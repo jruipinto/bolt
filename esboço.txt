@@ -1,0 +1,24 @@
+  //////////////////////////////////////
+ /      propósitos da aplicação       /
+//////////////////////////////////////
+
+registo de assistencias
+stock
+imprimir taloes
+
+
+#################################################################
+#		componentes na vista de cliente			#
+#################################################################
+
+>login
+
+	>assistencias			#tabela
+
+	>criar nova			#formulario
+
+	>historico			#tabela
+
+	>stock				#formulario + tabela de resultados
+
+	>encomendas			#formulario

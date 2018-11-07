@@ -1,0 +1,31 @@
+<div class="mytopbar">
+    <img class="mylogo" src="../../assets/baseline-important_devices-24px.svg" alt="">
+    <b>NReparações</b>
+    <a routerLink="./login" class="mylogin btn btn-dark">Logout</a>
+</div>
+
+<div class="mysidebar">
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a routerLink="./assistencias" routerLinkActive="nav-link-active" class="nav-link">Assistências</a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="./criarnova" routerLinkActive="nav-link-active" class="nav-link sub-nav-link sub-nav-link-last-item">Criar Nova</a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="./encomendas" routerLinkActive="nav-link-active" class="nav-link">Encomendas</a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="./historico" routerLinkActive="nav-link-active" class="nav-link sub-nav-link sub-nav-link-last-item">Histórico</a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="./stock" routerLinkActive="nav-link-active" class="nav-link">Stock</a>
+    </li>
+
+  </ul>
+</div>
+
+<div class="mycontent">
+  <router-outlet></router-outlet>
+</div>
+

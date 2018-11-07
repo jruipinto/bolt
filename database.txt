@@ -1,0 +1,55 @@
+#################################################################################
+#               tabelas sql							#
+#################################################################################
+
+tecnico
+	*id
+	*nome
+	*email
+	*password
+
+cliente
+	*id
+	*nome
+	*contacto
+	email
+	password
+	endereco
+	nif
+
+assistencia
+	*id
+	*cliente_id
+	*tecnico_id: JSON
+	*categoria
+	marca
+	modelo
+	cor
+	serial
+	*problema
+	orcamento
+	relatorio_interno
+	relatorio_cliente
+	material: JSON
+	preco
+	*estado
+
+artigo
+	*id
+	marca
+	modelo
+	*descricao
+	localizacao
+	qty
+
+encomenda
+	*id
+	*artigo_id
+	assistencia_id
+	cliente_id
+	observacao
+	*estado
+	*previsão_entrega
+	orcamento
+	fornecedor
+	qty
