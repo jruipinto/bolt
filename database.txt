@@ -2,25 +2,20 @@
 #               tabelas sql							#
 #################################################################################
 
-tecnico
+user
 	*id
 	*nome
-	*email
-	*password
-
-cliente
-	*id
-	*nome
-	*contacto
+	contacto
 	email
 	password
 	endereco
 	nif
+	*tipo
 
 assistencia
 	*id
-	*cliente_id
-	*tecnico_id: JSON
+	*cliente_user_id
+	*tecnico_user_id: JSON
 	*categoria
 	marca
 	modelo
@@ -49,7 +44,7 @@ encomenda
 	cliente_id
 	observacao
 	*estado
-	*previsão_entrega
+	*previsao_entrega
 	orcamento
 	fornecedor
 	qty
