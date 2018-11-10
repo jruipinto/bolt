@@ -1,0 +1,28 @@
+<div class="text-center">
+  <form class="form-signin" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    <img class="mb-4" src="../../assets/user-lock-solid.svg" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Acesso restrito</h1>
+
+    <input 
+    name="email" 
+    type="email" 
+    class="form-control" 
+    placeholder="Email address" 
+    required 
+    autofocus 
+    formControlName="email">
+
+    <input 
+    name="password" 
+    type="password" 
+    class="form-control" 
+    placeholder="Password" 
+    required
+    formControlName="password">
+
+    <button class="btn btn-lg btn-dark btn-block" type="submit" [disabled]="!signupForm.valid">Registar</button>
+    <hr>
+    <small class="mt-5 mb-3 text-muted">Desenvolvido por JRui Pinto &copy; 2018-2019</small>
+
+  </form>
+</div>
