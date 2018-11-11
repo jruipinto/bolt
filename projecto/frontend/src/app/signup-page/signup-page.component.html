@@ -1,28 +1,80 @@
-<div class="text-center">
-  <form class="form-signin" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-    <img class="mb-4" src="../../assets/user-lock-solid.svg" alt="" width="72" height="72">
-    <h1 class="h3 mb-3 font-weight-normal">Acesso restrito</h1>
+<form class="myform" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+  <h3>Registar novo utilizador</h3>
 
-    <input 
-    name="email" 
-    type="email" 
-    class="form-control" 
-    placeholder="Email address" 
-    required 
-    autofocus 
-    formControlName="email">
+  <div class="row">
+    <div class="col-sm-2">
+      <label for="nome">Nome:</label>
+    </div>
+    <div class="col-sm-10">
+      <input type="text" name="nome" id="nome" placeholder="(obrigatório)" required formControlName="nome">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <label for="contacto">Contacto:</label>
+    </div>
+    <div class="col-sm-10">
+      <input type="tel" name="contacto" id="contacto" placeholder="(obrigatório)" formControlName="contacto">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <label for="email">Email:</label>
 
-    <input 
-    name="password" 
-    type="password" 
-    class="form-control" 
-    placeholder="Password" 
-    required
-    formControlName="password">
+    </div>
+    <div class="col-sm-10">
+      <input type="email" name="email" id="email" formControlName="email">
 
-    <button class="btn btn-lg btn-dark btn-block" type="submit" [disabled]="!signupForm.valid">Registar</button>
-    <hr>
-    <small class="mt-5 mb-3 text-muted">Desenvolvido por JRui Pinto &copy; 2018-2019</small>
+    </div>
+  </div>
 
-  </form>
-</div>
+  <div class="row">
+    <div class="col-sm-2">
+      <label for="password">Password:</label>
+
+    </div>
+    <div class="col-sm-10">
+      <input type="password" name="password" id="password" formControlName="password">
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <label for="endereco">Endereço:</label>
+
+    </div>
+    <div class="col-sm-10">
+      <input type="text" name="endereco" id="endereco" formControlName="endereco">
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-2">
+      <label for="nif">NIF:</label>
+
+    </div>
+    <div class="col-sm-10">
+      <input type="number" name="nif" id="nif" formControlName="nif">
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <label for="tipo">Tipo:</label>
+
+    </div>
+    <div class="col-sm-10">
+
+      <select name="tipo" id="tipo" formControlName="tipo">
+        <option value="tecnico">Técnico</option>
+        <option value="cliente">Cliente</option>
+      </select>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <input type="submit" [disabled]="!signupForm.valid">
+  </div>
+</form>

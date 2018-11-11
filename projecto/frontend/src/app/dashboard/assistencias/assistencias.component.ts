@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { DataService } from 'src/app/shared/services/data.service';
 
 @Component({
   selector: 'app-assistencias',
@@ -7,7 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AssistenciasComponent implements OnInit {
 
-  constructor() { }
+  assistencias$: Observable<any[]>;
+
+  constructor(private dataService: DataService) {
+    this.dataService.find$('assistencias').subscribe(u => this.assistencias$ = u.data);
+   }
 
   ngOnInit() {
   }

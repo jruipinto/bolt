@@ -1,0 +1,19 @@
+.tabela {
+    border-collapse: collapse;
+    width: 80%;
+}
+
+td, th {
+    border-bottom: 1px solid #ddd;
+    padding: 0em 1em 0em 1em;
+}
+
+tr:nth-child(even){background-color: #f2f2f2;}
+
+tr:hover {background-color: #ddd;}
+
+th {
+    text-align: left;
+    background-color: rgb(65, 65, 65);
+    color: white;
+}

@@ -20,15 +20,18 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     return this.checkLogin();
   }
 
-  canLoad(route: Route): boolean {
+  canLoad(route: Route): Observable<boolean> | Promise<boolean> | boolean {
     return this.checkLogin();
   }
 
-  checkLogin(): boolean {
-    if (this.authService.isAuthenticated()) {
-      return true;
-    }
-    this.router.navigate(['/login']);
-    return false;
+  checkLogin(): Observable<boolean> | Promise<boolean> | boolean {
+    /* Try to auth with the server. If authed resolve to true, else resolve to false */
+    return this.authService
+      .logIn()
+      .then(() => true)
+      .catch(() => {
+        this.router.navigate(['/login']);
+        return false;
+      });
   }
 }

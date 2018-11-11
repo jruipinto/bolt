@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
+import { DataService } from '../shared/services/data.service';
+
 @Component({
   selector: 'app-signup-page',
   templateUrl: './signup-page.component.html',
@@ -8,11 +10,16 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class SignupPageComponent implements OnInit {
   signupForm = this.fb.group({
-    email: ['', Validators.required],
-    password: ['', Validators.required]
+    nome: ['', Validators.required],
+    contacto: ['', Validators.required],
+    email: [''],
+    password: [''],
+    endereco: [null],
+    nif: [null],
+    tipo: ['', Validators.required]
   });
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private dataService: DataService) { }
 
   ngOnInit() {
   }
@@ -21,6 +28,18 @@ export class SignupPageComponent implements OnInit {
     console.log(this.signupForm.value);
     console.log(this.signupForm.value.email);
     console.log(this.signupForm.value.password);
+    console.log(this.signupForm.value.nome);
+    console.log(this.signupForm.value.tipo);
+
+    const nome: string = this.signupForm.value.nome;
+    const contacto: number = this.signupForm.value.contacto;
+    const email: string = this.signupForm.value.email;
+    const password: string = this.signupForm.value.password;
+    const endereco: string = this.signupForm.value.endereco;
+    const nif: number = this.signupForm.value.nif;
+    const tipo: string = this.signupForm.value.tipo;
+
+    this.dataService.create$('users', {nome, contacto, email, password, endereco, nif, tipo});
   }
 
 }

@@ -9,11 +9,32 @@ module.exports = function (app) {
   
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
       unique: true
     },
     password: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING
+    },
+    // varchar(45), not null
+    nome: {
+      type: Sequelize.STRING(45),
+      allowNull: false
+    },
+    //bigint(14), unique
+    contacto: {
+      type: Sequelize.BIGINT(14),
+      unique: true
+    },
+    //text(400)
+    endereço: {
+      type: Sequelize.TEXT
+    },
+    //bigint(30)
+    nif: {
+      type: Sequelize.BIGINT(30)
+    },
+    //varchar(7), not null
+    tipo: {
+      type: Sequelize.STRING(7),
       allowNull: false
     },
   

@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth.service';
+import { FeathersService } from './services/feathers.service';
+import { DataService } from './services/data.service';
 
 @NgModule({
   imports: [
@@ -10,7 +12,9 @@ import { AuthService } from './services/auth.service';
   declarations: [],
   providers: [
     AuthGuard,
-    AuthService
+    AuthService,
+    FeathersService,
+    DataService
   ]
 })
 export class SharedModule { }

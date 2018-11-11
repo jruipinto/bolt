@@ -1,3 +1,20 @@
-<p>
-  assistencias works!
-</p>
+<table class="tabela">
+    <tr>
+      <th>#</th>
+      <th>Cliente</th> 
+      <th>Categoria</th>
+      <th>Marca</th>
+      <th>Modelo</th>
+      <th>Problema</th>
+      <th>Estado</th>
+    </tr>
+    <tr *ngFor="let assistencia of assistencias$">
+      <td>{{assistencia.id}}</td>
+      <td>{{assistencia.cliente_user_id}}</td>
+      <td>{{assistencia.categoria}}</td>
+      <td>{{assistencia.marca}}</td>
+      <td>{{assistencia.modelo}}</td>
+      <td>{{assistencia.problema}}</td>
+      <td>{{assistencia.estado}}</td>
+    </tr>
+  </table>
