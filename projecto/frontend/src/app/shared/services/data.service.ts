@@ -8,11 +8,11 @@ export class DataService {
 
   constructor(private feathersService: FeathersService) { }
 
-  find$ (serviceName: string) {
+  find$ (serviceName: string, query?: object) {
     return (<any>this.feathersService
       .service(serviceName)
       .watch()
-      .find()
+      .find(query)
       );
   }
 
