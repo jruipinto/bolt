@@ -13,7 +13,7 @@ module.exports = function (app) {
     },
     //int, not null
     tecnico_user_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.JSON,
       allowNull: false
     },
     //varchar(20), not null

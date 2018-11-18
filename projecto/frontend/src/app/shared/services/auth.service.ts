@@ -11,8 +11,12 @@ export class AuthService {
 
   constructor(private feathersService: FeathersService, private router: Router) { }
 
-  isAuthenticated(): Observable<boolean> | boolean {
-    return true;
+  public getUserId (): number {
+    const decode = require('jwt-decode');
+    // Retrieve the token from wherever you've stored it.
+    const jwt = window.localStorage.getItem('feathers-jwt');
+    const payload = decode(jwt);
+    return payload.userId;
   }
 
   public logIn(credentials?): Promise<any> {
@@ -21,6 +25,6 @@ export class AuthService {
 
   public logOut() {
     this.feathersService.logout();
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 }

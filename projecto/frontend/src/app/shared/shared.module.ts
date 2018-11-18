@@ -4,12 +4,15 @@ import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth.service';
 import { FeathersService } from './services/feathers.service';
 import { DataService } from './services/data.service';
+import { AutofocusDirective } from './directives/autofocus.directive';
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  declarations: [],
+  declarations: [
+    AutofocusDirective
+  ],
   providers: [
     AuthGuard,
     AuthService,

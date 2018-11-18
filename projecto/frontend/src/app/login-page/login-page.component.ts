@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { FeathersService } from '../shared/services/feathers.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -16,7 +17,7 @@ export class LoginPageComponent implements OnInit {
     password: ['', Validators.required]
   });
 
-  constructor(private fb: FormBuilder, private feathersService: FeathersService, private router: Router) { }
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -33,7 +34,7 @@ export class LoginPageComponent implements OnInit {
       console.log('Incomplete credentials!');
       return;
     }
-
+    /*
     // try to authenticate with feathers
     this.feathersService.authenticate({
       strategy: 'local',
@@ -47,6 +48,19 @@ export class LoginPageComponent implements OnInit {
       .catch(err => {
         console.log('Wrong credentials!');
       });
+      */
+     this.authService.logIn({
+      strategy: 'local',
+      email,
+      password
+    }) // navigate to base URL on success
+    .then(() => {
+      this.router.navigate(['/']);
+    })
+    .catch(err => {
+      console.log('Wrong credentials!');
+    });
+
   }
 
 }

@@ -39,7 +39,8 @@ export class SignupPageComponent implements OnInit {
     const nif: number = this.signupForm.value.nif;
     const tipo: string = this.signupForm.value.tipo;
 
-    this.dataService.create$('users', {nome, contacto, email, password, endereco, nif, tipo});
+    // this.dataService.create$('users', {nome, contacto, email, password, endereco, nif, tipo});
+    this.dataService.create$('users', this.signupForm.value);
   }
 
 }
