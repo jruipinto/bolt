@@ -1,20 +1,26 @@
-<table class="tabela">
-    <tr>
-      <th>#</th>
-      <th>Cliente</th> 
-      <th>Categoria</th>
-      <th>Marca</th>
-      <th>Modelo</th>
-      <th>Problema</th>
-      <th>Estado</th>
-    </tr>
-    <tr *ngFor="let assistencia of assistencias$">
-      <td>{{assistencia.id}}</td>
-      <td>{{assistencia.cliente_user_id}}</td>
-      <td>{{assistencia.categoria}}</td>
-      <td>{{assistencia.marca}}</td>
-      <td>{{assistencia.modelo}}</td>
-      <td>{{assistencia.problema}}</td>
-      <td>{{assistencia.estado}}</td>
-    </tr>
-  </table>
+<div>
+  <div class="row linha" *ngFor="let assistencia of assistencias$">
+    <div class="col-md-1 fontheavy">
+      {{assistencia.id}}
+    </div>
+    <div class="col-md-2 lessimportant">
+      {{assistencia.categoria}}:
+    </div>
+    <div class="col-md-2">
+      <span class="fontheavy">{{assistencia.marca}}</span>
+      {{assistencia.modelo}}
+    </div>
+    <div class="col-md-1 lessimportant">
+        {{assistencia.cor}}
+      </div>
+    <div class="col-md-3 lessimportant">
+      {{assistencia.problema}}
+    </div>
+    <div class="col-md-2 lessimportant">
+      cliente:{{assistencia.cliente_user_id}}
+    </div>
+    <div class="col-md-1 lessimportant">
+      {{assistencia.estado}}
+    </div>
+  </div>
+</div>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { FeathersService } from './feathers.service';
+import { DataService } from './data.service';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  constructor(private feathersService: FeathersService, private router: Router) { }
+  constructor(dataService: DataService, private feathersService: FeathersService, private router: Router ) { }
 
   public getUserId (): number {
     const decode = require('jwt-decode');
@@ -17,6 +18,11 @@ export class AuthService {
     const jwt = window.localStorage.getItem('feathers-jwt');
     const payload = decode(jwt);
     return payload.userId;
+  }
+
+  public getUserName$ (): any {
+    const id = this.getUserId();
+    return (<any>this.feathersService.service('users').watch().get(id));
   }
 
   public logIn(credentials?): Promise<any> {

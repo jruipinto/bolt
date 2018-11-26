@@ -82,10 +82,7 @@ $primary-color: $topbar-color;
 }
 
 .mycontent {
-    position: fixed;
-    top: $topbar-height;
-    left: $sidebar-width;
+    margin-top: $topbar-height;
+    margin-left: $sidebar-width;
     padding: $general-padding;
-    // overflow: auto;
-    width: 100%;
 }

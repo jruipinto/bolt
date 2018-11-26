@@ -8,11 +8,14 @@ import { DataService } from 'src/app/shared/services/data.service';
   styleUrls: ['./assistencias.component.scss']
 })
 export class AssistenciasComponent implements OnInit {
-
   assistencias$: Observable<any[]>;
 
   constructor(private dataService: DataService) {
-    this.dataService.find$('assistencias').subscribe(u => this.assistencias$ = u.data);
+    this.dataService.find$('assistencias', {
+      query: {
+        $limit: 25
+      }
+    }).subscribe(u => this.assistencias$ = u.data);
    }
 
   ngOnInit() {

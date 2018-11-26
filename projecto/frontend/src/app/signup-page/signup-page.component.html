@@ -75,6 +75,10 @@
   </div>
 
   <div class="row">
+    <span *ngIf="!signupForm.valid">Preencha todos os campos obrigatórios!</span>
+  </div>
+
+  <div class="row">
     <input type="submit" [disabled]="!signupForm.valid">
   </div>
 </form>

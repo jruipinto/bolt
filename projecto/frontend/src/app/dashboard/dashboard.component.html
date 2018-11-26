@@ -1,7 +1,7 @@
 <div class="mytopbar">
     <img class="mylogo" src="../../assets/logo.svg" alt="">
     
-    <a (click)="logOut()" class="mylogin btn btn-dark">Logout</a>
+    <a (click)="logOut()" class="mylogin btn btn-dark">Logout {{userName}}</a>
 </div>
 
 <div class="mysidebar">
@@ -26,6 +26,8 @@
 </div>
 
 <div class="mycontent">
-  <router-outlet></router-outlet>
+  <div class="mycontainer">
+    <router-outlet></router-outlet>
+  </div>
 </div>
 

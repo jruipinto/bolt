@@ -32,7 +32,7 @@
       <label for="endereco">Endereço:</label>
     </div>
     <div class="col-sm-10">
-      <input type="text" name="endereco" id="endereco" formControlName="endereco">
+      <input type="text" name="endereço" id="endereço" formControlName="endereço">
     </div>
   </div>
   <div class="row">
@@ -102,7 +102,8 @@
       <label for="problema">Problema:</label>
     </div>
     <div class="col-sm-10">
-      <input type="text" name="problema" id="problema" placeholder="(obrigatório)" required formControlName="problema">
+     <!-- <input type="text" name="problema" id="problema" placeholder="(obrigatório)" required formControlName="problema"> -->
+      <textarea name="problema" id="problema" placeholder="(obrigatório)" required formControlName="problema"></textarea>
     </div>
   </div>
   <div class="row">
@@ -114,6 +115,6 @@
     </div>
   </div>
   <div class="row">
-    <input type="submit">
+    <input type="submit" [disabled]="!criarNovaForm.valid">
   </div>
 </form>
