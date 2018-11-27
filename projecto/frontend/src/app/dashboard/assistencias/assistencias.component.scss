@@ -1,6 +1,7 @@
 .linha {
     border-bottom: 1px solid #ddd;
     padding: 0em 0em 0em 0em;
+    cursor: pointer;
 }
 
 .linha:nth-child(even){background-color: #ebebeb;}

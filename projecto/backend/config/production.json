@@ -1,4 +1,3 @@
 {
-  "host": "backend-app.feathersjs.com",
-  "port": "PORT"
+  "mysql": "mysql://root:....0313@localhost:3306/bolt"
 }
