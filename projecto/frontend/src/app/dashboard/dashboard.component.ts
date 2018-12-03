@@ -8,7 +8,7 @@ import { DataService } from '../shared/services/data.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  private userName: string;
+  public userName: string;
 
   constructor(private authService: AuthService, dataService: DataService) { }
 

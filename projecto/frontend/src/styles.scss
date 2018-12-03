@@ -2,8 +2,22 @@
 
 html,
 body {
+  margin: 0;
+  padding: 0;
   height: 100%;
   overflow: auto;
+  text-rendering: optimizeLegibility;
+  font-family: 
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
 }
 
 .myform {
@@ -39,6 +53,7 @@ select {
 }
 
 ///////////////////////////////////////////////////////////////////////
+
 @import "../node_modules/bootstrap/scss/functions";
 @import "variables";
 @import "../node_modules/bootstrap/scss/mixins";
@@ -68,7 +83,7 @@ select {
 @import "../node_modules/bootstrap/scss/media";
 @import "../node_modules/bootstrap/scss/list-group";
 @import "../node_modules/bootstrap/scss/close";
-@import "../node_modules/bootstrap/scss/modal";
+// @import "../node_modules/bootstrap/scss/modal";
 @import "../node_modules/bootstrap/scss/tooltip";
 @import "../node_modules/bootstrap/scss/popover";
 @import "../node_modules/bootstrap/scss/carousel";

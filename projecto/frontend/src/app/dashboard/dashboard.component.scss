@@ -22,7 +22,7 @@ $primary-color: $topbar-color;
     position: absolute;
     right: 0px;
     height: $topbar-height;
-    line-height: ($topbar-height/1.5);
+    line-height: ($topbar-height/1.2);
     // border-left: 1px solid $sidebar-bg;
     padding: $general-padding;
     color: $primary-color !important;
