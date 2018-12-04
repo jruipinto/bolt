@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment';
 })
 export class FeathersService {
   private _feathers = feathers();                     // init socket.io
-  private _socket = io(environment.apiURL, environment.apiPath);      // init feathers
+  private _socket = io(environment.apiURL);      // init feathers
 
   constructor() {
     this._feathers
