@@ -58,7 +58,7 @@ export class LoginPageComponent implements OnInit {
       this.router.navigate(['/']);
     })
     .catch(err => {
-      console.log('Wrong credentials!');
+      console.log('Wrong credentials!', err);
     });
 
   }

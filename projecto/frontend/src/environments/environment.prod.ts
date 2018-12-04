@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiURL: 'http://nreparacoes.ddns.net/api/'
+  apiURL: 'http://api.nreparacoes.ddns.net/',
+  apiPath: {path: '/api'}
 };
