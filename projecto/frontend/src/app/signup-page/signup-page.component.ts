@@ -11,7 +11,7 @@ import { DataService } from '../shared/services/data.service';
 export class SignupPageComponent implements OnInit {
   signupForm = this.fb.group({
     nome: ['', Validators.required],
-    contacto: ['', Validators.required],
+    contacto: ['', [Validators.required, Validators.min(200000000), Validators.max(999999999999)]],
     email: [''],
     password: [''],
     endereco: [null],
