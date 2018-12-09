@@ -20,6 +20,12 @@
     color: lighten($color: #212529, $amount: 20%);
 }
 
+.separate {
+  padding-left: 1em;
+  margin-bottom: 1em;
+  background-color: #ebebeb;
+}
+
 /* -------- Modal classes -------- */
 
   /* The Modal (background) */
@@ -61,6 +67,10 @@
     color: #000;
     text-decoration: none;
     cursor: pointer;
+  }
+
+  .title {
+    margin-bottom: 1em;
   }
   
 /* -------------------------------------- */  

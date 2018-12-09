@@ -1,5 +1,5 @@
 <div class="linha" *ngFor="let assistencia of assistencias$">
-  <div class="row"(click)="toogleModal(assistencia.id)">
+  <div class="row" (click)="toogleModal(assistencia.id)">
     <div class="col-md-1 fontheavy">
       {{assistencia.id}}
     </div>
@@ -29,9 +29,55 @@
     <!-- Modal content -->
     <div class="modal-content">
       <span class="close" (click)="toogleModal(assistencia.id)">&times;</span>
-      <p>{{assistencia.id}}</p>
-      <p>{{assistencia.categoria}}:</p>
-      <p>{{assistencia.marca}}</p>
+      <div class="row title">
+        <div class="col fontheavy">
+          {{assistencia.id}}
+        </div>
+      </div>
+      <div class="row separate">
+        <div class="col-md-2 fontheavy">
+          Estado:
+        </div>
+        <div class="col">
+          {{assistencia.estado}}
+        </div>
+      </div>
+      <div class="row separate">
+        <div class="col-md-2 fontheavy">
+          Cliente:
+        </div>
+        <div class="col">
+          {{assistencia.cliente_user_id}}
+        </div>
+      </div>
+      <div class="separate">
+        <div class="row">
+          <div class="col-md-2 fontheavy">
+            {{assistencia.categoria}}:
+          </div>
+          <div class="col">
+            {{assistencia.marca}} {{assistencia.modelo}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2 fontheavy">
+            Cor:
+          </div>
+          <div class="col">
+            {{assistencia.cor}}
+          </div>
+        </div>
+      </div>
+      <div class="separate">
+        <div class="row">
+          <div class="col-md-2 fontheavy">
+            Problema:
+          </div>
+          <div class="col">
+            {{assistencia.problema}}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
