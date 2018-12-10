@@ -61,10 +61,26 @@
         </div>
         <div class="row">
           <div class="col-md-2 fontheavy">
+            Serial:
+          </div>
+          <div class="col">
+            {{assistencia.serial}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2 fontheavy">
             Cor:
           </div>
           <div class="col">
             {{assistencia.cor}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2 fontheavy">
+            Orçamento:
+          </div>
+          <div class="col">
+            {{assistencia.orcamento}}
           </div>
         </div>
       </div>
@@ -78,7 +94,37 @@
           </div>
         </div>
       </div>
+      <div class="separate">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col fontheavy">
+                Informação técnica interna:
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <textarea class="responsive-textarea" name="interna" id="interna"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col fontheavy">
+                Informação para o cliente:
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <textarea class="responsive-textarea" name="externa" id="externa"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <input type="submit">
+      </div>
     </div>
   </div>
-
 </div>
