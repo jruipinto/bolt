@@ -48,6 +48,10 @@ input[type="submit"] {
   background-color: #212121a9;
 }
 
+input[type="number"] {
+  min-width: auto;
+}
+
 select {
   background-color: #d6d6d67a;
   border: none;

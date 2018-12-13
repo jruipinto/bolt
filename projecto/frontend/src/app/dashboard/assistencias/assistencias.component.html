@@ -1,5 +1,5 @@
-<div class="linha" *ngFor="let assistencia of assistencias$">
-  <div class="row" (click)="toogleModal(assistencia.id)">
+<div class="linha" *ngFor="let assistencia of assistencias$; let listaIndex=index">
+  <div class="row" (click)="toogleModal(listaIndex)">
     <div class="col-md-1 fontheavy">
       {{assistencia.id}}
     </div>
@@ -17,7 +17,7 @@
       {{assistencia.problema}}
     </div>
     <div class="col-md-2 lessimportant">
-      cliente:{{assistencia.cliente_user_id}}
+      Cliente:{{assistencia.cliente_user_name}}
     </div>
     <div class="col-md-1 lessimportant">
       {{assistencia.estado}}
@@ -28,7 +28,7 @@
   <div *ngIf="assistencia.expanded" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
-      <span class="close" (click)="toogleModal(assistencia.id)">&times;</span>
+      <span class="close" (click)="toogleModal(listaIndex)">&times;</span>
       <div class="row title">
         <div class="col fontheavy">
           {{assistencia.id}}
@@ -104,7 +104,7 @@
             </div>
             <div class="row">
               <div class="col">
-                <textarea class="responsive-textarea" name="interna" id="interna"></textarea>
+                <textarea class="responsive-textarea" name="relatorio_interno" id="relatorio_interno"></textarea>
               </div>
             </div>
           </div>
@@ -116,9 +116,19 @@
             </div>
             <div class="row">
               <div class="col">
-                <textarea class="responsive-textarea" name="externa" id="externa"></textarea>
+                <textarea class="responsive-textarea" name="relatorio_cliente" id="relatorio_cliente"></textarea>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="separate">
+        <div class="row">
+          <div class="col-md-2 fontheavy">
+            Preço:
+          </div>
+          <div class="col">
+            <input type="number" name="preco" id="preco"> €
           </div>
         </div>
       </div>

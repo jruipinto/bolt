@@ -14,23 +14,33 @@ export class AssistenciasComponent implements OnInit {
       query: {
         $limit: 25
       }
-    }).subscribe(u => this.assistencias$ = u.data);
+    }).subscribe(u => {
+      this.assistencias$ = u.data;
+      this.getClientNameById();
+    });
   }
 
   ngOnInit() {
   }
 
-  toogleModal(dummyObjectID: number): void {
-    // https://stackblitz.com/edit/angular-diy-modal-from-dynamic-list?embed=1&file=src/app/dynamic-list/dynamic-list.component.ts
-    const dummyObjectIndex: number = this.assistencias$
-    .findIndex(i => i.id === dummyObjectID);
-
-    if (this.assistencias$[dummyObjectIndex].expanded) {
-      delete this.assistencias$[dummyObjectIndex].expanded;
+  toogleModal(listaIndex: number): void {
+    if (this.assistencias$[listaIndex].expanded) {
+      delete this.assistencias$[listaIndex].expanded;
       return;
     }
 
-    Object.assign(this.assistencias$[dummyObjectIndex], { expanded: true });
+    Object.assign(this.assistencias$[listaIndex], { expanded: true });
+  }
+
+  getClientNameById(): void {
+    this.assistencias$.forEach((assistencia, index) => {
+      this.dataService.get$('users', assistencia.cliente_user_id)
+      .subscribe(e => {
+        console.log(e);
+        Object.assign(this.assistencias$[index], {cliente_user_name: e.nome});
+        console.log(this.assistencias$[index]);
+      });
+    })
   }
 
 }
