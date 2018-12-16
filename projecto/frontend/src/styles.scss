@@ -29,6 +29,7 @@ textarea {
   background-color: #d6d6d67a;
   min-width: 50%;
   border: none;
+  margin: 0.2em !important;
 }
 
 input:disabled {
@@ -40,12 +41,17 @@ input[type="radio"] {
   min-width: auto;
 }
 
-input[type="submit"] {
+input[type="submit"], input[type="button"] {
   cursor: pointer;
   padding: 0.5em 1em 0.5em 1em;
   min-width: auto;
   color: whitesmoke;
   background-color: #212121a9;
+}
+
+input[class="my-button-secondary"] {
+  color: #212121a9;
+  background-color: whitesmoke;
 }
 
 input[type="number"] {

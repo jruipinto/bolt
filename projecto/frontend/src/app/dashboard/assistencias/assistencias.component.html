@@ -39,11 +39,13 @@
           Estado:
         </div>
         <div class="col">
-          <!-- {{assistencia.estado}}  -->
-          <select name="estado" id="estado" style="border-style:none">
-            <option value={{assistencia.estado}}>{{assistencia.estado}}</option>
-            <option value="outro estado">outro estado</option>
-          </select>
+          {{assistencia.estado}}
+          <!-- 
+            <select name="estado" id="estado" style="border-style:none">
+              <option value={{assistencia.estado}}>{{assistencia.estado}}</option>
+              <option value="outro estado">outro estado</option>
+            </select>
+           -->
         </div>
       </div>
       <div class="row separate">
@@ -108,7 +110,7 @@
             </div>
             <div class="row">
               <div class="col">
-                <textarea class="responsive-textarea" name="relatorio_interno" id="relatorio_interno"></textarea>
+                <textarea class="responsive-textarea" name="relatorio_interno" id="relatorio_interno" [(ngModel)]='assistencia.relatorio_interno'></textarea>
               </div>
             </div>
           </div>
@@ -120,7 +122,7 @@
             </div>
             <div class="row">
               <div class="col">
-                <textarea class="responsive-textarea" name="relatorio_cliente" id="relatorio_cliente"></textarea>
+                <textarea class="responsive-textarea" name="relatorio_cliente" id="relatorio_cliente" [(ngModel)]='assistencia.relatorio_cliente'></textarea>
               </div>
             </div>
           </div>
@@ -132,12 +134,23 @@
             Preço:
           </div>
           <div class="col">
-            <input type="number" name="preco" id="preco"> €
+            <input type="number" name="preco" id="preco" [(ngModel)]='assistencia.preco'> €
           </div>
         </div>
       </div>
       <div class="row">
-        <input type="submit">
+        <div class="col-lg-auto">
+          <input type="button" value="Guardar" (click)="guardar(assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, listaIndex)">
+        </div>
+        <div class="col-lg-auto">
+          <input type="button" class="my-button-secondary" value="Orçamentar" (click)="orcamentar(assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, listaIndex)">
+        </div>
+        <div class="col-lg-auto">
+          <input type="button" class="my-button-secondary" value="Contactar" (click)="contactar(assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, listaIndex)">
+        </div>
+        <div class="col-lg-auto">
+          <input type="button" class="my-button-secondary" value="Fechar" (click)="fechar(assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, listaIndex)">
+        </div>
       </div>
     </div>
   </div>
