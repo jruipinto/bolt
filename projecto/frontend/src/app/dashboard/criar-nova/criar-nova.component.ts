@@ -11,8 +11,11 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 export class CriarNovaComponent implements OnInit {
 
   private cliente: any; // objecto
-  private estado = 'em análise';
+  private estado: string;
+  private query: object; //payload que vamos enviar ao backend
+                        // https://docs.feathersjs.com/api/databases/common.html#adapterfindparams
 
+  
   contactoClienteForm = this.fb.group({
     // por exemplo, contacto: 255486001
     contacto: [null, Validators.min(200000000)]
@@ -42,15 +45,15 @@ export class CriarNovaComponent implements OnInit {
     this.contactoClienteForm.valueChanges.subscribe(() => {
       if (this.contactoClienteForm.invalid) { this.clienteForm.patchValue({nome: '', email: '', endereco: '', nif: ''}); return; }
 
-      // myQuery é o payload que vamos enviar ao backend
+      // this.query é o payload que vamos enviar ao backend
       // https://docs.feathersjs.com/api/databases/common.html#adapterfindparams
-      const myQuery: object = {query:
+      this.query = {query:
         {
         contacto: this.contactoClienteForm.value.contacto
         }
       };
 
-      this.dataService.find$('users', myQuery).subscribe(resposta => {
+      this.dataService.find$('users', this.query).subscribe(resposta => {
         if (resposta.data[0]) {
           this.clienteForm.patchValue(resposta.data[0]);
           this.cliente = resposta.data[0];
@@ -60,6 +63,7 @@ export class CriarNovaComponent implements OnInit {
   }
 
   onSubmit() {
+    this.estado = 'entrou';
     const agora = new Date();
     const tecnico_JSON: string = JSON.stringify([{
       tecnico_user_id: this.authService.getUserId(),
@@ -67,14 +71,14 @@ export class CriarNovaComponent implements OnInit {
       updatedAt: agora.toLocaleString()
     }]);
 
-    const myObj: object = {
+    this.query = {
       tecnico_user_id: tecnico_JSON,
       cliente_user_id: this.cliente.id,
       estado: this.estado
     };
 
-    Object.assign(myObj, this.criarNovaForm.value);
-    this.dataService.create$('assistencias', myObj);
+    Object.assign(this.query, this.criarNovaForm.value);
+    this.dataService.create$('assistencias', this.query);
 
     if (this.clienteForm.dirty) {
       console.log(this.clienteForm.value);

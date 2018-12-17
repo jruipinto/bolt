@@ -25,20 +25,6 @@ export class SignupPageComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.signupForm.value);
-    console.log(this.signupForm.value.email);
-    console.log(this.signupForm.value.password);
-    console.log(this.signupForm.value.nome);
-    console.log(this.signupForm.value.tipo);
-
-    const nome: string = this.signupForm.value.nome;
-    const contacto: number = this.signupForm.value.contacto;
-    const email: string = this.signupForm.value.email;
-    const password: string = this.signupForm.value.password;
-    const endereco: string = this.signupForm.value.endereco;
-    const nif: number = this.signupForm.value.nif;
-    const tipo: string = this.signupForm.value.tipo;
-
     // this.dataService.create$('users', {nome, contacto, email, password, endereco, nif, tipo});
     this.dataService.create$('users', this.signupForm.value);
   }

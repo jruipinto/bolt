@@ -7,8 +7,8 @@ import { DataService } from 'src/app/shared/services/data.service';
   styleUrls: ['./assistencias.component.scss']
 })
 export class AssistenciasComponent implements OnInit {
-  assistencias$: any[];
-  query: object;
+  public assistencias$: any[];
+  private query: object;
 
   constructor(private dataService: DataService) {
     this.query = {
@@ -57,6 +57,7 @@ export class AssistenciasComponent implements OnInit {
 
   guardar(relatorio_interno: string, relatorio_cliente: string, preco: number, assistenciaId: number, listaIndex: number): void {
     this.query = {
+      estado: 'em análise',
       relatorio_interno: relatorio_interno,
       relatorio_cliente: relatorio_cliente,
       preco: preco
@@ -69,6 +70,7 @@ export class AssistenciasComponent implements OnInit {
 
   orcamentar(relatorio_interno: string, relatorio_cliente: string, preco: number, assistenciaId: number, listaIndex: number): void {
     this.query = {
+      estado: 'aguarda aprovação de orçamento',
       relatorio_interno: relatorio_interno,
       relatorio_cliente: relatorio_cliente,
       preco: preco
@@ -81,6 +83,7 @@ export class AssistenciasComponent implements OnInit {
 
   contactar(relatorio_interno: string, relatorio_cliente: string, preco: number, assistenciaId: number, listaIndex: number): void {
     this.query = {
+      estado: 'aguarda que cliente seja contactado',
       relatorio_interno: relatorio_interno,
       relatorio_cliente: relatorio_cliente,
       preco: preco
@@ -93,6 +96,7 @@ export class AssistenciasComponent implements OnInit {
 
   fechar(relatorio_interno: string, relatorio_cliente: string, preco: number, assistenciaId: number, listaIndex: number): void {
     this.query = {
+      estado: 'concluída assistência',
       relatorio_interno: relatorio_interno,
       relatorio_cliente: relatorio_cliente,
       preco: preco
