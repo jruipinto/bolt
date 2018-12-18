@@ -64,6 +64,19 @@ module.exports = function (app) {
     //varchar(20)
     estado: {
       type: Sequelize.STRING(20)
+      /*
+      estados possiveis:
+      registado
+      em transito
+      recebido
+      em análise
+      aprovação pendente
+      aprovado contacto
+      aprovado orçamento
+      aguarda material
+      recebido material
+      concluido 
+      */
     },
   }, {
     hooks: {
