@@ -70,12 +70,13 @@ module.exports = function (app) {
       em transito
       recebido
       em análise
-      aprovação pendente
-      aprovado contacto
+      contacto pendente
+      contactado
+      orçamento pendente
       aprovado orçamento
       aguarda material
       recebido material
-      concluido 
+      concluído
       */
     },
   }, {
