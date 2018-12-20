@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/shared/services/data.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-assistencias',
@@ -10,7 +11,10 @@ export class AssistenciasComponent implements OnInit {
   public assistencias$: any[];
   private query: object;
 
-  constructor(private dataService: DataService) {
+  constructor(
+    private dataService: DataService,
+    private authService: AuthService
+  ) {
     this.query = {
       query: {
         $limit: 25
@@ -23,6 +27,7 @@ export class AssistenciasComponent implements OnInit {
   }
 
   updateAssistencias(u: any): void {
+    // busca e ouve todas as assistencias criadas na DB e coloca no array
     if (!this.assistencias$) {
       this.assistencias$ = u.data;
     } else {
@@ -36,6 +41,7 @@ export class AssistenciasComponent implements OnInit {
   }
 
   toogleModal(listaIndex: number): void {
+    // abre e fecha o modal
     if (this.assistencias$[listaIndex].expanded) {
       delete this.assistencias$[listaIndex].expanded;
       return;
@@ -45,22 +51,47 @@ export class AssistenciasComponent implements OnInit {
   }
 
   getClientNameById(): void {
+    // procura o nome do cliente que corresponde com a id de cliente na assistencia
     this.assistencias$.forEach((assistencia, index) => {
       this.dataService.get$('users', assistencia.cliente_user_id)
         .subscribe(e => {
-          // console.log(e);
           Object.assign(this.assistencias$[index], { cliente_user_name: e.nome });
-          // console.log(this.assistencias$[index]);
         });
     });
   }
 
-  guardar(relatorio_interno: string, relatorio_cliente: string, preco: number, assistenciaId: number, listaIndex: number): void {
+
+
+  /* ------------- funções dos botoes do modal --------------------*/
+
+  guardar(
+    relatorio_interno: string,
+    relatorio_cliente: string,
+    preco: number, assistenciaId: number,
+    tecnico_user_id: string,
+    listaIndex: number): void {
+
+    let tecnico_JSON: JSON = JSON.parse(tecnico_user_id);
+
+    const agora = new Date();
+
+    // falta corrigir esta função
+
+    Object.assign(tecnico_JSON, {
+      tecnico_user_id: this.authService.getUserId(),
+      estado: 'em análise',
+      updatedAt: agora.toLocaleString()
+    });
+
+    tecnico_user_id = JSON.stringify(tecnico_JSON);
+
+
     this.query = {
       estado: 'em análise',
       relatorio_interno: relatorio_interno,
       relatorio_cliente: relatorio_cliente,
-      preco: preco
+      preco: preco,
+      tecnico_user_id: tecnico_user_id
     };
 
     this.dataService.patch$('assistencias', this.query, assistenciaId);
@@ -70,7 +101,7 @@ export class AssistenciasComponent implements OnInit {
 
   orcamentar(relatorio_interno: string, relatorio_cliente: string, preco: number, assistenciaId: number, listaIndex: number): void {
     this.query = {
-      estado: 'aguarda aprovação de orçamento',
+      estado: 'orçamento pendente',
       relatorio_interno: relatorio_interno,
       relatorio_cliente: relatorio_cliente,
       preco: preco
@@ -83,7 +114,7 @@ export class AssistenciasComponent implements OnInit {
 
   contactar(relatorio_interno: string, relatorio_cliente: string, preco: number, assistenciaId: number, listaIndex: number): void {
     this.query = {
-      estado: 'aguarda que cliente seja contactado',
+      estado: 'contacto pendente',
       relatorio_interno: relatorio_interno,
       relatorio_cliente: relatorio_cliente,
       preco: preco
@@ -96,7 +127,7 @@ export class AssistenciasComponent implements OnInit {
 
   fechar(relatorio_interno: string, relatorio_cliente: string, preco: number, assistenciaId: number, listaIndex: number): void {
     this.query = {
-      estado: 'concluída assistência',
+      estado: 'concluído',
       relatorio_interno: relatorio_interno,
       relatorio_cliente: relatorio_cliente,
       preco: preco

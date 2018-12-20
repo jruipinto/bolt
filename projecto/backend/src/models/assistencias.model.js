@@ -72,10 +72,12 @@ module.exports = function (app) {
       em análise
       contacto pendente
       contactado
+      incontactável
       orçamento pendente
-      aprovado orçamento
+      orçamento aprovado
+      orçamento recusado
       aguarda material
-      recebido material
+      material recebido
       concluído
       */
     },

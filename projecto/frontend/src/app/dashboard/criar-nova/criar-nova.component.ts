@@ -63,7 +63,7 @@ export class CriarNovaComponent implements OnInit {
   }
 
   onSubmit() {
-    this.estado = 'entrou';
+    this.estado = 'recebido';
     const agora = new Date();
     const tecnico_JSON: string = JSON.stringify([{
       tecnico_user_id: this.authService.getUserId(),
