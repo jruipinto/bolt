@@ -71,19 +71,33 @@ export class AssistenciasComponent implements OnInit {
     tecnico_user_id: string,
     listaIndex: number): void {
 
-    let tecnico_JSON: JSON = JSON.parse(tecnico_user_id);
+    let tecnico_JSON: any = JSON.parse(tecnico_user_id);
+    console.log(tecnico_JSON);
+    tecnico_JSON = JSON.parse(tecnico_JSON);
+    console.log(typeof tecnico_JSON)
 
     const agora = new Date();
 
     // falta corrigir esta função
 
+    /*
     Object.assign(tecnico_JSON, {
       tecnico_user_id: this.authService.getUserId(),
       estado: 'em análise',
       updatedAt: agora.toLocaleString()
     });
+    */
+
+    const myObj: any = {
+      "tecnico_user_id": this.authService.getUserId(),
+      "estado": 'em análise',
+      "updatedAt": agora.toLocaleString()
+    }
+    console.log(myObj);
+    tecnico_JSON.push(myObj);
 
     tecnico_user_id = JSON.stringify(tecnico_JSON);
+    console.log(tecnico_user_id);
 
 
     this.query = {
@@ -94,7 +108,7 @@ export class AssistenciasComponent implements OnInit {
       tecnico_user_id: tecnico_user_id
     };
 
-    this.dataService.patch$('assistencias', this.query, assistenciaId);
+    //this.dataService.patch$('assistencias', this.query, assistenciaId);
 
     this.toogleModal(listaIndex);
   }
