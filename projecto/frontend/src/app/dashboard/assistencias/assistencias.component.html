@@ -134,16 +134,16 @@
       </div>
       <div class="row">
         <div class="col-lg-auto">
-          <input type="button" value="Guardar" (click)="guardar(assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
+          <input type="button" value="Guardar" (click)="save('em análise', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
         </div>
         <div class="col-lg-auto">
-          <input type="button" class="my-button-secondary" value="Orçamentar" (click)="orcamentar(assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, listaIndex)">
+          <input type="button" class="my-button-secondary" value="Orçamentar" (click)="save('orçamento pendente', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
         </div>
         <div class="col-lg-auto">
-          <input type="button" class="my-button-secondary" value="Contactar" (click)="contactar(assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, listaIndex)">
+          <input type="button" class="my-button-secondary" value="Contactar" (click)="save('contacto pendente', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
         </div>
         <div class="col-lg-auto">
-          <input type="button" class="my-button-secondary" value="Fechar" (click)="fechar(assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, listaIndex)">
+          <input type="button" class="my-button-secondary" value="Fechar" (click)="save('concluído', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
         </div>
       </div>
     </div>

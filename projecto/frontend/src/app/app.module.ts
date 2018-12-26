@@ -3,10 +3,9 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
+import { SharedModule } from './shared/shared.module';
 import { AppComponent } from './app.component';
 import { LoginPageComponent } from './login-page/login-page.component';
-// import { DashboardModule } from './dashboard/dashboard.module';
-import { SharedModule } from './shared/shared.module';
 import { SignupPageComponent } from './signup-page/signup-page.component';
 
 @NgModule({
@@ -19,9 +18,8 @@ import { SignupPageComponent } from './signup-page/signup-page.component';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule,
-    // DashboardModule,
-    SharedModule
+    SharedModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

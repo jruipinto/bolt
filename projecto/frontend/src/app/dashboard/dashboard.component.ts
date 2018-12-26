@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
-import { DataService } from '../shared/services/data.service';
+import { StoreService } from '../shared/services/store.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,7 +10,7 @@ import { DataService } from '../shared/services/data.service';
 export class DashboardComponent implements OnInit {
   public userName: string;
 
-  constructor(private authService: AuthService, dataService: DataService) { }
+  constructor(private authService: AuthService, private store: StoreService) { }
 
   ngOnInit() {
     this.authService.getUserName$().subscribe(e => this.userName = e.nome);

@@ -64,89 +64,31 @@ export class AssistenciasComponent implements OnInit {
 
   /* ------------- funções dos botoes do modal --------------------*/
 
-  guardar(
+  save(
+    estado: string,
     relatorio_interno: string,
     relatorio_cliente: string,
     preco: number, assistenciaId: number,
     tecnico_user_id: string,
-    listaIndex: number): void {
-
-    let tecnico_JSON: any = JSON.parse(tecnico_user_id);
-    console.log(tecnico_JSON);
-    tecnico_JSON = JSON.parse(tecnico_JSON);
-    console.log(typeof tecnico_JSON)
+    listaIndex: number
+  ): void {
 
     const agora = new Date();
-
-    // falta corrigir esta função
-
-    /*
-    Object.assign(tecnico_JSON, {
+    const novoRegisto: object = {
       tecnico_user_id: this.authService.getUserId(),
-      estado: 'em análise',
+      estado: estado,
       updatedAt: agora.toLocaleString()
-    });
-    */
-
-    const myObj: any = {
-      "tecnico_user_id": this.authService.getUserId(),
-      "estado": 'em análise',
-      "updatedAt": agora.toLocaleString()
-    }
-    console.log(myObj);
-    tecnico_JSON.push(myObj);
-
-    tecnico_user_id = JSON.stringify(tecnico_JSON);
-    console.log(tecnico_user_id);
-
+    };
+    const parsed_tecnico_user_id: object[] = JSON.parse(JSON.parse(tecnico_user_id));
+    parsed_tecnico_user_id.push(novoRegisto);
 
     this.query = {
-      estado: 'em análise',
+      estado: estado,
       relatorio_interno: relatorio_interno,
       relatorio_cliente: relatorio_cliente,
       preco: preco,
-      tecnico_user_id: tecnico_user_id
+      tecnico_user_id: JSON.stringify(parsed_tecnico_user_id)
     };
-
-    //this.dataService.patch$('assistencias', this.query, assistenciaId);
-
-    this.toogleModal(listaIndex);
-  }
-
-  orcamentar(relatorio_interno: string, relatorio_cliente: string, preco: number, assistenciaId: number, listaIndex: number): void {
-    this.query = {
-      estado: 'orçamento pendente',
-      relatorio_interno: relatorio_interno,
-      relatorio_cliente: relatorio_cliente,
-      preco: preco
-    };
-
-    this.dataService.patch$('assistencias', this.query, assistenciaId);
-
-    this.toogleModal(listaIndex);
-  }
-
-  contactar(relatorio_interno: string, relatorio_cliente: string, preco: number, assistenciaId: number, listaIndex: number): void {
-    this.query = {
-      estado: 'contacto pendente',
-      relatorio_interno: relatorio_interno,
-      relatorio_cliente: relatorio_cliente,
-      preco: preco
-    };
-
-    this.dataService.patch$('assistencias', this.query, assistenciaId);
-
-    this.toogleModal(listaIndex);
-  }
-
-  fechar(relatorio_interno: string, relatorio_cliente: string, preco: number, assistenciaId: number, listaIndex: number): void {
-    this.query = {
-      estado: 'concluído',
-      relatorio_interno: relatorio_interno,
-      relatorio_cliente: relatorio_cliente,
-      preco: preco
-    };
-
     this.dataService.patch$('assistencias', this.query, assistenciaId);
 
     this.toogleModal(listaIndex);
