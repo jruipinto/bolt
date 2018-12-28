@@ -5,7 +5,6 @@ import { AuthService } from './services/auth.service';
 import { FeathersService } from './services/feathers.service';
 import { DataService } from './services/data.service';
 import { AutofocusDirective } from './directives/autofocus.directive';
-import { StoreService } from './services/store.service';
 
 @NgModule({
   imports: [
@@ -18,8 +17,7 @@ import { StoreService } from './services/store.service';
     AuthGuard,
     AuthService,
     FeathersService,
-    DataService,
-    StoreService
+    DataService
   ]
 })
 export class SharedModule { }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
-import { StoreService } from '../shared/services/store.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,7 +9,7 @@ import { StoreService } from '../shared/services/store.service';
 export class DashboardComponent implements OnInit {
   public userName: string;
 
-  constructor(private authService: AuthService, private store: StoreService) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
     this.authService.getUserName$().subscribe(e => this.userName = e.nome);
