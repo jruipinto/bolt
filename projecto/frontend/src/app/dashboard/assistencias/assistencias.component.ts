@@ -8,19 +8,18 @@ import { AuthService } from 'src/app/shared/services/auth.service';
   styleUrls: ['./assistencias.component.scss']
 })
 export class AssistenciasComponent implements OnInit {
-  public assistencias$: any[];
-  private query: object;
+  public assistencias = [];
+  public assistencias$ = this.dataService.find$('assistencias', {
+    query: {
+      $limit: 25
+    }
+  });
 
   constructor(
     private dataService: DataService,
     private authService: AuthService
   ) {
-    this.query = {
-      query: {
-        $limit: 25
-      }
-    };
-    this.dataService.find$('assistencias', this.query).subscribe(u => this.updateAssistencias(u));
+    this.assistencias$.subscribe(u => this.updateAssistencias(u));
   }
 
   ngOnInit() {
@@ -28,12 +27,12 @@ export class AssistenciasComponent implements OnInit {
 
   updateAssistencias(u: any): void {
     // busca e ouve todas as assistencias criadas na DB e coloca no array
-    if (!this.assistencias$) {
-      this.assistencias$ = u.data;
+    if (!this.assistencias) {
+      this.assistencias = u.data;
     } else {
-      this.assistencias$.forEach((assistencia, index) => {
+      this.assistencias.forEach((assistencia, index) => {
         if (assistencia.id === u.data[0].id) {
-          Object.assign(this.assistencias$[index], u.data[0]);
+          Object.assign(this.assistencias[index], u.data[0]);
         }
       });
     }
@@ -42,20 +41,20 @@ export class AssistenciasComponent implements OnInit {
 
   toogleModal(listaIndex: number): void {
     // abre e fecha o modal
-    if (this.assistencias$[listaIndex].expanded) {
-      delete this.assistencias$[listaIndex].expanded;
+    if (this.assistencias[listaIndex].expanded) {
+      delete this.assistencias[listaIndex].expanded;
       return;
     }
 
-    Object.assign(this.assistencias$[listaIndex], { expanded: true });
+    Object.assign(this.assistencias[listaIndex], { expanded: true });
   }
 
   getClientNameById(): void {
     // procura o nome do cliente que corresponde com a id de cliente na assistencia
-    this.assistencias$.forEach((assistencia, index) => {
+    this.assistencias.forEach((assistencia, index) => {
       this.dataService.get$('users', assistencia.cliente_user_id)
         .subscribe(e => {
-          Object.assign(this.assistencias$[index], { cliente_user_name: e.nome });
+          Object.assign(this.assistencias[index], { cliente_user_name: e.nome });
         });
     });
   }
@@ -82,14 +81,14 @@ export class AssistenciasComponent implements OnInit {
     const parsed_tecnico_user_id: object[] = JSON.parse(JSON.parse(tecnico_user_id));
     parsed_tecnico_user_id.push(novoRegisto);
 
-    this.query = {
+    const query = {
       estado: estado,
       relatorio_interno: relatorio_interno,
       relatorio_cliente: relatorio_cliente,
       preco: preco,
       tecnico_user_id: JSON.stringify(parsed_tecnico_user_id)
     };
-    this.dataService.patch$('assistencias', this.query, assistenciaId);
+    this.dataService.patch$('assistencias', query, assistenciaId);
 
     this.toogleModal(listaIndex);
   }
