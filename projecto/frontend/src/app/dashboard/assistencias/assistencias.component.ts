@@ -27,7 +27,7 @@ export class AssistenciasComponent implements OnInit {
 
   updateAssistencias(u: any): void {
     // busca e ouve todas as assistencias criadas na DB e coloca no array
-    if (!this.assistencias) {
+    if (!this.assistencias.length) {
       this.assistencias = u.data;
     } else {
       this.assistencias.forEach((assistencia, index) => {
