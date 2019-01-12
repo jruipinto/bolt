@@ -135,5 +135,8 @@
       }
     }
   },
-  "defaultProject": "frontend"
+  "defaultProject": "frontend",
+  "cli": {
+    "defaultCollection": "@ngxs/schematics"
+  }
 }

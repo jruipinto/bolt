@@ -1,4 +1,4 @@
-<div class="linha" *ngFor="let assistencia of assistencias$; let listaIndex=index">
+<div class="linha" *ngFor="let assistencia of assistencias; let listaIndex=index">
   <div class="row" (click)="toogleModal(listaIndex)">
     <div class="col-md-1 fontheavy">
       {{assistencia.id}}
