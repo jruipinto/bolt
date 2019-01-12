@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/shared/services/data.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-assistencias',
@@ -13,13 +14,16 @@ export class AssistenciasComponent implements OnInit {
     query: {
       $limit: 25
     }
-  });
+  })
+  .pipe(
+    map(u => this.updateAssistencias(u))
+  );
 
   constructor(
     private dataService: DataService,
     private authService: AuthService
   ) {
-    this.assistencias$.subscribe(u => this.updateAssistencias(u));
+    this.assistencias$.subscribe();
   }
 
   ngOnInit() {
