@@ -9,13 +9,16 @@ import { CriarNovaComponent } from './criar-nova/criar-nova.component';
 import { HistoricoComponent } from './historico/historico.component';
 import { StockComponent } from './stock/stock.component';
 import { EncomendasComponent } from './encomendas/encomendas.component';
+import { NgxsModule } from '@ngxs/store';
+import { AssistenciasState } from '../store/assistencias.state';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    NgxsModule.forFeature([AssistenciasState])
   ],
   declarations: [
     DashboardComponent,

@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/shared/services/data.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { map } from 'rxjs/operators';
+import { Select } from '@ngxs/store';
+import { Emitter, Emittable } from '@ngxs-labs/emitter';
+import { Observable } from 'rxjs';
+import { AssistenciasState } from 'src/app/store/assistencias.state';
 
 @Component({
   selector: 'app-assistencias',
@@ -18,6 +22,12 @@ export class AssistenciasComponent implements OnInit {
   .pipe(
     map(u => this.updateAssistencias(u))
   );
+
+  @Select(AssistenciasState)
+  public assistenciasSTT$: Observable<any>;
+
+  @Emitter(AssistenciasState.setValue)
+  public assistenciasValue: Emittable<any>;
 
   constructor(
     private dataService: DataService,
@@ -40,6 +50,7 @@ export class AssistenciasComponent implements OnInit {
         }
       });
     }
+    console.log('b', Object.isExtensible(this.assistencias));
     this.getClientNameById();
   }
 
@@ -54,10 +65,13 @@ export class AssistenciasComponent implements OnInit {
   }
 
   getClientNameById(): void {
+    console.log('c', Object.isExtensible(this.assistencias));
     // procura o nome do cliente que corresponde com a id de cliente na assistencia
     this.assistencias.forEach((assistencia, index) => {
+      console.log('cm', Object.isExtensible(assistencia));
       this.dataService.get$('users', assistencia.cliente_user_id)
         .subscribe(e => {
+          console.log('cmp', Object.isExtensible(this.assistencias[index]));
           Object.assign(this.assistencias[index], { cliente_user_name: e.nome });
         });
     });
@@ -71,7 +85,8 @@ export class AssistenciasComponent implements OnInit {
     estado: string,
     relatorio_interno: string,
     relatorio_cliente: string,
-    preco: number, assistenciaId: number,
+    preco: number,
+    assistenciaId: number,
     tecnico_user_id: string,
     listaIndex: number
   ): void {

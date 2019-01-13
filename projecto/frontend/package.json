@@ -25,9 +25,9 @@
     "@feathersjs/feathers": "^3.2.3",
     "@feathersjs/socketio-client": "^1.1.5",
     "@ng-bootstrap/ng-bootstrap": "^4.0.0",
+    "@ngxs-labs/emitter": "^1.8.0",
     "@ngxs/devtools-plugin": "^3.3.2",
     "@ngxs/logger-plugin": "^3.3.2",
-    "@ngxs/schematics": "0.0.1-alpha.5",
     "@ngxs/store": "^3.3.2",
     "@types/feathersjs__authentication-client": "1.0.3",
     "@types/feathersjs__feathers": "3.0.3",
@@ -41,7 +41,7 @@
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.10.0",
+    "@angular-devkit/build-angular": "^0.12.1",
     "@angular/cli": "~7.0.3",
     "@angular/compiler-cli": "~7.0.0",
     "@angular/language-service": "~7.0.0",
