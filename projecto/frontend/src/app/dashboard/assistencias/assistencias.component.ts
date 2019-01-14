@@ -40,6 +40,7 @@ export class AssistenciasComponent implements OnInit {
   }
 
   updateAssistencias(u: any): void {
+    console.log('u', Object.isExtensible(u.data[0]));
     // busca e ouve todas as assistencias criadas na DB e coloca no array
     if (!this.assistencias.length) {
       this.assistencias = u.data;

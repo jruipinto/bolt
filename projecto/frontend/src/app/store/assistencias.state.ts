@@ -59,7 +59,7 @@ export class AssistenciasState implements NgxsOnInit {
 
     }
 
-    updateAssistencias(u: any, assistencias: any): any {
+    updateAssistencias(u: any, assistencias: any): object[] {
         // busca e ouve todas as assistencias criadas na DB e coloca no array
         if (!assistencias.length) {
             assistencias = u.data;
@@ -70,13 +70,13 @@ export class AssistenciasState implements NgxsOnInit {
                 }
             });
         }
-        console.log(Object.isExtensible(assistencias));
+        console.log('return:',Object.isExtensible(assistencias));
         // assistencias = this.getClientNameById(assistencias);
         return assistencias;
     }
 
     getClientNameById(assistencias: any): any {
-        console.log('gCNBI:', assistencias);
+        console.log('gCNBI:', Object.isExtensible(assistencias[0]));
         console.log(Object.isExtensible(assistencias));
         // procura o nome do cliente que corresponde com a id de cliente na assistencia
         assistencias.forEach((assistencia, index) => {
