@@ -40,7 +40,6 @@ export class AssistenciasComponent implements OnInit {
   }
 
   updateAssistencias(u: any): void {
-    console.log('u', Object.isExtensible(u.data[0]));
     // busca e ouve todas as assistencias criadas na DB e coloca no array
     if (!this.assistencias.length) {
       this.assistencias = u.data;
@@ -51,7 +50,6 @@ export class AssistenciasComponent implements OnInit {
         }
       });
     }
-    console.log('b', Object.isExtensible(this.assistencias));
     this.getClientNameById();
   }
 
@@ -66,13 +64,10 @@ export class AssistenciasComponent implements OnInit {
   }
 
   getClientNameById(): void {
-    console.log('c', Object.isExtensible(this.assistencias));
     // procura o nome do cliente que corresponde com a id de cliente na assistencia
     this.assistencias.forEach((assistencia, index) => {
-      console.log('cm', Object.isExtensible(assistencia));
       this.dataService.get$('users', assistencia.cliente_user_id)
         .subscribe(e => {
-          console.log('cmp', Object.isExtensible(this.assistencias[index]));
           Object.assign(this.assistencias[index], { cliente_user_name: e.nome });
         });
     });

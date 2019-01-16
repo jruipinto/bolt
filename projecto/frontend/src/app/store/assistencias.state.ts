@@ -76,13 +76,10 @@ export class AssistenciasState implements NgxsOnInit {
     }
 
     getClientNameById(assistencias: any): any {
-        console.log('gCNBI:', Object.isExtensible(assistencias[0]));
-        console.log(Object.isExtensible(assistencias));
         // procura o nome do cliente que corresponde com a id de cliente na assistencia
         assistencias.forEach((assistencia, index) => {
             this.dataService.get$('users', assistencia.cliente_user_id)
                 .subscribe(e => {
-                    console.log(Object.isExtensible(assistencias[index]));
                     Object.assign(assistencias[index], { cliente_user_name: e.nome });
                 });
         });
