@@ -16,7 +16,7 @@ export const OPTIONS_CONFIG: Partial<NgxsConfig> = {
      * import { environment } from '@env';
      * developmentMode: !environment.production
      */
-    developmentMode: true
+    developmentMode: false
 };
 
 export const DEVTOOLS_REDUX_CONFIG: NgxsDevtoolsOptions = {

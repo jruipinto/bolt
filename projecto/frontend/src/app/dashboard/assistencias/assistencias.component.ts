@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { Select } from '@ngxs/store';
 import { Emitter, Emittable } from '@ngxs-labs/emitter';
 import { Observable } from 'rxjs';
-import { AssistenciasState } from 'src/app/store/assistencias.state';
+import { AssistenciasState, AssistenciaStateModel } from 'src/app/store/assistencias.state';
 
 @Component({
   selector: 'app-assistencias',
@@ -24,10 +24,10 @@ export class AssistenciasComponent implements OnInit {
   );
 
   @Select(AssistenciasState)
-  public assistenciasSTT$: Observable<any>;
+  public assistenciasSTT$: Observable<AssistenciaStateModel[]>;
 
   @Emitter(AssistenciasState.setValue)
-  public assistenciasValue: Emittable<any>;
+  public assistenciasValue: Emittable<AssistenciaStateModel[]>;
 
   constructor(
     private dataService: DataService,
@@ -40,7 +40,6 @@ export class AssistenciasComponent implements OnInit {
   }
 
   updateAssistencias(u: any): void {
-    console.log('u', Object.isExtensible(u.data[0]));
     // busca e ouve todas as assistencias criadas na DB e coloca no array
     if (!this.assistencias.length) {
       this.assistencias = u.data;
@@ -51,7 +50,6 @@ export class AssistenciasComponent implements OnInit {
         }
       });
     }
-    console.log('b', Object.isExtensible(this.assistencias));
     this.getClientNameById();
   }
 
@@ -66,13 +64,10 @@ export class AssistenciasComponent implements OnInit {
   }
 
   getClientNameById(): void {
-    console.log('c', Object.isExtensible(this.assistencias));
     // procura o nome do cliente que corresponde com a id de cliente na assistencia
     this.assistencias.forEach((assistencia, index) => {
-      console.log('cm', Object.isExtensible(assistencia));
       this.dataService.get$('users', assistencia.cliente_user_id)
         .subscribe(e => {
-          console.log('cmp', Object.isExtensible(this.assistencias[index]));
           Object.assign(this.assistencias[index], { cliente_user_name: e.nome });
         });
     });
@@ -93,13 +88,13 @@ export class AssistenciasComponent implements OnInit {
   ): void {
 
     const agora = new Date();
-    const novoRegisto: object = {
+    const alteracao: object = {
       tecnico_user_id: this.authService.getUserId(),
       estado: estado,
       updatedAt: agora.toLocaleString()
     };
     const parsed_tecnico_user_id: object[] = JSON.parse(JSON.parse(tecnico_user_id));
-    parsed_tecnico_user_id.push(novoRegisto);
+    parsed_tecnico_user_id.push(alteracao);
 
     const query = {
       estado: estado,
