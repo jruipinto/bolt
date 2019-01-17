@@ -13,6 +13,7 @@ import { AssistenciasState, AssistenciaStateModel } from 'src/app/store/assisten
   styleUrls: ['./assistencias.component.scss']
 })
 export class AssistenciasComponent implements OnInit {
+  /*
   public assistencias = [];
   public assistencias$ = this.dataService.find$('assistencias', {
     query: {
@@ -22,6 +23,7 @@ export class AssistenciasComponent implements OnInit {
   .pipe(
     map(u => this.updateAssistencias(u))
   );
+  */
 
   @Select(AssistenciasState)
   public assistenciasSTT$: Observable<AssistenciaStateModel[]>;
@@ -29,16 +31,22 @@ export class AssistenciasComponent implements OnInit {
   @Emitter(AssistenciasState.setValue)
   public assistenciasValue: Emittable<AssistenciaStateModel[]>;
 
+  @Emitter(AssistenciasState.toogleModal)
+  public toogleModal: Emittable<number>;
+
+
+
   constructor(
     private dataService: DataService,
     private authService: AuthService
   ) {
-    this.assistencias$.subscribe();
+    // this.assistencias$.subscribe();
   }
 
   ngOnInit() {
   }
 
+  /*
   updateAssistencias(u: any): void {
     // busca e ouve todas as assistencias criadas na DB e coloca no array
     if (!this.assistencias.length) {
@@ -73,6 +81,8 @@ export class AssistenciasComponent implements OnInit {
     });
   }
 
+  */
+
 
 
   /* ------------- funções dos botoes do modal --------------------*/
@@ -105,7 +115,7 @@ export class AssistenciasComponent implements OnInit {
     };
     this.dataService.patch$('assistencias', query, assistenciaId);
 
-    this.toogleModal(listaIndex);
+    this.toogleModal.emit(listaIndex);
   }
 
 }

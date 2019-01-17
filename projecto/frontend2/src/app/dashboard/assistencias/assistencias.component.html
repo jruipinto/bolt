@@ -1,6 +1,6 @@
 <div *ngIf="assistenciasSTT$ | async as assistenciasSTT">
   <div class="linha" *ngFor="let assistencia of assistenciasSTT; let listaIndex=index">
-    <div class="row" (click)="toogleModal(listaIndex)">
+    <div class="row" (click)="toogleModal.emit(listaIndex)">
       <div class="col-md-1 fontheavy">
         {{assistencia.id}}
       </div>
@@ -29,7 +29,7 @@
     <div *ngIf="assistencia.expanded" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
-        <span class="close" (click)="toogleModal(listaIndex)">&times;</span>
+        <span class="close" (click)="toogleModal.emit(listaIndex)">&times;</span>
         <div class="row title">
           <div class="col fontheavy">
             {{assistencia.id}}

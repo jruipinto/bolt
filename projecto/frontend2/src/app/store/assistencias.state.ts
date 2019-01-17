@@ -41,6 +41,7 @@ export interface AssistenciaStateModel {
     serial: string;
     tecnico_user_id: string;
     updatedAt: string;
+    expanded?: boolean;
 }
 
 @State<AssistenciaStateModel[]>({
@@ -54,6 +55,20 @@ export class AssistenciasState implements NgxsOnInit {
     public static setValue(ctx: StateContext<AssistenciaStateModel[]>, action: EmitterAction<any>) {
         ctx.setState(action.payload);
     }
+
+    @Receiver()
+    public static toogleModal(ctx: StateContext<AssistenciaStateModel[]>, action: EmitterAction<number>): void {
+        // abre e fecha o modal
+        const listaIndex: number = action.payload;
+        const assistencias: AssistenciaStateModel[] = ctx.getState();
+        if (assistencias[listaIndex].expanded) {
+          delete assistencias[listaIndex].expanded;
+          return;
+        }
+    
+        Object.assign(assistencias[listaIndex], { expanded: true });
+        ctx.setState(assistencias);
+      }
 
     ngxsOnInit(ctx?: StateContext<AssistenciaStateModel[]>) {
         const assistencias$ = this.dataService.find$('assistencias', {
