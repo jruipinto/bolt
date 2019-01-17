@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { Select } from '@ngxs/store';
 import { Emitter, Emittable } from '@ngxs-labs/emitter';
 import { Observable } from 'rxjs';
-import { AssistenciasState } from 'src/app/store/assistencias.state';
+import { AssistenciasState, AssistenciaStateModel } from 'src/app/store/assistencias.state';
 
 @Component({
   selector: 'app-assistencias',
@@ -24,10 +24,10 @@ export class AssistenciasComponent implements OnInit {
   );
 
   @Select(AssistenciasState)
-  public assistenciasSTT$: Observable<any>;
+  public assistenciasSTT$: Observable<AssistenciaStateModel[]>;
 
   @Emitter(AssistenciasState.setValue)
-  public assistenciasValue: Emittable<any>;
+  public assistenciasValue: Emittable<AssistenciaStateModel[]>;
 
   constructor(
     private dataService: DataService,
@@ -88,13 +88,13 @@ export class AssistenciasComponent implements OnInit {
   ): void {
 
     const agora = new Date();
-    const novoRegisto: object = {
+    const alteracao: object = {
       tecnico_user_id: this.authService.getUserId(),
       estado: estado,
       updatedAt: agora.toLocaleString()
     };
     const parsed_tecnico_user_id: object[] = JSON.parse(JSON.parse(tecnico_user_id));
-    parsed_tecnico_user_id.push(novoRegisto);
+    parsed_tecnico_user_id.push(alteracao);
 
     const query = {
       estado: estado,

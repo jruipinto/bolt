@@ -7,6 +7,7 @@ import { NgxsConfig } from '@ngxs/store/src/symbols';
 import { NgxsDevtoolsOptions } from '@ngxs/devtools-plugin/src/symbols';
 import { NgxsLoggerPluginOptions } from '@ngxs/logger-plugin/src/symbols';
 import { NgxsEmitPluginModule } from '@ngxs-labs/emitter';
+import { environment } from '../../environments/environment';
 
 export const OPTIONS_CONFIG: Partial<NgxsConfig> = {
     /**
@@ -26,7 +27,7 @@ export const DEVTOOLS_REDUX_CONFIG: NgxsDevtoolsOptions = {
      * import { environment } from '@env';
      * disabled: environment.production
      */
-    disabled: false
+    disabled: environment.production
 };
 
 export const LOGGER_CONFIG: NgxsLoggerPluginOptions = {
@@ -36,7 +37,7 @@ export const LOGGER_CONFIG: NgxsLoggerPluginOptions = {
      * import { environment } from '@env';
      * disabled: environment.production
      */
-    disabled: false
+    disabled: environment.production
 };
 
 @NgModule({
