@@ -1,149 +1,151 @@
-<div class="linha" *ngFor="let assistencia of assistencias; let listaIndex=index">
-  <div class="row" (click)="toogleModal(listaIndex)">
-    <div class="col-md-1 fontheavy">
-      {{assistencia.id}}
+<div *ngIf="assistenciasSTT$ | async as assistenciasSTT">
+  <div class="linha" *ngFor="let assistencia of assistenciasSTT; let listaIndex=index">
+    <div class="row" (click)="toogleModal(listaIndex)">
+      <div class="col-md-1 fontheavy">
+        {{assistencia.id}}
+      </div>
+      <div class="col-md-2 lessimportant">
+        {{assistencia.categoria}}:
+      </div>
+      <div class="col-md-2">
+        <span class="fontheavy">{{assistencia.marca}}</span>
+        {{assistencia.modelo}}
+      </div>
+      <div class="col-md-1 lessimportant">
+        {{assistencia.cor}}
+      </div>
+      <div class="col-md-3 lessimportant">
+        {{assistencia.problema}}
+      </div>
+      <div class="col-md-2 lessimportant">
+        Cliente:{{assistencia.cliente_user_name}}
+      </div>
+      <div class="col-md-1 lessimportant">
+        {{assistencia.estado}}
+      </div>
     </div>
-    <div class="col-md-2 lessimportant">
-      {{assistencia.categoria}}:
-    </div>
-    <div class="col-md-2">
-      <span class="fontheavy">{{assistencia.marca}}</span>
-      {{assistencia.modelo}}
-    </div>
-    <div class="col-md-1 lessimportant">
-      {{assistencia.cor}}
-    </div>
-    <div class="col-md-3 lessimportant">
-      {{assistencia.problema}}
-    </div>
-    <div class="col-md-2 lessimportant">
-      Cliente:{{assistencia.cliente_user_name}}
-    </div>
-    <div class="col-md-1 lessimportant">
-      {{assistencia.estado}}
-    </div>
-  </div>
 
-  <!-- The Modal -->
-  <div *ngIf="assistencia.expanded" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content">
-      <span class="close" (click)="toogleModal(listaIndex)">&times;</span>
-      <div class="row title">
-        <div class="col fontheavy">
-          {{assistencia.id}}
+    <!-- The Modal -->
+    <div *ngIf="assistencia.expanded" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close" (click)="toogleModal(listaIndex)">&times;</span>
+        <div class="row title">
+          <div class="col fontheavy">
+            {{assistencia.id}}
+          </div>
         </div>
-      </div>
-      <div class="row separate">
-        <div class="col-md-2 fontheavy">
-          Estado:
-        </div>
-        <div class="col">
-          {{assistencia.estado}}
-        </div>
-      </div>
-      <div class="row separate">
-        <div class="col-md-2 fontheavy">
-          Cliente:
-        </div>
-        <div class="col">
-          {{assistencia.cliente_user_name}}
-        </div>
-      </div>
-      <div class="separate">
-        <div class="row">
+        <div class="row separate">
           <div class="col-md-2 fontheavy">
-            {{assistencia.categoria}}:
+            Estado:
           </div>
           <div class="col">
-            {{assistencia.marca}} {{assistencia.modelo}}
+            {{assistencia.estado}}
           </div>
         </div>
-        <div class="row">
+        <div class="row separate">
           <div class="col-md-2 fontheavy">
-            Serial:
+            Cliente:
           </div>
           <div class="col">
-            {{assistencia.serial}}
+            {{assistencia.cliente_user_name}}
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-2 fontheavy">
-            Cor:
-          </div>
-          <div class="col">
-            {{assistencia.cor}}
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-2 fontheavy">
-            Orçamento:
-          </div>
-          <div class="col">
-            {{assistencia.orcamento}}
-          </div>
-        </div>
-      </div>
-      <div class="separate">
-        <div class="row">
-          <div class="col-md-2 fontheavy">
-            Problema:
-          </div>
-          <div class="col">
-            {{assistencia.problema}}
-          </div>
-        </div>
-      </div>
-      <div class="separate">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="row">
-              <div class="col fontheavy">
-                Informação técnica interna:
-              </div>
+        <div class="separate">
+          <div class="row">
+            <div class="col-md-2 fontheavy">
+              {{assistencia.categoria}}:
             </div>
-            <div class="row">
-              <div class="col">
-                <textarea class="responsive-textarea" name="relatorio_interno" id="relatorio_interno" [(ngModel)]='assistencia.relatorio_interno'></textarea>
-              </div>
+            <div class="col">
+              {{assistencia.marca}} {{assistencia.modelo}}
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="row">
-              <div class="col fontheavy">
-                Informação para o cliente:
-              </div>
+          <div class="row">
+            <div class="col-md-2 fontheavy">
+              Serial:
             </div>
-            <div class="row">
-              <div class="col">
-                <textarea class="responsive-textarea" name="relatorio_cliente" id="relatorio_cliente" [(ngModel)]='assistencia.relatorio_cliente'></textarea>
-              </div>
+            <div class="col">
+              {{assistencia.serial}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-2 fontheavy">
+              Cor:
+            </div>
+            <div class="col">
+              {{assistencia.cor}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-2 fontheavy">
+              Orçamento:
+            </div>
+            <div class="col">
+              {{assistencia.orcamento}}
             </div>
           </div>
         </div>
-      </div>
-      <div class="separate">
+        <div class="separate">
+          <div class="row">
+            <div class="col-md-2 fontheavy">
+              Problema:
+            </div>
+            <div class="col">
+              {{assistencia.problema}}
+            </div>
+          </div>
+        </div>
+        <div class="separate">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row">
+                <div class="col fontheavy">
+                  Informação técnica interna:
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <textarea class="responsive-textarea" name="relatorio_interno" id="relatorio_interno" [(ngModel)]='assistencia.relatorio_interno'></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row">
+                <div class="col fontheavy">
+                  Informação para o cliente:
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <textarea class="responsive-textarea" name="relatorio_cliente" id="relatorio_cliente" [(ngModel)]='assistencia.relatorio_cliente'></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="separate">
+          <div class="row">
+            <div class="col-md-2 fontheavy">
+              Preço:
+            </div>
+            <div class="col">
+              <input type="number" name="preco" id="preco" [(ngModel)]='assistencia.preco'> €
+            </div>
+          </div>
+        </div>
         <div class="row">
-          <div class="col-md-2 fontheavy">
-            Preço:
+          <div class="col-lg-auto">
+            <input type="button" value="Guardar" (click)="save('em análise', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
           </div>
-          <div class="col">
-            <input type="number" name="preco" id="preco" [(ngModel)]='assistencia.preco'> €
+          <div class="col-lg-auto">
+            <input type="button" class="my-button-secondary" value="Orçamentar" (click)="save('orçamento pendente', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-auto">
-          <input type="button" value="Guardar" (click)="save('em análise', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
-        </div>
-        <div class="col-lg-auto">
-          <input type="button" class="my-button-secondary" value="Orçamentar" (click)="save('orçamento pendente', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
-        </div>
-        <div class="col-lg-auto">
-          <input type="button" class="my-button-secondary" value="Contactar" (click)="save('contacto pendente', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
-        </div>
-        <div class="col-lg-auto">
-          <input type="button" class="my-button-secondary" value="Fechar" (click)="save('concluído', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
+          <div class="col-lg-auto">
+            <input type="button" class="my-button-secondary" value="Contactar" (click)="save('contacto pendente', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
+          </div>
+          <div class="col-lg-auto">
+            <input type="button" class="my-button-secondary" value="Fechar" (click)="save('concluído', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
+          </div>
         </div>
       </div>
     </div>

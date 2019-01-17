@@ -1,0 +1,101 @@
+$topbar-height: 3.5em;
+$topbar-bg: #212121;
+$topbar-color: #d6d6d6;
+
+$sidebar-width: 10em;
+$sidebar-bg: lighten($topbar-bg, 10%);
+
+
+$general-padding: 0.5em 1em 0.5em 1em;
+$primary-color: $topbar-color;
+
+.mylogo {
+    width: 8em;
+    height: 4.5em;
+    margin: -0.5em 0em 0.5em 1em;
+}
+
+.mylogin {
+    cursor: pointer;
+    font-weight: 500;
+    text-transform: capitalize;
+    position: absolute;
+    right: 0px;
+    height: $topbar-height;
+    line-height: ($topbar-height/1.2);
+    // border-left: 1px solid $sidebar-bg;
+    padding: $general-padding;
+    color: $primary-color !important;
+    // color: #ff6605 !important;
+}
+.mylogin:hover {
+    background-color: darken($topbar-bg, 2%);
+    color: lighten($primary-color, 15%) !important;
+
+}
+
+
+.mytopbar {
+    background-color: $topbar-bg;
+    color: $topbar-color;
+    position: fixed;
+    top: 0;
+    height: $topbar-height;
+    width: 100%;
+    padding: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    z-index: 1;
+}
+
+.mysidebar {
+    background-color: $sidebar-bg;
+    color: $topbar-color;
+    position: fixed;
+    top: $topbar-height;
+    bottom: 0;
+    left: 0;
+    width: $sidebar-width;
+    padding-top: 1em;
+}
+
+.nav-link {
+    background-color: $sidebar-bg;
+    color: $topbar-color;
+    font-size: 1em;
+    font-weight: 500;
+    padding-right: 1em;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0.5em;
+    margin-bottom: 0.2em;
+}
+
+.nav-link:hover {
+    color: lighten($primary-color, 15%);
+}
+
+.nav-link-active {
+    background-color: $topbar-bg;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    z-index: 1;
+}
+.nav-link-active:hover {
+    background-color: darken($topbar-bg, 2%);
+}
+
+.sub-nav-link{
+    margin-top: 0;
+    padding-left: 2.5em;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 0.9em;
+}
+.sub-nav-link-last-item {
+    margin-bottom: 0.5em;
+}
+
+.mycontent {
+    margin-top: $topbar-height;
+    margin-left: $sidebar-width;
+    padding: $general-padding;
+}

@@ -1,0 +1,83 @@
+.linha {
+    border-bottom: 1px solid #ddd;
+    padding: 0em 0em 0em 0em;
+    cursor: pointer;
+}
+
+.linha:nth-child(even){background-color: #ebebeb;}
+
+.linha:hover {background-color: #ddd;}
+
+.fontheavy {
+    font-weight: 500;
+}
+
+.fontlight {
+    font-weight: 300;
+}
+
+.lessimportant {
+    color: lighten($color: #212529, $amount: 20%);
+}
+
+.separate {
+  padding-left: 1em;
+  margin-bottom: 1em;
+  background-color: #ebebeb;
+}
+
+.responsive-textarea {
+  width: 90%;
+  min-height: 5em;
+}
+
+/* -------- Modal classes -------- */
+
+  /* The Modal (background) */
+  .modal {
+    cursor:  default;    
+    display: block; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    // padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding: 2em 11em 2em 11em;
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 0;
+    padding: 1em;
+    border: 1px solid #888;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    overflow: auto;
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .title {
+    margin-bottom: 1em;
+  }
+  
+/* -------------------------------------- */  
