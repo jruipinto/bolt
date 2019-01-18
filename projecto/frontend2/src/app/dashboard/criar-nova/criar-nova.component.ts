@@ -12,10 +12,10 @@ export class CriarNovaComponent implements OnInit {
 
   private cliente: any; // objecto
   private estado: string;
-  private query: object; //payload que vamos enviar ao backend
+  private query: object; // payload que vamos enviar ao backend
                         // https://docs.feathersjs.com/api/databases/common.html#adapterfindparams
 
-  
+
   contactoClienteForm = this.fb.group({
     // por exemplo, contacto: 255486001
     contacto: [null, Validators.min(200000000)]

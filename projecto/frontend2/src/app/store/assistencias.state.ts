@@ -62,13 +62,16 @@ export class AssistenciasState implements NgxsOnInit {
         const listaIndex: number = action.payload;
         const assistencias: AssistenciaStateModel[] = ctx.getState();
         if (assistencias[listaIndex].expanded) {
-          delete assistencias[listaIndex].expanded;
-          return;
+            delete assistencias[listaIndex].expanded;
+            return;
         }
-    
         Object.assign(assistencias[listaIndex], { expanded: true });
         ctx.setState(assistencias);
-      }
+    }
+
+    @Receiver()
+    public static saveModal(ctx: StateContext<any>, action: EmitterAction<any>) {
+    }
 
     ngxsOnInit(ctx?: StateContext<AssistenciaStateModel[]>) {
         const assistencias$ = this.dataService.find$('assistencias', {
@@ -110,4 +113,10 @@ export class AssistenciasState implements NgxsOnInit {
         return assistencias;
     }
 
+}
+
+@State<any>({
+    name: 'assistenciasModal'
+})
+export class AssistenciasModalState {
 }

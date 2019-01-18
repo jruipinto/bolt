@@ -10,7 +10,9 @@ import { HistoricoComponent } from './historico/historico.component';
 import { StockComponent } from './stock/stock.component';
 import { EncomendasComponent } from './encomendas/encomendas.component';
 import { NgxsModule } from '@ngxs/store';
+import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { AssistenciasState } from '../store/assistencias.state';
+
 
 @NgModule({
   imports: [
@@ -18,6 +20,7 @@ import { AssistenciasState } from '../store/assistencias.state';
     ReactiveFormsModule,
     FormsModule,
     DashboardRoutingModule,
+    NgxsFormPluginModule,
     NgxsModule.forFeature([AssistenciasState])
   ],
   declarations: [

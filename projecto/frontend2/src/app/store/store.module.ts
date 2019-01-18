@@ -7,6 +7,7 @@ import { NgxsConfig } from '@ngxs/store/src/symbols';
 import { NgxsDevtoolsOptions } from '@ngxs/devtools-plugin/src/symbols';
 import { NgxsLoggerPluginOptions } from '@ngxs/logger-plugin/src/symbols';
 import { NgxsEmitPluginModule } from '@ngxs-labs/emitter';
+import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { environment } from '../../environments/environment';
 
 export const OPTIONS_CONFIG: Partial<NgxsConfig> = {
@@ -46,7 +47,8 @@ export const LOGGER_CONFIG: NgxsLoggerPluginOptions = {
         NgxsModule.forRoot([], OPTIONS_CONFIG),
         NgxsReduxDevtoolsPluginModule.forRoot(DEVTOOLS_REDUX_CONFIG),
         NgxsLoggerPluginModule.forRoot(LOGGER_CONFIG),
-        NgxsEmitPluginModule.forRoot()
+        NgxsEmitPluginModule.forRoot(),
+        NgxsFormPluginModule.forRoot()
     ],
     exports: [NgxsModule]
 })

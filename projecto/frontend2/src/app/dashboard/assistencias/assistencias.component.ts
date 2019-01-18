@@ -34,6 +34,9 @@ export class AssistenciasComponent implements OnInit {
   @Emitter(AssistenciasState.toogleModal)
   public toogleModal: Emittable<number>;
 
+  @Emitter(AssistenciasState.saveModal)
+  public saveModal: Emittable<any>;
+
 
 
   constructor(
