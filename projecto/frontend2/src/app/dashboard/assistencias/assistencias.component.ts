@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/shared/services/data.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { map } from 'rxjs/operators';
 import { Select } from '@ngxs/store';
 import { Emitter, Emittable } from '@ngxs-labs/emitter';
 import { Observable } from 'rxjs';
 import { AssistenciasState, AssistenciaStateModel } from 'src/app/store/assistencias.state';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-assistencias',
@@ -41,7 +41,8 @@ export class AssistenciasComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private authService: AuthService
+    private authService: AuthService,
+    private fb: FormBuilder
   ) {
     // this.assistencias$.subscribe();
   }
