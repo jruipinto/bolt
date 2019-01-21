@@ -11,8 +11,12 @@ import { StockComponent } from './stock/stock.component';
 import { EncomendasComponent } from './encomendas/encomendas.component';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
-import { AssistenciasState } from './assistencias/assistencias.state';
-import { CriarNovaState } from './criar-nova/criar-nova.state';
+import {ArtigosState} from '../store/artigos.state';
+import {AssistenciasState} from '../store/assistencias.state';
+import {EncomendasState} from '../store/encomendas.state';
+import {UsersState} from '../store/users.state';
+import { CriarNovaState } from './criar-nova/criar-nova.component.state';
+
 
 
 @NgModule({
@@ -23,7 +27,10 @@ import { CriarNovaState } from './criar-nova/criar-nova.state';
     DashboardRoutingModule,
     NgxsFormPluginModule,
     NgxsModule.forFeature([
+      ArtigosState,
       AssistenciasState,
+      EncomendasState,
+      UsersState,
       CriarNovaState
     ])
   ],
