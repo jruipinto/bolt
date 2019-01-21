@@ -11,7 +11,8 @@ import { StockComponent } from './stock/stock.component';
 import { EncomendasComponent } from './encomendas/encomendas.component';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
-import { AssistenciasState } from '../store/assistencias.state';
+import { AssistenciasState } from './assistencias/assistencias.state';
+import { CriarNovaState } from './criar-nova/criar-nova.state';
 
 
 @NgModule({
@@ -21,7 +22,10 @@ import { AssistenciasState } from '../store/assistencias.state';
     FormsModule,
     DashboardRoutingModule,
     NgxsFormPluginModule,
-    NgxsModule.forFeature([AssistenciasState])
+    NgxsModule.forFeature([
+      AssistenciasState,
+      CriarNovaState
+    ])
   ],
   declarations: [
     DashboardComponent,

@@ -1,5 +1,5 @@
-<div *ngIf="assistenciasSTT$ | async as assistenciasSTT">
-  <div class="linha" *ngFor="let assistencia of assistenciasSTT; let listaIndex=index">
+<div *ngIf="assistencias$ | async as assistencias">
+  <div class="linha" *ngFor="let assistencia of assistencias; let listaIndex=index">
     <div class="row" (click)="toogleModal.emit(listaIndex)">
       <div class="col-md-1 fontheavy">
         {{assistencia.id}}
@@ -135,16 +135,16 @@
         </div>
         <div class="row">
           <div class="col-lg-auto">
-            <input type="button" value="Guardar" (click)="save('em análise', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
+            <input type="button" value="Guardar" (click)="saveModal.emit({estado: 'em análise', relatorio_interno: assistencia.relatorio_interno, relatorio_cliente: assistencia.relatorio_cliente, preco: assistencia.preco, assistencia_id: assistencia.id, tecnico_user_id: assistencia.tecnico_user_id, lista_index: listaIndex})">
           </div>
           <div class="col-lg-auto">
-            <input type="button" class="my-button-secondary" value="Orçamentar" (click)="save('orçamento pendente', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
+            <input type="button" class="my-button-secondary" value="Orçamentar" (click)="saveModal.emit({estado: 'orçamento pendente', relatorio_interno: assistencia.relatorio_interno, relatorio_cliente: assistencia.relatorio_cliente, preco: assistencia.preco, assistencia_id: assistencia.id, tecnico_user_id: assistencia.tecnico_user_id, lista_index: listaIndex})">
           </div>
           <div class="col-lg-auto">
-            <input type="button" class="my-button-secondary" value="Contactar" (click)="save('contacto pendente', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
+            <input type="button" class="my-button-secondary" value="Contactar" (click)="saveModal.emit({estado: 'contacto pendente', relatorio_interno: assistencia.relatorio_interno, relatorio_cliente: assistencia.relatorio_cliente, preco: assistencia.preco, assistencia_id: assistencia.id, tecnico_user_id: assistencia.tecnico_user_id, lista_index: listaIndex})">
           </div>
           <div class="col-lg-auto">
-            <input type="button" class="my-button-secondary" value="Fechar" (click)="save('concluído', assistencia.relatorio_interno, assistencia.relatorio_cliente, assistencia.preco, assistencia.id, assistencia.tecnico_user_id, listaIndex)">
+            <input type="button" class="my-button-secondary" value="Fechar" (click)="saveModal.emit({estado: 'concluído', relatorio_interno: assistencia.relatorio_interno, relatorio_cliente: assistencia.relatorio_cliente, preco: assistencia.preco, assistencia_id: assistencia.id, tecnico_user_id: assistencia.tecnico_user_id, lista_index: listaIndex})">
           </div>
         </div>
       </div>

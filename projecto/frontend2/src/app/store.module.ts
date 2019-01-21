@@ -8,7 +8,7 @@ import { NgxsDevtoolsOptions } from '@ngxs/devtools-plugin/src/symbols';
 import { NgxsLoggerPluginOptions } from '@ngxs/logger-plugin/src/symbols';
 import { NgxsEmitPluginModule } from '@ngxs-labs/emitter';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
-import { environment } from '../../environments/environment';
+import { environment } from '../environments/environment';
 
 export const OPTIONS_CONFIG: Partial<NgxsConfig> = {
     /**

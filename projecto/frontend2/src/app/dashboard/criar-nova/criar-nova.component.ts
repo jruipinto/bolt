@@ -43,7 +43,7 @@ export class CriarNovaComponent implements OnInit {
 
   listenToMyFormsChanges(): void {
     this.contactoClienteForm.valueChanges.subscribe(() => {
-      if (this.contactoClienteForm.invalid) { this.clienteForm.patchValue({nome: '', email: '', endereco: '', nif: ''}); return; }
+      if (this.contactoClienteForm.invalid) { this.clienteForm.reset(); return; }
 
       // this.query é o payload que vamos enviar ao backend
       // https://docs.feathersjs.com/api/databases/common.html#adapterfindparams
@@ -79,6 +79,7 @@ export class CriarNovaComponent implements OnInit {
 
     Object.assign(this.query, this.criarNovaForm.value);
     this.dataService.create$('assistencias', this.query);
+    this.criarNovaForm.reset();
 
     if (this.clienteForm.dirty) {
       console.log(this.clienteForm.value);
