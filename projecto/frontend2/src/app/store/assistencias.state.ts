@@ -127,6 +127,7 @@ export class AssistenciasState implements NgxsOnInit {
         });
 
         assistencias$.subscribe(u => {
+            console.log('recebido:', u.data);
             ctx.setState(this.updateAssistencias(u, ctx.getState()));
             console.log('state:', ctx.getState());
         });
@@ -135,17 +136,16 @@ export class AssistenciasState implements NgxsOnInit {
 
     updateAssistencias(u: any, assistencias: AssistenciaStateModel[]): AssistenciaStateModel[] {
         // busca e ouve todas as assistencias criadas na DB e coloca no array
-        let updated = false;
         if (!assistencias.length) {
             assistencias = u.data;
         } else {
-            assistencias.forEach((assistencia: AssistenciaStateModel, index: number) => {
-                if (assistencia.id === u.data[0].id) {
-                    Object.assign(assistencias[index], u.data[0]);
-                    updated = true;
-                }
-            });
-            if (!updated) { assistencias.push(...u.data); }
+            const indexOfLastUpdate = u.data.length - 1;
+            const indexOfAssistenciaToUpdate = assistencias.findIndex(assistencia => assistencia.id === u.data[indexOfLastUpdate].id);
+            if (indexOfAssistenciaToUpdate < 0) {
+                assistencias.push(u.data[indexOfLastUpdate]);
+            } else {
+                Object.assign(assistencias[indexOfAssistenciaToUpdate], u.data[indexOfLastUpdate]);
+            }
         }
         assistencias = this.addClientNameById(assistencias);
         return assistencias;
