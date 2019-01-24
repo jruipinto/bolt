@@ -46,6 +46,7 @@ export class LoginPageComponent implements OnInit {
       })
       .catch(err => {
         console.log('Wrong credentials!', err);
+        alert('As credenciais estão erradas. Corrija ou contacte o administrador.')
       });
 
   }
