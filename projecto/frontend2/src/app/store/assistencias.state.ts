@@ -98,7 +98,11 @@ export class AssistenciasState implements NgxsOnInit {
             estado: estado,
             updatedAt: agora.toLocaleString()
         };
-        const parsed_tecnico_user_id: object[] = JSON.parse(JSON.parse(tecnico_user_id));
+
+        let parsed_tecnico_user_id: any = JSON.parse(tecnico_user_id);
+        if (typeof parsed_tecnico_user_id === 'string') {
+            parsed_tecnico_user_id = JSON.parse(parsed_tecnico_user_id);
+        }
         parsed_tecnico_user_id.push(alteracao);
 
         const query = {
