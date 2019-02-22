@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 
 import { FeathersService } from './feathers.service';
 import { DataService } from './data.service';

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { FeathersService } from '../shared/services/feathers.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
 
@@ -46,7 +45,7 @@ export class LoginPageComponent implements OnInit {
       })
       .catch(err => {
         console.log('Wrong credentials!', err);
-        alert('As credenciais estão erradas. Corrija ou contacte o administrador.')
+        alert('As credenciais estão erradas. Corrija ou contacte o administrador.');
       });
 
   }

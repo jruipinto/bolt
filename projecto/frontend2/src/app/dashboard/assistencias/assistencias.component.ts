@@ -11,6 +11,9 @@ import { AssistenciasState, AssistenciaStateModel } from '../../store/assistenci
 })
 export class AssistenciasComponent implements OnInit {
 
+  public modalContext = {};
+  public modalExists: boolean;
+
   @Select(AssistenciasState)
   public assistencias$: Observable<AssistenciaStateModel[]>;
 
@@ -28,5 +31,14 @@ export class AssistenciasComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  openModal(payload: {}): void {
+    this.modalExists = true;
+    Object.assign(this.modalContext, { assistencia: payload });
+  }
+
+  closeModal (): void {
+    this.modalExists = false;
   }
 }
