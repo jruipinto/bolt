@@ -11,14 +11,15 @@ $primary-color: $topbar-color;
 
 .mylogo {
     width: 8em;
-    height: 4.5em;
-    margin: -0.5em 0em 0.5em 1em;
+    height: 4em;
+    margin: -0.5em 0em 0.5em -1.5em;
 }
 
 .mymenu {
-    width: 4.5em;
-    height: 4.5em;
-    margin: -0.5em 0em 0.5em 1em;
+    cursor: pointer;
+    width: 5em;
+    height: 5em;
+    margin: -0.5em 0em 0.5em -.5em;
 }
 
 .mylogin {
@@ -54,6 +55,7 @@ $primary-color: $topbar-color;
 }
 
 .mysidebar {
+    display: none;
     background-color: $sidebar-bg;
     color: $topbar-color;
     position: fixed;
@@ -102,6 +104,26 @@ $primary-color: $topbar-color;
 
 .mycontent {
     margin-top: $topbar-height;
-    margin-left: $sidebar-width;
+    margin-left: 0;
     padding: $general-padding;
+}
+
+@media only screen and (min-width: 992px) {
+    .mylogo {
+        width: 8em;
+        height: 4.5em;
+        margin: -0.5em 0em 0.5em 1em;
+    }
+
+    .mymenu {
+        display: none;
+    }
+
+    .mysidebar {
+        display: block;
+    }
+
+    .mycontent {
+        margin-left: $sidebar-width;
+    }
 }
