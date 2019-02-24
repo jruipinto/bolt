@@ -1,6 +1,6 @@
 <div *ngIf="(assistencias$ | async) as assistencias">
   <div *ngIf="assistencias.length>0">
-      <r-card class="row" *ngFor="let assistencia of assistencias; let listaIndex=index" (click)="openModal(assistencia)">
+      <r-data-row class="row" *ngFor="let assistencia of assistencias; let listaIndex=index" (click)="openModal(assistencia)">
         <div class="col-lg-1 fontheavy">
           {{assistencia.id}}
         </div>
@@ -23,7 +23,7 @@
         <div class="col-lg-1 lessimportant">
           {{assistencia.estado}}
         </div>
-      </r-card>
+      </r-data-row>
   </div>
 </div>
 
@@ -104,7 +104,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <textarea class="responsive-textarea" name="relatorio_interno" id="relatorio_interno" [(ngModel)]='modalContext.assistencia.relatorio_interno'></textarea>
+            <textarea name="relatorio_interno" id="relatorio_interno" [(ngModel)]='modalContext.assistencia.relatorio_interno'></textarea>
           </div>
         </div>
       </div>
@@ -116,7 +116,7 @@
         </div>
         <div class="row">
           <div class="col">
-            <textarea class="responsive-textarea" name="relatorio_cliente" id="relatorio_cliente" [(ngModel)]='modalContext.assistencia.relatorio_cliente'></textarea>
+            <textarea name="relatorio_cliente" id="relatorio_cliente" [(ngModel)]='modalContext.assistencia.relatorio_cliente'></textarea>
           </div>
         </div>
       </div>

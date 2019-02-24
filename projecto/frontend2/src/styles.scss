@@ -1,4 +1,22 @@
-//////////////////////  My Styles /////////////////////////////////////
+/////////////////////////////// imports ////////////////////////////////////////
+
+@import "../node_modules/bootstrap/scss/bootstrap-reboot.scss";
+@import "../node_modules/bootstrap/scss/bootstrap-grid.scss";
+
+///////////////////// variables ///////////////////////////////////////
+
+$topbar-height: 3.5em;
+$topbar-bg: #212121;
+$topbar-color: #d6d6d6;
+
+$sidebar-width: 10em;
+$sidebar-bg: lighten($topbar-bg, 10%);
+
+
+$general-padding: 0.5em 1em 0.5em 1em;
+$primary-color: $topbar-color;
+
+//////////////////////  reset body /////////////////////////////////////
 
 html,
 body {
@@ -20,9 +38,7 @@ body {
     "Segoe UI Symbol";
 }
 
-.myform {
-  margin: 1em;
-}
+///////////////////////// elements customization //////////////////////////////////
 
 input,
 textarea {
@@ -37,9 +53,7 @@ input:disabled {
   cursor: not-allowed;
 }
 
-input[type="radio"] {
-  min-width: auto;
-}
+input[type="radio"] { min-width: auto; }
 
 input[type="submit"], input[type="button"] {
   cursor: pointer;
@@ -63,44 +77,140 @@ select {
   border: none;
 }
 
-///////////////////////////////////////////////////////////////////////
+//////////////////////////// my framework classes /////////////////////////////
 
-@import "../node_modules/bootstrap/scss/functions";
-@import "variables";
-@import "../node_modules/bootstrap/scss/mixins";
-@import "../node_modules/bootstrap/scss/root";
-@import "../node_modules/bootstrap/scss/reboot";
-@import "../node_modules/bootstrap/scss/type";
-@import "../node_modules/bootstrap/scss/images";
-@import "../node_modules/bootstrap/scss/code";
-@import "../node_modules/bootstrap/scss/grid";
-@import "../node_modules/bootstrap/scss/tables";
-@import "../node_modules/bootstrap/scss/forms";
-@import "../node_modules/bootstrap/scss/buttons";
-@import "../node_modules/bootstrap/scss/transitions";
-@import "../node_modules/bootstrap/scss/dropdown";
-@import "../node_modules/bootstrap/scss/button-group";
-@import "../node_modules/bootstrap/scss/input-group";
-@import "../node_modules/bootstrap/scss/forms";
-@import "../node_modules/bootstrap/scss/nav";
-@import "../node_modules/bootstrap/scss/navbar";
-@import "../node_modules/bootstrap/scss/card";
-@import "../node_modules/bootstrap/scss/breadcrumb";
-@import "../node_modules/bootstrap/scss/pagination";
-@import "../node_modules/bootstrap/scss/badge";
-@import "../node_modules/bootstrap/scss/jumbotron";
-@import "../node_modules/bootstrap/scss/alert";
-@import "../node_modules/bootstrap/scss/progress";
-@import "../node_modules/bootstrap/scss/media";
-@import "../node_modules/bootstrap/scss/list-group";
-@import "../node_modules/bootstrap/scss/close";
-// @import "../node_modules/bootstrap/scss/modal";
-@import "../node_modules/bootstrap/scss/tooltip";
-@import "../node_modules/bootstrap/scss/popover";
-@import "../node_modules/bootstrap/scss/carousel";
-@import "../node_modules/bootstrap/scss/utilities";
-@import "../node_modules/bootstrap/scss/print";
+.myform { margin: 1em; }
+
+.fontheavy { font-weight: 500; }
+
+.fontlight {  font-weight: 300; }
+
+.lessimportant { color: lighten($color: #212529, $amount: 20%); }
+
+.separate {
+  padding-left: 1em;
+  margin: 1em;
+  background-color: #ebebeb;
+}
+
+.mylogo {
+  width: 6em;
+  height: 3.5em;
+  margin: 0;
+}
+
+.mymenu {
+  cursor: pointer;
+  width: 2.5em;
+  height: 2.5em;
+  margin: .5em 1em .5em 1em;
+}
+
+.mylogin {
+  cursor: pointer;
+  font-weight: 500;
+  text-transform: capitalize;
+  position: absolute;
+  right: 0px;
+  height: $topbar-height;
+  line-height: ($topbar-height/1.2);
+  padding: $general-padding;
+  color: $primary-color !important;
+}
+.mylogin:hover {
+  background-color: darken($topbar-bg, 2%);
+  color: lighten($primary-color, 15%) !important;
+}
 
 
+.mytopbar {
+  background-color: $topbar-bg;
+  color: $topbar-color;
+  position: fixed;
+  top: 0;
+  height: $topbar-height;
+  width: 100%;
+  padding: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  z-index: 1;
+}
 
-// @import "../node_modules/bootstrap/scss/bootstrap.scss";
+.mysidebar {
+  display: none;
+  z-index: 2;
+  background-color: $sidebar-bg;
+  color: $topbar-color;
+  position: fixed;
+  top: $topbar-height;
+  bottom: 0;
+  left: 0;
+  width: $sidebar-width;
+  padding: 0;
+}
+
+.sidebar-visible { display: block; }
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.nav-link {
+  display: block;
+  padding: 0rem 1rem;
+  background-color: $sidebar-bg;
+  color: $topbar-color;
+  font-size: 1em;
+  font-weight: 500;
+  text-decoration: none;
+  margin-top: 0.5em;
+  margin-bottom: 0.2em;
+}
+
+.nav-link:hover, .nav-link:focus {
+  color: lighten($primary-color, 15%);
+  text-decoration: none;
+}
+
+.nav-link-active {
+  background-color: $topbar-bg;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  z-index: 1;
+}
+.nav-link-active:hover { background-color: darken($topbar-bg, 2%); }
+
+.sub-nav-link{
+  margin-top: 0;
+  padding-left: 2.5em;
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 0.9em;
+}
+.sub-nav-link-last-item { margin-bottom: 0.5em; }
+
+.mycontent {
+  margin-top: $topbar-height;
+  margin-left: 0;
+  padding: $general-padding;
+}
+
+@media only screen and (min-width: 992px) {
+  .mylogo {
+    margin-left: 2em;
+  }
+
+  .mymenu {
+    display: none;
+  }
+
+  .mysidebar {
+    display: block;
+  }
+
+  .mycontent {
+    margin-left: $sidebar-width;
+  }
+}

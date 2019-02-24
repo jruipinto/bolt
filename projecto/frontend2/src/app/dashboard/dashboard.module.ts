@@ -16,7 +16,7 @@ import { AssistenciasState } from '../store/assistencias.state';
 import { EncomendasState } from '../store/encomendas.state';
 import { UsersState } from '../store/users.state';
 import { CriarNovaState } from './criar-nova/criar-nova.component.state';
-import { RCardComponent, RModalComponent } from '../shared/components';
+import { RCardComponent, RModalComponent, RDataRowComponent } from '../shared/components';
 import { AutofocusDirective } from '../shared';
 
 
@@ -45,6 +45,7 @@ import { AutofocusDirective } from '../shared';
     EncomendasComponent,
     RCardComponent,
     RModalComponent,
+    RDataRowComponent,
     AutofocusDirective
   ]
 })

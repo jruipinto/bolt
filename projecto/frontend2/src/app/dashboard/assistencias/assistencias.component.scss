@@ -1,34 +1,8 @@
 r-card { min-height: 4em; }
 
-.linha {
-    border-bottom: 1px solid #ddd;
-    padding: 0em 0em 0em 0em;
-    cursor: pointer;
-}
+r-data-row { min-height: 3em; }
 
-.linha:nth-child(even){background-color: #ebebeb;}
-
-.linha:hover {background-color: #ddd;}
-
-.fontheavy {
-    font-weight: 500;
-}
-
-.fontlight {
-    font-weight: 300;
-}
-
-.lessimportant {
-    color: lighten($color: #212529, $amount: 20%);
-}
-
-.separate {
-  padding-left: 1em;
-  margin-bottom: 1em;
-  background-color: #ebebeb;
-}
-
-.responsive-textarea {
+textarea {
   width: 90%;
   min-height: 5em;
 }
