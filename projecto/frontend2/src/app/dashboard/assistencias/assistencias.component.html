@@ -1,7 +1,6 @@
 <div *ngIf="(assistencias$ | async) as assistencias">
   <div *ngIf="assistencias.length>0">
-    <div class="linha" *ngFor="let assistencia of assistencias; let listaIndex=index">
-      <div class="row" (click)="openModal(assistencia)">
+      <r-card class="row" *ngFor="let assistencia of assistencias; let listaIndex=index" (click)="openModal(assistencia)">
         <div class="col-lg-1 fontheavy">
           {{assistencia.id}}
         </div>
@@ -24,8 +23,7 @@
         <div class="col-lg-1 lessimportant">
           {{assistencia.estado}}
         </div>
-      </div>
-    </div>
+      </r-card>
   </div>
 </div>
 
