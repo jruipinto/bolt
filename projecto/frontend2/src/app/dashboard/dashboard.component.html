@@ -1,11 +1,11 @@
 <div class="mytopbar">
-    <img class="mymenu" src="../../assets/menu bar.svg" alt="">
-    <img class="mylogo" src="../../assets/logo.svg" alt="">
+    <img class="mymenu" src="../../assets/menu bar.svg" alt="menu" (click)="toogleSidebar()">
+    <img class="mylogo" src="../../assets/logo.svg" alt="logo">
     
     <a (click)="logOut()" class="mylogin">Logout {{userName}}</a>
 </div>
 
-<div class="mysidebar">
+<div class="mysidebar" [class.sidebar-visible]="sidebarVisible">
   <ul class="nav flex-column">
     <li class="nav-item">
       <a routerLink="./assistencias" routerLinkActive="nav-link-active" class="nav-link">Assistências</a>

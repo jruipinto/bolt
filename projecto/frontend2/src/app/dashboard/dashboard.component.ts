@@ -8,6 +8,7 @@ import { AuthService } from '../shared/services/auth.service';
 })
 export class DashboardComponent implements OnInit {
   public userName: string;
+  public sidebarVisible = false;
 
   constructor(private authService: AuthService) { }
 
@@ -17,6 +18,14 @@ export class DashboardComponent implements OnInit {
 
   logOut() {
     return this.authService.logOut();
+  }
+
+  toogleSidebar () {
+    if (!this.sidebarVisible) {
+      this.sidebarVisible = true;
+    } else {
+      this.sidebarVisible = false;
+    }
   }
 
 }
