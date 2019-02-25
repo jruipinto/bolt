@@ -72,6 +72,11 @@ input[type="number"] {
   min-width: auto;
 }
 
+input[type="button"] {
+  border: none;
+  min-width: 8em;
+}
+
 select {
   background-color: #d6d6d67a;
   border: none;
@@ -87,9 +92,12 @@ select {
 
 .lessimportant { color: lighten($color: #212529, $amount: 20%); }
 
-.separate {
-  padding-left: 1em;
+.separate, .my-button-group {
   margin: 1em;
+}
+
+.separate {
+  padding-left: 1em;  
   background-color: #ebebeb;
 }
 
