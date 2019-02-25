@@ -84,17 +84,13 @@ select {
 
 //////////////////////////// my framework classes /////////////////////////////
 
-.myform { margin: 1em; }
-
 .fontheavy { font-weight: 500; }
 
 .fontlight {  font-weight: 300; }
 
 .lessimportant { color: lighten($color: #212529, $amount: 20%); }
 
-.separate, .my-button-group {
-  margin: 1em;
-}
+.separate, .my-button-group, .myform { margin: 1em; }
 
 .separate {
   padding-left: 1em;  
