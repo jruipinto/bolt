@@ -43,39 +43,29 @@ body {
 input,
 textarea {
   background-color: #d6d6d67a;
-  min-width: 50%;
+  min-width: 100%;
   border: none;
-  margin: 0.2em !important;
-}
-
-input:disabled {
-  text-decoration: line-through;
-  cursor: not-allowed;
+  //margin-top: 0.2em;
+  margin-bottom: 0.5rem;
 }
 
 input[type="radio"] { min-width: auto; }
 
-input[type="submit"], input[type="button"] {
+input[type="submit"],
+input[type="button"] {
   cursor: pointer;
   padding: 0.5em 1em 0.5em 1em;
-  min-width: auto;
   color: whitesmoke;
   background-color: #212121a9;
+  border: none;
 }
 
 input[class="my-button-secondary"] {
-  color: #212121a9;
-  background-color: whitesmoke;
+  color: $topbar-bg;
+  background-color: $primary-color;
 }
 
-input[type="number"] {
-  min-width: auto;
-}
 
-input[type="button"] {
-  border: none;
-  min-width: 8em;
-}
 
 select {
   background-color: #d6d6d67a;
@@ -90,10 +80,11 @@ select {
 
 .lessimportant { color: lighten($color: #212529, $amount: 20%); }
 
-.separate, .my-button-group, .myform { margin: 1em; }
+.separate,
+.myform { margin: 1em 0 1em 0; }
 
 .separate {
-  padding-left: 1em;  
+  padding: 0 1em 0 1em;  
   background-color: #ebebeb;
 }
 
@@ -174,7 +165,8 @@ select {
   margin-bottom: 0.2em;
 }
 
-.nav-link:hover, .nav-link:focus {
+.nav-link:hover,
+.nav-link:focus {
   color: lighten($primary-color, 15%);
   text-decoration: none;
 }
@@ -199,6 +191,11 @@ select {
   margin-top: $topbar-height;
   margin-left: 0;
   padding: $general-padding;
+}
+
+:disabled {
+  text-decoration: line-through;
+  cursor: not-allowed !important;
 }
 
 @media only screen and (min-width: 992px) {
