@@ -1,29 +1,29 @@
 <div *ngIf="(assistencias$ | async) as assistencias">
   <div *ngIf="assistencias.length>0">
-      <r-data-row class="row" *ngFor="let assistencia of assistencias; let listaIndex=index" (click)="openModal(assistencia)">
-        <div class="col-lg-1 fontheavy">
-          {{assistencia.id}}
-        </div>
-        <div class="col-lg-2 lessimportant">
-          {{assistencia.categoria}}:
-        </div>
-        <div class="col-lg-2">
-          <span class="fontheavy">{{assistencia.marca}}</span>
-          {{assistencia.modelo}}
-        </div>
-        <div class="col-lg-1 lessimportant">
-          {{assistencia.cor}}
-        </div>
-        <div class="col-lg-3 lessimportant">
-          {{assistencia.problema}}
-        </div>
-        <div class="col-lg-2 lessimportant">
-          Cliente:{{assistencia.cliente_user_name}}
-        </div>
-        <div class="col-lg-1 lessimportant">
-          {{assistencia.estado}}
-        </div>
-      </r-data-row>
+    <r-data-row class="row" *ngFor="let assistencia of assistencias; let listaIndex=index" (click)="openModal(assistencia)">
+      <div class="col-lg-1 fontheavy">
+        {{assistencia.id}}
+      </div>
+      <div class="col-lg-2 lessimportant">
+        {{assistencia.categoria}}:
+      </div>
+      <div class="col-lg-2">
+        <span class="fontheavy">{{assistencia.marca}}</span>
+        {{assistencia.modelo}}
+      </div>
+      <div class="col-lg-1 lessimportant">
+        {{assistencia.cor}}
+      </div>
+      <div class="col-lg-3 lessimportant">
+        {{assistencia.problema}}
+      </div>
+      <div class="col-lg-2 lessimportant">
+        Cliente:{{assistencia.cliente_user_name}}
+      </div>
+      <div class="col-lg-1 lessimportant">
+        {{assistencia.estado}}
+      </div>
+    </r-data-row>
   </div>
 </div>
 
@@ -43,7 +43,7 @@
         {{modalContext.assistencia.estado}}
       </div>
     </div>
-</div>
+  </div>
   <div class="separate">
     <div class="row">
       <div class="col-md-2 fontheavy">
@@ -53,14 +53,15 @@
         {{modalContext.assistencia.cliente_user_name}}
       </div>
     </div>
-</div>
-  <div class="separate">
     <div class="row">
       <div class="col-md-2 fontheavy">
-        {{modalContext.assistencia.categoria}}:
+        Equipamento:
       </div>
       <div class="col">
-        {{modalContext.assistencia.marca}} {{modalContext.assistencia.modelo}}
+        {{modalContext.assistencia.categoria}}
+        {{modalContext.assistencia.marca}}
+        {{modalContext.assistencia.modelo}}
+        {{modalContext.assistencia.cor}}
       </div>
     </div>
     <div class="row">
@@ -71,24 +72,6 @@
         {{modalContext.assistencia.serial}}
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-2 fontheavy">
-        Cor:
-      </div>
-      <div class="col">
-        {{modalContext.assistencia.cor}}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-2 fontheavy">
-        Orçamento:
-      </div>
-      <div class="col">
-        {{modalContext.assistencia.orcamento}}
-      </div>
-    </div>
-  </div>
-  <div class="separate">
     <div class="row">
       <div class="col-md-2 fontheavy">
         Problema:
@@ -129,9 +112,17 @@
   <div class="separate">
     <div class="row">
       <div class="col-md-2 fontheavy">
+        Orçamento:
+      </div>
+      <div class="col">
+        {{modalContext.assistencia.orcamento}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2 fontheavy">
         Preço:
       </div>
-      <div class="col-md-4">
+      <div class="col-md-1">
         <input type="number" name="preco" id="preco" [(ngModel)]='modalContext.assistencia.preco'>
       </div>
       <div class="col-md-auto">
@@ -154,4 +145,3 @@
     </div>
   </div>
 </r-modal>
-
