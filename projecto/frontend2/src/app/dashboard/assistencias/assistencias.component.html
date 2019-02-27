@@ -141,7 +141,7 @@
       <input type="button" class="my-button-secondary" value="Contactar" (click)="saveModal.emit({estado: 'contacto pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
     </div>
     <div class="col-xl-2 col-md-3">
-      <input type="button" class="my-button-secondary" value="Fechar" (click)="saveModal.emit({estado: 'concluído', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
+      <input type="button" class="my-button-secondary" value="Concluir" (click)="saveModal.emit({estado: 'concluído', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
     </div>
   </div>
 </r-modal>
