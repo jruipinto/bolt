@@ -1,0 +1,34 @@
+<div class="mytopbar">
+    <img class="mymenu" src="../../assets/menu bar.svg" alt="menu" (click)="toogleSidebar()">
+    <img class="mylogo" src="../../assets/logo.svg" alt="logo">
+    
+    <a (click)="logOut()" class="my-logout-btn">Logout {{userName}}</a>
+</div>
+
+<div class="mysidebar" [class.sidebar-visible]="sidebarVisible">
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a routerLink="./assistencias" routerLinkActive="nav-link-active" class="nav-link">Assistências</a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="./criarnova" routerLinkActive="nav-link-active" class="nav-link sub-nav-link sub-nav-link-last-item">Criar Nova</a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="./encomendas" routerLinkActive="nav-link-active" class="nav-link">Encomendas</a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="./historico" routerLinkActive="nav-link-active" class="nav-link sub-nav-link sub-nav-link-last-item">Histórico</a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="./stock" routerLinkActive="nav-link-active" class="nav-link">Stock</a>
+    </li>
+
+  </ul>
+</div>
+
+<div class="mycontent">
+  <div class="mycontainer">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+

@@ -1,0 +1,9 @@
+:host {
+  border-bottom: 1px solid #ddd;
+  padding: 0em 0em 0em 0em;
+  cursor: pointer;
+}
+
+:host:nth-child(even){background-color: #ebebeb;}
+
+:host:hover {background-color: #ddd;}
