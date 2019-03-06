@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ClarityModule } from '@clr/angular';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
@@ -34,7 +35,8 @@ import { AutofocusDirective } from '../shared';
       EncomendasState,
       UsersState,
       CriarNovaState
-    ])
+    ]),
+    ClarityModule
   ],
   declarations: [
     DashboardComponent,

@@ -1,34 +1,55 @@
-<div class="mytopbar">
-    <img class="mymenu" src="../../assets/menu bar.svg" alt="menu" (click)="toogleSidebar()">
-    <img class="mylogo" src="../../assets/logo.svg" alt="logo">
-    
-    <a (click)="logOut()" class="my-logout-btn">Logout {{userName}}</a>
-</div>
+<clr-main-container>
+  <clr-header class="header header-4">
+    <div class="branding">
+      <a class="nav-link">
+        <clr-icon shape="home" size="24"></clr-icon>
+        <span class="title">N Reparações</span>
+      </a>
+    </div>
+    <div class="header-actions">
+      <clr-dropdown>
+        <button class="nav-text" clrDropdownTrigger>
+          {{userName}}
+          <clr-icon shape="caret down"></clr-icon>
+        </button>
+        <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+          <!--<a href="." clrDropdownItem>Preferências</a>-->
+          <a (click)="logOut()" clrDropdownItem>Log out</a>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+    </div>
+  </clr-header>
 
-<div class="mysidebar" [class.sidebar-visible]="sidebarVisible">
-  <ul class="nav flex-column">
-    <li class="nav-item">
-      <a routerLink="./assistencias" routerLinkActive="nav-link-active" class="nav-link">Assistências</a>
-    </li>
-    <li class="nav-item">
-      <a routerLink="./criarnova" routerLinkActive="nav-link-active" class="nav-link sub-nav-link sub-nav-link-last-item">Criar Nova</a>
-    </li>
-    <li class="nav-item">
-      <a routerLink="./encomendas" routerLinkActive="nav-link-active" class="nav-link">Encomendas</a>
-    </li>
-    <li class="nav-item">
-      <a routerLink="./historico" routerLinkActive="nav-link-active" class="nav-link sub-nav-link sub-nav-link-last-item">Histórico</a>
-    </li>
-    <li class="nav-item">
-      <a routerLink="./stock" routerLinkActive="nav-link-active" class="nav-link">Stock</a>
-    </li>
-
-  </ul>
-</div>
-
-<div class="mycontent">
-  <div class="mycontainer">
-    <router-outlet></router-outlet>
+  <div class="content-container">
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+    <nav class="sidenav" [clr-nav-level]="1">
+      <section class="sidenav-content">
+        <section class="nav-group">
+          <input id="tabexample1" type="checkbox">
+          <label for="tabexample1">Assistências</label>
+          <ul class="nav-list">
+            <li><a class="nav-link" routerLink="./assistencias" routerLinkActive="active">Lista</a></li>
+            <li><a class="nav-link" routerLink="./criarnova" routerLinkActive="active">Criar Nova</a></li>
+          </ul>
+        </section>
+        <section class="nav-group">
+          <input id="tabexample2" type="checkbox">
+          <label for="tabexample2">Encomendas</label>
+          <ul class="nav-list">
+            <li><a class="nav-link" routerLink="./encomendas" routerLinkActive="active">Lista</a></li>
+            <li><a class="nav-link" routerLink="./historico" routerLinkActive="active">Histórico</a></li>
+          </ul>
+        </section>
+        <section class="nav-group">
+          <input id="tabexample3" type="checkbox">
+          <label for="tabexample3">Stock</label>
+          <ul class="nav-list">
+            <li><a class="nav-link" routerLink="./stock" routerLinkActive="active">Lista</a></li>
+          </ul>
+        </section>
+      </section>
+    </nav>
   </div>
-</div>
-
+</clr-main-container>

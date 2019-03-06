@@ -1,26 +1,26 @@
 <div *ngIf="(assistencias$ | async) as assistencias">
   <div *ngIf="assistencias.length>0">
-    <r-data-row class="row" *ngFor="let assistencia of assistencias; let listaIndex=index" (click)="openModal(assistencia)">
-      <div class="col-xl-1 fontheavy">
+    <r-data-row class="clr-row" *ngFor="let assistencia of assistencias; let listaIndex=index" (click)="openModal(assistencia)">
+      <div class="clr-col-xl-1 fontheavy">
         {{assistencia.id}}
       </div>
-      <div class="col-xl-2 lessimportant">
+      <div class="clr-col-xl-2 lessimportant">
         {{assistencia.categoria}}:
       </div>
-      <div class="col-xl-2">
+      <div class="clr-col-xl-2">
         <span class="fontheavy">{{assistencia.marca}}</span>
         {{assistencia.modelo}}
       </div>
-      <div class="col-xl-1 lessimportant">
+      <div class="clr-col-xl-1 lessimportant">
         {{assistencia.cor}}
       </div>
-      <div class="col-xl-3 lessimportant">
+      <div class="clr-col-xl-3 lessimportant">
         {{assistencia.problema}}
       </div>
-      <div class="col-xl-2 lessimportant">
+      <div class="clr-col-xl-2 lessimportant">
         Cliente:{{assistencia.cliente_user_name}}
       </div>
-      <div class="col-xl-1 lessimportant">
+      <div class="clr-col-xl-1 lessimportant">
         {{assistencia.estado}}
       </div>
     </r-data-row>
@@ -29,80 +29,80 @@
 
 
 <r-modal *ngIf="modalExists" (modalCloseEvent)="closeModal()">
-  <div class="row title">
-    <div class="col fontheavy">
+  <div class="clr-row title">
+    <div class="clr-col fontheavy">
       {{modalContext.assistencia.id}}
     </div>
   </div>
   <div class="separate">
-    <div class="row">
-      <div class="col-md-2 fontheavy">
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">
         Estado:
       </div>
-      <div class="col">
+      <div class="clr-col">
         {{modalContext.assistencia.estado}}
       </div>
     </div>
   </div>
   <div class="separate">
-    <div class="row">
-      <div class="col-md-2 fontheavy">
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">
         Cliente:
       </div>
-      <div class="col">
+      <div class="clr-col">
         {{modalContext.assistencia.cliente_user_name}}
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-2 fontheavy">
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">
         Equipamento:
       </div>
-      <div class="col">
+      <div class="clr-col">
         {{modalContext.assistencia.categoria}}
         {{modalContext.assistencia.marca}}
         {{modalContext.assistencia.modelo}}
         {{modalContext.assistencia.cor}}
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-2 fontheavy">
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">
         Serial:
       </div>
-      <div class="col">
+      <div class="clr-col">
         {{modalContext.assistencia.serial}}
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-2 fontheavy">
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">
         Problema:
       </div>
-      <div class="col">
+      <div class="clr-col">
         {{modalContext.assistencia.problema}}
       </div>
     </div>
   </div>
   <div class="separate">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="row">
-          <div class="col fontheavy">
+    <div class="clr-row">
+      <div class="clr-col-md-6">
+        <div class="clr-row">
+          <div class="clr-col fontheavy">
             Informação técnica interna:
           </div>
         </div>
-        <div class="row">
-          <div class="col">
+        <div class="clr-row">
+          <div class="clr-col">
             <textarea name="relatorio_interno" id="relatorio_interno" [(ngModel)]='modalContext.assistencia.relatorio_interno'></textarea>
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="row">
-          <div class="col fontheavy">
+      <div class="clr-col-md-6">
+        <div class="clr-row">
+          <div class="clr-col fontheavy">
             Informação para o cliente:
           </div>
         </div>
-        <div class="row">
-          <div class="col">
+        <div class="clr-row">
+          <div class="clr-col">
             <textarea name="relatorio_cliente" id="relatorio_cliente" [(ngModel)]='modalContext.assistencia.relatorio_cliente'></textarea>
           </div>
         </div>
@@ -110,37 +110,37 @@
     </div>
   </div>
   <div class="separate">
-    <div class="row">
-      <div class="col-md-2 fontheavy">
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">
         Orçamento:
       </div>
-      <div class="col">
+      <div class="clr-col">
         {{modalContext.assistencia.orcamento}}
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-2 fontheavy">
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">
         Preço:
       </div>
-      <div class="col-md-4">
+      <div class="clr-col-md-4">
         <input type="number" name="preco" id="preco" [(ngModel)]='modalContext.assistencia.preco'>
       </div>
-      <div class="col-md-auto">
+      <div class="clr-col-md-auto">
         €
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-xl-2 col-md-3">
+  <div class="clr-row">
+    <div class="clr-col-xl-2 clr-col-md-3">
       <input type="button" value="Guardar" (click)="saveModal.emit({estado: 'em análise', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
     </div>
-    <div class="col-xl-2 col-md-3">
+    <div class="clr-col-xl-2 clr-col-md-3">
       <input type="button" class="my-button-secondary" value="Orçamentar" (click)="saveModal.emit({estado: 'orçamento pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
     </div>
-    <div class="col-xl-2 col-md-3">
+    <div class="clr-col-xl-2 clr-col-md-3">
       <input type="button" class="my-button-secondary" value="Contactar" (click)="saveModal.emit({estado: 'contacto pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
     </div>
-    <div class="col-xl-2 col-md-3">
+    <div class="clr-col-xl-2 clr-col-md-3">
       <input type="button" class="my-button-secondary" value="Concluir" (click)="saveModal.emit({estado: 'concluído', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
     </div>
   </div>

@@ -79,3 +79,7 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  * APPLICATION IMPORTS
  */
 (window as any).global = window;
+
+// VMWare Clarity design imports
+import '@webcomponents/custom-elements';
+import '@clr/icons';
