@@ -132,16 +132,16 @@
   </div>
   <div class="clr-row">
     <div class="clr-col-xl-2 clr-col-md-3">
-      <input type="button" value="Guardar" (click)="saveModal.emit({estado: 'em análise', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
+      <input type="button" class="btn btn-primary" value="Guardar" (click)="saveModal.emit({estado: 'em análise', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
     </div>
     <div class="clr-col-xl-2 clr-col-md-3">
-      <input type="button" class="my-button-secondary" value="Orçamentar" (click)="saveModal.emit({estado: 'orçamento pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
+      <input type="button" class="btn" value="Orçamentar" (click)="saveModal.emit({estado: 'orçamento pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
     </div>
     <div class="clr-col-xl-2 clr-col-md-3">
-      <input type="button" class="my-button-secondary" value="Contactar" (click)="saveModal.emit({estado: 'contacto pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
+      <input type="button" class="btn" value="Contactar" (click)="saveModal.emit({estado: 'contacto pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
     </div>
     <div class="clr-col-xl-2 clr-col-md-3">
-      <input type="button" class="my-button-secondary" value="Concluir" (click)="saveModal.emit({estado: 'concluído', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
+      <input type="button" class="btn" value="Concluir" (click)="saveModal.emit({estado: 'concluído', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
     </div>
   </div>
 </r-modal>
