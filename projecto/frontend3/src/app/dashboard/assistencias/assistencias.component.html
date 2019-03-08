@@ -1,26 +1,26 @@
 <div *ngIf="(assistencias$ | async) as assistencias">
   <div *ngIf="assistencias.length>0">
     <r-data-row class="clr-row" *ngFor="let assistencia of assistencias; let listaIndex=index" (click)="openModal(assistencia)">
-      <div class="clr-col-xl-1 fontheavy">
+      <div class="clr-col-lg-1 fontheavy">
         {{assistencia.id}}
       </div>
-      <div class="clr-col-xl-2 lessimportant">
+      <div class="clr-col-lg-2 lessimportant">
         {{assistencia.categoria}}:
       </div>
-      <div class="clr-col-xl-2">
+      <div class="clr-col-lg-2">
         <span class="fontheavy">{{assistencia.marca}}</span>
         {{assistencia.modelo}}
       </div>
-      <div class="clr-col-xl-1 lessimportant">
+      <div class="clr-col-lg-1 lessimportant">
         {{assistencia.cor}}
       </div>
-      <div class="clr-col-xl-3 lessimportant">
+      <div class="clr-col-lg-3 lessimportant">
         {{assistencia.problema}}
       </div>
-      <div class="clr-col-xl-2 lessimportant">
+      <div class="clr-col-lg-2 lessimportant">
         Cliente:{{assistencia.cliente_user_name}}
       </div>
-      <div class="clr-col-xl-1 lessimportant">
+      <div class="clr-col-lg-1 lessimportant">
         {{assistencia.estado}}
       </div>
     </r-data-row>
