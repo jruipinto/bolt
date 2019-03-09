@@ -14,3 +14,10 @@
     background: url(./assets/logo.svg);
 }
 */
+
+.wd-100 {
+    width: 100%;
+    max-width: 100%;
+}
+
+.separate:not(:first-child) { margin-top: 1rem; }
