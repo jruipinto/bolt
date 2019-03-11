@@ -146,11 +146,20 @@
     (click)="saveModal.emit({estado: 'em análise', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
     -->
 
-    <clr-button-group class="btn-group btn-primary " [clrMenuPosition]="'top-right'">
-      <clr-button class="btn">Download</clr-button>
-      <clr-button class="btn" [clrInMenu]="true">Assign</clr-button>
-      <clr-button class="btn" [clrInMenu]="true">Move</clr-button>
-      <clr-button class="btn" [clrInMenu]="true">Delete</clr-button>
+    <clr-button-group class="btn-group " [clrMenuPosition]="'top-right'">
+      <clr-button class="btn"
+      (click)="saveModal.emit({estado: 'orçamento pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})"
+      [clrInMenu]="true">Orçamentar</clr-button>
+      <clr-button class="btn"
+      (click)="saveModal.emit({estado: 'contacto pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})"
+      [clrInMenu]="true">Contactar</clr-button>
+      <clr-button class="btn"
+      (click)="saveModal.emit({estado: 'concluído', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})"
+      [clrInMenu]="true">Concluir</clr-button>
+      <clr-button class="btn btn-primary btn-icon"
+      (click)="saveModal.emit({estado: 'em análise', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
+      <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
+      Guardar</clr-button>
     </clr-button-group>
   </div>
 </clr-modal>

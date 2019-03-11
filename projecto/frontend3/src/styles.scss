@@ -21,3 +21,7 @@
 }
 
 .separate:not(:first-child) { margin-top: 1rem; }
+
+app-assistencias .modal-footer .btn {
+    margin: 0 1px 0 0;
+}
