@@ -12,7 +12,7 @@ import { AssistenciasState, AssistenciaStateModel } from '../../store/assistenci
 export class AssistenciasComponent implements OnInit {
 
   public modalContext = {};
-  public modalExists: boolean;
+  public modalExists = false;
 
   @Select(AssistenciasState)
   public assistencias$: Observable<AssistenciaStateModel[]>;
