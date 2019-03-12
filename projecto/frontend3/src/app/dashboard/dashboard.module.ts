@@ -19,6 +19,7 @@ import { UsersState } from '../store/users.state';
 import { CriarNovaState } from './criar-nova/criar-nova.component.state';
 import { RCardComponent, RModalComponent, RDataRowComponent } from '../shared/components';
 import { AutofocusDirective } from '../shared';
+import { PainelRapidoComponent } from './painel-rapido/painel-rapido.component';
 
 
 
@@ -48,7 +49,8 @@ import { AutofocusDirective } from '../shared';
     RCardComponent,
     RModalComponent,
     RDataRowComponent,
-    AutofocusDirective
+    AutofocusDirective,
+    PainelRapidoComponent
   ]
 })
 export class DashboardModule { }
