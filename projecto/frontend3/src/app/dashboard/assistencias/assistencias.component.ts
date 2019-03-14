@@ -13,6 +13,7 @@ export class AssistenciasComponent implements OnInit {
 
   public modalContext = {};
   public modalExists = false;
+  public modalOpen = false;
 
   @Select(AssistenciasState)
   public assistencias$: Observable<AssistenciaStateModel[]>;
@@ -32,14 +33,23 @@ export class AssistenciasComponent implements OnInit {
 
   ngOnInit() {
   }
+  /*
+    openModal(payload: {}): void {
+      this.modalExists = true;
+      Object.assign(this.modalContext, { assistencia: payload });
+      console.log('TCL: AssistenciasComponent -> this.modalContext', this.modalContext);
+    }
+  
+    closeModal (): void {
+      this.modalExists = false;
+    }
+  */
 
   openModal(payload: {}): void {
-    this.modalExists = true;
+    this.modalOpen = true;
     Object.assign(this.modalContext, { assistencia: payload });
     console.log('TCL: AssistenciasComponent -> this.modalContext', this.modalContext);
   }
 
-  closeModal (): void {
-    this.modalExists = false;
-  }
+
 }

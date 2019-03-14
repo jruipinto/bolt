@@ -1,0 +1,125 @@
+<clr-modal [(clrModalOpen)]="modalOpen" [clrModalSize]="'lg'">
+
+  <h3 class="modal-title">{{modalContext.assistencia.id}}</h3>
+
+  <div class="modal-body">
+    <div class="separate">
+      <div class="clr-row">
+        <div class="clr-col-md-2 fontheavy">
+          Estado:
+        </div>
+        <div class="clr-col">
+          {{modalContext.assistencia.estado}}
+        </div>
+      </div>
+    </div>
+    <div class="separate">
+      <div class="clr-row">
+        <div class="clr-col-md-2 fontheavy">
+          Cliente:
+        </div>
+        <div class="clr-col">
+          {{modalContext.assistencia.cliente_user_name}}
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-md-2 fontheavy">
+          Equipamento:
+        </div>
+        <div class="clr-col">
+          {{modalContext.assistencia.categoria}}
+          {{modalContext.assistencia.marca}}
+          {{modalContext.assistencia.modelo}}
+          {{modalContext.assistencia.cor}}
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-md-2 fontheavy">
+          Serial:
+        </div>
+        <div class="clr-col">
+          {{modalContext.assistencia.serial}}
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-md-2 fontheavy">
+          Problema:
+        </div>
+        <div class="clr-col">
+          {{modalContext.assistencia.problema}}
+        </div>
+      </div>
+    </div>
+    <div class="separate">
+      <div class="clr-row">
+        <div class="clr-col-md-6">
+          <div class="clr-row">
+            <div class="clr-col fontheavy">
+              Informação técnica interna:
+            </div>
+          </div>
+          <div class="clr-row">
+            <div class="clr-col">
+              <textarea name="relatorio_interno" id="relatorio_interno"
+                [(ngModel)]='modalContext.assistencia.relatorio_interno'></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="clr-col-md-6">
+          <div class="clr-row">
+            <div class="clr-col fontheavy">
+              Informação para o cliente:
+            </div>
+          </div>
+          <div class="clr-row">
+            <div class="clr-col">
+              <textarea name="relatorio_cliente" id="relatorio_cliente"
+                [(ngModel)]='modalContext.assistencia.relatorio_cliente'></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="separate">
+      <div class="clr-row">
+        <div class="clr-col-md-2 fontheavy">
+          Orçamento:
+        </div>
+        <div class="clr-col">
+          {{modalContext.assistencia.orcamento}}
+          <span *ngIf="!modalContext.assistencia.orcamento">não tem</span>
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-md-2 fontheavy">
+          Preço:
+        </div>
+        <div class="clr-col-md-4">
+          <input type="number" name="preco" id="preco" [(ngModel)]='modalContext.assistencia.preco'>
+        </div>
+        <div class="clr-col-md-auto">
+          €
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <clr-button-group class="btn-group " [clrMenuPosition]="'top-right'">
+      <clr-button class="btn"
+      (click)="saveModal.emit({estado: 'orçamento pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})"
+      [clrInMenu]="true">Orçamentar</clr-button>
+      <clr-button class="btn"
+      (click)="saveModal.emit({estado: 'contacto pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})"
+      [clrInMenu]="true">Contactar</clr-button>
+      <clr-button class="btn"
+      (click)="saveModal.emit({estado: 'concluído', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})"
+      [clrInMenu]="true">Concluir</clr-button>
+      <clr-button class="btn btn-primary btn-icon"
+      (click)="saveModal.emit({estado: 'em análise', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
+      <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
+      Guardar</clr-button>
+    </clr-button-group>
+  </div>
+
+</clr-modal>
