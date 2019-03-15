@@ -6,13 +6,15 @@ import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 /* state */
 import { AssistenciasState } from './pages/assistencias';
 import { CriarNovaState } from './pages/criar-nova';
+import { AssistenciaModalState } from './pages/assistencia-modal';
 
 
 @NgModule({
     imports: [
         NgxsModule.forFeature([
             AssistenciasState,
-            CriarNovaState
+            CriarNovaState,
+            AssistenciaModalState
         ]),
         NgxsFormPluginModule
     ],
