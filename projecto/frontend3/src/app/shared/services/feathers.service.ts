@@ -6,7 +6,7 @@ import * as io from 'socket.io-client';
 import feathers from '@feathersjs/feathers';
 import feathersSocketIOClient from '@feathersjs/socketio-client';
 import feathersAuthClient from '@feathersjs/authentication-client';
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'

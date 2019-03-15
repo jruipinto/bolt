@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Select } from '@ngxs/store';
 import { Emitter, Emittable } from '@ngxs-labs/emitter';
 import { Observable } from 'rxjs';
-import { AssistenciasState, AssistenciaStateModel } from '../../store/assistencias.state';
+import { AssistenciasState, AssistenciaStateModel } from './assistencias.state';
 
 @Component({
   selector: 'app-assistencias',

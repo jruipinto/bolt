@@ -1,10 +1,8 @@
 /* angular modules */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 /* guards */
-import { AuthGuard } from './shared/guards/auth.guard';
-
+import { AuthGuard } from 'src/app/shared/guards/auth.guard';
 /* components */
 import { LoginPageComponent, SignupPageComponent } from './pages';
 
@@ -20,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadChildren: './dashboard/dashboard.module#DashboardModule',
+    loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
     canLoad: [AuthGuard]
   },
   { path: '',   redirectTo: '/dashboard/painelrapido', pathMatch: 'full' },

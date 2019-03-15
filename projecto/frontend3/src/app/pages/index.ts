@@ -1,3 +1,3 @@
-export { LoginPageComponent } from './login-page/login-page.component';
-export { SignupPageComponent } from './signup-page/signup-page.component';
+export * from './login-page';
+export * from './signup-page';
 /* dashboard is a lazy module with it's own pages */

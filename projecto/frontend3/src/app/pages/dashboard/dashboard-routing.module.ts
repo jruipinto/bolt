@@ -1,14 +1,15 @@
+/* angular modules */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DashboardComponent } from './dashboard.component';
+/* guards */
 import { AuthGuard } from 'src/app/shared';
+/* components */
+import { DashboardComponent } from './dashboard.component';
 import {
-  PainelRapidoComponent,
-  AssistenciasComponent,
-  CriarNovaComponent,
-  EncomendasComponent,
-  HistoricoComponent,
-  StockComponent } from './pages';
+  PainelRapidoComponent, AssistenciasComponent, CriarNovaComponent,
+  EncomendasComponent, HistoricoComponent, StockComponent
+} from './pages';
+
 
 const routes: Routes = [
   {

@@ -1,7 +1,6 @@
 import { State, StateContext, NgxsOnInit } from '@ngxs/store';
 import { Receiver, EmitterAction, Emitter, Emittable } from '@ngxs-labs/emitter';
-import { DataService } from '../shared/services/data.service';
-import { AuthService } from '../shared/services/auth.service';
+import { DataService, AuthService } from 'src/app/shared';
 import { Injector } from '@angular/core';
 
 /*

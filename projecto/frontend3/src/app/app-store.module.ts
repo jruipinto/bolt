@@ -1,7 +1,6 @@
 /* angular modules */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 /* ngxs modules */
 import { NgxsModule } from '@ngxs/store';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -11,9 +10,8 @@ import { NgxsDevtoolsOptions } from '@ngxs/devtools-plugin/src/symbols';
 import { NgxsLoggerPluginOptions } from '@ngxs/logger-plugin/src/symbols';
 import { NgxsEmitPluginModule } from '@ngxs-labs/emitter';
 import { NgxsFormPluginModule } from '@ngxs/form-plugin';
-
 /* other imports */
-import { environment } from '../environments/environment';
+import { environment } from 'src/environments/environment';
 
 export const OPTIONS_CONFIG: Partial<NgxsConfig> = {
     /**

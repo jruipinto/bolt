@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { DataService } from '../shared/services/data.service';
+import { DataService } from 'src/app/shared';
 
 @Component({
   selector: 'app-signup-page',
