@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
-import { AuthGuard } from '../shared/guards/auth.guard';
-import { StockComponent } from './stock/stock.component';
-import { EncomendasComponent } from './encomendas/encomendas.component';
-import { AssistenciasComponent } from './assistencias/assistencias.component';
-import { CriarNovaComponent } from './criar-nova/criar-nova.component';
-import { HistoricoComponent } from './historico/historico.component';
-import { PainelRapidoComponent } from './painel-rapido/painel-rapido.component';
+import { AuthGuard } from 'src/app/shared';
+import {
+  PainelRapidoComponent,
+  AssistenciasComponent,
+  CriarNovaComponent,
+  EncomendasComponent,
+  HistoricoComponent,
+  StockComponent } from './pages';
 
 const routes: Routes = [
   {

@@ -1,8 +1,13 @@
+/* angular modules */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginPageComponent } from './login-page/login-page.component';
+
+/* guards */
 import { AuthGuard } from './shared/guards/auth.guard';
-import { SignupPageComponent } from './signup-page/signup-page.component';
+
+/* components */
+import { LoginPageComponent, SignupPageComponent } from './pages';
+
 
 const routes: Routes = [
   {

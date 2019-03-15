@@ -39,7 +39,7 @@ export class AssistenciasComponent implements OnInit {
       Object.assign(this.modalContext, { assistencia: payload });
       console.log('TCL: AssistenciasComponent -> this.modalContext', this.modalContext);
     }
-  
+
     closeModal (): void {
       this.modalExists = false;
     }

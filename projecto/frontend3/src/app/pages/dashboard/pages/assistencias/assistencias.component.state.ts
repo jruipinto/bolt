@@ -5,24 +5,24 @@ import { AuthService } from '../../shared/services/auth.service';
 import { Injector } from '@angular/core';
 
 /*
-export interface AssistenciasStateModel {
-    value: number;
-}
-
-const defaults = null;
-
-@State<AssistenciasStateModel>({
-  name: 'assistencias',
-  defaults
-})
-export class AssistenciasState {
-
-    @Receiver()
-    public static setValue(ctx: StateContext<AssistenciasStateModel>, action: EmitterAction<number>) {
-        ctx.setState({ value: action.payload });
+    export interface AssistenciasStateModel {
+        value: number;
     }
 
-}
+    const defaults = null;
+
+    @State<AssistenciasStateModel>({
+    name: 'assistencias',
+    defaults
+    })
+    export class AssistenciasState {
+
+        @Receiver()
+        public static setValue(ctx: StateContext<AssistenciasStateModel>, action: EmitterAction<number>) {
+            ctx.setState({ value: action.payload });
+        }
+
+    }
 */
 export interface AssistenciaStateModel {
     categoria: string;
