@@ -1,7 +1,7 @@
 <div *ngIf="(assistencias$ | async) as assistencias">
   <div *ngIf="assistencias.length>0">
     <r-data-row class="clr-row" *ngFor="let assistencia of assistencias; let listaIndex=index"
-      (click)="openModal(assistencia)">
+      (click)="openModal(assistencia.id)">
       <div class="clr-col-lg-1 fontheavy">
         {{assistencia.id}}
       </div>
@@ -28,5 +28,4 @@
   </div>
 </div>
 
-<app-assistencia-modal *ngIf="modalOpen" [(modalOpen)]="modalOpen" [modalContext]="modalContext">
-</app-assistencia-modal>
+<app-assistencia-modal></app-assistencia-modal>

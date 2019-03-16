@@ -1,4 +1,4 @@
-<clr-modal [(clrModalOpen)]="modalOpen" [clrModalSize]="'lg'">
+<clr-modal *ngIf="modalIsOpen" [(clrModalOpen)]="modalIsOpen" [clrModalSize]="'lg'">
 
   <h3 class="modal-title">{{modalContext.assistencia.id}}</h3>
 

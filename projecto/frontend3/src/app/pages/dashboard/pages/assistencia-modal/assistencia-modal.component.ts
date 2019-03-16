@@ -7,14 +7,14 @@ import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core
 })
 export class AssistenciaModalComponent implements OnChanges {
 
-  @Input() modalOpen = false;
+  @Input() modalIsOpen = false;
   @Input() modalContext = {};
   @Output() modalOpenChange = new EventEmitter<boolean>();
 
   constructor() { }
 
   ngOnChanges() {
-    this.modalOpenChange.emit(this.modalOpen);
+    this.modalOpenChange.emit(this.modalIsOpen);
   }
 
 }
