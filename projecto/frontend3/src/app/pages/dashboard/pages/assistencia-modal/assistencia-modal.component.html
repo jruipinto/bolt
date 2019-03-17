@@ -1,6 +1,6 @@
 <clr-modal *ngIf="modalIsOpen" [(clrModalOpen)]="modalIsOpen" [clrModalSize]="'lg'">
 
-  <h3 class="modal-title">{{modalContext.assistencia.id}}</h3>
+  <h3 class="modal-title">{{modalState.assistencia.id}}</h3>
 
   <div class="modal-body">
     <div class="separate">
@@ -9,7 +9,7 @@
           Estado:
         </div>
         <div class="clr-col">
-          {{modalContext.assistencia.estado}}
+          {{modalState.assistencia.estado}}
         </div>
       </div>
     </div>
@@ -19,7 +19,7 @@
           Cliente:
         </div>
         <div class="clr-col">
-          {{modalContext.assistencia.cliente_user_name}}
+          {{modalState.assistencia.cliente_user_name}}
         </div>
       </div>
       <div class="clr-row">
@@ -27,10 +27,10 @@
           Equipamento:
         </div>
         <div class="clr-col">
-          {{modalContext.assistencia.categoria}}
-          {{modalContext.assistencia.marca}}
-          {{modalContext.assistencia.modelo}}
-          {{modalContext.assistencia.cor}}
+          {{modalState.assistencia.categoria}}
+          {{modalState.assistencia.marca}}
+          {{modalState.assistencia.modelo}}
+          {{modalState.assistencia.cor}}
         </div>
       </div>
       <div class="clr-row">
@@ -38,7 +38,7 @@
           Serial:
         </div>
         <div class="clr-col">
-          {{modalContext.assistencia.serial}}
+          {{modalState.assistencia.serial}}
         </div>
       </div>
       <div class="clr-row">
@@ -46,7 +46,7 @@
           Problema:
         </div>
         <div class="clr-col">
-          {{modalContext.assistencia.problema}}
+          {{modalState.assistencia.problema}}
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@
           <div class="clr-row">
             <div class="clr-col">
               <textarea name="relatorio_interno" id="relatorio_interno"
-                [(ngModel)]='modalContext.assistencia.relatorio_interno'></textarea>
+                [(ngModel)]='modalState.assistencia.relatorio_interno'></textarea>
             </div>
           </div>
         </div>
@@ -74,7 +74,7 @@
           <div class="clr-row">
             <div class="clr-col">
               <textarea name="relatorio_cliente" id="relatorio_cliente"
-                [(ngModel)]='modalContext.assistencia.relatorio_cliente'></textarea>
+                [(ngModel)]='modalState.assistencia.relatorio_cliente'></textarea>
             </div>
           </div>
         </div>
@@ -86,8 +86,8 @@
           Orçamento:
         </div>
         <div class="clr-col">
-          {{modalContext.assistencia.orcamento}}
-          <span *ngIf="!modalContext.assistencia.orcamento">não tem</span>
+          {{modalState.assistencia.orcamento}}
+          <span *ngIf="!modalState.assistencia.orcamento">não tem</span>
         </div>
       </div>
       <div class="clr-row">
@@ -95,7 +95,7 @@
           Preço:
         </div>
         <div class="clr-col-md-4">
-          <input type="number" name="preco" id="preco" [(ngModel)]='modalContext.assistencia.preco'>
+          <input type="number" name="preco" id="preco" [(ngModel)]='modalState.assistencia.preco'>
         </div>
         <div class="clr-col-md-auto">
           €
@@ -107,16 +107,16 @@
   <div class="modal-footer">
     <clr-button-group class="btn-group " [clrMenuPosition]="'top-right'">
       <clr-button class="btn"
-      (click)="saveModal.emit({estado: 'orçamento pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})"
+      (click)="saveModal.emit({estado: 'orçamento pendente', relatorio_interno: modalState.assistencia.relatorio_interno, relatorio_cliente: modalState.assistencia.relatorio_cliente, preco: modalState.assistencia.preco, assistencia_id: modalState.assistencia.id, tecnico_user_id: modalState.assistencia.tecnico_user_id})"
       [clrInMenu]="true">Orçamentar</clr-button>
       <clr-button class="btn"
-      (click)="saveModal.emit({estado: 'contacto pendente', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})"
+      (click)="saveModal.emit({estado: 'contacto pendente', relatorio_interno: modalState.assistencia.relatorio_interno, relatorio_cliente: modalState.assistencia.relatorio_cliente, preco: modalState.assistencia.preco, assistencia_id: modalState.assistencia.id, tecnico_user_id: modalState.assistencia.tecnico_user_id})"
       [clrInMenu]="true">Contactar</clr-button>
       <clr-button class="btn"
-      (click)="saveModal.emit({estado: 'concluído', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})"
+      (click)="saveModal.emit({estado: 'concluído', relatorio_interno: modalState.assistencia.relatorio_interno, relatorio_cliente: modalState.assistencia.relatorio_cliente, preco: modalState.assistencia.preco, assistencia_id: modalState.assistencia.id, tecnico_user_id: modalState.assistencia.tecnico_user_id})"
       [clrInMenu]="true">Concluir</clr-button>
       <clr-button class="btn btn-primary btn-icon"
-      (click)="saveModal.emit({estado: 'em análise', relatorio_interno: modalContext.assistencia.relatorio_interno, relatorio_cliente: modalContext.assistencia.relatorio_cliente, preco: modalContext.assistencia.preco, assistencia_id: modalContext.assistencia.id, tecnico_user_id: modalContext.assistencia.tecnico_user_id, lista_index: listaIndex})">
+      (click)="saveModal.emit({estado: 'em análise', relatorio_interno: modalState.assistencia.relatorio_interno, relatorio_cliente: modalState.assistencia.relatorio_cliente, preco: modalState.assistencia.preco, assistencia_id: modalState.assistencia.id, tecnico_user_id: modalState.assistencia.tecnico_user_id})">
       <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
       Guardar</clr-button>
     </clr-button-group>

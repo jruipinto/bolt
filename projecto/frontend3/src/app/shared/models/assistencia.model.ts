@@ -1,7 +1,7 @@
 export interface Assistencia {
     id: number;
     cliente_user_id: number;
-    tecnico_user_id: JSON;
+    tecnico_user_id: string; // JSON string
     categoria: string;
     marca: string;
     modelo: string;
