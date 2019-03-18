@@ -19,6 +19,10 @@ export class AssistenciaModalComponent implements OnInit {
   @Emitter(AssistenciaModalState.setValue)
   public saveModal: Emittable<Assistencia>;
 
+  @Emitter(AssistenciaModalState.unsetModalIsOpen)
+  public closeWithoutSaving: Emittable<void>;
+
+
   constructor() { }
 
   ngOnInit() {

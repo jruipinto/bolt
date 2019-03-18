@@ -7,7 +7,8 @@ import { Observable } from 'rxjs';
 
 
 export interface AssistenciaModalStateModel {
-    modalIsOpen: boolean; // modal visible or not
+    modalIsOpen?: boolean; // modal visible or not
+    newEstado?: string; // estado emitido pelo saveModal() do assistencia-modal.component
     assistencia: Partial<Assistencia>; // the assistencia object to fill the modal
 }
 
@@ -35,16 +36,16 @@ export class AssistenciaModalState {
     }
 
     @Receiver({ type: '[Assistencia-Modal] set value' })
-    public static setValue({ patchState, getState }: StateContext<AssistenciaModalStateModel>, { payload }: EmitterAction<Assistencia>) {
+    public static setValue({ patchState, getState }: StateContext<AssistenciaModalStateModel>, { payload }: EmitterAction<AssistenciaModalStateModel>) {
         // parse json to add new timestamp to it
-        let parsed_tecnico_user_id: any = JSON.parse(payload.tecnico_user_id);
+        let parsed_tecnico_user_id: any = JSON.parse(payload.assistencia.tecnico_user_id);
         if (typeof parsed_tecnico_user_id === 'string') {
             parsed_tecnico_user_id = JSON.parse(parsed_tecnico_user_id);
         }
         parsed_tecnico_user_id.push(
             {
                 tecnico_user_id: this.authService.getUserId(),
-                estado: payload.estado,
+                estado: payload.newEstado,
                 updatedAt: new Date().toLocaleString() // dia/mes/ano, hora:minuto:segundo naquele momento
             }
         );
@@ -53,10 +54,10 @@ export class AssistenciaModalState {
             {
                 modalIsOpen: false,
                 assistencia: {
-                    estado: payload.estado,
-                    relatorio_interno: payload.relatorio_interno,
-                    relatorio_cliente: payload.relatorio_cliente,
-                    preco: payload.preco,
+                    estado: payload.newEstado,
+                    relatorio_interno: payload.assistencia.relatorio_interno,
+                    relatorio_cliente: payload.assistencia.relatorio_cliente,
+                    preco: payload.assistencia.preco,
                     tecnico_user_id: JSON.stringify(parsed_tecnico_user_id)
                 }
             }

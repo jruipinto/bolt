@@ -130,7 +130,8 @@ export class AssistenciasState implements NgxsOnInit {
         });
 
         assistencias$.subscribe(u => {
-            ctx.setState(this.updateAssistencias(u, ctx.getState()));
+            // ctx.setState(this.updateAssistencias(u, ctx.getState()));
+            ctx.patchState(u.data);
         });
 
     }
