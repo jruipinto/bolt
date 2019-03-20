@@ -29,14 +29,28 @@ export class AssistenciaModalState {
 
     @Receiver({ type: '[Assistencia-Modal] get value' })
     public static getValue(
-        { setState }: StateContext<AssistenciaModalStateModel>,
+        { setState, patchState }: StateContext<AssistenciaModalStateModel>,
         { payload }: EmitterAction<number>): void {
-        const assistencia$: Observable<Assistencia> = this.dataService.get$('assistencias', payload);
-        assistencia$.subscribe(assistencia => setState({ modalIsOpen: true, assistencia }));
+        let state: AssistenciaModalStateModel;
+        // const assistencia$: Observable<Assistencia> = this.dataService.get$('assistencias', payload);
+        // this.dataService.get$('assistencias', payload).subscribe(assistencia => setState({ modalIsOpen: true, assistencia }));
+        // this.dataService.get$('assistencias', payload).subscribe(assistencia => console.log(assistencia));
+        // patchState({modalIsOpen: true});
+        // return this.dataService.get$('assistencias', payload).subscribe(assistencia => patchState({ modalIsOpen: true, assistencia }));
+        this.dataService.get$('assistencias', payload).subscribe(assistencia =>
+            {
+                state = assistencia;
+                console.log(state);
+            }
+            );
+		console.log('TCL: AssistenciaModalState -> state', state);
+        
     }
 
     @Receiver({ type: '[Assistencia-Modal] set value' })
-    public static setValue({ patchState, getState }: StateContext<AssistenciaModalStateModel>, { payload }: EmitterAction<AssistenciaModalStateModel>) {
+    public static setValue(
+        { patchState, getState }: StateContext<AssistenciaModalStateModel>,
+        { payload }: EmitterAction<AssistenciaModalStateModel>) {
         // parse json to add new timestamp to it
         let parsed_tecnico_user_id: any = JSON.parse(payload.assistencia.tecnico_user_id);
         if (typeof parsed_tecnico_user_id === 'string') {

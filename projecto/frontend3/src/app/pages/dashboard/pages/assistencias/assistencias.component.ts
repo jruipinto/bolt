@@ -11,13 +11,13 @@ import { AssistenciaModalState} from '../assistencia-modal';
   styleUrls: ['./assistencias.component.scss']
 })
 export class AssistenciasComponent implements OnInit {
-
+/*
   public modalContext = {};
   public modalExists = false;
-  public modalOpen = false;
+  public modalOpen = false; */
 
   @Select(AssistenciasState)
-  public assistencias$: Observable<AssistenciaStateModel[]>;
+  public assistenciasState$: Observable<AssistenciaStateModel>;
 
   /*
   @Emitter(AssistenciasState.setValue)
@@ -28,7 +28,7 @@ export class AssistenciasComponent implements OnInit {
 
   @Emitter(AssistenciasState.saveModal)
   public saveModal: Emittable<any>;*/
-  //#######
+  // #######
 
   @Emitter(AssistenciaModalState.getValue)
   public openModal: Emittable<number>;

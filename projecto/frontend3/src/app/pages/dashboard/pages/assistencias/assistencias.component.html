@@ -1,6 +1,6 @@
-<div *ngIf="(assistencias$ | async) as assistencias">
-  <div *ngIf="assistencias.length>0">
-    <r-data-row class="clr-row" *ngFor="let assistencia of assistencias; let listaIndex=index"
+<div *ngIf="(assistenciasState$ | async) as assistenciasState">
+  <div *ngIf="assistenciasState.assistencias.length>0">
+    <r-data-row class="clr-row" *ngFor="let assistencia of assistenciasState.assistencias; let listaIndex=index"
       (click)="openModal.emit(assistencia.id)">
       <div class="clr-col-lg-1 fontheavy">
         {{assistencia.id}}
