@@ -14,7 +14,7 @@ import { Assistencia } from 'src/app/shared/models';
 })
 export class AssistenciaModalComponent implements OnInit {
   @Select(AssistenciaModalState)
-  public modalState: Observable<AssistenciaModalStateModel>;
+  public modalState$: Observable<AssistenciaModalStateModel>;
 
   @Emitter(AssistenciaModalState.setValue)
   public saveModal: Emittable<Assistencia>;

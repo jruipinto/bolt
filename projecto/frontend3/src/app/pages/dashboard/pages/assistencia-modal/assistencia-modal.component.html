@@ -1,7 +1,7 @@
-<div *ngIf="(modalState.modalIsOpen | async) as modalIsOpen">
+<div *ngIf="(modalState$ | async) as modalState">
   <clr-modal
-    [clrModalOpen]="modalIsOpen"
-    (clrModalOpen)="closeWithoutSaving.emit()"
+    [clrModalOpen]="modalState.modalIsOpen"
+    (clrModalOpenChange)="closeWithoutSaving.emit()"
     [clrModalSize]="'lg'">
 
     <h3 class="modal-title">{{modalState.assistencia.id}}</h3>

@@ -4,6 +4,7 @@ import { Receiver, EmitterAction } from '@ngxs-labs/emitter';
 import { DataService, AuthService } from 'src/app/shared/services';
 import { Assistencia } from 'src/app/shared/models';
 import { Observable } from 'rxjs';
+import { collapse } from '@clr/angular';
 
 
 export interface AssistenciaModalStateModel {
@@ -11,6 +12,17 @@ export interface AssistenciaModalStateModel {
     newEstado?: string; // estado emitido pelo saveModal() do assistencia-modal.component
     assistencia: Partial<Assistencia>; // the assistencia object to fill the modal
 }
+/* Actions */
+export class PullAssistencia {
+    static readonly type = '[Assistencia-Modal] pull assistencia';
+    constructor(public id: number) { }
+}
+
+export class UpdateAssistencia {
+    static readonly type = '[Assistencia-Modal] received update';
+    constructor(public assistencia: Assistencia) { }
+}
+/* ###### */
 
 
 @State<AssistenciaModalStateModel | null>({
@@ -27,24 +39,22 @@ export class AssistenciaModalState {
     }
 
 
-    @Receiver({ type: '[Assistencia-Modal] get value' })
+    @Receiver({action: [PullAssistencia, UpdateAssistencia]})
     public static getValue(
-        { setState, patchState }: StateContext<AssistenciaModalStateModel>,
-        { payload }: EmitterAction<number>): void {
-        let state: AssistenciaModalStateModel;
-        // const assistencia$: Observable<Assistencia> = this.dataService.get$('assistencias', payload);
-        // this.dataService.get$('assistencias', payload).subscribe(assistencia => setState({ modalIsOpen: true, assistencia }));
-        // this.dataService.get$('assistencias', payload).subscribe(assistencia => console.log(assistencia));
-        // patchState({modalIsOpen: true});
-        // return this.dataService.get$('assistencias', payload).subscribe(assistencia => patchState({ modalIsOpen: true, assistencia }));
-        this.dataService.get$('assistencias', payload).subscribe(assistencia =>
-            {
-                state = assistencia;
-                console.log(state);
-            }
-            );
-		console.log('TCL: AssistenciaModalState -> state', state);
-        
+        { setState, patchState, dispatch }: StateContext<AssistenciaModalStateModel>,
+        action: PullAssistencia | UpdateAssistencia): void {
+		console.log('TCL: AssistenciaModalState -> action', action)
+        if (action instanceof PullAssistencia) {
+            this.dataService.get$('assistencias', action.id)
+                .subscribe(assistencia => {
+					console.log('TCL: AssistenciaModalState -> assistencia', assistencia);                    
+                    dispatch(new UpdateAssistencia(assistencia));
+                });
+        }else{
+            patchState({modalIsOpen: true, assistencia: action.assistencia});
+        }
+
+
     }
 
     @Receiver({ type: '[Assistencia-Modal] set value' })
@@ -83,7 +93,7 @@ export class AssistenciaModalState {
 
     @Receiver({ type: '[Assistencia-Modal] close without saving' })
     public static unsetModalIsOpen({ patchState }: StateContext<AssistenciaModalStateModel>): void {
-        patchState({ modalIsOpen: false });
+        patchState({modalIsOpen: true, assistencia: null});
     }
 
     /*

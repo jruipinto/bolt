@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { Emitter, Emittable } from '@ngxs-labs/emitter';
 import { Observable } from 'rxjs';
 import { AssistenciasState, AssistenciaStateModel } from './assistencias.state';
-import { AssistenciaModalState} from '../assistencia-modal';
+import { AssistenciaModalState, PullAssistencia} from '../assistencia-modal';
 
 @Component({
   selector: 'app-assistencias',
@@ -19,6 +19,7 @@ export class AssistenciasComponent implements OnInit {
   @Select(AssistenciasState)
   public assistenciasState$: Observable<AssistenciaStateModel>;
 
+
   /*
   @Emitter(AssistenciasState.setValue)
   public assistenciasValue: Emittable<AssistenciaStateModel[]>;
@@ -30,21 +31,20 @@ export class AssistenciasComponent implements OnInit {
   public saveModal: Emittable<any>;*/
   // #######
 
-  @Emitter(AssistenciaModalState.getValue)
-  public openModal: Emittable<number>;
+ /* @Emitter(AssistenciaModalState.getValue)
+  public openModal: Emittable<number>;*/
 
 
-  constructor() {
+  constructor(private store: Store) {
   }
 
   ngOnInit() {
   }
-  /*
-    openModal(payload: {}): void {
-      this.modalExists = true;
-      Object.assign(this.modalContext, { assistencia: payload });
-      console.log('TCL: AssistenciasComponent -> this.modalContext', this.modalContext);
+  
+    openModal(id: number): void {
+      this.store.dispatch(new PullAssistencia(id));
     }
+    /*
 
     closeModal (): void {
       this.modalExists = false;
