@@ -1,10 +1,10 @@
 import { Injector } from '@angular/core'; // for static dependency injection (@ngxs specific)
 import { State, StateContext } from '@ngxs/store';
 import { Receiver, EmitterAction } from '@ngxs-labs/emitter';
+import { patch, updateItem } from '@ngxs/store/operators';
 import { DataService, AuthService } from 'src/app/shared/services';
 import { Assistencia } from 'src/app/shared/models';
 import { Observable } from 'rxjs';
-import { collapse } from '@clr/angular';
 
 
 export interface AssistenciaModalStateModel {
@@ -41,8 +41,8 @@ export class AssistenciaModalState {
 
     @Receiver({action: [PullAssistencia, UpdateAssistencia]})
     public static getValue(
-        { setState, patchState, dispatch }: StateContext<AssistenciaModalStateModel>,
-        action: PullAssistencia | UpdateAssistencia): void {
+        { patchState, dispatch }: StateContext<AssistenciaModalStateModel>,
+        action: PullAssistencia | UpdateAssistencia) {
 		console.log('TCL: AssistenciaModalState -> action', action)
         if (action instanceof PullAssistencia) {
             this.dataService.get$('assistencias', action.id)
@@ -92,8 +92,13 @@ export class AssistenciaModalState {
     }
 
     @Receiver({ type: '[Assistencia-Modal] close without saving' })
-    public static unsetModalIsOpen({ patchState }: StateContext<AssistenciaModalStateModel>): void {
-        patchState({modalIsOpen: true, assistencia: null});
+    public static unsetModalIsOpen(
+        { getState, setState }: StateContext<AssistenciaModalStateModel>,
+        action: EmitterAction<AssistenciaModalStateModel>) {
+        console.log('TCL: getState', getState());
+        setState(getState());
+        /*const assistenciaModalState =  getState();
+        setState({modalIsOpen: true, assistencia: assistenciaModalState.assistencia});*/
     }
 
     /*
