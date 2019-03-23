@@ -31,8 +31,8 @@ export class AssistenciasComponent implements OnInit {
   public saveModal: Emittable<any>;*/
   // #######
 
- /* @Emitter(AssistenciaModalState.getValue)
-  public openModal: Emittable<number>;*/
+  @Emitter(AssistenciaModalState.getValue)
+  public openModal: Emittable<number>;
 
 
   constructor(private store: Store) {
@@ -40,7 +40,7 @@ export class AssistenciasComponent implements OnInit {
 
   ngOnInit() {
   }
-  
+  /*
     openModal(id: number): void {
       this.store.dispatch(new PullAssistencia(id));
     }

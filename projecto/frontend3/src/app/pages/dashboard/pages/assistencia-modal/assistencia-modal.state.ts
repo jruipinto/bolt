@@ -39,19 +39,20 @@ export class AssistenciaModalState {
     }
 
 
-    @Receiver({action: [PullAssistencia, UpdateAssistencia]})
+    @Receiver({ action: [PullAssistencia, UpdateAssistencia] })
     public static getValue(
         { patchState, dispatch }: StateContext<AssistenciaModalStateModel>,
         action: PullAssistencia | UpdateAssistencia) {
-		console.log('TCL: AssistenciaModalState -> action', action)
         if (action instanceof PullAssistencia) {
             this.dataService.get$('assistencias', action.id)
                 .subscribe(assistencia => {
-					console.log('TCL: AssistenciaModalState -> assistencia', assistencia);                    
                     dispatch(new UpdateAssistencia(assistencia));
                 });
-        }else{
-            patchState({modalIsOpen: true, assistencia: action.assistencia});
+            patchState({ modalIsOpen: true });
+        } else {
+            if (typeof action.assistencia === 'object') {
+                patchState({ assistencia: action.assistencia });
+            }
         }
 
 
@@ -59,7 +60,7 @@ export class AssistenciaModalState {
 
     @Receiver({ type: '[Assistencia-Modal] set value' })
     public static setValue(
-        { patchState, getState }: StateContext<AssistenciaModalStateModel>,
+        { patchState, getState, setState }: StateContext<AssistenciaModalStateModel>,
         { payload }: EmitterAction<AssistenciaModalStateModel>) {
         // parse json to add new timestamp to it
         let parsed_tecnico_user_id: any = JSON.parse(payload.assistencia.tecnico_user_id);
@@ -73,19 +74,18 @@ export class AssistenciaModalState {
                 updatedAt: new Date().toLocaleString() // dia/mes/ano, hora:minuto:segundo naquele momento
             }
         );
-        // self explanatory
-        patchState(
-            {
-                modalIsOpen: false,
-                assistencia: {
-                    estado: payload.newEstado,
-                    relatorio_interno: payload.assistencia.relatorio_interno,
-                    relatorio_cliente: payload.assistencia.relatorio_cliente,
-                    preco: payload.assistencia.preco,
-                    tecnico_user_id: JSON.stringify(parsed_tecnico_user_id)
-                }
-            }
-        );
+
+        // self explanatory ( patchState() )
+        const assistencia = getState().assistencia;
+        Object.assign(assistencia, {
+            estado: payload.newEstado,
+            relatorio_interno: payload.assistencia.relatorio_interno,
+            relatorio_cliente: payload.assistencia.relatorio_cliente,
+            preco: payload.assistencia.preco,
+            tecnico_user_id: JSON.stringify(parsed_tecnico_user_id)
+        });
+        patchState({ modalIsOpen: false, assistencia: assistencia });
+
         // submit state to database
         const state = getState();
         this.dataService.patch$('assistencias', state.assistencia, state.assistencia.id);
@@ -93,12 +93,8 @@ export class AssistenciaModalState {
 
     @Receiver({ type: '[Assistencia-Modal] close without saving' })
     public static unsetModalIsOpen(
-        { getState, setState }: StateContext<AssistenciaModalStateModel>,
-        action: EmitterAction<AssistenciaModalStateModel>) {
-        console.log('TCL: getState', getState());
-        setState(getState());
-        /*const assistenciaModalState =  getState();
-        setState({modalIsOpen: true, assistencia: assistenciaModalState.assistencia});*/
+        { patchState }: StateContext<AssistenciaModalStateModel>) {
+        patchState({ modalIsOpen: false });
     }
 
     /*
