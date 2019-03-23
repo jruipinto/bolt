@@ -1,10 +1,14 @@
+/* angular modules */
 import { Injector } from '@angular/core'; // for static dependency injection (@ngxs specific)
+/* @ngxs modules */
 import { State, StateContext } from '@ngxs/store';
 import { Receiver, EmitterAction } from '@ngxs-labs/emitter';
-import { patch, updateItem } from '@ngxs/store/operators';
+/* shared services */
 import { DataService, AuthService } from 'src/app/shared/services';
+/* shared models */
 import { Assistencia } from 'src/app/shared/models';
-import { Observable } from 'rxjs';
+
+
 
 
 export interface AssistenciaModalStateModel {
@@ -12,6 +16,8 @@ export interface AssistenciaModalStateModel {
     newEstado?: string; // estado emitido pelo saveModal() do assistencia-modal.component
     assistencia: Partial<Assistencia>; // the assistencia object to fill the modal
 }
+
+
 /* Actions */
 export class PullAssistencia {
     static readonly type = '[Assistencia-Modal] pull assistencia';
@@ -43,7 +49,6 @@ export class AssistenciaModalState {
     public static getValue(
         { patchState, dispatch }: StateContext<AssistenciaModalStateModel>,
         action: PullAssistencia | UpdateAssistencia) {
-        console.log('TCL: AssistenciaModalState -> action', action);
         if (action instanceof PullAssistencia) {
             this.dataService.get$('assistencias', action.id)
                 .subscribe(assistencia => {
@@ -51,10 +56,10 @@ export class AssistenciaModalState {
                     dispatch(new UpdateAssistencia(assistencia));
                 });
         } else {
-            patchState({ modalIsOpen: true, assistencia: action.assistencia });
+            if (typeof action.assistencia === 'object') {
+                patchState({ modalIsOpen: true, assistencia: action.assistencia });
+            }
         }
-
-
     }
 
     @Receiver({ type: '[Assistencia-Modal] set value' })
@@ -63,9 +68,11 @@ export class AssistenciaModalState {
         { payload }: EmitterAction<AssistenciaModalStateModel>) {
         // parse json to add new timestamp to it
         let parsed_tecnico_user_id: any = JSON.parse(payload.assistencia.tecnico_user_id);
+        console.log('TCL: AssistenciaModalState -> parsed_tecnico_user_id', parsed_tecnico_user_id);
         if (typeof parsed_tecnico_user_id === 'string') {
             parsed_tecnico_user_id = JSON.parse(parsed_tecnico_user_id);
         }
+        console.log('TCL: AssistenciaModalState -> parsed_tecnico_user_id', parsed_tecnico_user_id);
         parsed_tecnico_user_id.push(
             {
                 tecnico_user_id: this.authService.getUserId(),
@@ -92,13 +99,8 @@ export class AssistenciaModalState {
     }
 
     @Receiver({ type: '[Assistencia-Modal] close without saving' })
-    public static unsetModalIsOpen(
-        { getState, setState }: StateContext<AssistenciaModalStateModel>,
-        action: EmitterAction<AssistenciaModalStateModel>) {
-        console.log('TCL: getState', getState());
-        setState(getState());
-        /*const assistenciaModalState =  getState();
-        setState({modalIsOpen: true, assistencia: assistenciaModalState.assistencia});*/
+    public static unsetModalIsOpen({ patchState }: StateContext<AssistenciaModalStateModel>) {
+        patchState({ modalIsOpen: false });
     }
 
     /*
