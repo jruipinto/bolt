@@ -39,19 +39,19 @@ export class AssistenciaModalState {
     }
 
 
-    @Receiver({action: [PullAssistencia, UpdateAssistencia]})
+    @Receiver({ action: [PullAssistencia, UpdateAssistencia] })
     public static getValue(
         { patchState, dispatch }: StateContext<AssistenciaModalStateModel>,
         action: PullAssistencia | UpdateAssistencia) {
-		console.log('TCL: AssistenciaModalState -> action', action)
+        console.log('TCL: AssistenciaModalState -> action', action);
         if (action instanceof PullAssistencia) {
             this.dataService.get$('assistencias', action.id)
                 .subscribe(assistencia => {
-					console.log('TCL: AssistenciaModalState -> assistencia', assistencia);                    
+                    console.log('TCL: AssistenciaModalState -> assistencia', assistencia);
                     dispatch(new UpdateAssistencia(assistencia));
                 });
-        }else{
-            patchState({modalIsOpen: true, assistencia: action.assistencia});
+        } else {
+            patchState({ modalIsOpen: true, assistencia: action.assistencia });
         }
 
 
