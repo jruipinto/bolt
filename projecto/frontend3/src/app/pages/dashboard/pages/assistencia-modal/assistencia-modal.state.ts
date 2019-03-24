@@ -52,19 +52,19 @@ export class AssistenciaModalState {
         if (action instanceof PullAssistencia) {
             this.dataService.get$('assistencias', action.id)
                 .subscribe(assistencia => {
-                    console.log('TCL: AssistenciaModalState -> assistencia', assistencia);
                     dispatch(new UpdateAssistencia(assistencia));
                 });
+            patchState({ modalIsOpen: true });
         } else {
             if (typeof action.assistencia === 'object') {
-                patchState({ modalIsOpen: true, assistencia: action.assistencia });
+                patchState({ assistencia: action.assistencia });
             }
         }
     }
 
     @Receiver({ type: '[Assistencia-Modal] set value' })
     public static setValue(
-        { patchState, getState }: StateContext<AssistenciaModalStateModel>,
+        { patchState, getState, setState }: StateContext<AssistenciaModalStateModel>,
         { payload }: EmitterAction<AssistenciaModalStateModel>) {
         // parse json to add new timestamp to it
         let parsed_tecnico_user_id: any = JSON.parse(payload.assistencia.tecnico_user_id);
@@ -80,19 +80,18 @@ export class AssistenciaModalState {
                 updatedAt: new Date().toLocaleString() // dia/mes/ano, hora:minuto:segundo naquele momento
             }
         );
-        // self explanatory
-        patchState(
-            {
-                modalIsOpen: false,
-                assistencia: {
-                    estado: payload.newEstado,
-                    relatorio_interno: payload.assistencia.relatorio_interno,
-                    relatorio_cliente: payload.assistencia.relatorio_cliente,
-                    preco: payload.assistencia.preco,
-                    tecnico_user_id: JSON.stringify(parsed_tecnico_user_id)
-                }
-            }
-        );
+
+        // self explanatory ( patchState() )
+        const assistencia = getState().assistencia;
+        Object.assign(assistencia, {
+            estado: payload.newEstado,
+            relatorio_interno: payload.assistencia.relatorio_interno,
+            relatorio_cliente: payload.assistencia.relatorio_cliente,
+            preco: payload.assistencia.preco,
+            tecnico_user_id: JSON.stringify(parsed_tecnico_user_id)
+        });
+        patchState({ modalIsOpen: false, assistencia: assistencia });
+
         // submit state to database
         const state = getState();
         this.dataService.patch$('assistencias', state.assistencia, state.assistencia.id);

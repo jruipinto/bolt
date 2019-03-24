@@ -40,6 +40,16 @@ export class AssistenciasComponent implements OnInit {
 
   ngOnInit() {
   }
+  /*
+    openModal(id: number): void {
+      this.store.dispatch(new PullAssistencia(id));
+    }
+    /*
+
+    closeModal (): void {
+      this.modalExists = false;
+    }
+  */
 /*
   openModal(id: number): void {
     this.store.dispatch(new PullAssistencia(id));

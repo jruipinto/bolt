@@ -4,9 +4,9 @@
     (clrModalOpenChange)="closeWithoutSaving.emit()"
     [clrModalSize]="'lg'">
 
-    <h3 class="modal-title">{{modalState.assistencia.id}}</h3>
+    <h3 class="modal-title">{{modalState.assistencia?.id}}</h3>
 
-    <div class="modal-body">
+    <div class="modal-body" *ngIf="modalState.assistencia">
       <div class="separate">
         <div class="clr-row">
           <div class="clr-col-md-2 fontheavy">
