@@ -7,6 +7,7 @@ import { Receiver, EmitterAction } from '@ngxs-labs/emitter';
 import { DataService, AuthService } from 'src/app/shared/services';
 /* shared models */
 import { Assistencia } from 'src/app/shared/models';
+import { Subscription } from 'rxjs';
 
 
 
@@ -38,6 +39,7 @@ export class UpdateAssistencia {
 export class AssistenciaModalState {
     private static dataService: DataService;
     private static authService: AuthService;
+    private static updateSubscription: Subscription;
 
     constructor(injector: Injector) {
         AssistenciaModalState.dataService = injector.get<DataService>(DataService);
@@ -50,14 +52,14 @@ export class AssistenciaModalState {
         { patchState, dispatch }: StateContext<AssistenciaModalStateModel>,
         action: PullAssistencia | UpdateAssistencia) {
         if (action instanceof PullAssistencia) {
-            this.dataService.get$('assistencias', action.id)
+            this.updateSubscription = this.dataService.get$('assistencias', action.id)
                 .subscribe(assistencia => {
                     dispatch(new UpdateAssistencia(assistencia));
                 });
-            patchState({ modalIsOpen: true });
         } else {
             if (typeof action.assistencia === 'object') {
-                patchState({ assistencia: action.assistencia });
+                patchState({ modalIsOpen: true, assistencia: action.assistencia });
+                this.updateSubscription.unsubscribe();
             }
         }
     }
@@ -68,11 +70,9 @@ export class AssistenciaModalState {
         { payload }: EmitterAction<AssistenciaModalStateModel>) {
         // parse json to add new timestamp to it
         let parsed_tecnico_user_id: any = JSON.parse(payload.assistencia.tecnico_user_id);
-        console.log('TCL: AssistenciaModalState -> parsed_tecnico_user_id', parsed_tecnico_user_id);
         if (typeof parsed_tecnico_user_id === 'string') {
             parsed_tecnico_user_id = JSON.parse(parsed_tecnico_user_id);
         }
-        console.log('TCL: AssistenciaModalState -> parsed_tecnico_user_id', parsed_tecnico_user_id);
         parsed_tecnico_user_id.push(
             {
                 tecnico_user_id: this.authService.getUserId(),
@@ -101,48 +101,4 @@ export class AssistenciaModalState {
     public static unsetModalIsOpen({ patchState }: StateContext<AssistenciaModalStateModel>) {
         patchState({ modalIsOpen: false });
     }
-
-    /*
-        @Receiver()
-        public static unsetModalIsOpen({ setState, getState }: StateContext<AssistenciaModalStateModel>): void {
-            setState({ modalIsOpen: false, assistencia: getState().assistencia });
-        }
-
-
-        @Receiver()
-        public static saveModal(ctx: StateContext<any>, action: EmitterAction<any>) {
-            const estado: string = action.payload.estado;
-            const relatorio_interno: string = action.payload.relatorio_interno;
-            const relatorio_cliente: string = action.payload.relatorio_cliente;
-            const preco: number = action.payload.preco;
-            const assistencia_id: number = action.payload.assistencia_id;
-            const tecnico_user_id: string = action.payload.tecnico_user_id;
-            const lista_index: number = action.payload.lista_index;
-
-            const agora = new Date();
-            const alteracao: object = {
-                tecnico_user_id: this.staticAuthService.getUserId(),
-                estado: estado,
-                updatedAt: agora.toLocaleString()
-            };
-
-            let parsed_tecnico_user_id: any = JSON.parse(tecnico_user_id);
-            if (typeof parsed_tecnico_user_id === 'string') {
-                parsed_tecnico_user_id = JSON.parse(parsed_tecnico_user_id);
-            }
-            parsed_tecnico_user_id.push(alteracao);
-
-            const query = {
-                estado: estado,
-                relatorio_interno: relatorio_interno,
-                relatorio_cliente: relatorio_cliente,
-                preco: preco,
-                tecnico_user_id: JSON.stringify(parsed_tecnico_user_id)
-            };
-            this.staticDataService.patch$('assistencias', query, assistencia_id);
-
-            this.staticToogleModal.emit(lista_index);
-        }
-
-    */
 }

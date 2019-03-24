@@ -4,6 +4,7 @@ import { patch, updateItem } from '@ngxs/store/operators';
 import { DataService } from 'src/app/shared';
 import { Injector } from '@angular/core';
 import { Assistencia } from 'src/app/shared/models';
+import { first } from 'rxjs/operators';
 
 export interface AssistenciaStateModel {
     assistencias: Assistencia[];
@@ -35,6 +36,9 @@ export class AssistenciasState implements NgxsOnInit {
         const assistencias = action.assistencias;
         assistencias.forEach((assistencia, index) => { // preenche o nome de cliente em cada assistencia do array
             AssistenciasState.dataService.get$('users', assistencia.cliente_user_id)
+                .pipe(
+                    first()
+                )
                 .subscribe(e => {
                     Object.assign(assistencias[index], { cliente_user_name: e.nome });
                 });
