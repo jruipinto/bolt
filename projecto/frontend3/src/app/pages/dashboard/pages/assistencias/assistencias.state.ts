@@ -45,7 +45,7 @@ export class AssistenciasState implements NgxsOnInit {
                 },
                 err => console.log('error:', err)
             )
-        ;
+            ;
     }
 
     @Receiver({ action: PullAssistencias })
@@ -83,11 +83,11 @@ export class AssistenciasState implements NgxsOnInit {
         dispatch(new PullAssistencias());
         AssistenciasState.feathersService
             .service('assistencias')
-            .on('created', assistencia => { dispatch(new PatchAssistencias(assistencia)); })
+            .on('created', assistencia => { console.log('created: ', assistencia); })
             ;
         AssistenciasState.feathersService
             .service('assistencias')
-            .on('patched', assistencia => { console.log('patched: ', assistencia); })
+            .on('patched', assistencia => { dispatch(new PatchAssistencias(assistencia)); })
             ;
     }
 
