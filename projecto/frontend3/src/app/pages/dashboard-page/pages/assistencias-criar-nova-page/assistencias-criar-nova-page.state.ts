@@ -1,7 +1,7 @@
 import { State } from '@ngxs/store';
 
 @State<any>({
-    name: 'assistenciasCriarNovapage'
+    name: 'assistenciasCriarNovaPage'
 })
 export class AssistenciasCriarNovaPageState {
 

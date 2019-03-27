@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { AssistenciasPageState, AssistenciasPageStateModel, PullAssistencias } from './assistencias-page.state';
-import { PullAssistencia } from '../assistencia-modal';
+import { AssistenciasPageState, AssistenciasPageStateModel, PullAssistenciasPageState } from './assistencias-page.state';
+import { PullAssistenciaModalState } from '../assistencia-modal';
 
 @Component({
   selector: 'app-assistencias-page',
@@ -17,11 +17,11 @@ export class AssistenciasPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(new PullAssistencias());
+    this.store.dispatch(new PullAssistenciasPageState());
   }
 
   openModal(id: number): void {
-    this.store.dispatch(new PullAssistencia(id));
+    this.store.dispatch(new PullAssistenciaModalState(id));
   }
 
 }

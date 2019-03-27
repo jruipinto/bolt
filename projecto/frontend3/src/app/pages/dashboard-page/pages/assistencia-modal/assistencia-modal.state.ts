@@ -9,18 +9,18 @@ export interface AssistenciaModalStateModel {
     assistencia: Partial<Assistencia>; // the assistencia object to fill the modal
 }
 /* Actions */
-export class PullAssistencia {
-    static readonly type = '[Assistencia-Modal] Pull from api';
+export class PullAssistenciaModalState {
+    static readonly type = '[Assistencia-Modal] Pulled from: assistencias api';
     constructor(public id: number) { }
 }
 
-export class PushAssistencia {
-    static readonly type = '[Assistencia-Modal] Push to api';
+export class PushAssistenciaModalState {
+    static readonly type = '[Assistencia-Modal] Pushed to: assistencias api';
     constructor(public newEstado: string, public assistencia: Assistencia) { }
 }
 
-export class PatchAssistencia {
-    static readonly type = '[Assistencia-Modal] received "patched" from api';
+export class PatchAssistenciaModalState {
+    static readonly type = '[Assistencia-Modal] received "patched" from: assistencias api';
     constructor(public assistencia: Assistencia) { }
 }
 
@@ -42,8 +42,8 @@ export class AssistenciaModalState {
     }
 
 
-    @Action( PullAssistencia )
-    pullAssistencia({ patchState, dispatch }: StateContext<AssistenciaModalStateModel>, action: PullAssistencia) {
+    @Action( PullAssistenciaModalState )
+    pullAssistenciaPage({ patchState, dispatch }: StateContext<AssistenciaModalStateModel>, action: PullAssistenciaModalState) {
         AssistenciaModalState.feathersService
             .service('assistencias')
             .get(action.id)
@@ -54,14 +54,14 @@ export class AssistenciaModalState {
             ;
         AssistenciaModalState.feathersService
             .service('assistencias')
-            .on('patched', apiAssistencia => { dispatch(new PatchAssistencia(apiAssistencia)); })
+            .on('patched', apiAssistencia => { dispatch(new PatchAssistenciaModalState(apiAssistencia)); })
             ;
     }
 
-    @Action( PushAssistencia )
-    pushAssistencia(
+    @Action( PushAssistenciaModalState )
+    pushAssistenciaPage(
         { patchState, getState, dispatch }: StateContext<AssistenciaModalStateModel>,
-        action: PushAssistencia) {
+        action: PushAssistenciaModalState) {
         // parse json to add new timestamp to it
         let parsed_tecnico_user_id: any = JSON.parse(action.assistencia.tecnico_user_id);
         if (typeof parsed_tecnico_user_id === 'string') {
@@ -100,8 +100,8 @@ export class AssistenciaModalState {
             ;
     }
 
-    @Action( PatchAssistencia )
-    patchAssistencia({ patchState, getState }: StateContext<AssistenciaModalStateModel>, action: PatchAssistencia) {
+    @Action( PatchAssistenciaModalState )
+    patchAssistenciaPage({ patchState, getState }: StateContext<AssistenciaModalStateModel>, action: PatchAssistenciaModalState) {
         if (action.assistencia.id = getState().assistencia.id) {
             patchState({ assistencia: action.assistencia });
         }
