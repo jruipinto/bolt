@@ -3,7 +3,7 @@ import { Encomenda, Assistencia } from 'src/app/shared/models';
 
 export interface PainelRapidoPageStateModel {
     encomendas: Encomenda[];
-    orcamendos: Assistencia[];
+    orcamentos: Assistencia[];
     pedidosContactoCliente: Assistencia[];
 }
 
