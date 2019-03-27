@@ -55,4 +55,4 @@ export const LOGGER_CONFIG: NgxsLoggerPluginOptions = {
     ],
     exports: [NgxsModule]
 })
-export class NgxsStoreModule {}
+export class AppStoreModule {}
