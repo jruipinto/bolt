@@ -21,8 +21,8 @@ const routes: Routes = [
     loadChildren: './pages/dashboard-page/dashboard-page.module#DashboardPageModule',
     canLoad: [AuthGuard]
   },
-  { path: '',   redirectTo: '/dashboard/painelrapido', pathMatch: 'full' },
-  { path: '**', redirectTo: '/dashboard/painelrapido' }
+  { path: '',   redirectTo: '/dashboard/painel-rapido', pathMatch: 'full' },
+  { path: '**', redirectTo: '/dashboard/painel-rapido' }
 ];
 
 @NgModule({
