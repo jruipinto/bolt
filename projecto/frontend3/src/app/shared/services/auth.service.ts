@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { FeathersService } from './feathers.service';
-import { DataService } from './data.service';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -9,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  constructor(dataService: DataService, private feathersService: FeathersService, private router: Router ) { }
+  constructor( private feathersService: FeathersService, private router: Router ) { }
 
   public getUserId (): number {
     const decode = require('jwt-decode');

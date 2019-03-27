@@ -1,10 +1,6 @@
-/* angular modules */
 import { Injector } from '@angular/core'; // for static dependency injection (@ngxs specific)
-/* @ngxs modules */
 import { Action, State, StateContext } from '@ngxs/store';
-/* shared services */
 import { AuthService, FeathersService } from 'src/app/shared/services';
-/* shared models */
 import { Assistencia } from 'src/app/shared/models';
 
 export interface AssistenciaModalStateModel {
