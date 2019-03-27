@@ -25,7 +25,6 @@
     "@feathersjs/authentication-client": "^1.0.10",
     "@feathersjs/feathers": "^3.3.1",
     "@feathersjs/socketio-client": "^1.2.1",
-    "@ngxs-labs/emitter": "^1.9.0",
     "@ngxs/devtools-plugin": "^3.4.3",
     "@ngxs/form-plugin": "^3.4.3",
     "@ngxs/logger-plugin": "^3.4.3",

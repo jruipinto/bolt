@@ -1,13 +1,11 @@
 /* angular modules */
 import { Injector } from '@angular/core'; // for static dependency injection (@ngxs specific)
 /* @ngxs modules */
-import { State, StateContext } from '@ngxs/store';
-import { Receiver, EmitterAction } from '@ngxs-labs/emitter';
+import { Action, State, StateContext } from '@ngxs/store';
 /* shared services */
-import { DataService, AuthService, FeathersService } from 'src/app/shared/services';
+import { AuthService, FeathersService } from 'src/app/shared/services';
 /* shared models */
 import { Assistencia } from 'src/app/shared/models';
-import { AssistenciaStateModel } from '../assistencias';
 
 export interface AssistenciaModalStateModel {
     modalIsOpen?: boolean; // modal visible or not
@@ -26,7 +24,7 @@ export class PushAssistencia {
 }
 
 export class PatchAssistencia {
-    static readonly type = '[Assistencia-Modal] received patched from api';
+    static readonly type = '[Assistencia-Modal] received "patched" from api';
     constructor(public assistencia: Assistencia) { }
 }
 
@@ -48,8 +46,8 @@ export class AssistenciaModalState {
     }
 
 
-    @Receiver({ action: [PullAssistencia] })
-    public static getValue({ patchState, dispatch }: StateContext<AssistenciaModalStateModel>, action: PullAssistencia) {
+    @Action( PullAssistencia )
+    pullAssistencia({ patchState, dispatch }: StateContext<AssistenciaModalStateModel>, action: PullAssistencia) {
         AssistenciaModalState.feathersService
             .service('assistencias')
             .get(action.id)
@@ -64,15 +62,8 @@ export class AssistenciaModalState {
             ;
     }
 
-    @Receiver({ action: [PatchAssistencia] })
-    public static getValue2({ patchState, getState }: StateContext<AssistenciaModalStateModel>, action: PatchAssistencia) {
-        if (action.assistencia.id = getState().assistencia.id) {
-            patchState({ assistencia: action.assistencia });
-        }
-    }
-
-    @Receiver({ action: [PushAssistencia] })
-    public static setValue(
+    @Action( PushAssistencia )
+    pushAssistencia(
         { patchState, getState, dispatch }: StateContext<AssistenciaModalStateModel>,
         action: PushAssistencia) {
         // parse json to add new timestamp to it
@@ -82,7 +73,7 @@ export class AssistenciaModalState {
         }
         parsed_tecnico_user_id.push(
             {
-                tecnico_user_id: this.authService.getUserId(),
+                tecnico_user_id: AssistenciaModalState.authService.getUserId(),
                 estado: action.newEstado,
                 updatedAt: new Date().toLocaleString() // dia/mes/ano, hora:minuto:segundo naquele momento
             }
@@ -97,14 +88,14 @@ export class AssistenciaModalState {
             preco: action.assistencia.preco,
             tecnico_user_id: JSON.stringify(parsed_tecnico_user_id)
         });
-        patchState({  assistencia: stateAssistencia });
+        patchState({ assistencia: stateAssistencia });
 
         // submit state to database
         AssistenciaModalState.feathersService
             .service('assistencias')
             .patch(getState().assistencia.id, getState().assistencia)
             .then(
-                success => {
+                () => {
                     console.log('Pushed to api with success');
                     dispatch(new CloseModalAssistencia());
                 },
@@ -113,8 +104,15 @@ export class AssistenciaModalState {
             ;
     }
 
-    @Receiver({ action: [CloseModalAssistencia] })
-    public static unsetModalIsOpen({ patchState }: StateContext<AssistenciaModalStateModel>) {
+    @Action( PatchAssistencia )
+    patchAssistencia({ patchState, getState }: StateContext<AssistenciaModalStateModel>, action: PatchAssistencia) {
+        if (action.assistencia.id = getState().assistencia.id) {
+            patchState({ assistencia: action.assistencia });
+        }
+    }
+
+    @Action( CloseModalAssistencia )
+    unsetModalIsOpen({ patchState }: StateContext<AssistenciaModalStateModel>) {
         patchState({ modalIsOpen: false });
     }
 }

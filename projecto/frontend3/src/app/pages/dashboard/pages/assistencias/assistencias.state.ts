@@ -1,7 +1,6 @@
 import { Injector } from '@angular/core';
-import { State, StateContext, NgxsOnInit } from '@ngxs/store';
-import { patch, append, updateItem } from '@ngxs/store/operators';
-import { Receiver } from '@ngxs-labs/emitter';
+import { Action, State, StateContext } from '@ngxs/store';
+import { append, patch, updateItem } from '@ngxs/store/operators';
 import { FeathersService } from 'src/app/shared/services';
 import { Assistencia } from 'src/app/shared/models';
 
@@ -14,12 +13,12 @@ export class PullAssistencias {
 }
 
 export class CreateAssistencias {
-    static readonly type = '[Assistencias] received created from api';
+    static readonly type = '[Assistencias] received "created" from api';
     constructor(public assistencia: Assistencia) { }
 }
 
 export class PatchAssistencias {
-    static readonly type = '[Assistencias] received patched from api';
+    static readonly type = '[Assistencias] received "patched" from api';
     constructor(public assistencia: Assistencia) { }
 }
 /* ###### */
@@ -27,15 +26,15 @@ export class PatchAssistencias {
     name: 'assistenciasPage',
     defaults: null
 })
-export class AssistenciasState implements NgxsOnInit {
+export class AssistenciasState {
     private static feathersService: FeathersService;
 
     constructor(injector: Injector) {
         AssistenciasState.feathersService = injector.get<FeathersService>(FeathersService);
     }
 
-    @Receiver({ action: PullAssistencias })
-    public static pullAssistencias({ getState, setState }: StateContext<AssistenciaStateModel>) {
+    @Action( PullAssistencias )
+    pullAssistencias({ getState, setState, dispatch }: StateContext<AssistenciaStateModel>) {
         AssistenciasState.feathersService
             .service('assistencias')
             .find({ query: { $limit: 25 } })
@@ -65,29 +64,18 @@ export class AssistenciasState implements NgxsOnInit {
                 err => console.log('error:', err)
             )
             ;
-    }
-
-    @Receiver({ action: [PatchAssistencias] })
-    public static patchAssistencias({ setState }: StateContext<AssistenciaStateModel>, action: PatchAssistencias) {
         AssistenciasState.feathersService
-            .service('users')
-            .get(action.assistencia.cliente_user_id)
-            .then(
-                apiUser => {
-                    Object.assign(action.assistencia, { cliente_user_name: apiUser.nome });
-                    setState(
-                        patch({
-                            assistencias: updateItem(stateAssistencia => stateAssistencia.id === action.assistencia.id, action.assistencia)
-                        })
-                    );
-                },
-                err => console.log('error:', err)
-            )
+            .service('assistencias')
+            .on('created', apiAssistencia => { dispatch(new CreateAssistencias(apiAssistencia)); })
+            ;
+        AssistenciasState.feathersService
+            .service('assistencias')
+            .on('patched', apiAssistencia => { dispatch(new PatchAssistencias(apiAssistencia)); })
             ;
     }
 
-    @Receiver({ action: [CreateAssistencias] })
-    public static createAssistencias({ setState }: StateContext<AssistenciaStateModel>, action: CreateAssistencias) {
+    @Action( CreateAssistencias )
+    createAssistencias({ setState }: StateContext<AssistenciaStateModel>, action: CreateAssistencias) {
         AssistenciasState.feathersService
             .service('users')
             .get(action.assistencia.cliente_user_id)
@@ -105,16 +93,22 @@ export class AssistenciasState implements NgxsOnInit {
             ;
     }
 
-    ngxsOnInit({ dispatch }: StateContext<AssistenciaStateModel>) {
-        dispatch(new PullAssistencias());
+    @Action( PatchAssistencias )
+    patchAssistencias({ setState }: StateContext<AssistenciaStateModel>, action: PatchAssistencias) {
         AssistenciasState.feathersService
-            .service('assistencias')
-            .on('created', apiAssistencia => { dispatch(new CreateAssistencias(apiAssistencia)); })
-            ;
-        AssistenciasState.feathersService
-            .service('assistencias')
-            .on('patched', apiAssistencia => { dispatch(new PatchAssistencias(apiAssistencia)); })
+            .service('users')
+            .get(action.assistencia.cliente_user_id)
+            .then(
+                apiUser => {
+                    Object.assign(action.assistencia, { cliente_user_name: apiUser.nome });
+                    setState(
+                        patch({
+                            assistencias: updateItem(stateAssistencia => stateAssistencia.id === action.assistencia.id, action.assistencia)
+                        })
+                    );
+                },
+                err => console.log('error:', err)
+            )
             ;
     }
-
 }
