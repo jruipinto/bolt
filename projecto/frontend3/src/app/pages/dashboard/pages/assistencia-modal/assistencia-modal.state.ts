@@ -106,7 +106,7 @@ export class AssistenciaModalState {
             .then(
                 success => {
                     console.log('Pushed to api with success');
-                    dispatch(new CloseModalAssistencia())
+                    dispatch(new CloseModalAssistencia());
                 },
                 err => console.log('error:', err)
             )
