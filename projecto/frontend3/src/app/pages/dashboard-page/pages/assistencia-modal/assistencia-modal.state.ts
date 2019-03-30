@@ -43,7 +43,7 @@ export class AssistenciaModalState {
 
 
     @Action( AssistenciaModalGetAssistencia )
-    pullAssistenciaPage({ patchState, dispatch }: StateContext<AssistenciaModalStateModel>, action: AssistenciaModalGetAssistencia) {
+    getAssistencia({ patchState, dispatch }: StateContext<AssistenciaModalStateModel>, action: AssistenciaModalGetAssistencia) {
         AssistenciaModalState.feathersService
             .service('assistencias')
             .get(action.id)
@@ -59,7 +59,7 @@ export class AssistenciaModalState {
     }
 
     @Action( AssistenciaModalPostAssistencia )
-    pushAssistenciaPage(
+    postAssistencia(
         { patchState, getState, dispatch }: StateContext<AssistenciaModalStateModel>,
         action: AssistenciaModalPostAssistencia) {
         // parse json to add new timestamp to it
@@ -101,7 +101,7 @@ export class AssistenciaModalState {
     }
 
     @Action( AssistenciaModalPatchAssistencia )
-    AssistenciaModalpatchAssistenciaPage({ patchState, getState }: StateContext<AssistenciaModalStateModel>, action: AssistenciaModalPatchAssistencia) {
+    patchAssistencia({ patchState, getState }: StateContext<AssistenciaModalStateModel>, action: AssistenciaModalPatchAssistencia) {
         if (action.assistencia.id = getState().assistencia.id) {
             patchState({ assistencia: action.assistencia });
         }

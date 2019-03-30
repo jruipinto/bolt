@@ -1,5 +1,7 @@
-import { State } from '@ngxs/store';
+import { Injector } from '@angular/core';
+import { State, StateContext, Action } from '@ngxs/store';
 import { Encomenda, Assistencia } from 'src/app/shared/models';
+import { FeathersService } from 'src/app/shared/services';
 
 export interface PainelRapidoPageStateModel {
     encomendas: Encomenda[];
@@ -8,61 +10,36 @@ export interface PainelRapidoPageStateModel {
 }
 
 /* Actions for encomendas */
-export class FindEncomendas {
+export class PainelRapidoFindEncomendas {
     static readonly type = '[Encomendas API] Find Encomendas';
 }
 
-export class PostEncomendas {
+export class PainelRapidoPostEncomenda {
     static readonly type = '[Painel-Rapido-Page] Post Encomenda';
 }
 
-export class CreatePainelRapidoPageEncomendas {
-    static readonly type = '[Painel-Rapido-Page] received PainelRapidoPageState.encomendas "created" from: Encomendas api';
+export class PainelRapidoCreateEncomenda {
+    static readonly type = '[Encomendas API] Created Encomenda';
     constructor(public encomenda: Encomenda) { }
 }
 
-export class PatchPainelRapidoPageEncomendas {
-    static readonly type = '[Painel-Rapido-Page] received PainelRapidoPageState.encomendas "patched" from: Encomendas api';
+export class PainelRapidoPatchEncomenda {
+    static readonly type = '[Encomendas API] Patched Encomenda';
     constructor(public encomenda: Encomenda) { }
 }
 /* ###### */
 
-/* Actions for orcamentos */
-export class PullPainelRapidoPageOrcamentos {
-    static readonly type = '[Painel-Rapido-Page] Pulled PainelRapidoPageState.orcamentos from: Assistencias api';
+/* Actions for orcamentos & pedidosContactoCliente*/
+export class PainelRapidoFindAssistencias {
+    static readonly type = '[Assistencias API] Find Assistencias';
 }
 
-export class PushPainelRapidoPageOrcamentos {
-    static readonly type = '[Painel-Rapido-Page] Pushed PainelRapidoPageState.orcamentos to: Assistencias api';
+export class PainelRapidoPostAssistencia {
+    static readonly type = '[Painel-Rapido-Page] Post Assistencia';
 }
 
-export class CreatePainelRapidoPageOrcamentos {
-    static readonly type = '[Painel-Rapido-Page] received PainelRapidoPageState.orcamentos "created" from: Assistencias api';
-    constructor(public assistencia: Assistencia) { }
-}
-
-export class PatchPainelRapidoPageOrcamentos {
-    static readonly type = '[Painel-Rapido-Page] received PainelRapidoPageState.orcamentos"patched" from: Assistencias api';
-    constructor(public assistencia: Assistencia) { }
-}
-/* ###### */
-
-/* Actions for pedidosContactoCliente */
-export class PullPainelRapidoPagePedidosContactoCliente {
-    static readonly type = '[Painel-Rapido-Page] Pulled PainelRapidoPageState.pedidosContactoCliente from: Assistencias api';
-}
-
-export class PushPainelRapidoPagePedidosContactoCliente {
-    static readonly type = '[Painel-Rapido-Page] Pushed PainelRapidoPageState.pedidosContactoCliente to: Assistencias api';
-}
-
-export class CreatePainelRapidoPagePedidosContactoCliente {
-    static readonly type = '[Painel-Rapido-Page] received PainelRapidoPageState.pedidosContactoCliente "created" from: Assistencias api';
-    constructor(public assistencia: Assistencia) { }
-}
-
-export class PatchPainelRapidoPagePedidosContactoCliente {
-    static readonly type = '[Painel-Rapido-Page] received PainelRapidoPageState.pedidosContactoCliente "patched" from: Assistencias api';
+export class PainelRapidoPatchAssistencia {
+    static readonly type = '[Assistencias API] Patched Assistencia';
     constructor(public assistencia: Assistencia) { }
 }
 /* ###### */
@@ -72,8 +49,45 @@ export class PatchPainelRapidoPagePedidosContactoCliente {
     defaults: null
 })
 export class PainelRapidoPageState {
+    private static feathersService: FeathersService;
 
-    constructor() {
+    constructor(injector: Injector) {
+        PainelRapidoPageState.feathersService = injector.get<FeathersService>(FeathersService);
+    }
+
+    @Action(PainelRapidoFindAssistencias)
+    findEncomendas({ getState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
+        
+    }
+
+    @Action(PainelRapidoPostEncomenda)
+    postEncomenda({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPostEncomenda) {
+
+    }
+
+    @Action(PainelRapidoCreateEncomenda)
+    createEncomenda({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoCreateEncomenda) {
+
+    }
+
+    @Action(PainelRapidoPatchEncomenda)
+    patchEncomenda({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPatchEncomenda) {
+
+    }
+
+    @Action(PainelRapidoFindAssistencias)
+    findAssistencias({ getState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
+        
+    }
+
+    @Action(PainelRapidoPostAssistencia)
+    postAssistencia({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPostAssistencia) {
+
+    }
+
+    @Action(PainelRapidoPatchAssistencia)
+    patchAssistencia({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPatchAssistencia) {
+
     }
 
 }

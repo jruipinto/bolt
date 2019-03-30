@@ -34,7 +34,7 @@ export class AssistenciasPageState {
     }
 
     @Action( AssistenciasPageFindAssistencias )
-    AssistenciasPageFindAssistencias({ getState, setState, dispatch }: StateContext<AssistenciasPageStateModel>) {
+    findAssistencias({ getState, setState, dispatch }: StateContext<AssistenciasPageStateModel>) {
         AssistenciasPageState.feathersService
             .service('assistencias')
             .find({ query: { $limit: 25 } })
@@ -75,7 +75,7 @@ export class AssistenciasPageState {
     }
 
     @Action( AssistenciasPageCreateAssistencia )
-    AssistenciasPagecreateAssistencia({ setState }: StateContext<AssistenciasPageStateModel>, action: AssistenciasPageCreateAssistencia) {
+    createAssistencia({ setState }: StateContext<AssistenciasPageStateModel>, action: AssistenciasPageCreateAssistencia) {
         AssistenciasPageState.feathersService
             .service('users')
             .get(action.assistencia.cliente_user_id)
@@ -94,7 +94,7 @@ export class AssistenciasPageState {
     }
 
     @Action( AssistenciasPagePatchAssistencia )
-    AssistenciasPagepatchAssistencia({ setState }: StateContext<AssistenciasPageStateModel>, action: AssistenciasPagePatchAssistencia) {
+    patchAssistencia({ setState }: StateContext<AssistenciasPageStateModel>, action: AssistenciasPagePatchAssistencia) {
         AssistenciasPageState.feathersService
             .service('users')
             .get(action.assistencia.cliente_user_id)
