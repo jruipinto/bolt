@@ -8,16 +8,16 @@ export interface AssistenciasPageStateModel {
     assistencias: Assistencia[];
 }
 /* Actions */
-export class FindAssistencias {
+export class AssistenciasPageFindAssistencias {
     static readonly type = '[Assistencias API] Find Assistencias';
 }
 
-export class CreateAssistencia {
+export class AssistenciasPageCreateAssistencia {
     static readonly type = '[Assistencias API] Created Assistencia';
     constructor(public assistencia: Assistencia) { }
 }
 
-export class PatchAssistencia {
+export class AssistenciasPagePatchAssistencia {
     static readonly type = '[Assistencias API] Patched Assistencia';
     constructor(public assistencia: Assistencia) { }
 }
@@ -33,8 +33,8 @@ export class AssistenciasPageState {
         AssistenciasPageState.feathersService = injector.get<FeathersService>(FeathersService);
     }
 
-    @Action( FindAssistencias )
-    FindAssistencias({ getState, setState, dispatch }: StateContext<AssistenciasPageStateModel>) {
+    @Action( AssistenciasPageFindAssistencias )
+    AssistenciasPageFindAssistencias({ getState, setState, dispatch }: StateContext<AssistenciasPageStateModel>) {
         AssistenciasPageState.feathersService
             .service('assistencias')
             .find({ query: { $limit: 25 } })
@@ -66,16 +66,16 @@ export class AssistenciasPageState {
             ;
         AssistenciasPageState.feathersService
             .service('assistencias')
-            .on('created', apiAssistencia => { dispatch(new CreateAssistencia(apiAssistencia)); })
+            .on('created', apiAssistencia => { dispatch(new AssistenciasPageCreateAssistencia(apiAssistencia)); })
             ;
         AssistenciasPageState.feathersService
             .service('assistencias')
-            .on('patched', apiAssistencia => { dispatch(new PatchAssistencia(apiAssistencia)); })
+            .on('patched', apiAssistencia => { dispatch(new AssistenciasPagePatchAssistencia(apiAssistencia)); })
             ;
     }
 
-    @Action( CreateAssistencia )
-    createAssistencia({ setState }: StateContext<AssistenciasPageStateModel>, action: CreateAssistencia) {
+    @Action( AssistenciasPageCreateAssistencia )
+    AssistenciasPagecreateAssistencia({ setState }: StateContext<AssistenciasPageStateModel>, action: AssistenciasPageCreateAssistencia) {
         AssistenciasPageState.feathersService
             .service('users')
             .get(action.assistencia.cliente_user_id)
@@ -93,8 +93,8 @@ export class AssistenciasPageState {
             ;
     }
 
-    @Action( PatchAssistencia )
-    patchAssistencia({ setState }: StateContext<AssistenciasPageStateModel>, action: PatchAssistencia) {
+    @Action( AssistenciasPagePatchAssistencia )
+    AssistenciasPagepatchAssistencia({ setState }: StateContext<AssistenciasPageStateModel>, action: AssistenciasPagePatchAssistencia) {
         AssistenciasPageState.feathersService
             .service('users')
             .get(action.assistencia.cliente_user_id)

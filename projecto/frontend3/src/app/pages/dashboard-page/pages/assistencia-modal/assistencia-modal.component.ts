@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 
 import { Select, Store } from '@ngxs/store';
 
-import { AssistenciaModalState, AssistenciaModalStateModel, CloseAssistenciaModal,
-  PostAssistencia } from './assistencia-modal.state';
+import { AssistenciaModalState, AssistenciaModalStateModel, AssistenciaModalClose,
+  AssistenciaModalPostAssistencia } from './assistencia-modal.state';
 
 
 @Component({
@@ -23,11 +23,11 @@ export class AssistenciaModalComponent implements OnInit {
   }
 
   closeModal() {
-    this.store.dispatch(new CloseAssistenciaModal());
+    this.store.dispatch(new AssistenciaModalClose());
   }
 
   saveModal({ newEstado, assistencia }) {
-    this.store.dispatch(new PostAssistencia(newEstado, assistencia));
+    this.store.dispatch(new AssistenciaModalPostAssistencia(newEstado, assistencia));
   }
 
 }
