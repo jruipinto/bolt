@@ -8,60 +8,60 @@ export interface PainelRapidoPageStateModel {
 }
 
 /* Actions for encomendas */
-export class PullPainelRapidoPageEncomendasState {
-    static readonly type = '[Painel-Rapido-Page] Pulled PainelRapidoPageState.encomendas from: Encomendas api';
+export class FindEncomendas {
+    static readonly type = '[Encomendas API] Find Encomendas';
 }
 
-export class PushPainelRapidoPageEncomendasState {
-    static readonly type = '[Painel-Rapido-Page] Pushed PainelRapidoPageState.encomendas to: Encomendas api';
+export class PostEncomendas {
+    static readonly type = '[Painel-Rapido-Page] Post Encomenda';
 }
 
-export class CreatePainelRapidoPageEncomendasState {
+export class CreatePainelRapidoPageEncomendas {
     static readonly type = '[Painel-Rapido-Page] received PainelRapidoPageState.encomendas "created" from: Encomendas api';
     constructor(public encomenda: Encomenda) { }
 }
 
-export class PatchPainelRapidoPageEncomendasState {
+export class PatchPainelRapidoPageEncomendas {
     static readonly type = '[Painel-Rapido-Page] received PainelRapidoPageState.encomendas "patched" from: Encomendas api';
     constructor(public encomenda: Encomenda) { }
 }
 /* ###### */
 
 /* Actions for orcamentos */
-export class PullPainelRapidoPageOrcamentosState {
+export class PullPainelRapidoPageOrcamentos {
     static readonly type = '[Painel-Rapido-Page] Pulled PainelRapidoPageState.orcamentos from: Assistencias api';
 }
 
-export class PushPainelRapidoPageOrcamentosState {
+export class PushPainelRapidoPageOrcamentos {
     static readonly type = '[Painel-Rapido-Page] Pushed PainelRapidoPageState.orcamentos to: Assistencias api';
 }
 
-export class CreatePainelRapidoPageOrcamentosState {
+export class CreatePainelRapidoPageOrcamentos {
     static readonly type = '[Painel-Rapido-Page] received PainelRapidoPageState.orcamentos "created" from: Assistencias api';
     constructor(public assistencia: Assistencia) { }
 }
 
-export class PatchPainelRapidoPageOrcamentosState {
+export class PatchPainelRapidoPageOrcamentos {
     static readonly type = '[Painel-Rapido-Page] received PainelRapidoPageState.orcamentos"patched" from: Assistencias api';
     constructor(public assistencia: Assistencia) { }
 }
 /* ###### */
 
 /* Actions for pedidosContactoCliente */
-export class PullPainelRapidoPagePedidosContactoClienteState {
+export class PullPainelRapidoPagePedidosContactoCliente {
     static readonly type = '[Painel-Rapido-Page] Pulled PainelRapidoPageState.pedidosContactoCliente from: Assistencias api';
 }
 
-export class PushPainelRapidoPagePedidosContactoClienteState {
+export class PushPainelRapidoPagePedidosContactoCliente {
     static readonly type = '[Painel-Rapido-Page] Pushed PainelRapidoPageState.pedidosContactoCliente to: Assistencias api';
 }
 
-export class CreatePainelRapidoPagePedidosContactoClienteState {
+export class CreatePainelRapidoPagePedidosContactoCliente {
     static readonly type = '[Painel-Rapido-Page] received PainelRapidoPageState.pedidosContactoCliente "created" from: Assistencias api';
     constructor(public assistencia: Assistencia) { }
 }
 
-export class PatchPainelRapidoPagePedidosContactoClienteState {
+export class PatchPainelRapidoPagePedidosContactoCliente {
     static readonly type = '[Painel-Rapido-Page] received PainelRapidoPageState.pedidosContactoCliente "patched" from: Assistencias api';
     constructor(public assistencia: Assistencia) { }
 }
