@@ -3,6 +3,7 @@ import { Action, State, StateContext } from '@ngxs/store';
 import { append, patch, updateItem } from '@ngxs/store/operators';
 import { FeathersService } from 'src/app/shared/services';
 import { Assistencia } from 'src/app/shared/models';
+import { from } from 'rxjs';
 
 export interface AssistenciasPageStateModel {
     assistencias: Assistencia[];
@@ -33,48 +34,31 @@ export class AssistenciasPageState {
         AssistenciasPageState.feathersService = injector.get<FeathersService>(FeathersService);
     }
 
-    @Action( AssistenciasPageFindAssistencias )
+    @Action(AssistenciasPageFindAssistencias)
     findAssistencias({ getState, setState, dispatch }: StateContext<AssistenciasPageStateModel>) {
-        AssistenciasPageState.feathersService
-            .service('assistencias')
-            .find({ query: { $limit: 25 } })
-            .then(
-                u => {
-                    setState({ assistencias: u.data });
-                    getState().assistencias.forEach((assistencia, index) => { // preenche o nome de cliente em cada assistencia do State
-                        AssistenciasPageState.feathersService
-                            .service('users')
-                            .get(assistencia.cliente_user_id)
-                            .then(
-                                apiUser => {
-                                    Object.assign(assistencia, { cliente_user_name: apiUser.nome });
-                                    setState(
-                                        patch({
-                                            assistencias: updateItem(
-                                                stateAssistencia => stateAssistencia.id === assistencia.id, assistencia
-                                            )
-                                        })
-                                    );
-                                },
-                                err => console.log('error:', err)
-                            )
-                            ;
-                    });
+        const assistenciasAPI = AssistenciasPageState.feathersService.service('assistencias');
+        const usersAPI = AssistenciasPageState.feathersService.service('users');
+        function insertUserNome(apiResponse) {
+            apiResponse.data.map(assistencia => usersAPI.get(assistencia.cliente_user_id)
+                .then(apiUser => {
+                    Object.assign(assistencia, { cliente_user_name: apiUser.nome });
                 },
+                    err => console.log('error:', err)
+                )
+            );
+            return apiResponse.data;
+        }
+        const assistencias$ = from(assistenciasAPI.find({ query: { $limit: 25 } })
+            .then(apiResponse => insertUserNome(apiResponse),
                 err => console.log('error:', err)
-            )
-            ;
-        AssistenciasPageState.feathersService
-            .service('assistencias')
-            .on('created', apiAssistencia => { dispatch(new AssistenciasPageCreateAssistencia(apiAssistencia)); })
-            ;
-        AssistenciasPageState.feathersService
-            .service('assistencias')
-            .on('patched', apiAssistencia => { dispatch(new AssistenciasPagePatchAssistencia(apiAssistencia)); })
-            ;
+            ));
+
+        assistencias$.subscribe(assistencias => setState({ assistencias }));
+        assistenciasAPI.on('created', apiAssistencia => { dispatch(new AssistenciasPageCreateAssistencia(apiAssistencia)); });
+        assistenciasAPI.on('patched', apiAssistencia => { dispatch(new AssistenciasPagePatchAssistencia(apiAssistencia)); });
     }
 
-    @Action( AssistenciasPageCreateAssistencia )
+    @Action(AssistenciasPageCreateAssistencia)
     createAssistencia({ setState }: StateContext<AssistenciasPageStateModel>, action: AssistenciasPageCreateAssistencia) {
         AssistenciasPageState.feathersService
             .service('users')
@@ -93,7 +77,7 @@ export class AssistenciasPageState {
             ;
     }
 
-    @Action( AssistenciasPagePatchAssistencia )
+    @Action(AssistenciasPagePatchAssistencia)
     patchAssistencia({ setState }: StateContext<AssistenciasPageStateModel>, action: AssistenciasPagePatchAssistencia) {
         AssistenciasPageState.feathersService
             .service('users')
