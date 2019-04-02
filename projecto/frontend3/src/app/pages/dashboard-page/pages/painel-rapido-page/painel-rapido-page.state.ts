@@ -57,7 +57,7 @@ export class PainelRapidoPageState {
 
     @Action(PainelRapidoFindAssistencias)
     findEncomendas({ getState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
-        
+
     }
 
     @Action(PainelRapidoPostEncomenda)
@@ -77,7 +77,7 @@ export class PainelRapidoPageState {
 
     @Action(PainelRapidoFindAssistencias)
     findAssistencias({ getState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
-        
+
     }
 
     @Action(PainelRapidoPostAssistencia)
