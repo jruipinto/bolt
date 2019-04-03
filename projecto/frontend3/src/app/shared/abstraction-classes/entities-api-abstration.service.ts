@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
-import { FeathersService } from '../services';
 import { from, Observable } from 'rxjs';
+
+import { FeathersService } from 'src/app/shared/services/feathers.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class EntitiesApiAbstrationService {
-  protected entity: string | null = null;
+export abstract class EntitiesApiAbstrationService {
   private entityAPI = this.feathersService.service(this.entity);
 
-  constructor(protected feathersService: FeathersService) { }
+  constructor(protected feathersService: FeathersService, private entity: string) {
+  }
 
-  find(query?: object): Observable<any> {
+  protected find(query?: object): Observable<any> {
     console.log(`[${this.entity} API] find ${this.entity}`);
     return from(this.entityAPI.find(query)
       .then(apiResponse => { return apiResponse },
