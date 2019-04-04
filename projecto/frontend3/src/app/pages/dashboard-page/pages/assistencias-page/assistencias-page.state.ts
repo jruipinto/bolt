@@ -1,7 +1,7 @@
 import { Injector } from '@angular/core';
 import { Action, State, StateContext } from '@ngxs/store';
 import { append, patch, updateItem } from '@ngxs/store/operators';
-import { FeathersService } from 'src/app/shared/services';
+import { FeathersService, AssistenciasApiService } from 'src/app/shared/services';
 import { Assistencia } from 'src/app/shared/models';
 import { from } from 'rxjs';
 
@@ -29,29 +29,17 @@ export class AssistenciasPagePatchAssistencia {
 })
 export class AssistenciasPageState {
     private static feathersService: FeathersService;
+    private static assistenciasApiService: AssistenciasApiService;
 
     constructor(injector: Injector) {
         AssistenciasPageState.feathersService = injector.get<FeathersService>(FeathersService);
+        AssistenciasPageState.assistenciasApiService = injector.get<AssistenciasApiService>(AssistenciasApiService);
     }
 
     @Action(AssistenciasPageFindAssistencias)
     findAssistencias({ getState, setState, dispatch }: StateContext<AssistenciasPageStateModel>) {
         const assistenciasAPI = AssistenciasPageState.feathersService.service('assistencias');
-        const usersAPI = AssistenciasPageState.feathersService.service('users');
-        function insertUserNome(apiResponse) {
-            apiResponse.data.map(assistencia => usersAPI.get(assistencia.cliente_user_id)
-                .then(apiUser => {
-                    Object.assign(assistencia, { cliente_user_name: apiUser.nome });
-                },
-                    err => console.log('error:', err)
-                )
-            );
-            return apiResponse.data;
-        }
-        const assistencias$ = from(assistenciasAPI.find({ query: { $limit: 25 } })
-            .then(apiResponse => insertUserNome(apiResponse),
-                err => console.log('error:', err)
-            ));
+        const assistencias$ = AssistenciasPageState.assistenciasApiService.find({ query: { $limit: 25 } });
 
         assistencias$.subscribe(assistencias => setState({ assistencias }));
         assistenciasAPI.on('created', apiAssistencia => { dispatch(new AssistenciasPageCreateAssistencia(apiAssistencia)); });
