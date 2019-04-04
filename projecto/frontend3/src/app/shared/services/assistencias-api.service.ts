@@ -26,7 +26,7 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
   }
 
   find(query?: object): Observable<any> {
-    const assistencias$ = super.find(query)
+    const assistencias$ = super.find(query);
     return assistencias$.pipe(
       map(
         apiResponse => this.insertUserNome(apiResponse),
@@ -35,7 +35,7 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
   }
 
   get(id: number): Observable<any> {
-    const assistencia$ = super.get(id)
+    const assistencia$ = super.get(id);
     return assistencia$.pipe(
       map(
         apiResponse => this.insertUserNome(apiResponse),
