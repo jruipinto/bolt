@@ -1,6 +1,6 @@
 import { Injector } from '@angular/core'; // for static dependency injection (@ngxs specific)
 import { Action, State, StateContext } from '@ngxs/store';
-import { AuthService, FeathersService } from 'src/app/shared/services';
+import { AuthService, FeathersService, AssistenciasApiService } from 'src/app/shared/services';
 import { Assistencia } from 'src/app/shared/models';
 
 export interface AssistenciaModalStateModel {
@@ -35,30 +35,28 @@ export class AssistenciaModalClose {
 export class AssistenciaModalState {
     private static authService: AuthService;
     private static feathersService: FeathersService;
+    private static assistenciasApiService: AssistenciasApiService;
 
     constructor(injector: Injector) {
         AssistenciaModalState.authService = injector.get<AuthService>(AuthService);
         AssistenciaModalState.feathersService = injector.get<FeathersService>(FeathersService);
+        AssistenciaModalState.assistenciasApiService = injector.get<AssistenciasApiService>(AssistenciasApiService);
     }
 
 
-    @Action( AssistenciaModalGetAssistencia )
+    @Action(AssistenciaModalGetAssistencia)
     getAssistencia({ patchState, dispatch }: StateContext<AssistenciaModalStateModel>, action: AssistenciaModalGetAssistencia) {
-        AssistenciaModalState.feathersService
-            .service('assistencias')
-            .get(action.id)
-            .then(
-                apiAssistencia => { patchState({ modalIsOpen: true, assistencia: apiAssistencia }); },
-                err => console.log('error:', err)
-            )
+        const assistenciasAPI = AssistenciaModalState.assistenciasApiService;
+        const assistencia$ = AssistenciaModalState.assistenciasApiService.get(action.id);
+        assistencia$.subscribe(
+            apiAssistencia => { patchState({ modalIsOpen: true, assistencia: apiAssistencia }); },
+            err => console.log('error:', err)
+        )
             ;
-        AssistenciaModalState.feathersService
-            .service('assistencias')
-            .on('patched', apiAssistencia => { dispatch(new AssistenciaModalPatchAssistencia(apiAssistencia)); })
-            ;
+        assistenciasAPI.on('patched', apiAssistencia => { dispatch(new AssistenciaModalPatchAssistencia(apiAssistencia)); });
     }
 
-    @Action( AssistenciaModalPostAssistencia )
+    @Action(AssistenciaModalPostAssistencia)
     postAssistencia(
         { patchState, getState, dispatch }: StateContext<AssistenciaModalStateModel>,
         action: AssistenciaModalPostAssistencia) {
@@ -100,14 +98,14 @@ export class AssistenciaModalState {
             ;
     }
 
-    @Action( AssistenciaModalPatchAssistencia )
+    @Action(AssistenciaModalPatchAssistencia)
     patchAssistencia({ patchState, getState }: StateContext<AssistenciaModalStateModel>, action: AssistenciaModalPatchAssistencia) {
         if (action.assistencia.id = getState().assistencia.id) {
             patchState({ assistencia: action.assistencia });
         }
     }
 
-    @Action( AssistenciaModalClose )
+    @Action(AssistenciaModalClose)
     unsetModalIsOpen({ patchState }: StateContext<AssistenciaModalStateModel>) {
         patchState({ modalIsOpen: false });
     }
