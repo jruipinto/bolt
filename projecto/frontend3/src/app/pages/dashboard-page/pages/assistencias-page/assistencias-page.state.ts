@@ -4,7 +4,6 @@ import { append, patch, updateItem } from '@ngxs/store/operators';
 import { FeathersService } from 'src/app/shared/services';
 import { Assistencia } from 'src/app/shared/models';
 import { from } from 'rxjs';
-import { AssistenciasApiService } from 'src/app/shared/services/assistencias-api.service';
 
 export interface AssistenciasPageStateModel {
     assistencias: Assistencia[];
@@ -30,18 +29,29 @@ export class AssistenciasPagePatchAssistencia {
 })
 export class AssistenciasPageState {
     private static feathersService: FeathersService;
-    private static assistenciasAPI: AssistenciasApiService;
 
     constructor(injector: Injector) {
         AssistenciasPageState.feathersService = injector.get<FeathersService>(FeathersService);
-        AssistenciasPageState.assistenciasAPI = injector.get<AssistenciasApiService>(AssistenciasApiService);
     }
 
     @Action(AssistenciasPageFindAssistencias)
     findAssistencias({ getState, setState, dispatch }: StateContext<AssistenciasPageStateModel>) {
         const assistenciasAPI = AssistenciasPageState.feathersService.service('assistencias');
-
-        const assistencias$ = AssistenciasPageState.assistenciasAPI.find({ query: { $limit: 25 } });
+        const usersAPI = AssistenciasPageState.feathersService.service('users');
+        function insertUserNome(apiResponse) {
+            apiResponse.data.map(assistencia => usersAPI.get(assistencia.cliente_user_id)
+                .then(apiUser => {
+                    Object.assign(assistencia, { cliente_user_name: apiUser.nome });
+                },
+                    err => console.log('error:', err)
+                )
+            );
+            return apiResponse.data;
+        }
+        const assistencias$ = from(assistenciasAPI.find({ query: { $limit: 25 } })
+            .then(apiResponse => insertUserNome(apiResponse),
+                err => console.log('error:', err)
+            ));
 
         assistencias$.subscribe(assistencias => setState({ assistencias }));
         assistenciasAPI.on('created', apiAssistencia => { dispatch(new AssistenciasPageCreateAssistencia(apiAssistencia)); });
