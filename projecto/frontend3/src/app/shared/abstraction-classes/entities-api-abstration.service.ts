@@ -33,4 +33,9 @@ export abstract class EntitiesApiAbstrationService {
   protected patch(id: number, data: object, actionType?: string) {
     console.log(actionType);
   }
+
+  public on(event: string | symbol, listener: (...args: any[]) => void) {
+    return this.entityAPI.on(event, listener);
+  }
+
 }
