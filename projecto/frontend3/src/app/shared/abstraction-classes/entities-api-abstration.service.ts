@@ -13,17 +13,17 @@ export abstract class EntitiesApiAbstrationService {
   constructor(protected feathersService: FeathersService, private entity: string) {
   }
 
-  protected find(query?: object): Observable<any> {
+  protected find<T>(query?: object): Observable<void |T[]> {
     console.log(`[${this.entity} API] find ${this.entity}`);
     return from(this.entityAPI.find(query)
-      .then(apiResponse => apiResponse,
+      .then(apiResponse => apiResponse.data,
         err => console.log('error:', err)
       ));
   }
-  protected get(id: number): Observable<any> {
+  protected get<T>(id: number): Observable<void |T[]> {
     console.log(`[${this.entity} API] get ${this.entity}`);
     return from(this.entityAPI.get(id)
-      .then(apiResponse => apiResponse,
+      .then(apiResponse => [apiResponse],
         err => console.log('error:', err)
       ));
   }

@@ -11,14 +11,14 @@ import { FeathersService } from './feathers.service';
 export class AssistenciasApiService extends EntitiesApiAbstrationService {
   private usersAPI = this.feathersService.service('users');
   private insertUserNome = (apiResponse) => {
-    apiResponse.data.map(assistencia => this.usersAPI.get(assistencia.cliente_user_id)
+    apiResponse.map(assistencia => this.usersAPI.get(assistencia.cliente_user_id)
       .then(apiUser => {
         Object.assign(assistencia, { cliente_user_name: apiUser.nome });
       },
         err => console.log('error:', err)
       )
     );
-    return apiResponse.data;
+    return apiResponse;
   }
 
   constructor(protected feathersService: FeathersService) {
@@ -30,7 +30,8 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
     return assistencias$.pipe(
       map(
         apiResponse => this.insertUserNome(apiResponse),
-        err => console.log('error:', err))
+        err => console.log('error:', err)
+      )
     );
   }
 
@@ -39,7 +40,8 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
     return assistencia$.pipe(
       map(
         apiResponse => this.insertUserNome(apiResponse),
-        err => console.log('error:', err))
+        err => console.log('error:', err)
+      )
     );
   }
 

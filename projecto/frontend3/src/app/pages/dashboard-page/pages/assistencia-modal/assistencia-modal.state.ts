@@ -49,7 +49,7 @@ export class AssistenciaModalState {
         const assistenciasAPI = AssistenciaModalState.assistenciasApiService;
         const assistencia$ = AssistenciaModalState.assistenciasApiService.get(action.id);
         assistencia$.subscribe(
-            apiAssistencia => { patchState({ modalIsOpen: true, assistencia: apiAssistencia }); },
+            apiAssistencia => { patchState({ modalIsOpen: true, assistencia: apiAssistencia[0] }); },
             err => console.log('error:', err)
         )
             ;
