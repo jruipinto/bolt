@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { EntitiesApiAbstrationService } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
+import { Assistencia } from 'src/app/shared/models';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
     super(feathersService, 'assistencias');
   }
 
-  find(query?: object): Observable<any> {
+  find(query?: object) {
     const assistencias$ = super.find(query);
     return assistencias$.pipe(
       map(
@@ -35,7 +36,7 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
     );
   }
 
-  get(id: number): Observable<any> {
+  get(id: number) {
     const assistencia$ = super.get(id);
     return assistencia$.pipe(
       map(
