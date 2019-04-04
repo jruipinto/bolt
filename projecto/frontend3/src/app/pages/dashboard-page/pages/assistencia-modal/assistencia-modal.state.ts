@@ -34,12 +34,10 @@ export class AssistenciaModalClose {
 })
 export class AssistenciaModalState {
     private static authService: AuthService;
-    private static feathersService: FeathersService;
     private static assistenciasApiService: AssistenciasApiService;
 
     constructor(injector: Injector) {
-        AssistenciaModalState.authService = injector.get<AuthService>(AuthService);
-        AssistenciaModalState.feathersService = injector.get<FeathersService>(FeathersService);
+        AssistenciaModalState.authService = injector.get<AuthService>(AuthService);        
         AssistenciaModalState.assistenciasApiService = injector.get<AssistenciasApiService>(AssistenciasApiService);
     }
 
@@ -60,6 +58,7 @@ export class AssistenciaModalState {
     postAssistencia(
         { patchState, getState, dispatch }: StateContext<AssistenciaModalStateModel>,
         action: AssistenciaModalPostAssistencia) {
+            const assistenciasAPI = AssistenciaModalState.assistenciasApiService;
         // parse json to add new timestamp to it
         let parsed_tecnico_user_id: any = JSON.parse(action.assistencia.tecnico_user_id);
         if (typeof parsed_tecnico_user_id === 'string') {
@@ -85,10 +84,8 @@ export class AssistenciaModalState {
         patchState({ assistencia: stateAssistencia });
 
         // submit state to database
-        AssistenciaModalState.feathersService
-            .service('assistencias')
-            .patch(getState().assistencia.id, getState().assistencia)
-            .then(
+        assistenciasAPI.patch(getState().assistencia.id, getState().assistencia)
+            .subscribe(
                 () => {
                     console.log('Pushed to api with success');
                     dispatch(new AssistenciaModalClose());

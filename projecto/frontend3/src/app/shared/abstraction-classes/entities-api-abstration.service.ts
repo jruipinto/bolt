@@ -27,11 +27,19 @@ export abstract class EntitiesApiAbstrationService {
         err => console.log('error:', err)
       ));
   }
-  protected create(data: object, actionType?: string) {
+  public create(data: object, actionType?: string) {
     console.log(actionType);
+    return from(this.entityAPI.create(data)
+      .then(apiResponse => [apiResponse],
+        err => console.log('error:', err)
+      ));
   }
-  protected patch(id: number, data: object, actionType?: string) {
+  public patch(id: number, data: object, actionType?: string) {
     console.log(actionType);
+    return from(this.entityAPI.patch(id, data)
+      .then(apiResponse => [apiResponse],
+        err => console.log('error:', err)
+      ));
   }
 
   public on(event: string | symbol, listener: (...args: any[]) => void) {
