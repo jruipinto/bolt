@@ -5,6 +5,7 @@ import { Select, Store } from '@ngxs/store';
 
 import { AssistenciaModalState, AssistenciaModalStateModel, AssistenciaModalClose,
   AssistenciaModalPostAssistencia } from './assistencia-modal.state';
+import { Assistencia } from 'src/app/shared/models';
 
 
 @Component({
@@ -22,12 +23,13 @@ export class AssistenciaModalComponent implements OnInit {
   ngOnInit() {
   }
 
-  closeModal() {
-    this.store.dispatch(new AssistenciaModalClose());
+  closeModal(modalIsOpen: boolean) {
+    if (modalIsOpen) { this.store.dispatch(new AssistenciaModalClose()); }
   }
 
   saveModal({ newEstado, assistencia }) {
-    this.store.dispatch(new AssistenciaModalPostAssistencia(newEstado, assistencia));
+    const assistenciaCopy: Assistencia = { ...assistencia, estado: newEstado};
+    this.store.dispatch(new AssistenciaModalPostAssistencia(assistenciaCopy));
   }
 
 }

@@ -1,8 +1,5 @@
 <div *ngIf="(modalState$ | async) as modalState">
-  <clr-modal
-    [clrModalOpen]="modalState.modalIsOpen"
-    (clrModalOpenChange)="closeModal()"
-    [clrModalSize]="'lg'">
+  <clr-modal [clrModalOpen]="modalState.modalIsOpen" (clrModalOpenChange)="closeModal(modalState.modalIsOpen)" [clrModalSize]="'lg'">
 
     <h3 class="modal-title">{{modalState.assistencia?.id}}</h3>
 
@@ -111,18 +108,18 @@
     <div class="modal-footer">
       <clr-button-group class="btn-group " [clrMenuPosition]="'top-right'">
         <clr-button class="btn"
-        (click)="saveModal({newEstado: 'orçamento pendente', assistencia: modalState.assistencia})"
-        [clrInMenu]="true">Orçamentar</clr-button>
+          (click)="saveModal({newEstado: 'orçamento pendente', assistencia: modalState.assistencia})"
+          [clrInMenu]="true">Orçamentar</clr-button>
         <clr-button class="btn"
-        (click)="saveModal({newEstado: 'contacto pendente', assistencia: modalState.assistencia})"
-        [clrInMenu]="true">Contactar</clr-button>
-        <clr-button class="btn"
-        (click)="saveModal({newEstado: 'concluído', assistencia: modalState.assistencia})"
-        [clrInMenu]="true">Concluir</clr-button>
+          (click)="saveModal({newEstado: 'contacto pendente', assistencia: modalState.assistencia})" [clrInMenu]="true">
+          Contactar</clr-button>
+        <clr-button class="btn" (click)="saveModal({newEstado: 'concluído', assistencia: modalState.assistencia})"
+          [clrInMenu]="true">Concluir</clr-button>
         <clr-button class="btn btn-primary btn-icon"
-        (click)="saveModal({newEstado: 'em análise', assistencia: modalState.assistencia})">
-        <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
-        Guardar</clr-button>
+          (click)="saveModal({newEstado: 'em análise', assistencia: modalState.assistencia})">
+          <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
+          Guardar
+        </clr-button>
       </clr-button-group>
     </div>
 

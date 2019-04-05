@@ -14,36 +14,62 @@ export abstract class EntitiesApiAbstrationService {
   }
 
   protected find(query?: object) {
+    const apiResponse$ = from(
+      this.entityAPI.find(query)
+        .then(apiResponse => apiResponse.data,
+          err => console.log('error:', err)
+        ));
     console.log(`[${this.entity} API] find ${this.entity}`);
-    return from(this.entityAPI.find(query)
-      .then(apiResponse => apiResponse.data,
-        err => console.log('error:', err)
-      ));
+    return apiResponse$;
   }
+
   protected get(id: number) {
-    console.log(`[${this.entity} API] get ${this.entity}`);
-    return from(this.entityAPI.get(id)
+    const apiResponse$ = from(this.entityAPI.get(id)
       .then(apiResponse => [apiResponse],
         err => console.log('error:', err)
       ));
+    console.log(`[${this.entity} API] get ${this.entity} (id:${id})`);
+    return apiResponse$;
   }
+
   public create(data: object, actionType?: string) {
-    console.log(actionType);
-    return from(this.entityAPI.create(data)
+    const apiResponse$ = from(this.entityAPI.create(data)
       .then(apiResponse => [apiResponse],
         err => console.log('error:', err)
       ));
+    console.log(actionType);
+    return apiResponse$;
   }
+
   public patch(id: number, data: object, actionType?: string) {
-    console.log(actionType);
-    return from(this.entityAPI.patch(id, data)
+    const apiResponse$ = from(this.entityAPI.patch(id, data)
       .then(apiResponse => [apiResponse],
         err => console.log('error:', err)
       ));
+    console.log(actionType);
+    return apiResponse$;
   }
 
   public on(event: string | symbol, listener: (...args: any[]) => void) {
     return this.entityAPI.on(event, listener);
+  }
+
+  public onCreated() {
+    const apiResponse$ = new Observable(
+      observer => {
+        this.entityAPI.on('created', createdObject => observer.next(createdObject));
+      }
+    );
+    return apiResponse$;
+  }
+
+  public onPatched() {
+    const apiResponse$ = new Observable(
+      observer => {
+        this.entityAPI.on('patched', createdObject => observer.next(createdObject as any));
+      }
+    );
+    return apiResponse$;
   }
 
 }
