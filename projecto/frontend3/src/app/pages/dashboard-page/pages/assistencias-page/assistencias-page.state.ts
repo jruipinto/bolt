@@ -3,6 +3,7 @@ import { Action, State, StateContext } from '@ngxs/store';
 import { append, patch, updateItem } from '@ngxs/store/operators';
 import { AssistenciasApiService } from 'src/app/shared/services';
 import { Assistencia } from 'src/app/shared/models';
+import { tap, first } from 'rxjs/operators';
 
 export interface AssistenciasPageStateModel {
     assistencias: Assistencia[];
@@ -46,7 +47,10 @@ export class AssistenciasPageState {
             .subscribe(apiAssistencia => {
                 dispatch(new AssistenciasPagePatchAssistencia(apiAssistencia[0] as Assistencia));
             });
-        return assistencias$.subscribe(assistencias => setState({ assistencias }));
+        return assistencias$.pipe(
+            first(),
+            tap(assistencias => setState({ assistencias }))
+        );
     }
 
     @Action(AssistenciasPageCreateAssistencia)

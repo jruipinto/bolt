@@ -2,7 +2,7 @@ import { Injector } from '@angular/core'; // for static dependency injection (@n
 import { Action, State, StateContext } from '@ngxs/store';
 import { AuthService, AssistenciasApiService } from 'src/app/shared/services';
 import { Assistencia } from 'src/app/shared/models';
-import { first, takeWhile } from 'rxjs/operators';
+import { first, takeWhile, tap } from 'rxjs/operators';
 
 export interface AssistenciaModalStateModel {
     modalIsOpen?: boolean; // modal visible or not
@@ -54,13 +54,13 @@ export class AssistenciaModalState {
         // assistenciasAPI.on('patched', apiAssistencia => { dispatch(new AssistenciaModalPatchAssistencia(apiAssistencia)); });
         return assistenciasAPI.onPatched()
             .pipe(
-                takeWhile(() => getState().modalIsOpen)
-            )
-            .subscribe(patchedAssistencia => {
-                if (getState().modalIsOpen) {
-                    dispatch(new AssistenciaModalPatchAssistencia(patchedAssistencia[0] as any));
-                }
-            });
+                takeWhile(() => getState().modalIsOpen),
+                tap(patchedAssistencia => {
+                    if (getState().modalIsOpen) {
+                        dispatch(new AssistenciaModalPatchAssistencia(patchedAssistencia[0] as any));
+                    }
+                })
+            );
     }
 
     @Action(AssistenciaModalPostAssistencia)
@@ -95,7 +95,7 @@ export class AssistenciaModalState {
         patchState({ assistencia: newStateAssistencia });
 
         // submit state to database
-        return dispatch(new AssistenciaModalClose()).subscribe(() =>
+        dispatch(new AssistenciaModalClose()).subscribe(() =>
             assistenciasAPI.patch(getState().assistencia.id, getState().assistencia)
                 .pipe(first())
                 .subscribe(
