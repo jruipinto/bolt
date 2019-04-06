@@ -9,16 +9,16 @@ export interface AssistenciasPageStateModel {
 }
 /* Actions */
 export class AssistenciasPageFindAssistencias {
-    static readonly type = '[Assistencias API] Find Assistencias';
+    static readonly type = '[Assistencias API] Find Assistencias (AssistenciasPageState)';
 }
 
 export class AssistenciasPageCreateAssistencia {
-    static readonly type = '[Assistencias API] Created Assistencia';
+    static readonly type = '[Assistencias API] Created Assistencia (AssistenciasPageState)';
     constructor(public assistencia: Assistencia) { }
 }
 
 export class AssistenciasPagePatchAssistencia {
-    static readonly type = '[Assistencias API] Patched Assistencia';
+    static readonly type = '[Assistencias API] Patched Assistencia (AssistenciasPageState)';
     constructor(public assistencia: Assistencia) { }
 }
 /* ###### */
@@ -38,39 +38,32 @@ export class AssistenciasPageState {
         const assistenciasAPI = AssistenciasPageState.assistenciasApiService;
         const assistencias$ = assistenciasAPI.find({ query: { $limit: 25 } });
 
-        assistencias$.subscribe(assistencias => setState({ assistencias }));
-        assistenciasAPI.on('created', apiAssistencia => { dispatch(new AssistenciasPageCreateAssistencia(apiAssistencia)); });
-        assistenciasAPI.on('patched', apiAssistencia => { dispatch(new AssistenciasPagePatchAssistencia(apiAssistencia)); });
+        assistenciasAPI.onCreated()
+            .subscribe(apiAssistencia => {
+                dispatch(new AssistenciasPageCreateAssistencia(apiAssistencia[0] as Assistencia));
+            });
+        assistenciasAPI.onPatched()
+            .subscribe(apiAssistencia => {
+                dispatch(new AssistenciasPagePatchAssistencia(apiAssistencia[0] as Assistencia));
+            });
+        return assistencias$.subscribe(assistencias => setState({ assistencias }));
     }
 
     @Action(AssistenciasPageCreateAssistencia)
     createAssistencia({ setState }: StateContext<AssistenciasPageStateModel>, action: AssistenciasPageCreateAssistencia) {
-        const assistencia$ = AssistenciasPageState.assistenciasApiService.get(action.assistencia.cliente_user_id);
-        assistencia$.subscribe(
-            assistencia => {
-                setState(
-                    patch({
-                        assistencias: append([assistencia])
-                    })
-                );
-            },
-            err => console.log('error:', err)
+        setState(
+            patch({
+                assistencias: append([action.assistencia])
+            })
         );
     }
 
     @Action(AssistenciasPagePatchAssistencia)
     patchAssistencia({ setState }: StateContext<AssistenciasPageStateModel>, action: AssistenciasPagePatchAssistencia) {
-        const assistencia$ = AssistenciasPageState.assistenciasApiService.get(action.assistencia.cliente_user_id);
-        assistencia$.subscribe(
-            assistencia => {
-                    setState(
-                        patch({
-                            assistencias: updateItem(stateAssistencia => stateAssistencia.id === assistencia.id, assistencia)
-                        })
-                    );
-                },
-                err => console.log('error:', err)
-            )
-            ;
+        setState(
+            patch({
+                assistencias: updateItem(stateAssistencia => stateAssistencia.id === action.assistencia.id, action.assistencia)
+            })
+        );
     }
 }

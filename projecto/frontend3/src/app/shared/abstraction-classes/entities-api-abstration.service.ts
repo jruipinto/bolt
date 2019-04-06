@@ -50,14 +50,10 @@ export abstract class EntitiesApiAbstrationService {
     return apiResponse$;
   }
 
-  public on(event: string | symbol, listener: (...args: any[]) => void) {
-    return this.entityAPI.on(event, listener);
-  }
-
   public onCreated() {
     const apiResponse$ = new Observable(
       observer => {
-        this.entityAPI.on('created', createdObject => observer.next(createdObject));
+        this.entityAPI.on('created', createdObject => observer.next([createdObject]));
       }
     );
     return apiResponse$;
@@ -66,10 +62,16 @@ export abstract class EntitiesApiAbstrationService {
   public onPatched() {
     const apiResponse$ = new Observable(
       observer => {
-        this.entityAPI.on('patched', createdObject => observer.next(createdObject as any));
+        this.entityAPI.on('patched', createdObject => observer.next([createdObject]));
       }
     );
     return apiResponse$;
   }
+
+  /*
+  public on(event: string | symbol, listener: (...args: any[]) => void) {
+    return this.entityAPI.on(event, listener);
+  }
+  */
 
 }

@@ -10,27 +10,22 @@ export interface AssistenciaModalStateModel {
 }
 /* Actions */
 export class AssistenciaModalGetAssistencia {
-    static readonly type = '[Assistencias API] Get Assistencia';
+    static readonly type = '[Assistencias API] Get Assistencia (AssistenciaModalState)';
     constructor(public id: number) { }
 }
 
 export class AssistenciaModalPostAssistencia {
-    static readonly type = '[Assistencia-Modal] Post Assistencia';
+    static readonly type = '[Assistencia-Modal] Post Assistencia (AssistenciaModalState)';
     constructor(public assistencia: Assistencia) { }
 }
 
-export class AssistenciaModalPatchAssistencia3 {
-    static readonly type = '[Assistencias API] Patched Assistencia3';
-    constructor(public assistencia: Assistencia) { }
-}
-
-export class AssistenciaModalPatchAssistencia2 {
-    static readonly type = '[Assistencias API] Patched Assistencia (get asked this)';
+export class AssistenciaModalPatchAssistencia {
+    static readonly type = '[Assistencias API] Patched Assistencia (AssistenciaModalState)';
     constructor(public assistencia: Assistencia) { }
 }
 
 export class AssistenciaModalClose {
-    static readonly type = '[Assistencia-Modal] Closed Modal';
+    static readonly type = '[Assistencia-Modal] Closed Modal (AssistenciaModalState)';
 }
 /* ###### */
 @State<AssistenciaModalStateModel | null>({
@@ -57,14 +52,14 @@ export class AssistenciaModalState {
         )
             ;
         // assistenciasAPI.on('patched', apiAssistencia => { dispatch(new AssistenciaModalPatchAssistencia(apiAssistencia)); });
-        assistenciasAPI.onPatched()
+        return assistenciasAPI.onPatched()
             .pipe(
                 takeWhile(() => getState().modalIsOpen)
             )
             .subscribe(patchedAssistencia => {
-                const assistencia: any = { ...patchedAssistencia };
-                console.log('i dispatched patch =', getState().modalIsOpen);
-                if (getState().modalIsOpen) { dispatch(new AssistenciaModalPatchAssistencia2(assistencia)); }
+                if (getState().modalIsOpen) {
+                    dispatch(new AssistenciaModalPatchAssistencia(patchedAssistencia[0] as any));
+                }
             });
     }
 
@@ -99,10 +94,8 @@ export class AssistenciaModalState {
 
         patchState({ assistencia: newStateAssistencia });
 
-        console.log('modal:', getState().modalIsOpen);
-
         // submit state to database
-        dispatch(new AssistenciaModalClose()).subscribe(() =>
+        return dispatch(new AssistenciaModalClose()).subscribe(() =>
             assistenciasAPI.patch(getState().assistencia.id, getState().assistencia)
                 .pipe(first())
                 .subscribe(
@@ -114,10 +107,9 @@ export class AssistenciaModalState {
         );
     }
 
-    @Action([AssistenciaModalPatchAssistencia3, AssistenciaModalPatchAssistencia2])
+    @Action(AssistenciaModalPatchAssistencia)
     patchAssistencia({ patchState, getState }: StateContext<AssistenciaModalStateModel>,
-        action: AssistenciaModalPatchAssistencia3|AssistenciaModalPatchAssistencia2) {
-        console.log('modal:', getState().modalIsOpen);
+        action: AssistenciaModalPatchAssistencia) {
         if (action.assistencia.id = getState().assistencia.id) {
             patchState({ assistencia: action.assistencia });
         }

@@ -46,4 +46,24 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
     );
   }
 
+  onCreated() {
+    const assistencia$ = super.onCreated();
+    return assistencia$.pipe(
+      map(
+        apiResponse => this.insertUserNome(apiResponse),
+        err => console.log('error:', err)
+      )
+    );
+  }
+
+  onPatched() {
+    const assistencia$ = super.onPatched();
+    return assistencia$.pipe(
+      map(
+        apiResponse => this.insertUserNome(apiResponse),
+        err => console.log('error:', err)
+      )
+    );
+  }
+
 }
