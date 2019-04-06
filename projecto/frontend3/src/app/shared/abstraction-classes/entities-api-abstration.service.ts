@@ -13,7 +13,7 @@ export abstract class EntitiesApiAbstrationService {
   constructor(protected feathersService: FeathersService, private entity: string) {
   }
 
-  protected find(query?: object) {
+  public find(query?: object) {
     const apiResponse$ = from(
       this.entityAPI.find(query)
         .then(apiResponse => apiResponse.data,
@@ -23,7 +23,7 @@ export abstract class EntitiesApiAbstrationService {
     return apiResponse$;
   }
 
-  protected get(id: number) {
+  public get(id: number) {
     const apiResponse$ = from(this.entityAPI.get(id)
       .then(apiResponse => [apiResponse],
         err => console.log('error:', err)

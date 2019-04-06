@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
 import { AssistenciasPageState, AssistenciasPageStateModel, AssistenciasPageFindAssistencias } from './assistencias-page.state';
 import { AssistenciaModalGetAssistencia } from '../assistencia-modal';
 
