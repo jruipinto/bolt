@@ -1,37 +1,42 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap, concatMap } from 'rxjs/operators';
 
 import { EntitiesApiAbstrationService } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
 import { Assistencia } from 'src/app/shared/models';
+import { UsersApiService } from './users-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssistenciasApiService extends EntitiesApiAbstrationService {
-  private usersAPI = this.feathersService.service('users');
-  private insertUserNome = (apiResponse) => {
-    apiResponse.map(assistencia => this.usersAPI.get(assistencia.cliente_user_id)
-      .then(apiUser => {
-        Object.assign(assistencia, { cliente_user_name: apiUser.nome });
-      },
-        err => console.log('error:', err)
+  private usersAPI = this.usersApiService;
+  private insertUserNomes = (assistencias) => {
+    assistencias.map(assistencia => this.usersAPI.get(assistencia.cliente_user_id)
+      .pipe(
+        map(apiUser => {
+          const modAssistencia = {
+            ...assistencia,
+            ...{ cliente_user_name: apiUser[0].nome, cliente_user_contacto: apiUser[0].contacto }
+          };
+          return modAssistencia;
+        }
+        )
       )
     );
-    return apiResponse;
+    return assistencias as Assistencia[];
   }
 
-  constructor(protected feathersService: FeathersService) {
+  constructor(protected feathersService: FeathersService, private usersApiService: UsersApiService) {
     super(feathersService, 'assistencias');
   }
 
   find(query?: object) {
     const assistencias$ = super.find(query);
     return assistencias$.pipe(
-      map(
-        apiResponse => this.insertUserNome(apiResponse),
-        err => console.log('error:', err)
+      concatMap(
+        apiResponse => this.insertUserNomes(apiResponse)
       )
     );
   }
@@ -40,8 +45,7 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
     const assistencia$ = super.get(id);
     return assistencia$.pipe(
       map(
-        apiResponse => this.insertUserNome(apiResponse),
-        err => console.log('error:', err)
+        apiResponse => this.insertUserNomes(apiResponse)
       )
     );
   }
@@ -50,8 +54,7 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
     const assistencia$ = super.onCreated();
     return assistencia$.pipe(
       map(
-        apiResponse => this.insertUserNome(apiResponse),
-        err => console.log('error:', err)
+        apiResponse => this.insertUserNomes(apiResponse)
       )
     );
   }
@@ -60,8 +63,7 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
     const assistencia$ = super.onPatched();
     return assistencia$.pipe(
       map(
-        apiResponse => this.insertUserNome(apiResponse),
-        err => console.log('error:', err)
+        apiResponse => this.insertUserNomes(apiResponse)
       )
     );
   }

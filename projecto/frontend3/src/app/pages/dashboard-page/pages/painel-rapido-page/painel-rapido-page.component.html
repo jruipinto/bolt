@@ -1,7 +1,7 @@
 <div class="clr-row">
   <div class="clr-col-lg-4">
     <h5>Encomendas</h5>
-    <div class="card">
+    <div class="card" *ngFor="let encomenda of encomendas">
       <div class="card-block">
         <!--
         <div class="progress success top">
@@ -31,10 +31,10 @@
   </div>
   <div class="clr-col-lg-4">
     <h5>Orçamentos</h5>
-    <div class="card">
+    <div class="card" *ngFor="let orcamento of orcamentos">
       <div class="card-block">
         <div class="card-text">
-            <p>Manuel Pinto | 910 000 000 | 90€</p>
+            <p>Manuel Pinto | 910 000 000 | {{orcamento.preco}}€</p>
             <button class="btn btn-sm btn-link">abrir</button>
         </div>
       </div>
@@ -56,10 +56,10 @@
   </div>
   <div class="clr-col-lg-4">
     <h5>P. Contact. Cliente</h5>
-    <div class="card">
+    <div class="card" *ngFor="let pedidoContactoCliente of pedidosContactoCliente">
       <div class="card-block">
         <div class="card-text">
-            <p>Manuel Pinto | 910 000 000 | codigo</p>
+            <p>Manuel Pinto | 910 000 000 | {{pedidoContactoCliente.relatorio_cliente}}</p>
             <button class="btn btn-sm btn-link">abrir</button>
         </div>
       </div>
