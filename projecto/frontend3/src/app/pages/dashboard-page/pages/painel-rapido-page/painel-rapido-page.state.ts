@@ -3,7 +3,7 @@ import { State, StateContext, Action } from '@ngxs/store';
 import { Encomenda, Assistencia } from 'src/app/shared/models';
 import { AssistenciasApiService } from 'src/app/shared/services';
 import { EncomendasApiService } from 'src/app/shared/services/encomendas-api.service';
-import { tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 export interface PainelRapidoPageStateModel {
     encomendas?: Encomenda[];
@@ -77,7 +77,7 @@ export class PainelRapidoPageState {
     findEncomendas({ getState, patchState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
         const encomendas$ = PainelRapidoPageState.encomendasApiService.find();
         return encomendas$.pipe(
-            tap(encomendas => patchState({ encomendas }))
+            map(encomendas => patchState({ encomendas }))
         );
     }
 
@@ -100,7 +100,7 @@ export class PainelRapidoPageState {
     findOrcamentos({ getState, patchState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
         const orcamentos$ = PainelRapidoPageState.assistenciasApiService.find({ query: { estado: 'orçamento pendente' } });
         return orcamentos$.pipe(
-            tap(orcamentos => patchState({ orcamentos }))
+            map(orcamentos => patchState({ orcamentos }))
         );
     }
 
@@ -118,7 +118,7 @@ export class PainelRapidoPageState {
     findPedidosContactoCliente({ getState, patchState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
         const pedidosContactoCliente$ = PainelRapidoPageState.assistenciasApiService.find({ query: { estado: 'contacto pendente' } });
         return pedidosContactoCliente$.pipe(
-            tap(pedidosContactoCliente => patchState({ pedidosContactoCliente }))
+            map(pedidosContactoCliente => patchState({ pedidosContactoCliente }))
         );
     }
 
