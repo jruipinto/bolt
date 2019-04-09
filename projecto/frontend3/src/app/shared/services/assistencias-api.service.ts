@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, concat } from 'rxjs';
-import { map, tap, concatMap } from 'rxjs/operators';
+import { map, tap, concatMap, toArray } from 'rxjs/operators';
 
 import { EntitiesApiAbstrationService } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
@@ -34,7 +34,8 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
     return assistencias$.pipe(
       concatMap(
         apiResponse => this.insertUserNomes(apiResponse)
-      )
+      ),
+      toArray()
     );
   }
 
