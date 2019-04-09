@@ -24,6 +24,12 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
         )
       )
     ));
+  private transform = (assistencias$: Observable<Assistencia[]>) => assistencias$.pipe(
+    concatMap(
+      apiResponse => this.insertUserNomes(apiResponse)
+    ),
+    toArray()
+  );
 
   constructor(protected feathersService: FeathersService, private usersApiService: UsersApiService) {
     super(feathersService, 'assistencias');
@@ -36,7 +42,7 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
         apiResponse => this.insertUserNomes(apiResponse)
       ),
       toArray()
-    );
+    ) as Observable<Assistencia[]>;
   }
 
   get(id: number) {
@@ -44,8 +50,9 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
     return assistencia$.pipe(
       map(
         apiResponse => this.insertUserNomes(apiResponse)
-      )
-    );
+      ),
+      toArray()
+    ) as Observable<Assistencia[]>;
   }
 
   onCreated() {

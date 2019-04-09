@@ -1,8 +1,10 @@
 import { Injector } from '@angular/core'; // for static dependency injection (@ngxs specific)
+import { merge, concat } from 'rxjs';
+import { first, takeWhile, map, mergeAll, tap } from 'rxjs/operators';
 import { Action, State, StateContext } from '@ngxs/store';
 import { AuthService, AssistenciasApiService } from 'src/app/shared/services';
 import { Assistencia } from 'src/app/shared/models';
-import { first, takeWhile, tap } from 'rxjs/operators';
+
 
 export interface AssistenciaModalStateModel {
     modalIsOpen?: boolean; // modal visible or not
@@ -46,21 +48,22 @@ export class AssistenciaModalState {
     getAssistencia({ getState, patchState, dispatch }: StateContext<AssistenciaModalStateModel>, action: AssistenciaModalGetAssistencia) {
         const assistenciasAPI = AssistenciaModalState.assistenciasApiService;
         const assistencia$ = AssistenciaModalState.assistenciasApiService.get(action.id);
-        assistencia$.pipe(first()).subscribe(
-            apiAssistencia => { patchState({ modalIsOpen: true, assistencia: apiAssistencia[0] }); },
-            err => console.log('error:', err)
-        )
-            ;
         // assistenciasAPI.on('patched', apiAssistencia => { dispatch(new AssistenciaModalPatchAssistencia(apiAssistencia)); });
-        return assistenciasAPI.onPatched()
-            .pipe(
-                takeWhile(() => getState().modalIsOpen),
-                tap(patchedAssistencia => {
-                    if (getState().modalIsOpen) {
-                        dispatch(new AssistenciaModalPatchAssistencia(patchedAssistencia[0] as any));
-                    }
-                })
-            );
+        assistenciasAPI.onPatched().pipe(
+            takeWhile(() => getState().modalIsOpen),
+            map(patchedAssistencia => {
+                if (getState().modalIsOpen) {
+                    dispatch(new AssistenciaModalPatchAssistencia(patchedAssistencia[0]));
+                }
+            })
+        ).subscribe();
+        return assistencia$.pipe(
+            tap(
+                apiAssistencia => { 
+                    console.log('teste:',apiAssistencia);
+                    patchState({ modalIsOpen: true, assistencia: apiAssistencia[0] }); }
+            )
+        );
     }
 
     @Action(AssistenciaModalPostAssistencia)
