@@ -6,6 +6,7 @@ import { EntitiesApiAbstrationService } from 'src/app/shared/abstraction-classes
 import { FeathersService } from './feathers.service';
 import { Assistencia } from 'src/app/shared/models';
 import { UsersApiService } from './users-api.service';
+import { transformAll } from '@angular/compiler/src/render3/r3_ast';
 
 @Injectable({
   providedIn: 'root'
@@ -23,13 +24,13 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
 
         )
       )
-    ));
+    ))
   private transform = (assistencias$: Observable<Assistencia[]>) => assistencias$.pipe(
     concatMap(
       apiResponse => this.insertUserNomes(apiResponse)
     ),
     toArray()
-  );
+  ) as Observable<Assistencia[]>
 
   constructor(protected feathersService: FeathersService, private usersApiService: UsersApiService) {
     super(feathersService, 'assistencias');
@@ -37,40 +38,22 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
 
   find(query?: object) {
     const assistencias$ = super.find(query);
-    return assistencias$.pipe(
-      concatMap(
-        apiResponse => this.insertUserNomes(apiResponse)
-      ),
-      toArray()
-    ) as Observable<Assistencia[]>;
+    return this.transform(assistencias$);
   }
 
   get(id: number) {
     const assistencia$ = super.get(id);
-    return assistencia$.pipe(
-      map(
-        apiResponse => this.insertUserNomes(apiResponse)
-      ),
-      toArray()
-    ) as Observable<Assistencia[]>;
+    return this.transform(assistencia$);
   }
 
   onCreated() {
     const assistencia$ = super.onCreated();
-    return assistencia$.pipe(
-      map(
-        apiResponse => this.insertUserNomes(apiResponse)
-      )
-    );
+    return this.transform(assistencia$);
   }
 
   onPatched() {
     const assistencia$ = super.onPatched();
-    return assistencia$.pipe(
-      map(
-        apiResponse => this.insertUserNomes(apiResponse)
-      )
-    );
+    return this.transform(assistencia$);
   }
 
 }

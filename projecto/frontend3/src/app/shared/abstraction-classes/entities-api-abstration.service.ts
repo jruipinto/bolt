@@ -20,7 +20,7 @@ export abstract class EntitiesApiAbstrationService {
           err => console.log('error:', err)
         ));
     console.log(`[${this.entity} API] find ${this.entity}`);
-    return apiResponse$;
+    return apiResponse$ as Observable<any[]>;
   }
 
   public get(id: number) {
@@ -29,7 +29,7 @@ export abstract class EntitiesApiAbstrationService {
         err => console.log('error:', err)
       ));
     console.log(`[${this.entity} API] get ${this.entity} (id:${id})`);
-    return apiResponse$;
+    return apiResponse$ as Observable<any[]>;
   }
 
   public create(data: object, actionType?: string) {
@@ -56,7 +56,7 @@ export abstract class EntitiesApiAbstrationService {
         this.entityAPI.on('created', createdObject => observer.next([createdObject]));
       }
     );
-    return apiResponse$;
+    return apiResponse$ as Observable<any[]>;
   }
 
   public onPatched() {
@@ -65,7 +65,7 @@ export abstract class EntitiesApiAbstrationService {
         this.entityAPI.on('patched', createdObject => observer.next([createdObject]));
       }
     );
-    return apiResponse$;
+    return apiResponse$ as Observable<any[]>;
   }
 
   /*
