@@ -34,8 +34,8 @@
     <div class="card" *ngFor="let orcamento of orcamentos">
       <div class="card-block">
         <div class="card-text">
-            <p>Manuel Pinto | 910 000 000 | {{orcamento.preco}}€</p>
-            <button class="btn btn-sm btn-link">abrir</button>
+            <p>{{orcamento.cliente_user_name}} | {{orcamento.cliente_user_contacto}} | {{orcamento.preco}}€</p>
+            <button class="btn btn-sm btn-link" (click)="openAssistencia(orcamento.id)">abrir</button>
         </div>
       </div>
       <div class="card-footer">
@@ -59,8 +59,8 @@
     <div class="card" *ngFor="let pedidoContactoCliente of pedidosContactoCliente">
       <div class="card-block">
         <div class="card-text">
-            <p>Manuel Pinto | 910 000 000 | {{pedidoContactoCliente.relatorio_cliente}}</p>
-            <button class="btn btn-sm btn-link">abrir</button>
+            <p>{{pedidoContactoCliente.cliente_user_name}} | {{pedidoContactoCliente.cliente_user_contacto}} | {{pedidoContactoCliente.relatorio_cliente}}</p>
+            <button class="btn btn-sm btn-link" (click)="openAssistencia(pedidoContactoCliente.id)">abrir</button>
         </div>
       </div>
       <div class="card-footer">

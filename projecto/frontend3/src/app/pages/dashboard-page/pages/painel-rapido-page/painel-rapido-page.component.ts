@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, Select } from '@ngxs/store';
 import {
-  PainelRapidoFindEncomendas,
-  PainelRapidoPageState, PainelRapidoPageStateModel, PainelRapidoFindOrcamentos, PainelRapidoFindPedidosContactoCliente
+  PainelRapidoPageFindEncomendas, PainelRapidoPageState,
+  PainelRapidoPageStateModel, PainelRapidoPageFindOrcamentos,
+  PainelRapidoPageFindPedidosContactoCliente
 } from './painel-rapido-page.state';
+import { AssistenciaModalGetAssistencia } from 'src/app/pages/dashboard-page/pages/assistencia-modal';
 import { Encomenda, Assistencia } from 'src/app/shared';
+
 
 @Component({
   selector: 'app-painel-rapido-page',
@@ -23,7 +26,10 @@ export class PainelRapidoPageComponent implements OnInit {
   constructor(private store: Store) { }
 
   ngOnInit() {
-    this.store.dispatch([new PainelRapidoFindEncomendas, new PainelRapidoFindOrcamentos, new PainelRapidoFindPedidosContactoCliente])
+    this.store.dispatch([
+      new PainelRapidoPageFindEncomendas,
+      new PainelRapidoPageFindOrcamentos,
+      new PainelRapidoPageFindPedidosContactoCliente])
       .subscribe(() =>
         this.painelRapidoPageState$
           .subscribe(
@@ -34,6 +40,10 @@ export class PainelRapidoPageComponent implements OnInit {
             }
           )
       );
+  }
+
+  openAssistencia(id: number): void {
+    this.store.dispatch(new AssistenciaModalGetAssistencia(id));
   }
 
 }

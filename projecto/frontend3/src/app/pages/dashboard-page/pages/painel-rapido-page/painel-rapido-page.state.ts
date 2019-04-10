@@ -12,50 +12,50 @@ export interface PainelRapidoPageStateModel {
 }
 
 /* Actions for encomendas */
-export class PainelRapidoFindEncomendas {
-    static readonly type = '[Encomendas API] Find Encomendas';
+export class PainelRapidoPageFindEncomendas {
+    static readonly type = '[Encomendas API] Find Encomendas (Painel-Rapido-Page)';
 }
 
-export class PainelRapidoPostEncomenda {
-    static readonly type = '[Painel-Rapido-Page] Post Encomenda';
+export class PainelRapidoPagePostEncomenda {
+    static readonly type = '[Painel-Rapido-Page] Post Encomenda (Painel-Rapido-Page)';
 }
 
-export class PainelRapidoCreateEncomenda {
-    static readonly type = '[Encomendas API] Created Encomenda';
+export class PainelRapidoPageCreateEncomenda {
+    static readonly type = '[Encomendas API] Created Encomenda (Painel-Rapido-Page)';
     constructor(public encomenda: Encomenda) { }
 }
 
-export class PainelRapidoPatchEncomenda {
-    static readonly type = '[Encomendas API] Patched Encomenda';
+export class PainelRapidoPagePatchEncomenda {
+    static readonly type = '[Encomendas API] Patched Encomenda (Painel-Rapido-Page)';
     constructor(public encomenda: Encomenda) { }
 }
 /* ###### */
 
 /* Actions for orcamentos */
-export class PainelRapidoFindOrcamentos {
-    static readonly type = '[Assistencias API] Find Assistencias';
+export class PainelRapidoPageFindOrcamentos {
+    static readonly type = '[Assistencias API] Find Assistencias (Painel-Rapido-Page)';
 }
 
-export class PainelRapidoPostOrcamento {
-    static readonly type = '[Painel-Rapido-Page] Post Assistencia';
+export class PainelRapidoPagePostOrcamento {
+    static readonly type = '[Painel-Rapido-Page] Post Assistencia (Painel-Rapido-Page)';
 }
 
-export class PainelRapidoPatchOrcamento {
-    static readonly type = '[Assistencias API] Patched Assistencia';
+export class PainelRapidoPagePatchOrcamento {
+    static readonly type = '[Assistencias API] Patched Assistencia (Painel-Rapido-Page)';
     constructor(public assistencia: Assistencia) { }
 }
 
 /* Actions for pedidosContactoCliente*/
-export class PainelRapidoFindPedidosContactoCliente {
-    static readonly type = '[Assistencias API] Find Assistencias';
+export class PainelRapidoPageFindPedidosContactoCliente {
+    static readonly type = '[Assistencias API] Find Assistencias (Painel-Rapido-Page)';
 }
 
-export class PainelRapidoPostPedidosContactoCliente {
-    static readonly type = '[Painel-Rapido-Page] Post Assistencia';
+export class PainelRapidoPagePostPedidoContactoCliente {
+    static readonly type = '[Painel-Rapido-Page] Post Assistencia (Painel-Rapido-Page)';
 }
 
-export class PainelRapidoPatchPedidosContactoCliente {
-    static readonly type = '[Assistencias API] Patched Assistencia';
+export class PainelRapidoPagePatchPedidoContactoCliente {
+    static readonly type = '[Assistencias API] Patched Assistencia (Painel-Rapido-Page)';
     constructor(public assistencia: Assistencia) { }
 }
 /* ###### */
@@ -73,62 +73,84 @@ export class PainelRapidoPageState {
         PainelRapidoPageState.assistenciasApiService = injector.get<AssistenciasApiService>(AssistenciasApiService);
     }
 
-    @Action(PainelRapidoFindEncomendas)
+    @Action(PainelRapidoPageFindEncomendas)
     findEncomendas({ getState, patchState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
-        const encomendas$ = PainelRapidoPageState.encomendasApiService.find();
+        const encomendasAPI = PainelRapidoPageState.encomendasApiService;
+        const encomendas$ = encomendasAPI.find();
+
+        encomendasAPI.onCreated()
+        .subscribe(apiEncomenda => {
+            dispatch(new PainelRapidoPageCreateEncomenda(apiEncomenda[0]));
+        });
+        encomendasAPI.onPatched()
+            .subscribe(apiEncomenda => {
+                dispatch(new PainelRapidoPagePatchEncomenda(apiEncomenda[0]));
+            });
         return encomendas$.pipe(
             tap(encomendas => patchState({ encomendas }))
         );
     }
 
-    @Action(PainelRapidoPostEncomenda)
-    postEncomenda({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPostEncomenda) {
+    @Action(PainelRapidoPagePostEncomenda)
+    postEncomenda({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPagePostEncomenda) {
 
     }
 
-    @Action(PainelRapidoCreateEncomenda)
-    createEncomenda({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoCreateEncomenda) {
+    @Action(PainelRapidoPageCreateEncomenda)
+    createEncomenda({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPageCreateEncomenda) {
 
     }
 
-    @Action(PainelRapidoPatchEncomenda)
-    patchEncomenda({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPatchEncomenda) {
+    @Action(PainelRapidoPagePatchEncomenda)
+    patchEncomenda({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPagePatchEncomenda) {
 
     }
 
-    @Action(PainelRapidoFindOrcamentos)
+    @Action(PainelRapidoPageFindOrcamentos)
     findOrcamentos({ getState, patchState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
-        const orcamentos$ = PainelRapidoPageState.assistenciasApiService.find({ query: { estado: 'orçamento pendente' } });
+        const assistenciasAPI = PainelRapidoPageState.assistenciasApiService;
+        const orcamentos$ = assistenciasAPI.find({ query: { estado: 'orçamento pendente' } });
+
+        assistenciasAPI.onPatched()
+            .subscribe(apiAssistencia => {
+                dispatch(new PainelRapidoPagePatchOrcamento(apiAssistencia[0]));
+            });
         return orcamentos$.pipe(
             tap(orcamentos => patchState({ orcamentos }))
         );
     }
 
-    @Action(PainelRapidoPostOrcamento)
-    postOrcamentos({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPostOrcamento) {
+    @Action(PainelRapidoPagePostOrcamento)
+    postOrcamentos({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPagePostOrcamento) {
 
     }
 
-    @Action(PainelRapidoPatchOrcamento)
-    patchOrcamentos({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPatchOrcamento) {
+    @Action(PainelRapidoPagePatchOrcamento)
+    patchOrcamentos({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPagePatchOrcamento) {
 
     }
 
-    @Action(PainelRapidoFindPedidosContactoCliente)
+    @Action(PainelRapidoPageFindPedidosContactoCliente)
     findPedidosContactoCliente({ getState, patchState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
-        const pedidosContactoCliente$ = PainelRapidoPageState.assistenciasApiService.find({ query: { estado: 'contacto pendente' } });
+        const assistenciasAPI = PainelRapidoPageState.assistenciasApiService;
+        const pedidosContactoCliente$ = assistenciasAPI.find({ query: { estado: 'contacto pendente' } });
+
+        assistenciasAPI.onPatched()
+            .subscribe(apiAssistencia => {
+                dispatch(new PainelRapidoPagePatchPedidoContactoCliente(apiAssistencia[0]));
+            });
         return pedidosContactoCliente$.pipe(
             tap(pedidosContactoCliente => patchState({ pedidosContactoCliente }))
         );
     }
 
-    @Action(PainelRapidoPostPedidosContactoCliente)
-    postPedidosContactoCliente({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPostPedidosContactoCliente) {
+    @Action(PainelRapidoPagePostPedidoContactoCliente)
+    postPedidosContactoCliente({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPagePostPedidoContactoCliente) {
 
     }
 
-    @Action(PainelRapidoPatchPedidosContactoCliente)
-    patchPedidosContactoCliente({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPatchPedidosContactoCliente) {
+    @Action(PainelRapidoPagePatchPedidoContactoCliente)
+    patchPedidosContactoCliente({ setState }: StateContext<PainelRapidoPageStateModel>, action: PainelRapidoPagePatchPedidoContactoCliente) {
 
     }
 
