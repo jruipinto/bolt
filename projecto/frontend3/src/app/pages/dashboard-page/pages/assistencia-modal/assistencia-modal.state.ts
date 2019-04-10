@@ -1,6 +1,5 @@
 import { Injector } from '@angular/core'; // for static dependency injection (@ngxs specific)
-import { merge, concat } from 'rxjs';
-import { first, takeWhile, map, mergeAll, tap } from 'rxjs/operators';
+import { first, takeWhile, tap } from 'rxjs/operators';
 import { Action, State, StateContext } from '@ngxs/store';
 import { AuthService, AssistenciasApiService } from 'src/app/shared/services';
 import { Assistencia } from 'src/app/shared/models';
@@ -51,7 +50,7 @@ export class AssistenciaModalState {
         // assistenciasAPI.on('patched', apiAssistencia => { dispatch(new AssistenciaModalPatchAssistencia(apiAssistencia)); });
         assistenciasAPI.onPatched().pipe(
             takeWhile(() => getState().modalIsOpen),
-            map(patchedAssistencia => {
+            tap(patchedAssistencia => {
                 if (getState().modalIsOpen) {
                     dispatch(new AssistenciaModalPatchAssistencia(patchedAssistencia[0]));
                 }
@@ -59,9 +58,7 @@ export class AssistenciaModalState {
         ).subscribe();
         return assistencia$.pipe(
             tap(
-                apiAssistencia => { 
-                    console.log('teste:',apiAssistencia);
-                    patchState({ modalIsOpen: true, assistencia: apiAssistencia[0] }); }
+                apiAssistencia => patchState({ modalIsOpen: true, assistencia: apiAssistencia[0] })
             )
         );
     }
@@ -119,8 +116,7 @@ export class AssistenciaModalState {
     }
 
     @Action(AssistenciaModalClose)
-    unsetModalIsOpen({ getState, patchState }: StateContext<AssistenciaModalStateModel>) {
+    unsetModalIsOpen({  patchState }: StateContext<AssistenciaModalStateModel>) {
         patchState({ modalIsOpen: false });
-        console.log('modal:', getState().modalIsOpen);
     }
 }

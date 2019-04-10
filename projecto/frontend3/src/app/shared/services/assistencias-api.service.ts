@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, concat } from 'rxjs';
-import { map, tap, concatMap, toArray } from 'rxjs/operators';
+import { map, concatMap, toArray } from 'rxjs/operators';
 
 import { EntitiesApiAbstrationService } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
 import { Assistencia } from 'src/app/shared/models';
 import { UsersApiService } from './users-api.service';
-import { transformAll } from '@angular/compiler/src/render3/r3_ast';
 
 @Injectable({
   providedIn: 'root'
