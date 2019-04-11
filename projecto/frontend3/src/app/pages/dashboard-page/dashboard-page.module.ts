@@ -19,6 +19,7 @@ import { RCardComponent, RModalComponent, RDataRowComponent } from 'src/app/shar
 /* directives */
 import { AutofocusDirective } from 'src/app/shared';
 import { EncomendasCriarNovaPageComponent } from './pages/encomendas-criar-nova-page/encomendas-criar-nova-page.component';
+import { ArtigosCriarNovoModalComponent } from './pages/artigos-criar-novo-modal/artigos-criar-novo-modal.component';
 
 
 
@@ -44,7 +45,8 @@ import { EncomendasCriarNovaPageComponent } from './pages/encomendas-criar-nova-
     EncomendasPageComponent,
     PainelRapidoPageComponent,
     AssistenciaModalComponent,
-    EncomendasCriarNovaPageComponent
+    EncomendasCriarNovaPageComponent,
+    ArtigosCriarNovoModalComponent
   ]
 })
 export class DashboardPageModule { }
