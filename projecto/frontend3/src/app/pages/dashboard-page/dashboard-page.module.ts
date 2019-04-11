@@ -18,6 +18,7 @@ import {
 import { RCardComponent, RModalComponent, RDataRowComponent } from 'src/app/shared/components';
 /* directives */
 import { AutofocusDirective } from 'src/app/shared';
+import { EncomendasCriarNovaPageComponent } from './pages/encomendas-criar-nova-page/encomendas-criar-nova-page.component';
 
 
 
@@ -42,7 +43,8 @@ import { AutofocusDirective } from 'src/app/shared';
     StockPageComponent,
     EncomendasPageComponent,
     PainelRapidoPageComponent,
-    AssistenciaModalComponent
+    AssistenciaModalComponent,
+    EncomendasCriarNovaPageComponent
   ]
 })
 export class DashboardPageModule { }

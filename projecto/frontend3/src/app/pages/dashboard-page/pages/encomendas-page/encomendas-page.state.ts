@@ -13,6 +13,11 @@ export class EncomendasPageFindEncomendas {
     static readonly type = '[Encomendas API] Find Encomendas (EncomendasPageState)';
 }
 
+export class EncomendasPagePostEncomenda {
+    static readonly type = '[Encomendas-Page] Post Encomenda (EncomendasPageState)';
+    constructor(public encomenda: Encomenda) { }
+}
+
 export class EncomendasPageCreateEncomenda {
     static readonly type = '[Encomendas API] Created Encomenda (EncomendasPageState)';
     constructor(public encomenda: Encomenda) { }
@@ -50,6 +55,21 @@ export class EncomendasPageState {
         return encomendas$.pipe(
             tap(encomendas => setState({ encomendas }))
         );
+    }
+
+    @Action(EncomendasPagePostEncomenda)
+    postEncomenda(
+        { setState }: StateContext<EncomendasPageStateModel>,
+        action: EncomendasPagePostEncomenda) {
+        const encomendasAPI = EncomendasPageState.encomendasApiService;
+        setState(
+            patch({
+                encomendas: updateItem(encomenda =>
+                    encomenda.id === action.encomenda.id, action.encomenda)
+            })
+        );
+        return encomendasAPI.patch(action.encomenda.id, action.encomenda);
+
     }
 
     @Action(EncomendasPageCreateEncomenda)

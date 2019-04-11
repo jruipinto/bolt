@@ -35,31 +35,31 @@ export class PainelRapidoPagePatchEncomenda {
 
 /* Actions for orcamentos */
 export class PainelRapidoPageFindOrcamentos {
-    static readonly type = '[Assistencias API] Find Orcamentos (Painel-Rapido-Page)';
+    static readonly type = '[Assistencias API] Find Assistencias (Painel-Rapido-Page.orcamentos)';
 }
 
 export class PainelRapidoPagePostOrcamento {
-    static readonly type = '[Painel-Rapido-Page] Post Orcamento (Painel-Rapido-Page)';
+    static readonly type = '[Painel-Rapido-Page] Post Assistencia (Painel-Rapido-Page.orcamentos)';
     constructor(public assistencia: Assistencia) { }
 }
 
 export class PainelRapidoPagePatchOrcamento {
-    static readonly type = '[Assistencias API] Patched Orcamento (Painel-Rapido-Page)';
+    static readonly type = '[Assistencias API] Patched Assistencia (Painel-Rapido-Page.orcamentos)';
     constructor(public assistencia: Assistencia) { }
 }
 
 /* Actions for pedidosContactoCliente*/
 export class PainelRapidoPageFindPedidosContactoCliente {
-    static readonly type = '[Assistencias API] Find PedidosContactoCliente (Painel-Rapido-Page)';
+    static readonly type = '[Assistencias API] Find Assistencias (Painel-Rapido-Page.pedidosContactoCliente)';
 }
 
 export class PainelRapidoPagePostPedidoContactoCliente {
-    static readonly type = '[Painel-Rapido-Page] Post PedidoContactoCliente (Painel-Rapido-Page)';
+    static readonly type = '[Painel-Rapido-Page] Post Assistencia (Painel-Rapido-Page.pedidosContactoCliente)';
     constructor(public assistencia: Assistencia) { }
 }
 
 export class PainelRapidoPagePatchPedidoContactoCliente {
-    static readonly type = '[Assistencias API] Patched PedidoContactoCliente (Painel-Rapido-Page)';
+    static readonly type = '[Assistencias API] Patched Assistencia (Painel-Rapido-Page.pedidosContactoCliente)';
     constructor(public assistencia: Assistencia) { }
 }
 /* ###### */
