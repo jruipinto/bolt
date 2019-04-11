@@ -19,7 +19,7 @@ export abstract class EntitiesApiAbstrationService {
         .then(apiResponse => apiResponse.data,
           err => console.log('error:', err)
         ));
-    console.log(`[${this.entity} API] find ${this.entity}`);
+    // console.log(`[${this.entity} API] find ${this.entity}`);
     return apiResponse$ as Observable<any[]>;
   }
 
@@ -28,7 +28,7 @@ export abstract class EntitiesApiAbstrationService {
       .then(apiResponse => [apiResponse],
         err => console.log('error:', err)
       ));
-    console.log(`[${this.entity} API] get ${this.entity} (id:${id})`);
+    // console.log(`[${this.entity} API] get ${this.entity} (id:${id})`);
     return apiResponse$ as Observable<any[]>;
   }
 
@@ -37,7 +37,7 @@ export abstract class EntitiesApiAbstrationService {
       .then(apiResponse => [apiResponse],
         err => console.log('error:', err)
       ));
-    console.log(actionType);
+    // console.log(actionType);
     return apiResponse$;
   }
 
@@ -46,7 +46,7 @@ export abstract class EntitiesApiAbstrationService {
       .then(apiResponse => [apiResponse],
         err => console.log('error:', err)
       ));
-    console.log(actionType);
+    // console.log(actionType);
     return apiResponse$;
   }
 

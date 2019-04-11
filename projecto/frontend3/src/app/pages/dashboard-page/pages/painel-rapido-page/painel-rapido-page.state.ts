@@ -35,31 +35,31 @@ export class PainelRapidoPagePatchEncomenda {
 
 /* Actions for orcamentos */
 export class PainelRapidoPageFindOrcamentos {
-    static readonly type = '[Assistencias API] Find Assistencias (Painel-Rapido-Page)';
+    static readonly type = '[Assistencias API] Find Orcamentos (Painel-Rapido-Page)';
 }
 
 export class PainelRapidoPagePostOrcamento {
-    static readonly type = '[Painel-Rapido-Page] Post Assistencia (Painel-Rapido-Page)';
+    static readonly type = '[Painel-Rapido-Page] Post Orcamento (Painel-Rapido-Page)';
     constructor(public assistencia: Assistencia) { }
 }
 
 export class PainelRapidoPagePatchOrcamento {
-    static readonly type = '[Assistencias API] Patched Assistencia (Painel-Rapido-Page)';
+    static readonly type = '[Assistencias API] Patched Orcamento (Painel-Rapido-Page)';
     constructor(public assistencia: Assistencia) { }
 }
 
 /* Actions for pedidosContactoCliente*/
 export class PainelRapidoPageFindPedidosContactoCliente {
-    static readonly type = '[Assistencias API] Find Assistencias (Painel-Rapido-Page)';
+    static readonly type = '[Assistencias API] Find PedidosContactoCliente (Painel-Rapido-Page)';
 }
 
 export class PainelRapidoPagePostPedidoContactoCliente {
-    static readonly type = '[Painel-Rapido-Page] Post Assistencia (Painel-Rapido-Page)';
+    static readonly type = '[Painel-Rapido-Page] Post PedidoContactoCliente (Painel-Rapido-Page)';
     constructor(public assistencia: Assistencia) { }
 }
 
 export class PainelRapidoPagePatchPedidoContactoCliente {
-    static readonly type = '[Assistencias API] Patched Assistencia (Painel-Rapido-Page)';
+    static readonly type = '[Assistencias API] Patched PedidoContactoCliente (Painel-Rapido-Page)';
     constructor(public assistencia: Assistencia) { }
 }
 /* ###### */
@@ -78,7 +78,7 @@ export class PainelRapidoPageState {
     }
 
     @Action(PainelRapidoPageFindEncomendas)
-    findEncomendas({ getState, patchState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
+    findEncomendas({ patchState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
         const encomendasAPI = PainelRapidoPageState.encomendasApiService;
         const encomendas$ = encomendasAPI.find();
 
@@ -127,7 +127,7 @@ export class PainelRapidoPageState {
     }
 
     @Action(PainelRapidoPageFindOrcamentos)
-    findOrcamentos({ getState, patchState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
+    findOrcamentos({ patchState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
         const assistenciasAPI = PainelRapidoPageState.assistenciasApiService;
         const orcamentos$ = assistenciasAPI.find({ query: { estado: 'orçamento pendente' } });
 
@@ -163,7 +163,7 @@ export class PainelRapidoPageState {
     }
 
     @Action(PainelRapidoPageFindPedidosContactoCliente)
-    findPedidosContactoCliente({ getState, patchState, setState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
+    findPedidosContactoCliente({ patchState, dispatch }: StateContext<PainelRapidoPageStateModel>) {
         const assistenciasAPI = PainelRapidoPageState.assistenciasApiService;
         const pedidosContactoCliente$ = assistenciasAPI.find({ query: { estado: 'contacto pendente' } });
 
