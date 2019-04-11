@@ -7,13 +7,14 @@ import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 import { AssistenciasPageState } from './pages/assistencias-page';
 import { AssistenciasCriarNovaPageState } from './pages/assistencias-criar-nova-page';
 import { AssistenciaModalState } from './pages/assistencia-modal';
-import { PainelRapidoPageState } from './pages';
+import { PainelRapidoPageState, EncomendasPageState } from './pages';
 
 
 @NgModule({
     imports: [
         NgxsModule.forFeature([
             AssistenciasPageState,
+            EncomendasPageState,
             AssistenciasCriarNovaPageState,
             AssistenciaModalState,
             PainelRapidoPageState
