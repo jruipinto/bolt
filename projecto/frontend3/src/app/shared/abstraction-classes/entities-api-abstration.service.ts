@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
+import { from, Observable, throwError } from 'rxjs';
 
 import { FeathersService } from 'src/app/shared/services/feathers.service';
+import { reject } from 'q';
 
 
 @Injectable({
@@ -35,7 +36,7 @@ export abstract class EntitiesApiAbstrationService {
   public create(data: object, actionType?: string) {
     const apiResponse$ = from(this.entityAPI.create(data)
       .then(apiResponse => [apiResponse],
-        err => console.log('error:', err)
+        err => reject(err)
       ));
     // console.log(actionType);
     return apiResponse$;

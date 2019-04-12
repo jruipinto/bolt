@@ -1,34 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Observable, from, of } from 'rxjs';
+import { tap, map, concatMap, mergeMap } from 'rxjs/operators';
 import { DataService } from 'src/app/shared/services/data.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { User } from 'src/app/shared/models';
+import { UsersApiService } from 'src/app/shared/services/users-api.service';
+import { AssistenciasApiService } from 'src/app/shared';
+import { iif } from '@ngxs/store/operators';
+
 
 @Component({
   selector: 'app-assistencias-criar-nova-page',
   templateUrl: './assistencias-criar-nova-page.component.html',
-  styleUrls: ['./assistencias-criar-nova-page.component.scss']
+  styleUrls: ['./assistencias-criar-nova-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssistenciasCriarNovaPageComponent implements OnInit {
-
-  private cliente: any; // objecto
-  private estado: string;
-  private query: object; // payload que vamos enviar ao backend
-                        // https://docs.feathersjs.com/api/databases/common.html#adapterfindparams
-
-
-  contactoClienteForm = this.fb.group({
-    // por exemplo, contacto: 255486001
-    contacto: [null, Validators.min(200000000)]
+  /* Declaration of the 3 Forms on the UI */
+  private contactoClienteForm = this.fb.group({
+    contacto: [null, Validators.min(200000000)] // por exemplo, contacto: 255486001
   });
-
-  clienteForm = this.fb.group({
+  private clienteForm = this.fb.group({
     nome: ['', Validators.required],
     email: [''],
     endereço: [''],
     nif: ['']
   });
-
-  criarNovaForm = this.fb.group({
+  private criarNovaForm = this.fb.group({
     categoria: ['', Validators.required],
     marca: [''],
     modelo: [''],
@@ -37,58 +36,61 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     problema: ['', Validators.required],
     orcamento: [null]
   });
-
-
-  constructor(private fb: FormBuilder, private dataService: DataService, private authService: AuthService) { }
-
-  listenToMyFormsChanges(): void {
-    this.contactoClienteForm.valueChanges.subscribe(() => {
-      if (this.contactoClienteForm.invalid) { this.clienteForm.reset(); return; }
-
-      // this.query é o payload que vamos enviar ao backend
-      // https://docs.feathersjs.com/api/databases/common.html#adapterfindparams
-      this.query = {query:
-        {
-        contacto: this.contactoClienteForm.value.contacto
+  /*########################################### */
+  private cliente: User;
+  private clienteChange$ = this.contactoClienteForm.valueChanges.pipe(
+    concatMap(({ contacto }) => this.usersAPI$(contacto).pipe(
+      tap(clienteArr => {
+        if (clienteArr.length > 0) {
+          this.clienteForm.patchValue(clienteArr[0]);
+          this.cliente = clienteArr[0];
+        } else {
+          this.clienteForm.reset();
         }
-      };
+      })
+    )
 
-      this.dataService.find$('users', this.query).subscribe(resposta => {
-        if (resposta.data[0]) {
-          this.clienteForm.patchValue(resposta.data[0]);
-          this.cliente = resposta.data[0];
-        }
-      });
-    });
+    )
+  );
+  private usersAPI$ = (contacto: number) => this.usersApiService.find({ query: { contacto } }) as Observable<User[]>;
+
+
+  constructor(private fb: FormBuilder, private dataService: DataService,
+    private usersApiService: UsersApiService, private assistenciasApiService: AssistenciasApiService, private authService: AuthService) { }
+
+  ngOnInit() {
+    this.clienteChange$.subscribe();
   }
 
   onSubmit() {
-    this.estado = 'recebido';
-    const agora = new Date();
-    const tecnico_JSON: string = JSON.stringify([{
-      tecnico_user_id: this.authService.getUserId(),
-      estado: this.estado,
-      updatedAt: agora.toLocaleString()
-    }]);
-
-    this.query = {
-      tecnico_user_id: tecnico_JSON,
-      cliente_user_id: this.cliente.id,
-      estado: this.estado
+    const estado = 'recebido';
+    const tecnico_user_id = this.authService.getUserId();
+    const cliente_user_id = this.cliente.id;
+    const updatedAt = new Date().toLocaleString();
+    const assistenciasAPI$ = {
+      create: (data) =>
+        this.assistenciasApiService.create(data).pipe(
+          tap(() => {
+            this.criarNovaForm.reset();
+            if (this.clienteForm.dirty) { this.usersApiService.patch(this.cliente.id, this.clienteForm.value); }
+          }))
+    };
+    const assistencia = {
+      ...{
+        tecnico_user_id: JSON.stringify([{ tecnico_user_id, estado, updatedAt }]),
+        cliente_user_id,
+        estado: estado
+      },
+      ...this.criarNovaForm.value
     };
 
-    Object.assign(this.query, this.criarNovaForm.value);
-    this.dataService.create$('assistencias', this.query);
-    this.criarNovaForm.reset();
-
-    if (this.clienteForm.dirty) {
-      console.log(this.clienteForm.value);
-      this.dataService.patch$('users', this.clienteForm.value, this.cliente.id);
-    }
-  }
-
-  ngOnInit() {
-    this.listenToMyFormsChanges();
+    assistenciasAPI$.create(assistencia).subscribe(
+      () => alert('Submetido'),
+      err => {
+        console.log('Falhou a submissão. Chame o Admin.', err);
+        alert ('Falhou a submissão. Chame o Admin. (detalhes: CTRL + SHIFT + I)');
+        }
+    );
   }
 
 }
