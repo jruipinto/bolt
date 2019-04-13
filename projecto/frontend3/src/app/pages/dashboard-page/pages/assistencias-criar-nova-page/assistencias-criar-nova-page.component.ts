@@ -1,13 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable, from, of } from 'rxjs';
+import { Observable, from, of, iif } from 'rxjs';
 import { tap, map, concatMap, mergeMap } from 'rxjs/operators';
 import { DataService } from 'src/app/shared/services/data.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { User } from 'src/app/shared/models';
 import { UsersApiService } from 'src/app/shared/services/users-api.service';
 import { AssistenciasApiService } from 'src/app/shared';
-import { iif } from '@ngxs/store/operators';
 
 
 @Component({
@@ -67,6 +66,14 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     const tecnico_user_id = this.authService.getUserId();
     const cliente_user_id = this.cliente.id;
     const updatedAt = new Date().toLocaleString();
+    const userTest$ = of('sucesso').pipe(
+      mergeMap( () =>
+        iif( () =>
+        this.clienteForm.dirty,
+        this.usersApiService.patch(this.cliente.id, this.clienteForm.value),
+        of('not dirty'))
+      )
+    );
     const assistenciasAPI$ = {
       create: (data) =>
         this.assistenciasApiService.create(data).pipe(
