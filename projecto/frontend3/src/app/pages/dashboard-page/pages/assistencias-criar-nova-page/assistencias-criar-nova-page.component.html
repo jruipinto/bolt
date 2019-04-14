@@ -47,8 +47,8 @@
   </div>
 </form>
 
-<div *ngIf="clienteForm.statusChanges | async as clientFormStatus">
-  <form class="separate clr-form" [formGroup]="criarNovaForm" *ngIf="clientFormStatus === 'VALID'"
+<div class="separate" *ngIf="clienteForm.statusChanges | async as clientFormStatus">
+  <form class="clr-form" [formGroup]="criarNovaForm" *ngIf="clientFormStatus === 'VALID'"
     ngxsForm="criarNova.criarNovaForm" (ngSubmit)="onSubmit()">
     <div class="clr-row">
       <div class="clr-col-md-2">
