@@ -4,7 +4,7 @@ import { Observable, from, of, iif } from 'rxjs';
 import { tap, map, concatMap, mergeMap } from 'rxjs/operators';
 import { DataService } from 'src/app/shared/services/data.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { User } from 'src/app/shared/models';
+import { User, Assistencia } from 'src/app/shared/models';
 import { UsersApiService } from 'src/app/shared/services/users-api.service';
 import { AssistenciasApiService } from 'src/app/shared';
 
@@ -24,7 +24,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     nome: ['', Validators.required],
     email: [''],
     endereço: [''],
-    nif: ['']
+    nif: [''],
+    tipo: ['cliente'] // este campo não aparece no formulario porque é predefinido aqui
   });
   private criarNovaForm = this.fb.group({
     categoria: ['', Validators.required],
@@ -42,10 +43,10 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
       tap(clienteArr => {
         if (clienteArr.length > 0) {
           this.clienteForm.patchValue(clienteArr[0]);
-          this.cliente = clienteArr[0];
         } else {
           this.clienteForm.reset();
         }
+        this.cliente = clienteArr[0];
       })
     )
 
@@ -66,32 +67,33 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     const tecnico_user_id = this.authService.getUserId();
     const cliente_user_id = this.cliente.id;
     const updatedAt = new Date().toLocaleString();
-    const userTest$ = of('sucesso').pipe(
-      mergeMap( () =>
-        iif( () =>
-        this.clienteForm.dirty,
-        this.usersApiService.patch(this.cliente.id, this.clienteForm.value),
-        of('not dirty'))
-      )
-    );
-    const assistenciasAPI$ = {
-      create: (data) =>
+    const cliente = this.cliente;
+    const usersAPI = {
+      create$: (data: Partial<User>) => this.usersApiService.create(data),
+      patch$: (id: number, data: Partial<User>) => this.usersApiService.patch(id, data)
+    };
+    const assistenciasAPI = {
+      create$: (data: Partial<Assistencia>) =>
         this.assistenciasApiService.create(data).pipe(
           tap(() => {
             this.criarNovaForm.reset();
-            if (this.clienteForm.dirty) { this.usersApiService.patch(this.cliente.id, this.clienteForm.value); }
+            if (this.clienteForm.dirty) { usersAPI.patch$(this.cliente.id, this.clienteForm.value).subscribe(); }
           }))
     };
     const assistencia = {
       ...{
         tecnico_user_id: JSON.stringify([{ tecnico_user_id, estado, updatedAt }]),
         cliente_user_id,
-        estado: estado
+        estado
       },
       ...this.criarNovaForm.value
     };
 
-    assistenciasAPI$.create(assistencia).subscribe(
+    if (typeof cliente.id === 'undefined') {
+      usersAPI.create$(this.clienteForm.value).subscribe();
+    }
+
+    assistenciasAPI.create$(assistencia).subscribe(
       () => alert('Submetido'),
       err => {
         console.log('Falhou a submissão. Chame o Admin.', err);
