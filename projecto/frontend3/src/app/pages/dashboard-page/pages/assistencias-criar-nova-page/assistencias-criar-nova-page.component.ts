@@ -25,7 +25,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     email: [''],
     endereço: [''],
     nif: [''],
-    tipo: ['cliente'] // este campo não aparece no formulario porque é predefinido aqui
+    tipo: ['cliente'], // este campo não aparece no formulario porque é predefinido aqui
+    id: [null]
   });
   private criarNovaForm = this.fb.group({
     categoria: ['', Validators.required],
@@ -37,7 +38,6 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     orcamento: [null]
   });
   /*########################################### */
-  private cliente: User;
   private clienteChange$ = this.contactoClienteForm.valueChanges.pipe(
     concatMap(({ contacto }) => this.usersAPI$(contacto).pipe(
       tap(clienteArr => {
@@ -46,7 +46,6 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
         } else {
           this.clienteForm.reset();
         }
-        this.cliente = clienteArr[0];
       })
     )
 
@@ -64,22 +63,11 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
 
   onSubmit() {
     const estado = 'recebido';
+    const cliente = this.clienteForm.value;
+    const contacto = this.contactoClienteForm.value.contacto;
     const tecnico_user_id = this.authService.getUserId();
-    const cliente_user_id = this.cliente.id;
+    const cliente_user_id = cliente.id;
     const updatedAt = new Date().toLocaleString();
-    const cliente = this.cliente;
-    const usersAPI = {
-      create$: (data: Partial<User>) => this.usersApiService.create(data),
-      patch$: (id: number, data: Partial<User>) => this.usersApiService.patch(id, data)
-    };
-    const assistenciasAPI = {
-      create$: (data: Partial<Assistencia>) =>
-        this.assistenciasApiService.create(data).pipe(
-          tap(() => {
-            this.criarNovaForm.reset();
-            if (this.clienteForm.dirty) { usersAPI.patch$(this.cliente.id, this.clienteForm.value).subscribe(); }
-          }))
-    };
     const assistencia = {
       ...{
         tecnico_user_id: JSON.stringify([{ tecnico_user_id, estado, updatedAt }]),
@@ -88,18 +76,35 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
       },
       ...this.criarNovaForm.value
     };
+    const assistenciasAPI = {
+      create$: (data: Partial<Assistencia>) =>
+        this.assistenciasApiService.create(data).pipe(
+          tap(() => {
+            this.criarNovaForm.reset();
+            // open print service here!
+          }))
+    };
+    const usersAPI = {
+      create$: (data: Partial<User>) => this.usersApiService.create(data),
+      patch$: (id: number, data: Partial<User>) => this.usersApiService.patch(id, data)
+    };
+    const success = () => alert('Submetido');
+    const error = err => {
+      console.log('Falhou a submissão. Chame o Admin.', err);
+      alert ('Falhou a submissão. Chame o Admin. (detalhes: CTRL + SHIFT + I)');
+      };
 
-    if (typeof cliente.id === 'undefined') {
-      usersAPI.create$(this.clienteForm.value).subscribe();
+    if (this.clienteForm.dirty) {
+      cliente.id
+      ? usersAPI.patch$(cliente.id, cliente).pipe(
+        concatMap( () => assistenciasAPI.create$(assistencia))
+        ).subscribe(success, error)
+      : usersAPI.create$({...cliente, ...contacto }).pipe(
+        concatMap( () => assistenciasAPI.create$(assistencia))
+        ).subscribe(success, error);
+    } else {
+      assistenciasAPI.create$(assistencia).subscribe(success, error);
     }
-
-    assistenciasAPI.create$(assistencia).subscribe(
-      () => alert('Submetido'),
-      err => {
-        console.log('Falhou a submissão. Chame o Admin.', err);
-        alert ('Falhou a submissão. Chame o Admin. (detalhes: CTRL + SHIFT + I)');
-        }
-    );
   }
 
 }
