@@ -21,11 +21,10 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     contacto: [null, Validators.min(200000000)] // por exemplo, contacto: 255486001
   });
   private clienteForm = this.fb.group({
-    nome: ['', Validators.required],
+    nome: [null, [Validators.required, Validators.minLength(3)]],
     email: [''],
     endereço: [''],
     nif: [''],
-    tipo: ['cliente'], // este campo não aparece no formulario porque é predefinido aqui
     id: [null]
   });
   private criarNovaForm = this.fb.group({
@@ -65,6 +64,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     const estado = 'recebido';
     const cliente = this.clienteForm.value;
     const contacto = this.contactoClienteForm.value.contacto;
+		console.log("TCL: AssistenciasCriarNovaPageComponent -> onSubmit -> contacto", contacto)
     const tecnico_user_id = this.authService.getUserId();
     const cliente_user_id = cliente.id;
     const updatedAt = new Date().toLocaleString();
@@ -99,8 +99,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
       ? usersAPI.patch$(cliente.id, cliente).pipe(
         concatMap( () => assistenciasAPI.create$(assistencia))
         ).subscribe(success, error)
-      : usersAPI.create$({...cliente, ...contacto }).pipe(
-        concatMap( () => assistenciasAPI.create$(assistencia))
+      : usersAPI.create$({...cliente, ...contacto, ...{tipo: 'cliente'} }).pipe(
+        concatMap( newUserArr => assistenciasAPI.create$({...assistencia, ...{cliente_user_id: newUserArr[0].id}}))
         ).subscribe(success, error);
     } else {
       assistenciasAPI.create$(assistencia).subscribe(success, error);
