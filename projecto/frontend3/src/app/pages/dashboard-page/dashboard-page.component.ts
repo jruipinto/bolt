@@ -13,7 +13,7 @@ export class DashboardPageComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.authService.getUserName$().subscribe(e => this.userName = e.nome);
+    this.authService.getUserName$().subscribe(res => this.userName = res[0].nome);
   }
 
   logOut() {

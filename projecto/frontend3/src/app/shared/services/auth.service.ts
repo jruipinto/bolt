@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 
 import { FeathersService } from './feathers.service';
 import { Router } from '@angular/router';
+import { UsersApiService } from './users-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor( private feathersService: FeathersService, private router: Router ) { }
+  constructor( private feathersService: FeathersService, private usersApiService: UsersApiService, private router: Router ) { }
 
   public getUserId (): number {
     const decode = require('jwt-decode');
@@ -18,9 +19,9 @@ export class AuthService {
     return payload.userId;
   }
 
-  public getUserName$ (): any {
+  public getUserName$ () {
     const id = this.getUserId();
-    return (<any>this.feathersService.service('users').watch().get(id));
+    return this.usersApiService.get(id);
   }
 
   public logIn(credentials?): Promise<any> {
