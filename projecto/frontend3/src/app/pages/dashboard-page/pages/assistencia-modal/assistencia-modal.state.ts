@@ -67,6 +67,10 @@ export class AssistenciaModalState {
     postAssistencia(
         { patchState, getState, dispatch }: StateContext<AssistenciaModalStateModel>,
         action: AssistenciaModalPostAssistencia) {
+        const error = err => {
+            console.log('Falhou a submissão. Chame o Admin.', err);
+            alert('Falhou a submissão. Chame o Admin. (detalhes: CTRL + SHIFT + I)');
+        };
         const assistenciasAPI = AssistenciaModalState.assistenciasApiService;
         // parse json to add new timestamp to it
         let parsed_tecnico_user_id: any = JSON.parse(action.assistencia.tecnico_user_id);
@@ -97,12 +101,11 @@ export class AssistenciaModalState {
         // submit state to database
         dispatch(new AssistenciaModalClose()).subscribe(() =>
             assistenciasAPI.patch(getState().assistencia.id, getState().assistencia)
-                .pipe(first())
                 .subscribe(
                     () => {
                         console.log('Pushed to api with success');
                     },
-                    err => console.log('error:', err)
+                    error
                 )
         );
     }
@@ -116,7 +119,7 @@ export class AssistenciaModalState {
     }
 
     @Action(AssistenciaModalClose)
-    unsetModalIsOpen({  patchState }: StateContext<AssistenciaModalStateModel>) {
+    unsetModalIsOpen({ patchState }: StateContext<AssistenciaModalStateModel>) {
         patchState({ modalIsOpen: false });
     }
 }
