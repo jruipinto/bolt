@@ -37,7 +37,6 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     orcamento: [null]
   });
   /*########################################### */
-  printing = false;
   private clienteChange$ = this.contactoClienteForm.valueChanges.pipe(
     concatMap(({ contacto }) => this.usersAPI$(contacto).pipe(
       tap(clienteArr => {
@@ -62,7 +61,6 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
   }
 
   printAssistencia() {
-    this.printing = true;
     window.print();
   }
 

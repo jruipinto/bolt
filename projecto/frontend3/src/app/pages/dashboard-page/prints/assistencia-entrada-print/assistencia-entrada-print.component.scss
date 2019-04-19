@@ -1,51 +1,47 @@
 @media print{
-    /*
-    * Reset all styles and apply Bootstrap-Grid
-    */
-    @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-grid.min.css");
-    @import url("https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-reboot.min.css");
-    .container, .container-fluid {padding: 0;}
-    * {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: normal;
-    }
-    ul, ol {
-        list-style-position: outside;
-        padding-inline-start: 40px;
-        margin-block-start: 1em;
-        margin-block-end: 1em;
-    }
-    /* ####################################  */
-    html, body, h1, h2, h3, h4, p, img { margin: 0;} /* margin reset*/
-    h1{font-size: 18pt; font-weight: 500; margin-bottom: 0.5cm;}
-    h2{font-size: 16pt; font-weight: 500;}
-    p{font-size: 12pt;}
-  
-    .items-group {
-      border-style: solid;
-      border-color: black;
-      border-width: 1pt 1pt 1pt 1pt;
-      border-radius: 5pt;
-      padding: 3pt 3pt 3pt 3pt;
-      margin: 9pt 0 9pt 0;
-    }
-  
-    .logotipo {
-      width: 6cm;
-      height: 4cm;
-      margin: -0.5cm;
-    }
-  
-    .description-label,
-    .description-label > p { font-weight: 500;}
-  
-    .disclaimer, .address p {
-      font-size: 10pt;
-    }
-  
-    .signature-field {
-      padding-bottom: 24pt;
-      border-bottom: solid black 1pt;
-    }
+  /*
+  * Reset to print-friendly styles
+  */
+  * {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: normal;
   }
-  
+  ul, ol {
+      list-style-position: outside;
+      padding-inline-start: 40px;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+  }
+  /* ####################################  */
+  html, body, h1, h2, h3, h4, p, img { margin: 0;} /* margin reset*/
+  h1{font-size: 18pt; font-weight: 500; margin-bottom: 0.5cm;}
+  h2{font-size: 16pt; font-weight: 500;}
+  p{font-size: 12pt;}
+
+  .items-group {
+    border-style: solid;
+    border-color: black;
+    border-width: 1pt 1pt 1pt 1pt;
+    border-radius: 5pt;
+    padding: 3pt 3pt 3pt 3pt;
+    margin: 9pt 0 9pt 0;
+  }
+
+  .logotipo {
+    width: 6cm;
+    height: 4cm;
+    margin: -0.5cm 0 -0.5cm 0;
+  }
+
+  .description-label,
+  .description-label > p { font-weight: 500;}
+
+  .disclaimer, .address p {
+    font-size: 10pt;
+  }
+
+  .signature-field {
+    padding-bottom: 24pt;
+    border-bottom: solid black 1pt;
+  }
+}
