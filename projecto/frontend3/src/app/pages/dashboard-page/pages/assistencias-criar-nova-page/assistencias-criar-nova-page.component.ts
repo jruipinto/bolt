@@ -37,6 +37,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     orcamento: [null]
   });
   /*########################################### */
+  printing = false;
   private clienteChange$ = this.contactoClienteForm.valueChanges.pipe(
     concatMap(({ contacto }) => this.usersAPI$(contacto).pipe(
       tap(clienteArr => {
@@ -60,6 +61,11 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     this.clienteChange$.subscribe();
   }
 
+  printAssistencia() {
+    this.printing = true;
+    window.print();
+  }
+
   onSubmit() {
     const estado = 'recebido';
     const cliente = this.clienteForm.value;
@@ -81,6 +87,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
           tap(() => {
             this.criarNovaForm.reset();
             // open print service here!
+            this.printAssistencia();
           }))
     };
     const usersAPI = {

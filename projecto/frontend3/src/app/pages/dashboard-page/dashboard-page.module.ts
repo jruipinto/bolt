@@ -20,6 +20,7 @@ import { RCardComponent, RModalComponent, RDataRowComponent } from 'src/app/shar
 import { AutofocusDirective } from 'src/app/shared';
 import { EncomendasCriarNovaPageComponent } from './pages/encomendas-criar-nova-page/encomendas-criar-nova-page.component';
 import { ArtigosCriarNovoModalComponent } from './pages/artigos-criar-novo-modal/artigos-criar-novo-modal.component';
+import { AssistenciaEntradaPrintComponent } from './prints/assistencia-entrada-print/assistencia-entrada-print.component';
 
 
 
@@ -46,7 +47,8 @@ import { ArtigosCriarNovoModalComponent } from './pages/artigos-criar-novo-modal
     PainelRapidoPageComponent,
     AssistenciaModalComponent,
     EncomendasCriarNovaPageComponent,
-    ArtigosCriarNovoModalComponent
+    ArtigosCriarNovoModalComponent,
+    AssistenciaEntradaPrintComponent
   ]
 })
 export class DashboardPageModule { }
