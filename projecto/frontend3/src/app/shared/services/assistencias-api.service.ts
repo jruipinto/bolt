@@ -12,18 +12,16 @@ import { UsersApiService } from './users-api.service';
 })
 export class AssistenciasApiService extends EntitiesApiAbstrationService {
   private usersAPI = this.usersApiService;
+  private insertUserNome = assistencia => this.usersAPI.get(assistencia.cliente_user_id).pipe(
+    map(apiUser =>
+      assistencia = {
+        ...assistencia,
+        ...{ cliente_user_name: apiUser[0].nome, cliente_user_contacto: apiUser[0].contacto }
+      } as any
+    )
+  )
   private insertUserNomes = (assistencias: Assistencia[]) =>
-    concat(...assistencias.map(assistencia => this.usersAPI.get(assistencia.cliente_user_id)
-      .pipe(
-        map(apiUser =>
-          assistencia = {
-            ...assistencia,
-            ...{ cliente_user_name: apiUser[0].nome, cliente_user_contacto: apiUser[0].contacto }
-          } as any
-
-        )
-      )
-    ))
+    concat(...assistencias.map(this.insertUserNome))
   private transform = (assistencias$: Observable<Assistencia[]>) => assistencias$.pipe(
     concatMap(this.insertUserNomes),
     toArray()
@@ -51,14 +49,9 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
   onPatched() {
     const assistencia$ = super.onPatched();
     return assistencia$.pipe(
-      mergeMap(assistencias => this.usersAPI.get(assistencias[0].cliente_user_id).pipe(
-        map(apiUser =>
-          assistencias = [{
-            ...assistencias[0],
-            ...{ cliente_user_name: apiUser[0].nome, cliente_user_contacto: apiUser[0].contacto }
-          } as any]
-        )
-      ))
+      map(assistencias => assistencias[0]),
+      mergeMap(this.insertUserNome),
+      map(assistencia => [assistencia])
     );
   }
 
