@@ -6,7 +6,7 @@ import { NgxsFormPluginModule } from '@ngxs/form-plugin';
 /* state */
 import { AssistenciasPageState } from './pages/assistencias-page';
 import { AssistenciasCriarNovaPageState } from './pages/assistencias-criar-nova-page';
-import { AssistenciaModalState } from './pages/assistencia-modal';
+import { AssistenciaModalState } from './modals/assistencia-modal';
 import { PainelRapidoPageState, EncomendasPageState } from './pages';
 
 

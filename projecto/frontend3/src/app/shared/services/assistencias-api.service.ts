@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, concat } from 'rxjs';
-import { map, concatMap, toArray } from 'rxjs/operators';
+import { map, concatMap, toArray, tap, mergeMap } from 'rxjs/operators';
 
 import { EntitiesApiAbstrationService } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
@@ -12,22 +12,20 @@ import { UsersApiService } from './users-api.service';
 })
 export class AssistenciasApiService extends EntitiesApiAbstrationService {
   private usersAPI = this.usersApiService;
-  private insertUserNomes = (assistencias) =>
+  private insertUserNomes = (assistencias: Assistencia[]) =>
     concat(...assistencias.map(assistencia => this.usersAPI.get(assistencia.cliente_user_id)
       .pipe(
         map(apiUser =>
           assistencia = {
             ...assistencia,
             ...{ cliente_user_name: apiUser[0].nome, cliente_user_contacto: apiUser[0].contacto }
-          }
+          } as any
 
         )
       )
     ))
   private transform = (assistencias$: Observable<Assistencia[]>) => assistencias$.pipe(
-    concatMap(
-      apiResponse => this.insertUserNomes(apiResponse)
-    ),
+    concatMap(this.insertUserNomes),
     toArray()
   ) as Observable<Assistencia[]>
 
@@ -52,7 +50,16 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
 
   onPatched() {
     const assistencia$ = super.onPatched();
-    return this.transform(assistencia$);
+    return assistencia$.pipe(
+      mergeMap(assistencias => this.usersAPI.get(assistencias[0].cliente_user_id).pipe(
+        map(apiUser =>
+          assistencias = [{
+            ...assistencias[0],
+            ...{ cliente_user_name: apiUser[0].nome, cliente_user_contacto: apiUser[0].contacto }
+          } as any]
+        )
+      ))
+    );
   }
 
 }

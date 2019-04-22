@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { from, Observable, throwError } from 'rxjs';
+import { from, Observable, fromEvent} from 'rxjs';
+import { tap, map } from 'rxjs/operators';
 
 import { FeathersService } from 'src/app/shared/services/feathers.service';
 import { reject } from 'q';
@@ -52,21 +53,17 @@ export abstract class EntitiesApiAbstrationService {
   }
 
   public onCreated() {
-    const apiResponse$ = new Observable(
-      observer => {
-        this.entityAPI.on('created', createdObject => observer.next([createdObject]));
-      }
-    );
-    return apiResponse$ as Observable<any[]>;
+    const apiResponse$ = fromEvent(this.entityAPI, 'created');
+    return apiResponse$.pipe(
+      map(apiResponse => [apiResponse as any])
+      );
   }
 
   public onPatched() {
-    const apiResponse$ = new Observable(
-      observer => {
-        this.entityAPI.on('patched', createdObject => observer.next([createdObject]));
-      }
-    );
-    return apiResponse$ as Observable<any[]>;
+    const apiResponse$ = fromEvent(this.entityAPI, 'patched');
+    return apiResponse$.pipe(
+      map(apiResponse => [apiResponse as any])
+      );
   }
 
   /*

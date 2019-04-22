@@ -6,7 +6,7 @@ import {
   PainelRapidoPageStateModel, PainelRapidoPageFindOrcamentos,
   PainelRapidoPageFindPedidosContactoCliente
 } from './painel-rapido-page.state';
-import { AssistenciaModalGetAssistencia } from 'src/app/pages/dashboard-page/pages/assistencia-modal';
+import { AssistenciaModalGetAssistencia } from 'src/app/pages/dashboard-page/modals/assistencia-modal';
 import { Encomenda, Assistencia } from 'src/app/shared';
 
 
