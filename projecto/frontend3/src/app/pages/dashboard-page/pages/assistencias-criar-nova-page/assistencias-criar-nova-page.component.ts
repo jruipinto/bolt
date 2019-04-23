@@ -62,7 +62,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
   }
 
   printAssistencia(data: AssistenciaEntradaPrint) {
-    window.print();
+    console.log(data);
+    // window.print();
   }
 
   onSubmit() {
@@ -86,7 +87,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
           tap(() => {
             this.criarNovaForm.reset();
             // open print service here!
-            this.printAssistencia({});
+            this.printAssistencia({contacto, ...cliente, ...assistencia});
           }))
     };
     const usersAPI = {
