@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { User, Assistencia } from 'src/app/shared/models';
 import { UsersApiService } from 'src/app/shared/services/users-api.service';
 import { AssistenciasApiService } from 'src/app/shared';
+import { AssistenciaEntradaPrint } from '../../prints';
 
 
 @Component({
@@ -60,7 +61,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     this.clienteChange$.subscribe();
   }
 
-  printAssistencia() {
+  printAssistencia(data: AssistenciaEntradaPrint) {
     window.print();
   }
 
@@ -85,7 +86,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
           tap(() => {
             this.criarNovaForm.reset();
             // open print service here!
-            this.printAssistencia();
+            this.printAssistencia({});
           }))
     };
     const usersAPI = {
