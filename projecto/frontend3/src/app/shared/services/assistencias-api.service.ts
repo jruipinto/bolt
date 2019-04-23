@@ -20,12 +20,13 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
       } as any
     )
   )
-  private insertUserNomes = (assistencias: Assistencia[]) =>
-    concat(...assistencias.map(this.insertUserNome))
-  private transform = (assistencias$: Observable<Assistencia[]>) => assistencias$.pipe(
-    concatMap(this.insertUserNomes),
-    toArray()
-  ) as Observable<Assistencia[]>
+  private transform = (assistencias$: Observable<Assistencia[]>) =>
+    assistencias$.pipe(
+      concatMap((assistencias: Assistencia[]) =>
+        concat(...assistencias.map(this.insertUserNome))
+      ),
+      toArray()
+    ) as Observable<Assistencia[]>
 
   constructor(protected feathersService: FeathersService, private usersApiService: UsersApiService) {
     super(feathersService, 'assistencias');
@@ -42,17 +43,21 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
   }
 
   onCreated() {
-    const assistencia$ = super.onCreated();
-    return this.transform(assistencia$);
+    const assistencia$ = super.onCreated().pipe(
+      map(assistencias => assistencias[0]),
+      mergeMap(this.insertUserNome),
+      map(assistencia => [assistencia]))
+      ;
+    return assistencia$;
   }
 
   onPatched() {
-    const assistencia$ = super.onPatched();
-    return assistencia$.pipe(
+    const assistencia$ = super.onPatched().pipe(
       map(assistencias => assistencias[0]),
       mergeMap(this.insertUserNome),
       map(assistencia => [assistencia])
     );
+    return assistencia$;
   }
 
 }
