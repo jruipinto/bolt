@@ -1,13 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable, from, of, iif } from 'rxjs';
-import { tap, map, concatMap, mergeMap } from 'rxjs/operators';
-import { DataService } from 'src/app/shared/services/data.service';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { Observable} from 'rxjs';
+import { tap, concatMap } from 'rxjs/operators';
+
+import { AssistenciasApiService, UsersApiService, AuthService } from 'src/app/shared/services';
+import { AssistenciaEntradaPrint, AssistenciaEntradaPrintService } from 'src/app/pages/dashboard-page/prints/assistencia-entrada-print';
 import { User, Assistencia } from 'src/app/shared/models';
-import { UsersApiService } from 'src/app/shared/services/users-api.service';
-import { AssistenciasApiService } from 'src/app/shared';
-import { AssistenciaEntradaPrint } from '../../prints';
+
+
 
 
 @Component({
@@ -54,8 +54,11 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
   private usersAPI$ = (contacto: number) => this.usersApiService.find({ query: { contacto } }) as Observable<User[]>;
 
 
-  constructor(private fb: FormBuilder, private dataService: DataService,
-    private usersApiService: UsersApiService, private assistenciasApiService: AssistenciasApiService, private authService: AuthService) { }
+  constructor(private fb: FormBuilder,
+    private usersApiService: UsersApiService,
+    private assistenciasApiService: AssistenciasApiService,
+    private authService: AuthService,
+    private printService: AssistenciaEntradaPrintService) { }
 
   ngOnInit() {
     this.clienteChange$.subscribe();
@@ -63,6 +66,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
 
   printAssistencia(data: AssistenciaEntradaPrint) {
     console.log(data);
+    this.printService.print(data);
     // window.print();
   }
 
