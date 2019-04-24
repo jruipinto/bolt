@@ -7,7 +7,7 @@ import { AssistenciaEntradaPrint } from './assistencia-entrada-print.model';
 })
 export class AssistenciaEntradaPrintService {
   private printSource = new BehaviorSubject<AssistenciaEntradaPrint>(null);
-  public currentPrint = this.printSource.asObservable();
+  public currentPrint$ = this.printSource.asObservable();
 
   constructor() { }
 
