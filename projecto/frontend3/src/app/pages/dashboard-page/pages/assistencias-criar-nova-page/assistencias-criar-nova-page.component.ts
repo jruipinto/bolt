@@ -4,8 +4,9 @@ import { Observable} from 'rxjs';
 import { tap, concatMap } from 'rxjs/operators';
 
 import { AssistenciasApiService, UsersApiService, AuthService } from 'src/app/shared/services';
-import { AssistenciaEntradaPrint, AssistenciaEntradaPrintService } from 'src/app/pages/dashboard-page/prints/assistencia-entrada-print';
+import { AssistenciaEntradaPrintService } from 'src/app/pages/dashboard-page/prints/assistencia-entrada-print';
 import { User, Assistencia } from 'src/app/shared/models';
+import { capitalize } from 'src/app/shared/utilities';
 
 
 
@@ -71,13 +72,20 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     const tecnico_user_id = this.authService.getUserId();
     const cliente_user_id = cliente.id;
     const updatedAt = new Date().toLocaleString();
+    const processedCriarNovaForm = {
+      ...this.criarNovaForm.value,
+      marca: capitalize( this.criarNovaForm.value.marca),
+      modelo: capitalize( this.criarNovaForm.value.modelo),
+      cor: capitalize( this.criarNovaForm.value.cor),
+      problema: capitalize( this.criarNovaForm.value.problema)
+    };
     const assistencia = {
       ...{
         tecnico_user_id: JSON.stringify([{ tecnico_user_id, estado, updatedAt }]),
         cliente_user_id,
         estado
       },
-      ...this.criarNovaForm.value
+      ...processedCriarNovaForm
     };
     const assistenciasAPI = {
       create$: (data: Partial<Assistencia>) =>

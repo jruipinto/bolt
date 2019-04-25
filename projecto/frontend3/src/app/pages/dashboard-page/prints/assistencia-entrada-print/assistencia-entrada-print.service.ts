@@ -12,7 +12,15 @@ export class AssistenciaEntradaPrintService {
   constructor() { }
 
   print(data: AssistenciaEntradaPrint) {
-    this.printSource.next(data);
+    const updatedAt = new Date().toLocaleDateString();
+    const modData = {...data, updatedAt};
+    this.printSource.next(modData);
+    /*
+    * window.print() block the UI thread of the application.
+    * The application freezes and can't do anything.
+    * This is how browsers work and Angular can't do anything about it.
+    * This is why I'm waiting 150 milisecs to do window.print() after.
+    */
     timer(150).subscribe(() => window.print());
   }
 }
