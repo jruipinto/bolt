@@ -87,7 +87,7 @@
             Orçamento:
           </div>
           <div class="clr-col">
-            {{modalState.assistencia.orcamento}}
+            <span *ngIf="modalState.assistencia.orcamento">€   {{modalState.assistencia.orcamento}}</span>
             <span *ngIf="!modalState.assistencia.orcamento">não tem</span>
           </div>
         </div>
@@ -96,10 +96,7 @@
             Preço:
           </div>
           <div class="clr-col-md-4">
-            <input type="number" name="preco" id="preco" [(ngModel)]='modalState.assistencia.preco'>
-          </div>
-          <div class="clr-col-md-auto">
-            €
+            €<input type="number" name="preco" id="preco" [(ngModel)]='modalState.assistencia.preco'>
           </div>
         </div>
       </div>
