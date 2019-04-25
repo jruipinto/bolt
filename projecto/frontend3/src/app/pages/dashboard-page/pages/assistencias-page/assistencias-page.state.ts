@@ -37,7 +37,7 @@ export class AssistenciasPageState {
     @Action(AssistenciasPageFindAssistencias)
     findAssistencias({ setState, dispatch }: StateContext<AssistenciasPageStateModel>) {
         const assistenciasAPI = AssistenciasPageState.assistenciasApiService;
-        const assistencias$ = assistenciasAPI.find({ query: { $limit: 25 } });
+        const assistencias$ = assistenciasAPI.find({ query: { $limit: 200 } });
 
         assistenciasAPI.onCreated()
             .subscribe(apiAssistencia => {
