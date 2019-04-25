@@ -18,25 +18,13 @@ import { AssistenciasApiService } from 'src/app/shared';
 export class AssistenciasPageComponent implements OnInit {
   @Select(AssistenciasPageState)
   public assistenciasPageState$: Observable<AssistenciasPageStateModel>;
-  private assistenciasAPI = this.assistenciasApiService;
-  private assistenciasOnCreated$ = this.assistenciasAPI.onCreated().pipe(
-    tap(apiAssistencia => {
-      this.store.dispatch(new AssistenciasPageCreateAssistencia(apiAssistencia[0]));
-    })
-  );
-  private assistenciasOnPatched$ = this.assistenciasAPI.onPatched().pipe(
-    tap(apiAssistencia => {
-      this.store.dispatch(new AssistenciasPagePatchAssistencia(apiAssistencia[0]));
-    })
-  );
+
 
   constructor(private store: Store, private assistenciasApiService: AssistenciasApiService) {
   }
 
   ngOnInit() {
     this.store.dispatch(new AssistenciasPageFindAssistencias());
-    // this.assistenciasOnCreated$.subscribe();
-    // this.assistenciasOnPatched$.subscribe();
   }
 
   openModal(id: number): void {
