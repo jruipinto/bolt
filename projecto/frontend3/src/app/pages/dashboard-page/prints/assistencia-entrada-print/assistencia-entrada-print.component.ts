@@ -10,7 +10,7 @@ export class AssistenciaEntradaPrintComponent implements OnInit {
 
   constructor(private printService: AssistenciaEntradaPrintService) { }
 
-  public printData$ = this.printService.currentPrint$
+  public printData$ = this.printService.currentPrint$;
 
   ngOnInit() {
   }

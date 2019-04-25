@@ -64,12 +64,6 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     this.clienteChange$.subscribe();
   }
 
-  printAssistencia(data: AssistenciaEntradaPrint) {
-    console.log(data);
-    this.printService.print(data);
-    // window.print();
-  }
-
   onSubmit() {
     const estado = 'recebido';
     const cliente = this.clienteForm.value;
@@ -90,15 +84,14 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
         this.assistenciasApiService.create(data).pipe(
           tap(() => {
             this.criarNovaForm.reset();
-            // open print service here!
-            this.printAssistencia({contacto, ...cliente, ...assistencia});
+            // you can open print service here!
           }))
     };
     const usersAPI = {
       create$: (data: Partial<User>) => this.usersApiService.create(data),
       patch$: (id: number, data: Partial<User>) => this.usersApiService.patch(id, data)
     };
-    const success = () => alert('Submetido');
+    const success = () => this.printService.print({contacto, ...cliente, ...assistencia});
     const error = err => {
       console.log('Falhou a submissão. Chame o Admin.', err);
       alert ('Falhou a submissão. Chame o Admin. (detalhes: CTRL + SHIFT + I)');

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, timer } from 'rxjs';
 import { AssistenciaEntradaPrint } from './assistencia-entrada-print.model';
 
 @Injectable({
@@ -13,6 +13,6 @@ export class AssistenciaEntradaPrintService {
 
   print(data: AssistenciaEntradaPrint) {
     this.printSource.next(data);
-    window.print();
+    timer(150).subscribe(() => window.print());
   }
 }
