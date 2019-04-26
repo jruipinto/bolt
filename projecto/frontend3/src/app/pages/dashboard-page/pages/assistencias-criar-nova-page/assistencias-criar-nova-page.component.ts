@@ -99,7 +99,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
       create$: (data: Partial<User>) => this.usersApiService.create(data),
       patch$: (id: number, data: Partial<User>) => this.usersApiService.patch(id, data)
     };
-    const success = () => this.printService.print({contacto, ...cliente, ...assistencia});
+    const success = (response: Assistencia) => this.printService.print({contacto, ...cliente, ...response[0]});
     const error = err => {
       console.log('Falhou a submissão. Chame o Admin.', err);
       alert ('Falhou a submissão. Chame o Admin. (detalhes: CTRL + SHIFT + I)');
