@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AssistenciaEntradaPrintService } from './assistencia-entrada-print.service';
+import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 
 @Component({
   selector: 'app-assistencia-entrada-print',
@@ -8,9 +8,9 @@ import { AssistenciaEntradaPrintService } from './assistencia-entrada-print.serv
 })
 export class AssistenciaEntradaPrintComponent implements OnInit {
 
-  constructor(private printService: AssistenciaEntradaPrintService) { }
+  constructor(private printService: PrintService) { }
 
-  public printData$ = this.printService.currentPrint$;
+  public printData$ = this.printService.currentAssistenciaEntradaPrint$;
 
   ngOnInit() {
   }

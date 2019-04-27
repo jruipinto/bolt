@@ -21,6 +21,7 @@ import { AutofocusDirective } from 'src/app/shared';
 import { EncomendasCriarNovaPageComponent } from './pages/encomendas-criar-nova-page/encomendas-criar-nova-page.component';
 import { ArtigosCriarNovoModalComponent } from './modals/artigos-criar-novo-modal/artigos-criar-novo-modal.component';
 import { AssistenciaEntradaPrintComponent } from './prints/assistencia-entrada-print/assistencia-entrada-print.component';
+import { AssistenciaSaidaPrintComponent } from './prints/assistencia-saida-print/assistencia-saida-print.component';
 
 
 
@@ -48,7 +49,8 @@ import { AssistenciaEntradaPrintComponent } from './prints/assistencia-entrada-p
     AssistenciaModalComponent,
     EncomendasCriarNovaPageComponent,
     ArtigosCriarNovoModalComponent,
-    AssistenciaEntradaPrintComponent
+    AssistenciaEntradaPrintComponent,
+    AssistenciaSaidaPrintComponent
   ]
 })
 export class DashboardPageModule { }

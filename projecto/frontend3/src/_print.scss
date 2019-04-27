@@ -1,13 +1,26 @@
 /* Suffix this section at the end of your styles.css for
 toogling between @media screen and @media print mode */
 /*######################################################################*/
-@media not print{
-    /* hide the printing components from @media screen */
-    .printable { display: none; }
+@media not print {
+
+  /* hide the printing components from @media screen */
+  .printable {
+    display: none;
   }
-  @media print {
-    /* hide the screen components from @media print */
-    .screenable { display: none; }
-    * { color: black !important; } // optional (remove if colorfull wanted)
+}
+
+@media print {
+
+  /* hide the screen components from @media print */
+  .screenable {
+    display: none;
   }
-  /*######################################################################*/
+
+  * {
+    color: black !important;
+  }
+
+  // optional (remove if colorfull wanted)
+}
+
+/*######################################################################*/

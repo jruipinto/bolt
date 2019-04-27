@@ -4,7 +4,7 @@ import { Observable} from 'rxjs';
 import { tap, concatMap } from 'rxjs/operators';
 
 import { AssistenciasApiService, UsersApiService, AuthService } from 'src/app/shared/services';
-import { AssistenciaEntradaPrintService } from 'src/app/pages/dashboard-page/prints/assistencia-entrada-print';
+import { PrintService } from 'src/app/pages/dashboard-page/prints';
 import { User, Assistencia } from 'src/app/shared/models';
 import { capitalize } from 'src/app/shared/utilities';
 
@@ -59,7 +59,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     private usersApiService: UsersApiService,
     private assistenciasApiService: AssistenciasApiService,
     private authService: AuthService,
-    private printService: AssistenciaEntradaPrintService) { }
+    private printService: PrintService) { }
 
   ngOnInit() {
     this.clienteChange$.subscribe();
