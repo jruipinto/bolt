@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PrintService } from 'src/app/pages/dashboard-page/prints';
+import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 
 @Component({
   selector: 'app-assistencia-saida-print',

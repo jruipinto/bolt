@@ -39,7 +39,7 @@
         <p>Equipamento:</p>
         <p>Cor:</p>
         <p>Serial:</p>
-        <p>Problema:</p>
+        <p>Relatório:</p>
         <!-- <p>Observações:</p> -->
       </div>
   
@@ -47,29 +47,37 @@
         <p>{{print?.categoria}} > {{print?.marca}} > {{print?.modelo}}</p>
         <p>{{print?.cor}}</p>
         <p>{{print?.serial}}</p>
-        <p>{{print?.problema}}</p>
+        <p>{{print?.relatorio_cliente}}</p>
         <!-- <p>dummy -> codigo: 1798 - tem de ficar pronto até dia 12/02/2019</p> -->
       </div>
     </div>
   
     <div class="clr-row items-group">
       <div class="clr-col">
-        <p class="description-label">Condições Gerais:</p>
+        <p class="description-label">Condições de Garantia:</p>
         <ul class="disclaimer">
-          <li>Prazo para levantar 90 dias</li>
-          <li>Garantia 90 dias</li>
-          <li>Esta assistência só é entregue a quem apresentar este documento</li>
-          <li>O preço acresce 10% a cada 30 dias após fim do prazo de levantamento (taxa de conservação)</li>
-          <li>Os dados do cliente, acima mencionados, ficam registados na N Reparações apenas para efeitos de comunicação
-            em relação às suas assistências e facturação
-          </li>
+          <li>Garantia de 90 dias a contar de hoje</li>
+          <li>Esta garantia cobre defeitos de fabrico do material substituído</li>
+          <li>Esta garantia <strong>não cobre</strong> defeitos provocados por má utilização do equipamento, por exemplo:
+          quebras, quedas, compressão/apertos ou torção/dobragem do equipamento (excepto se o equipamento for dobravel)</li>
+          <li>(Equipamentos sem reparação ou cuja reparação não foi cobrada não são cobertos por nenhuma garantia)</li>
         </ul>
       </div>
     </div>
+
+    <div class="clr-row items-group">
+        <div class="clr-col-3 description-label">
+          <p>Preço:</p>
+        </div>
+    
+        <div class="clr-col-9">
+          <p>{{print?.preco}}</p>
+        </div>
+      </div>
   
     <div class="clr-row">
       <div class="clr-col">
-        <p class="disclaimer signature-field">Declaro que li e concordo com o disposto neste documento em {{print.updatedAt}}</p>
+        <p class="disclaimer signature-field">Declaro que recebi o equipamento em conformidade e concordo com o disposto neste documento em {{print.updatedAt}}</p>
       </div>
     </div>
   </div>
