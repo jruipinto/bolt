@@ -16,6 +16,6 @@ export interface Assistencia {
     material: JSON;
     preco: number;
     estado: string;
-    created_at: string;
-    updated_at: string;
+    createdAt: string;
+    updatedAt: string;
 }

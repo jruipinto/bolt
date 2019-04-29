@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, timer } from 'rxjs';
 import { AssistenciaEntradaPrint } from 'src/app/pages/dashboard-page/prints/assistencia-entrada-print/assistencia-entrada-print.model';
 import { AssistenciaSaidaPrint } from 'src/app/pages/dashboard-page/prints/assistencia-saida-print/assistencia-saida-print.model';
+import { Assistencia } from 'src/app/shared';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PrintService {
-  private assistenciaEntradaPrintSource = new BehaviorSubject<AssistenciaEntradaPrint>(null);
+  private assistenciaEntradaPrintSource = new BehaviorSubject<Assistencia>(null);
   public currentAssistenciaEntradaPrint$ = this.assistenciaEntradaPrintSource.asObservable();
 
-  private assistenciaSaidaPrintSource = new BehaviorSubject<AssistenciaSaidaPrint>(null);
+  private assistenciaSaidaPrintSource = new BehaviorSubject<Assistencia>(null);
   public currentAssistenciaSaidaPrint$ = this.assistenciaSaidaPrintSource.asObservable();
 
   constructor() { }
@@ -25,16 +26,17 @@ export class PrintService {
     timer(150).subscribe(() => window.print());
   }
 
-  printAssistenciaEntrada(data: AssistenciaEntradaPrint) {
-    const print = this.print;
+  printAssistenciaEntrada(assistencia: Assistencia) {
     const updatedAt = new Date().toLocaleDateString();
-    const modData = { ...data, updatedAt };
-    this.assistenciaEntradaPrintSource.next(modData);
-
-    print();
+    // const updatedAt = assistencia.updatedAt.toLocaleDateString();
+    //console.log({ ...assistencia, updatedAt });    
+    
+    this.assistenciaSaidaPrintSource.next(null);
+    this.assistenciaEntradaPrintSource.next({ ...assistencia, updatedAt });
+    this.print();
   }
 
-  printAssistenciaSaida(data: AssistenciaSaidaPrint) {
+  printAssistenciaSaida(data: Assistencia) {
     const print = this.print;
     const updatedAt = new Date().toLocaleDateString();
     const modData = { ...data, updatedAt };

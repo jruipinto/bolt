@@ -40,7 +40,7 @@ export abstract class EntitiesApiAbstrationService {
         err => reject(err)
       ));
     // console.log(actionType);
-    return apiResponse$;
+    return apiResponse$ as Observable<any[]>;
   }
 
   public patch(id: number, data: object, actionType?: string) {
@@ -49,7 +49,7 @@ export abstract class EntitiesApiAbstrationService {
         err => console.log('error:', err)
       ));
     // console.log(actionType);
-    return apiResponse$;
+    return apiResponse$ as Observable<any[]>;
   }
 
   public onCreated() {

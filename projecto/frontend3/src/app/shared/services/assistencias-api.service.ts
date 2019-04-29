@@ -42,6 +42,16 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
     return this.transform(assistencia$);
   }
 
+  create(data: object, actionType?: string) {
+    const assistencia$ = super.create(data);
+    return this.transform(assistencia$);
+  }
+
+  patch(id: number, data: object, actionType?: string) {
+    const assistencia$ = super.patch(id, data);
+    return this.transform(assistencia$);
+  }
+
   onCreated() {
     const assistencia$ = super.onCreated().pipe(
       map(assistencias => assistencias[0]),
