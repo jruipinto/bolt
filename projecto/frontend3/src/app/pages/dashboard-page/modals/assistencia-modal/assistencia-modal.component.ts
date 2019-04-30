@@ -27,9 +27,12 @@ export class AssistenciaModalComponent implements OnInit {
     if (modalIsOpen) { this.store.dispatch(new AssistenciaModalClose()); }
   }
 
-  saveModal({ newEstado, assistencia }) {
-    const assistenciaCopy: Assistencia = { ...assistencia, estado: newEstado};
-    this.store.dispatch(new AssistenciaModalPostAssistencia(assistenciaCopy));
+  saveModal({ newEstado, assistencia }) {    
+    if (newEstado === "entregue" && assistencia.estado !== "concluído") {
+      alert("Primeiro tens de concluir a assistencia!");
+    } else {
+      this.store.dispatch(new AssistenciaModalPostAssistencia({ ...assistencia, estado: newEstado}));
+    }    
   }
 
 }

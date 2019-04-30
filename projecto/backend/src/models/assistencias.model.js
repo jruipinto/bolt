@@ -79,6 +79,7 @@ module.exports = function (app) {
       aguarda material
       material recebido
       concluído
+      entregue
       */
     },
   }, {

@@ -33,15 +33,15 @@
           <input id="tabexample1" type="checkbox">
           <label for="tabexample1">Assistências</label>
           <ul class="nav-list">
-              <li><a class="nav-link" routerLink="./assistencias-criar-nova" routerLinkActive="active">Criar Nova</a></li>
-            <li><a class="nav-link" routerLink="./assistencias" routerLinkActive="active">Lista</a></li>
+            <li><a class="nav-link" routerLink="./assistencias" routerLinkActive="active">Assist. Activas</a></li>
+            <li><a class="nav-link" routerLink="./assistencias-criar-nova" routerLinkActive="active">Receber Nova</a></li>
           </ul>
         </section>
         <section class="nav-group">
           <input id="tabexample2" type="checkbox">
           <label for="tabexample2">Encomendas</label>
           <ul class="nav-list">
-              <li><a class="nav-link" routerLink="./encomendas-criar-nova" routerLinkActive="active">Criar Nova</a></li>
+            <li><a class="nav-link" routerLink="./encomendas-criar-nova" routerLinkActive="active">Criar Nova</a></li>
             <li><a class="nav-link" routerLink="./encomendas" routerLinkActive="active">Lista</a></li>
             <li><a class="nav-link" routerLink="./encomendas-historico" routerLinkActive="active">Histórico</a></li>
           </ul>
@@ -58,3 +58,4 @@
   </div>
 </clr-main-container>
 <app-assistencia-entrada-print class="printable"></app-assistencia-entrada-print>
+<app-assistencia-saida-print class="printable"></app-assistencia-saida-print>

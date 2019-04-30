@@ -112,6 +112,8 @@
           Contactar</clr-button>
         <clr-button class="btn" (click)="saveModal({newEstado: 'concluído', assistencia: modalState.assistencia})"
           [clrInMenu]="true">Concluir</clr-button>
+          <clr-button class="btn" (click)="saveModal({newEstado: 'entregue', assistencia: modalState.assistencia})"
+          [clrInMenu]="true">Entregar</clr-button>
         <clr-button class="btn btn-primary btn-icon"
           (click)="saveModal({newEstado: 'em análise', assistencia: modalState.assistencia})">
           <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
