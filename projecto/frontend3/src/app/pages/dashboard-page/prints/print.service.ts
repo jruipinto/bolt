@@ -27,23 +27,19 @@ export class PrintService {
   }
 
   printAssistenciaEntrada(assistencia: Assistencia) {
-    const updatedAt = new Date().toLocaleDateString();
-    // const updatedAt = assistencia.updatedAt.toLocaleDateString();
-    //console.log({ ...assistencia, updatedAt });    
-    
+    const createdAt = assistencia.createdAt.slice(0, 10);
+
     this.assistenciaSaidaPrintSource.next(null);
-    this.assistenciaEntradaPrintSource.next({ ...assistencia, updatedAt });
+    this.assistenciaEntradaPrintSource.next({ ...assistencia, createdAt });
     this.print();
   }
 
-  printAssistenciaSaida(data: Assistencia) {
-    const print = this.print;
-    const updatedAt = new Date().toLocaleDateString();
-    const modData = { ...data, updatedAt };
-    this.assistenciaEntradaPrintSource.next(null);
-    this.assistenciaSaidaPrintSource.next(modData);
+  printAssistenciaSaida(assistencia: Assistencia) {
+    const updatedAt = assistencia.updatedAt.slice(0, 10);
 
-    print();
+    this.assistenciaEntradaPrintSource.next(null);
+    this.assistenciaSaidaPrintSource.next({ ...assistencia, updatedAt });
+    this.print();
   }
 
 }
