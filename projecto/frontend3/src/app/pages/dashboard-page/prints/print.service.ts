@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, timer } from 'rxjs';
-import { AssistenciaEntradaPrint } from 'src/app/pages/dashboard-page/prints/assistencia-entrada-print/assistencia-entrada-print.model';
-import { AssistenciaSaidaPrint } from 'src/app/pages/dashboard-page/prints/assistencia-saida-print/assistencia-saida-print.model';
 import { Assistencia } from 'src/app/shared';
 
 @Injectable({
