@@ -16,18 +16,32 @@
 */
 
 .wd-100 {
-    width: 100%;
-    max-width: 100%;
+  width: 100%;
+  max-width: 100%;
 }
 
-.separate:not(:first-child) { margin-top: 1rem; }
+.separate:not(:first-child) {
+  margin-top: 1rem;
+}
 
 .fontheavy {
-    font-weight: 600;
+  font-weight: 600;
 }
 
+/*
+* Clarity Style fixes
+*/
+
 .modal-footer .btn {
-    margin: 0 !important;
+  margin: 0 !important;
 }
+
+@media screen and (max-width: 576px) {
+  .branding {
+    max-width: 10rem !important;
+  }
+}
+
+/* ############################# */
 
 @import "./print"

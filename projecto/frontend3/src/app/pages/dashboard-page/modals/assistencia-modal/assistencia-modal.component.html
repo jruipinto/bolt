@@ -1,7 +1,7 @@
 <div *ngIf="(modalState$ | async) as modalState">
   <clr-modal [clrModalOpen]="modalState.modalIsOpen" (clrModalOpenChange)="closeModal(modalState.modalIsOpen)" [clrModalSize]="'lg'">
 
-    <h3 class="modal-title">{{modalState.assistencia?.id}}</h3>
+    <h3 class="modal-title">{{modalState.assistencia.id}}</h3>
 
     <div class="modal-body" *ngIf="modalState.assistencia">
       <div class="separate">
@@ -105,17 +105,17 @@
     <div class="modal-footer">
       <clr-button-group class="btn-group " [clrMenuPosition]="'top-right'">
         <clr-button class="btn"
-          (click)="saveModal({newEstado: 'orçamento pendente', assistencia: modalState.assistencia})"
+          (click)="saveModal('orçamento pendente', modalState.assistencia)"
           [clrInMenu]="true">Orçamentar</clr-button>
         <clr-button class="btn"
-          (click)="saveModal({newEstado: 'contacto pendente', assistencia: modalState.assistencia})" [clrInMenu]="true">
+          (click)="saveModal('contacto pendente', modalState.assistencia)" [clrInMenu]="true">
           Contactar</clr-button>
-        <clr-button class="btn" (click)="saveModal({newEstado: 'concluído', assistencia: modalState.assistencia})"
+        <clr-button class="btn" (click)="saveModal('concluído', modalState.assistencia)"
           [clrInMenu]="true">Concluir</clr-button>
-          <clr-button class="btn" (click)="saveModal({newEstado: 'entregue', assistencia: modalState.assistencia})"
+          <clr-button class="btn" (click)="saveModal('entregue', modalState.assistencia)"
           [clrInMenu]="true">Entregar</clr-button>
         <clr-button class="btn btn-primary btn-icon"
-          (click)="saveModal({newEstado: 'em análise', assistencia: modalState.assistencia})">
+          (click)="saveModal('em análise', modalState.assistencia)">
           <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
           Guardar
         </clr-button>
