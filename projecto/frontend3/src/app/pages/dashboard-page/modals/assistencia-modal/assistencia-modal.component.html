@@ -1,5 +1,6 @@
 <div *ngIf="(modalState$ | async) as modalState">
-  <clr-modal [clrModalOpen]="modalState.modalIsOpen" (clrModalOpenChange)="closeModal(modalState.modalIsOpen)" [clrModalSize]="'lg'">
+  <clr-modal [clrModalOpen]="modalState.modalIsOpen" (clrModalOpenChange)="closeModal(modalState.modalIsOpen)"
+    [clrModalSize]="'lg'">
 
     <h3 class="modal-title">{{modalState.assistencia.id}}</h3>
 
@@ -103,23 +104,26 @@
     </div>
 
     <div class="modal-footer">
-      <clr-button-group class="btn-group " [clrMenuPosition]="'top-right'">
-        <clr-button class="btn"
-          (click)="saveModal('orçamento pendente', modalState.assistencia)"
-          [clrInMenu]="true">Orçamentar</clr-button>
-        <clr-button class="btn"
-          (click)="saveModal('contacto pendente', modalState.assistencia)" [clrInMenu]="true">
-          Contactar</clr-button>
-        <clr-button class="btn" (click)="saveModal('concluído', modalState.assistencia)"
-          [clrInMenu]="true">Concluir</clr-button>
-          <clr-button class="btn" (click)="saveModal('entregue', modalState.assistencia)"
-          [clrInMenu]="true">Entregar</clr-button>
-        <clr-button class="btn btn-primary btn-icon"
-          (click)="saveModal('em análise', modalState.assistencia)">
-          <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
-          Guardar
-        </clr-button>
-      </clr-button-group>
+      <clr-dropdown>
+        <button type="button" class="btn" clrDropdownTrigger>
+          <clr-icon shape="caret down"></clr-icon>
+          + Opções
+        </button>
+        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+          <button type="button" clrDropdownItem
+            (click)="saveModal('orçamento pendente', modalState.assistencia)">Orçamentar</button>
+          <button type="button" clrDropdownItem (click)="saveModal('contacto pendente', modalState.assistencia)">
+            Contactar</button>
+          <button type="button" clrDropdownItem
+            (click)="saveModal('concluído', modalState.assistencia)">Concluir</button>
+          <button type="button" clrDropdownItem
+            (click)="saveModal('entregue', modalState.assistencia)">Entregar</button>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+      <button class="btn btn-primary btn-icon" (click)="saveModal('em análise', modalState.assistencia)">
+        <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
+        Guardar
+      </button>
     </div>
 
   </clr-modal>
