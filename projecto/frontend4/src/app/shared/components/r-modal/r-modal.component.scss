@@ -1,0 +1,49 @@
+/* The Modal (background) */
+  :host {
+    cursor:  default;    
+    display: block; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding: 2em;
+    @media only screen and (min-width: 992px){ padding: 2em 11em 2em 11em; }
+  }
+  
+  /* The Modal Close Button */
+  .close {
+    z-index: 9000;
+    position: sticky;
+    top: 0;
+    float: right;
+    margin-right: .5em;
+    color: #aaaaaa;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Modal Box */
+  .modal-box {
+    background-color: #fefefe;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #888;
+    min-width: 30%;
+    min-height: 30%;
+    max-height: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    overflow: auto;
+  }
+
+  .modal-content { padding: 1em 2.5em 1em 1em; }

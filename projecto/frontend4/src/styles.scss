@@ -1,0 +1,43 @@
+// Clarity Dependency SCSS
+@import "~@clr/ui/src/utils/dependencies.clarity"; // Includes light theme
+// @import "~@clr/ui/src/utils/theme.dark.clarity"; 
+
+// Your Application Theme File
+// @import "./theme.scss";
+
+
+// Clarity Component SCSS
+@import "~@clr/ui/src/utils/components.clarity";
+
+/*
+.login-wrapper {
+    background: url(./assets/logo.svg);
+}
+*/
+
+.wd-100 {
+  width: 100%;
+  max-width: 100%;
+}
+
+.separate:not(:first-child) {
+  margin-top: 1rem;
+}
+
+.fontheavy {
+  font-weight: 600;
+}
+
+/*
+* Clarity Style fixes
+*/
+
+@media screen and (max-width: 576px) {
+  .branding {
+    max-width: 10rem !important;
+  }
+}
+
+/* ############################# */
+
+@import "./print"

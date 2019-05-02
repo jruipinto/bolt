@@ -1,0 +1,60 @@
+<!--
+<div class="clr-container-fluid login-box">
+  <div class="clr-row">
+    <div class="clr-col">
+      <img class="login-icon" src="../../assets/user-lock-solid.svg" alt="">
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col">
+      <h1 class="">Acesso restrito</h1>
+    </div>
+  </div>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="clr-row">
+      <div class="clr-col">
+        <input name="email" type="email" placeholder="Email address" required autofocus
+          formControlName="email">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col">
+        <input name="password" type="password" placeholder="Password" required formControlName="password">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col">
+        <button type="submit" [disabled]="!loginForm.valid">Entrar</button>
+      </div>
+    </div>
+  </form>
+  <div class="clr-row">
+    <div class="clr-col">
+      <small>Desenvolvido por JRui Pinto &copy; 2018-2019</small>
+    </div>
+  </div>
+</div>
+-->
+
+<div class="login-wrapper">
+    <form class="login" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <section class="title">
+            <h3 class="welcome">Bem-vindo a</h3>
+            N Reparações
+            <h5 class="hint">O acesso a esta página, é restrito, à área técnica da empresa</h5>
+        </section>
+        <div class="login-group">
+            <clr-input-container>
+                <input clrInput  type="email" name="email" placeholder="Email" formControlName="email" required autofocus>
+            </clr-input-container>
+            <clr-password-container>
+                <input clrPassword type="password" name="password" placeholder="Password" formControlName="password" required>
+            </clr-password-container>
+            <div class="error active" *ngIf=!loginForm.valid>
+                Utilizador ou password inválido
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">ENTRAR</button>
+        </div>
+        <small>Desenvolvido por JRui Pinto &copy; 2018-2019</small>
+    </form>
+</div>

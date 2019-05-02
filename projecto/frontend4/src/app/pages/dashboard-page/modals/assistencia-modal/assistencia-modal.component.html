@@ -1,0 +1,130 @@
+<div *ngIf="(modalState$ | async) as modalState">
+  <clr-modal [clrModalOpen]="modalState.modalIsOpen" (clrModalOpenChange)="closeModal(modalState.modalIsOpen)"
+    [clrModalSize]="'lg'">
+
+    <h3 class="modal-title">{{modalState.assistencia.id}}</h3>
+
+    <div class="modal-body" *ngIf="modalState.assistencia">
+      <div class="separate">
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Estado:
+          </div>
+          <div class="clr-col">
+            {{modalState.assistencia.estado}}
+          </div>
+        </div>
+      </div>
+      <div class="separate">
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Cliente:
+          </div>
+          <div class="clr-col">
+            {{modalState.assistencia.cliente_user_name}}
+          </div>
+        </div>
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Equipamento:
+          </div>
+          <div class="clr-col">
+            {{modalState.assistencia.categoria}}
+            {{modalState.assistencia.marca}}
+            {{modalState.assistencia.modelo}}
+            {{modalState.assistencia.cor}}
+          </div>
+        </div>
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Serial:
+          </div>
+          <div class="clr-col">
+            {{modalState.assistencia.serial}}
+          </div>
+        </div>
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Problema:
+          </div>
+          <div class="clr-col">
+            {{modalState.assistencia.problema}}
+          </div>
+        </div>
+      </div>
+      <div class="separate">
+        <div class="clr-row">
+          <div class="clr-col-md-6">
+            <div class="clr-row">
+              <div class="clr-col fontheavy">
+                Informação técnica interna:
+              </div>
+            </div>
+            <div class="clr-row">
+              <div class="clr-col">
+                <textarea name="relatorio_interno" id="relatorio_interno"
+                  [(ngModel)]='modalState.assistencia.relatorio_interno'></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="clr-col-md-6">
+            <div class="clr-row">
+              <div class="clr-col fontheavy">
+                Informação para o cliente:
+              </div>
+            </div>
+            <div class="clr-row">
+              <div class="clr-col">
+                <textarea name="relatorio_cliente" id="relatorio_cliente"
+                  [(ngModel)]='modalState.assistencia.relatorio_cliente'></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="separate">
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Orçamento:
+          </div>
+          <div class="clr-col">
+            <span *ngIf="modalState.assistencia.orcamento">€ {{modalState.assistencia.orcamento}}</span>
+            <span *ngIf="!modalState.assistencia.orcamento">não tem</span>
+          </div>
+        </div>
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Preço:
+          </div>
+          <div class="clr-col-md-4">
+            €<input type="number" name="preco" id="preco" [(ngModel)]='modalState.assistencia.preco'>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <clr-dropdown>
+        <button type="button" class="btn" clrDropdownTrigger>
+          <clr-icon shape="caret down"></clr-icon>
+          + Opções
+        </button>
+        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+          <button type="button" clrDropdownItem
+            (click)="saveModal('orçamento pendente', modalState.assistencia)">Orçamentar</button>
+          <button type="button" clrDropdownItem (click)="saveModal('contacto pendente', modalState.assistencia)">
+            Contactar</button>
+          <button type="button" clrDropdownItem
+            (click)="saveModal('concluído', modalState.assistencia)">Concluir</button>
+          <button type="button" clrDropdownItem
+            (click)="saveModal('entregue', modalState.assistencia)">Entregar</button>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+      <button class="btn btn-primary btn-icon" (click)="saveModal('em análise', modalState.assistencia)">
+        <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
+        Guardar
+      </button>
+    </div>
+
+  </clr-modal>
+</div>

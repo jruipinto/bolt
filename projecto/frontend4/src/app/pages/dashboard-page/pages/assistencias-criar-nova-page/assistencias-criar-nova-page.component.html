@@ -1,0 +1,133 @@
+<form class="separate clr-form" [formGroup]="contactoClienteForm" ngxsForm="criarNova.contactoClienteForm">
+  <div class="clr-row">
+    <div class="clr-col-md-2">
+      <label for="contacto">Contacto:</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input class="wd-100" type="tel" name="contacto" id="contacto" placeholder="(obrigatório)" required autofocus
+        formControlName="contacto">
+    </div>
+  </div>
+</form>
+
+<form class="separate clr-form" [formGroup]="clienteForm" *ngIf="contactoClienteForm.valid"
+  ngxsForm="criarNova.clienteForm">
+  <div class="clr-row">
+    <div class="clr-col-md-2">
+      <label for="nome">Nome:</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input class="wd-100" type="text" name="nome" id="nome" placeholder="(obrigatório)" required
+        formControlName="nome">
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-md-2">
+      <label for="email">Email:</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input class="wd-100" type="email" name="email" id="email" formControlName="email">
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-md-2">
+      <label for="endereco">Endereço:</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input class="wd-100" type="text" name="endereço" id="endereço" formControlName="endereço">
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-md-2">
+      <label for="nif">NIF:</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input class="wd-100" type="number" name="nif" id="nif" formControlName="nif">
+    </div>
+  </div>
+</form>
+
+<div class="separate" *ngIf="clienteForm.statusChanges | async as clientFormStatus">
+  <form class="clr-form" [formGroup]="criarNovaForm" *ngIf="contactoClienteForm.valid && clientFormStatus === 'VALID'"
+    ngxsForm="criarNova.criarNovaForm" (ngSubmit)="onSubmit()">
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="categoria">Categoria:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <div class="clr-select-wrapper wd-100">
+          <select class="clr-select wd-100" name="categoria" id="categoria" formControlName="categoria"
+            placeholder="(obrigatório)">
+            <option value="Telemóvel">Telemóvel</option>
+            <option value="Tablet">Tablet</option>
+            <option value="Portátil">Portátil</option>
+            <option value="PC fixo">PC fixo</option>
+            <option value="GPS">GPS</option>
+            <option value="Coluna portátil">Coluna portátil</option>
+            <option value="TV">TV</option>
+            <option value="Monitor">Monitor</option>
+            <option value="Centralina">Centralina</option>
+            <option value="Placa">Placa</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="marca">Marca:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="wd-100" type="text" name="marca" id="marca" formControlName="marca">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="modelo">Modelo:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="wd-100" type="text" name="modelo" id="modelo" formControlName="modelo">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="cor">Cor:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="wd-100" type="text" name="cor" id="cor" placeholder="(obrigatório)" required
+          formControlName="cor">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="serial">Serial:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="wd-100" type="text" name="serial" id="serial" placeholder="(recomendado)"
+          formControlName="serial">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="problema">Problema:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <!-- <input type="text" name="problema" id="problema" placeholder="(obrigatório)" required formControlName="problema"> -->
+        <textarea name="problema" id="problema" placeholder="(obrigatório)" required
+          formControlName="problema"></textarea>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="orcamento">Orçamento:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="wd-100" type="number" name="orcamento" id="orcamento" formControlName="orcamento">
+      </div>
+    </div>
+    <div class="clr-row no-gutters">
+      <div class="clr-col-md-12 clr-col-lg-2">
+        <input class="btn btn-primary wd-100" type="submit" [disabled]="!criarNovaForm.valid">
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,83 @@
+<div *ngIf="printData$ | async as print">
+    <div class="clr-row">
+      <div class="clr-col">
+        <h1> Assistência Nº {{print.id}} </h1>
+      </div>
+    </div>
+  
+    <div class="clr-row">
+      <div class="clr-col">
+        <img src="../../assets/logo.svg" alt="Logotipo" class="logotipo">
+      </div>
+  
+      <div class="clr-col">
+        <h2>N Reparações</h2>
+        <p>91 886 73 76</p>
+        <div class="address">
+          <p>geral@nreparacoes.com</p>
+          <p>Av. Dr. Ribeiro de Magalhães, 1391</p>
+          <p>Centro Comercial 123, Loja BD</p>
+          <p>4610-108 Felgueiras</p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="clr-row items-group">
+      <div class="clr-col-3 description-label">
+        <p>Cliente:</p>
+        <p>Contacto:</p>
+      </div>
+  
+      <div class="clr-col-9">
+        <p>{{print?.cliente_user_name}}</p>
+        <p>{{print?.cliente_user_contacto}}</p>
+      </div>
+    </div>
+  
+    <div class="clr-row items-group">
+      <div class="clr-col-3 description-label">
+        <p>Equipamento:</p>
+        <p>Cor:</p>
+        <p>Serial:</p>
+        <p>Relatório:</p>
+        <!-- <p>Observações:</p> -->
+      </div>
+  
+      <div class="clr-col-9">
+        <p>{{print?.categoria}} > {{print?.marca}} > {{print?.modelo}}</p>
+        <p>{{print?.cor}}</p>
+        <p>{{print?.serial}}</p>
+        <p>{{print?.relatorio_cliente}}</p>
+        <!-- <p>dummy -> codigo: 1798 - tem de ficar pronto até dia 12/02/2019</p> -->
+      </div>
+    </div>
+  
+    <div class="clr-row items-group">
+      <div class="clr-col">
+        <p class="description-label">Condições de Garantia:</p>
+        <ul class="disclaimer">
+          <li>Garantia de 90 dias a contar de hoje</li>
+          <li>Esta garantia cobre defeitos de fabrico do material substituído</li>
+          <li>Esta garantia <strong>não cobre</strong> defeitos provocados por má utilização do equipamento, por exemplo:
+          quebras, quedas, compressão/apertos ou torção/dobragem do equipamento (excepto se o equipamento for dobrável)</li>
+          <li>(Equipamentos sem reparação ou cuja reparação não foi cobrada, não são cobertos por nenhuma garantia)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="clr-row items-group">
+        <div class="clr-col-3 description-label">
+          <p>Preço:</p>
+        </div>
+    
+        <div class="clr-col-9">
+          <p><strong>{{print?.preco}}€</strong></p>
+        </div>
+      </div>
+  
+    <div class="clr-row">
+      <div class="clr-col">
+        <p class="disclaimer signature-field">Declaro que recebi o equipamento em conformidade e concordo com o disposto neste documento em {{print.updatedAt}}</p>
+      </div>
+    </div>
+  </div>
