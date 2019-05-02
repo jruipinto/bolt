@@ -21,11 +21,25 @@ constructor(
     );
     return this.xQuery.getHasCache() ? of() : request$;
   }
-  public create() { }
-  public update() { }
-  public patch() { }
-  public delete() { }
-  public onCreated() { }
-  public onPatched() { }
+  public create(data: object) {
+    this.xStore.add(data);
+    return this.xAPIservice.create(data)
+  }
+  //public update() {}
+  public patch(id: number, data: object) {
+    this.xStore.upsert(id, data);
+    return this.xAPIservice.patch(id, data)
+  }
+  // public delete() { }
+  public onCreated() {
+    return this.xAPIservice.onCreated().pipe(
+      tap(res => this.xStore.upsert(res[0].id, res[0]))
+    );
+  }
+  public onPatched() {
+    return this.xAPIservice.onCreated().pipe(
+      tap(res => this.xStore.upsert(res[0].id, res[0]))
+    );
+  }
 
 }
