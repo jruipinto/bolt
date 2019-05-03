@@ -43,8 +43,8 @@ export class LoginPageComponent implements OnInit {
         this.router.navigate(['/']);
       })
       .catch(err => {
-        console.log('Wrong credentials!', err);
-        alert('As credenciais estão erradas. Corrija ou contacte o administrador.');
+        console.log('Erro:', err);
+        alert('As credenciais estão erradas ou falta internet. Corrija ou contacte o administrador.');
       });
 
   }

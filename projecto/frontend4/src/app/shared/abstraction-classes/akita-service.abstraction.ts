@@ -23,12 +23,12 @@ constructor(
   }
   public create(data: object) {
     this.xStore.add(data);
-    return this.xAPIservice.create(data)
+    return this.xAPIservice.create(data);
   }
-  //public update() {}
+  // public update() {}
   public patch(id: number, data: object) {
     this.xStore.upsert(id, data);
-    return this.xAPIservice.patch(id, data)
+    return this.xAPIservice.patch(id, data);
   }
   // public delete() { }
   public onCreated() {
