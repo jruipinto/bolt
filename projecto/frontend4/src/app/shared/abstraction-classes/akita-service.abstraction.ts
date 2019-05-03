@@ -17,7 +17,7 @@ constructor(
   }
   public get(id: number) {
     const request$ = this.xAPIservice.get(id).pipe(
-      tap(res => this.xStore.upsert(res[0].id, res[0]))
+      tap(res => this.xStore.upsertMany(res))
     );
     return this.xQuery.getHasCache() ? of() : request$;
   }
