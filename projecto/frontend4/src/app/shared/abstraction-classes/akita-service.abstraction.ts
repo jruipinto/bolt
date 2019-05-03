@@ -13,7 +13,7 @@ constructor(
     const request$ = this.xAPIservice.find(query).pipe(
       tap(res => this.xStore.upsertMany(res))
     );
-    return this.xQuery.getHasCache() ? of() : request$;
+    return request$;
   }
   public get(id: number) {
     const request$ = this.xAPIservice.get(id).pipe(
