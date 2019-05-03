@@ -1,4 +1,4 @@
-import { of } from 'rxjs';
+import { of, concat } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { EntityStore, QueryEntity } from '@datorama/akita';
 import { EntitiesApiAbstrationService } from './entities-api-abstration.service';
@@ -11,7 +11,7 @@ constructor(
 
   public find(query?: object) {
     const request$ = this.xAPIservice.find(query).pipe(
-      tap(res => this.xStore.set(res))
+      tap(res => this.xStore.upsertMany(res))
     );
     return this.xQuery.getHasCache() ? of() : request$;
   }
@@ -33,12 +33,20 @@ constructor(
   // public delete() { }
   public onCreated() {
     return this.xAPIservice.onCreated().pipe(
-      tap(res => this.xStore.upsert(res[0].id, res[0]))
+      tap(res => this.xStore.upsertMany(res))
     );
   }
   public onPatched() {
     return this.xAPIservice.onCreated().pipe(
-      tap(res => this.xStore.upsert(res[0].id, res[0]))
+      tap(res => this.xStore.upsertMany(res))
+    );
+  }
+
+  public findAndWatch(query?: object) {
+    return concat(
+      this.find(query),
+      this.onCreated(),
+      this.onPatched()
     );
   }
 
