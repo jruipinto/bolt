@@ -22,6 +22,9 @@ constructor(
     return this.xQuery.getHasCache() ? of() : request$;
   }
   public create(data: object) {
+    // este nao é recomendado usar porque
+    // convem criar a assistencia na db mesmo
+    // para a db lhe atribuir uma ID
     this.xStore.add(data);
     return this.xAPIservice.create(data);
   }
