@@ -9,6 +9,8 @@ import {
 } from './assistencia-modal.state';
 import { Assistencia } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
+import { UIService, UI } from 'src/app/shared/rstate/ui.service';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -20,8 +22,16 @@ export class AssistenciaModalComponent implements OnInit {
   @Select(AssistenciaModalState)
   public modalState$: Observable<AssistenciaModalStateModel>;
 
-  constructor(private store: Store, private printService: PrintService) {
+  constructor(
+    private store: Store,
+    private printService: PrintService,
+    private uiService: UIService) {
   }
+
+  public modalVisible$: Observable<boolean> = this.uiService.state$
+    .pipe(
+      map((uiState: UI) => uiState.modals.assistenciaModal.visible)
+    )
 
   ngOnInit() {
   }

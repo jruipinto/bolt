@@ -1,45 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Store, Select } from '@ngxs/store';
-import {
-  PainelRapidoPageFindEncomendas, PainelRapidoPageState,
-  PainelRapidoPageStateModel, PainelRapidoPageFindOrcamentos,
-  PainelRapidoPageFindPedidosContactoCliente
-} from './painel-rapido-page.state';
+import { map } from 'rxjs/operators';
+import { Store} from '@ngxs/store';
 import { AssistenciaModalGetAssistencia } from 'src/app/pages/dashboard-page/modals/assistencia-modal';
-import { Encomenda, Assistencia } from 'src/app/shared';
+import { Encomenda, Assistencia } from 'src/app/shared/models';
+import { AssistenciasService } from 'src/app/shared/rstate/assistencias.service';
 
 
 @Component({
   selector: 'app-painel-rapido-page',
   templateUrl: './painel-rapido-page.component.html',
-  styleUrls: ['./painel-rapido-page.component.scss']
+  styleUrls: ['./painel-rapido-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PainelRapidoPageComponent implements OnInit {
 
-  @Select(PainelRapidoPageState)
-  public painelRapidoPageState$: Observable<PainelRapidoPageStateModel>;
-  public encomendas: Encomenda[];
-  public orcamentos: Partial<Assistencia[]>;
-  public pedidosContactoCliente: Partial<Assistencia[]>;
+  constructor(private store: Store, private assistencias: AssistenciasService) { }
 
-  constructor(private store: Store) { }
+  public encomendas$: Observable<Encomenda[]>;
+  public orcamentos$: Observable<Partial<Assistencia[]>> = this.assistencias.state$
+    .pipe(
+      map(state =>
+        state
+          ? state.filter(assistencia => assistencia.estado === 'orçamento pendente')
+          : null
+      )
+    );
+  public pedidosContactoCliente$: Observable<Partial<Assistencia[]>> = this.assistencias.state$
+    .pipe(
+      map(state =>
+        state
+          ? state.filter(assistencia => assistencia.estado === 'contacto pendente')
+          : null
+      )
+    );
 
   ngOnInit() {
-    this.store.dispatch([
-      new PainelRapidoPageFindEncomendas,
-      new PainelRapidoPageFindOrcamentos,
-      new PainelRapidoPageFindPedidosContactoCliente])
-      .subscribe(() =>
-        this.painelRapidoPageState$
-          .subscribe(
-            painelRapidoPageState => {
-              this.encomendas = painelRapidoPageState.encomendas;
-              this.orcamentos = painelRapidoPageState.orcamentos;
-              this.pedidosContactoCliente = painelRapidoPageState.pedidosContactoCliente;
-            }
-          )
-      );
+    this.assistencias
+      .findAndWatch()
+      .subscribe();
   }
 
   openAssistencia(id: number): void {
