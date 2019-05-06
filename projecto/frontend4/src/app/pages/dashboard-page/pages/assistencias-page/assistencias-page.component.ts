@@ -55,7 +55,7 @@ export class AssistenciasPageComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new AssistenciasPageFindAssistencias());
-    this.assistencias.findAndWatch();
+    this.assistencias.findAndWatch().subscribe();
   }
 
   openModal(id: number): void {
