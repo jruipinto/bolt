@@ -7,6 +7,7 @@ import {
   AssistenciasPageFindAssistencias
 } from './assistencias-page.state';
 import { AssistenciaModalGetAssistencia } from '../../modals/assistencia-modal';
+import { AssistenciasService } from 'src/app/shared/rstate/assistencias.service';
 
 @Component({
   selector: 'app-assistencias-page',
@@ -47,12 +48,14 @@ export class AssistenciasPageComponent implements OnInit {
     )
   );
 
-
-  constructor(private store: Store) {
+  constructor(private store: Store, private assistencias: AssistenciasService) {
   }
+
+  public assistencias$ = this.assistencias.state$;
 
   ngOnInit() {
     this.store.dispatch(new AssistenciasPageFindAssistencias());
+    this.assistencias.findAndWatch();
   }
 
   openModal(id: number): void {

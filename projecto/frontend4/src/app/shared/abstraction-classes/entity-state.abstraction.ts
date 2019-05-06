@@ -1,18 +1,15 @@
 import { of, concat, BehaviorSubject } from 'rxjs';
 import { map, tap, concatMap, switchMap } from 'rxjs/operators';
 import { unionBy } from 'lodash';
-import { EntityStore, QueryEntity } from '@datorama/akita';
 import { EntitiesApiAbstrationService } from './entities-api-abstration.service';
 
 export abstract class EntityStateAbstraction {
   private default = null;
   private source = new BehaviorSubject<any[]>(this.default);
-  private state$ = this.source.asObservable();
+  public state$ = this.source.asObservable();
 
   constructor(
-    private xAPIservice: EntitiesApiAbstrationService,
-    private xStore: EntityStore<any, any, any>,
-    private xQuery: QueryEntity<any, any>) { }
+    private xAPIservice: EntitiesApiAbstrationService) { }
 
   public find(query?: object) {
     return this.state$
