@@ -30,35 +30,45 @@ export abstract class EntityStateAbstraction {
         ));
   }
   public get(id: number) {
-    const dbGetAndStore$ = state => this.xAPIservice.get(id)
+    const dbGetAndSave$ = state => this.xAPIservice.get(id)
     .pipe(tap( e => this.source.next([...state, e])));
 
     return this.state$.pipe(
       map( state => [...state.filter(item  => item.id === id)]),
-      switchMap( state => (state[0] ? of(state) : dbGetAndStore$(state)) )
+      switchMap( state => (state[0] ? of(state) : dbGetAndSave$(state)) )
     );
   }
   public create(data: object) {
-    // este nao é recomendado usar porque
-    // convem criar a assistencia na db mesmo
-    // para a db lhe atribuir uma ID
-    this.xStore.add(data);
-    return this.xAPIservice.create(data);
+    // get state => create new item in api => set state + newItem
+    return this.state$.pipe(
+      concatMap(state => this.xAPIservice.create(data).pipe(
+        tap(newItem => this.source.next([...state, newItem]))
+      ))
+    );
   }
   // public update() {}
   public patch(id: number, data: object) {
-    this.xStore.upsert(id, data);
-    return this.xAPIservice.patch(id, data);
+    // get state => set state + data => send patch data to api
+    return this.state$.pipe(
+      tap( state  => this.source.next(unionBy([data], state))),
+      concatMap( () => this.xAPIservice.patch(id, data))
+    );
   }
   // public delete() { }
   public onCreated() {
+    // receive item from api => get state => set state + receivedItem
     return this.xAPIservice.onCreated().pipe(
-      tap(res => this.xStore.upsertMany(res))
+      concatMap( receivedItem => this.state$.pipe(
+        tap( state => this.source.next([...state, receivedItem]))
+      ))
     );
   }
   public onPatched() {
+    // receive item from api => get state => set state + receivedItem
     return this.xAPIservice.onCreated().pipe(
-      tap(res => this.xStore.upsertMany(res))
+      concatMap( receivedItem => this.state$.pipe(
+        tap( state => this.source.next(unionBy(receivedItem, state)))
+      ))
     );
   }
 
