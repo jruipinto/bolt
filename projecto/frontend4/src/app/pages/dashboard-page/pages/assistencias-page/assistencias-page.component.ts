@@ -11,7 +11,7 @@ import { AssistenciasService } from 'src/app/shared/rstate/assistencias.service'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssistenciasPageComponent implements OnInit {
-  
+
   constructor(private store: Store, private assistencias: AssistenciasService) {
   }
 

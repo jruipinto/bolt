@@ -5,12 +5,13 @@ export interface UI {
     modals: {
         assistenciaModal: {
             visible: boolean;
+            assistenciaID: number;
         }
         artigosCriarNovo: {
             visible: boolean;
         }
-    }
-    pages: {}
+    };
+    pages: {};
     prints: {
         assistenciaEntradaPrint: {
             visible: boolean;
@@ -18,15 +19,15 @@ export interface UI {
         assistenciaSaidaPrint: {
             visible: boolean;
         }
-    }
-    
+    };
+
 }
 
 @Injectable({ providedIn: 'root' })
 export class UIService extends UIStateAbstraction {
 
   constructor() {
-      super()
+      super();
   }
 
 }

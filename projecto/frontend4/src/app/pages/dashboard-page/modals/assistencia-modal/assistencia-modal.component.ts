@@ -10,7 +10,8 @@ import {
 import { Assistencia } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 import { UIService, UI } from 'src/app/shared/rstate/ui.service';
-import { map } from 'rxjs/operators';
+import { map, concatMap, tap } from 'rxjs/operators';
+import { AssistenciasService } from 'src/app/shared/rstate/assistencias.service';
 
 
 @Component({
@@ -25,19 +26,48 @@ export class AssistenciaModalComponent implements OnInit {
   constructor(
     private store: Store,
     private printService: PrintService,
-    private uiService: UIService) {
+    private uiService: UIService,
+    private assistencias: AssistenciasService) {
   }
 
-  public modalVisible$: Observable<boolean> = this.uiService.state$
+  public assistencia$ = this.uiService.state$
     .pipe(
-      map((uiState: UI) => uiState.modals.assistenciaModal.visible)
-    )
+      concatMap((uiState: UI) => this.assistencias.state$
+        .pipe(
+          map((assistencias: Assistencia[]) => assistencias[uiState.modals.assistenciaModal.assistenciaID])
+        ))
+    );
 
   ngOnInit() {
+    this.uiService.state$
+      .pipe(
+        concatMap((uiState: UI) => this.assistencias.get(uiState.modals.assistenciaModal.assistenciaID))
+      )
+      .subscribe();
   }
 
   closeModal(modalIsOpen: boolean) {
-    if (modalIsOpen) { this.store.dispatch(new AssistenciaModalClose()); }
+    if (modalIsOpen) {
+      // this.store.dispatch(new AssistenciaModalClose());
+      this.uiService.state$
+        .pipe(
+          tap((uiState: UI) =>
+            this.uiService.source.next(
+              {
+                ...uiState,
+                ...{
+                  ...uiState.modals,
+                  ...{
+                    ...uiState.modals.assistenciaModal,
+                    ...{ visible: false }
+                  }
+                }
+              }
+            )
+          )
+        )
+        .subscribe();
+    }
   }
 
   saveModal(newEstado: string, assistencia: Assistencia) {
