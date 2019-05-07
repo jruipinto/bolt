@@ -23,11 +23,33 @@ export interface UI {
 
 }
 
+const defaultUI: UI = {
+    modals: {
+        assistenciaModal: {
+            visible: false,
+            assistenciaID: null,
+        },
+        artigosCriarNovo: {
+            visible: false
+        }
+    },
+    pages: {},
+    prints: {
+        assistenciaEntradaPrint: {
+            visible: false
+        },
+        assistenciaSaidaPrint: {
+            visible: false
+        }
+    }
+
+}
+
 @Injectable({ providedIn: 'root' })
 export class UIService extends UIStateAbstraction {
 
   constructor() {
-      super();
+      super(defaultUI);
   }
 
 }

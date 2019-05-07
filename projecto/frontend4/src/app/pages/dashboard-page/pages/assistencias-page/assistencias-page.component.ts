@@ -1,8 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { Store } from '@ngxs/store';
-import { AssistenciaModalGetAssistencia } from '../../modals/assistencia-modal';
+import { map, tap } from 'rxjs/operators';
 import { AssistenciasService } from 'src/app/shared/rstate/assistencias.service';
+import { UIService, UI } from 'src/app/shared/rstate/ui.service';
 
 @Component({
   selector: 'app-assistencias-page',
@@ -12,7 +11,9 @@ import { AssistenciasService } from 'src/app/shared/rstate/assistencias.service'
 })
 export class AssistenciasPageComponent implements OnInit {
 
-  constructor(private store: Store, private assistencias: AssistenciasService) {
+  constructor(
+    private assistencias: AssistenciasService,
+    private uiService: UIService) {
   }
 
   public assistencias$ = this.assistencias.state$
@@ -33,7 +34,28 @@ export class AssistenciasPageComponent implements OnInit {
   }
 
   openModal(id: number): void {
-    this.store.dispatch(new AssistenciaModalGetAssistencia(id));
+    this.uiService.state$
+      .pipe(
+        tap((uiState: UI) =>
+          this.uiService.source.next(
+            {
+              ...uiState,
+              ...{
+                ...uiState.modals,
+                ...{
+                  ...uiState.modals.assistenciaModal,
+                  ...{
+                    visible: true,
+                    assistenciaID: id
+                  }
+                }
+              }
+            }
+          )
+        )
+      )
+      .subscribe();
+
   }
 
 }
