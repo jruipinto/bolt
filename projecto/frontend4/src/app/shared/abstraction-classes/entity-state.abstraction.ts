@@ -1,5 +1,5 @@
 import { of, concat, BehaviorSubject } from 'rxjs';
-import { map, tap, concatMap, switchMap } from 'rxjs/operators';
+import { map, tap, concatMap, switchMap, first } from 'rxjs/operators';
 import { unionBy } from 'lodash';
 import { EntitiesApiAbstrationService } from './entities-api-abstration.service';
 
@@ -14,6 +14,7 @@ export abstract class EntityStateAbstraction {
   public find(query?: object) {
     return this.state$
       .pipe(
+        first(),
         concatMap(state =>
           this.xAPIservice.find(query)
             .pipe(
@@ -28,16 +29,18 @@ export abstract class EntityStateAbstraction {
   }
   public get(id: number) {
     const dbGetAndSave$ = state => this.xAPIservice.get(id)
-    .pipe(tap( e => this.source.next([...state, e])));
+      .pipe( tap(e => this.source.next([...state, e])));
 
     return this.state$.pipe(
-      map( state => [...state.filter(item  => item.id === id)]),
-      switchMap( state => (state[0] ? of(state) : dbGetAndSave$(state)) )
+      first(),
+      map(state => [...state.filter(item => item.id === id)]),
+      switchMap(state => (state[0] ? of(state) : dbGetAndSave$(state)))
     );
   }
   public create(data: object) {
     // get state => create new item in api => set state + newItem
     return this.state$.pipe(
+      first(),
       concatMap(state => this.xAPIservice.create(data).pipe(
         tap(newItem => this.source.next([...state, newItem]))
       ))
@@ -47,24 +50,27 @@ export abstract class EntityStateAbstraction {
   public patch(id: number, data: object) {
     // get state => set state + data => send patch data to api
     return this.state$.pipe(
-      tap( state  => this.source.next(unionBy([data], state))),
-      concatMap( () => this.xAPIservice.patch(id, data))
+      first(),
+      tap(state => this.source.next(unionBy([data], state))),
+      concatMap(() => this.xAPIservice.patch(id, data))
     );
   }
   // public delete() { }
   public onCreated() {
     // receive item from api => get state => set state + receivedItem
     return this.xAPIservice.onCreated().pipe(
-      concatMap( receivedItem => this.state$.pipe(
-        tap( state => this.source.next([...state, receivedItem]))
+      concatMap(receivedItem => this.state$.pipe(
+        first(),
+        tap(state => this.source.next([...state, receivedItem]))
       ))
     );
   }
   public onPatched() {
     // receive item from api => get state => set state + receivedItem
     return this.xAPIservice.onCreated().pipe(
-      concatMap( receivedItem => this.state$.pipe(
-        tap( state => this.source.next(unionBy(receivedItem, state)))
+      concatMap(receivedItem => this.state$.pipe(
+        first(),
+        tap(state => this.source.next(unionBy(receivedItem, state)))
       ))
     );
   }

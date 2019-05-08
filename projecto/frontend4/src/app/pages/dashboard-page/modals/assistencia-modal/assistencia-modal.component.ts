@@ -10,7 +10,7 @@ import {
 import { Assistencia } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 import { UIService, UI } from 'src/app/shared/rstate/ui.service';
-import { map, concatMap, tap } from 'rxjs/operators';
+import { map, concatMap, tap, first } from 'rxjs/operators';
 import { AssistenciasService } from 'src/app/shared/rstate/assistencias.service';
 
 
@@ -34,7 +34,11 @@ export class AssistenciaModalComponent implements OnInit {
     .pipe(
       concatMap((uiState: UI) => this.assistencias.state$
         .pipe(
-          map((assistencias: Assistencia[]) => assistencias[uiState.assistenciaModalID])
+          map((assistencias: Assistencia[]) =>
+            assistencias.filter((assistencia: Assistencia) =>
+              assistencia.id == uiState.assistenciaModalID)
+          ),
+          map((assistencias: Assistencia[]) => assistencias[0])
         ))
     );
 
@@ -48,9 +52,9 @@ export class AssistenciaModalComponent implements OnInit {
 
   closeModal(modalIsOpen: boolean) {
     if (modalIsOpen) {
-      // this.store.dispatch(new AssistenciaModalClose());
       this.uiService.state$
         .pipe(
+          first(),
           tap((uiState: UI) =>
             this.uiService.source.next({ ...uiState, assistenciaModalVisible: false })
           )

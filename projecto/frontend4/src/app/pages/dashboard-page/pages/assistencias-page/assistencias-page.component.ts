@@ -41,11 +41,9 @@ export class AssistenciasPageComponent implements OnInit {
     this.uiService.state$
       .pipe(
         first(),
-        tap((uiState: UI) => {
-          console.log(uiState);
-          this.uiService.source.next({ ...uiState, ...{ assistenciaModalID: id, assistenciaModalvisible: true } });
-          console.log(uiState);
-        })
+        tap((uiState: UI) => 
+          this.uiService.source.next({ ...uiState, ...{ assistenciaModalID: id, assistenciaModalVisible: true } })
+        )
       )
       .subscribe();
   }
