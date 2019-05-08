@@ -34,14 +34,14 @@ export class AssistenciaModalComponent implements OnInit {
     .pipe(
       concatMap((uiState: UI) => this.assistencias.state$
         .pipe(
-          map((assistencias: Assistencia[]) => assistencias[uiState.modals.assistenciaModal.assistenciaID])
+          map((assistencias: Assistencia[]) => assistencias[uiState.assistenciaModalID])
         ))
     );
 
   ngOnInit() {
     this.uiService.state$
       .pipe(
-        concatMap((uiState: UI) => this.assistencias.get(uiState.modals.assistenciaModal.assistenciaID))
+        concatMap((uiState: UI) => this.assistencias.get(uiState.assistenciaModalID))
       )
       .subscribe();
   }
@@ -52,18 +52,7 @@ export class AssistenciaModalComponent implements OnInit {
       this.uiService.state$
         .pipe(
           tap((uiState: UI) =>
-            this.uiService.source.next(
-              {
-                ...uiState,
-                ...{
-                  ...uiState.modals,
-                  ...{
-                    ...uiState.modals.assistenciaModal,
-                    ...{ visible: false }
-                  }
-                }
-              }
-            )
+            this.uiService.source.next({ ...uiState, assistenciaModalVisible: false })
           )
         )
         .subscribe();

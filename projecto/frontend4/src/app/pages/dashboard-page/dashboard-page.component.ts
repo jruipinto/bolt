@@ -17,7 +17,7 @@ export class DashboardPageComponent implements OnInit {
 
   public assistenciaModalVisible$: Observable<boolean> = this.uiService.state$
   .pipe(
-    map((uiState: UI) => uiState ? uiState.modals.assistenciaModal.visible : false)
+    map((uiState: UI) => uiState.assistenciaModalVisible)
   );
 
   ngOnInit() {
