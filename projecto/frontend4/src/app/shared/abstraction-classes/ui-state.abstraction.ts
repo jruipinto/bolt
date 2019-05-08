@@ -1,9 +1,10 @@
 import { BehaviorSubject } from 'rxjs';
 
 export abstract class UIStateAbstraction {
-  public source = new BehaviorSubject<any>(this.defaultState);
+  private default = null;
+  public source = new BehaviorSubject<any>(this.default);
   public state$ = this.source.asObservable();
 
-  constructor(private defaultState) { }
+  constructor() { }
 
 }
