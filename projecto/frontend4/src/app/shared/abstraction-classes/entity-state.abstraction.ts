@@ -51,7 +51,7 @@ export abstract class EntityStateAbstraction {
     // get state => set state + data => send patch data to api
     return this.state$.pipe(
       first(),
-      tap(state => this.source.next(unionBy([data], state))),
+      tap(state => this.source.next(unionBy([data], state, 'id'))),
       concatMap(() => this.xAPIservice.patch(id, data))
     );
   }
@@ -59,6 +59,7 @@ export abstract class EntityStateAbstraction {
   public onCreated() {
     // receive item from api => get state => set state + receivedItem
     return this.xAPIservice.onCreated().pipe(
+      tap(console.log),
       concatMap(receivedItem => this.state$.pipe(
         first(),
         tap(state => this.source.next([...state, receivedItem]))
@@ -68,6 +69,7 @@ export abstract class EntityStateAbstraction {
   public onPatched() {
     // receive item from api => get state => set state + receivedItem
     return this.xAPIservice.onCreated().pipe(
+      tap(console.log),
       concatMap(receivedItem => this.state$.pipe(
         first(),
         tap(state => this.source.next(unionBy(receivedItem, state)))
