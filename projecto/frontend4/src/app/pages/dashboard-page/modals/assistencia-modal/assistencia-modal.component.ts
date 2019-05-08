@@ -67,10 +67,24 @@ export class AssistenciaModalComponent implements OnInit {
     if (newEstado === 'entregue' && assistencia.estado !== 'concluído') {
       alert('Primeiro tens de concluir a assistencia!');
     } else {
-      this.store.dispatch(new AssistenciaModalPostAssistencia({ ...assistencia, estado: newEstado }))
+      /*this.store.dispatch(new AssistenciaModalPostAssistencia({ ...assistencia, estado: newEstado }))
         .subscribe(() => {
           if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
-        });
+        });*/
+      this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado })
+        .pipe(
+          concatMap(() =>
+            this.uiService.state$
+              .pipe(
+                first(),
+                tap((uiState: UI) => this.uiService.source.next({ ...uiState, assistenciaModalVisible: false }))
+              )
+          ),
+          tap(() => {
+            if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
+          })
+        )
+        .subscribe();
     }
   }
 
