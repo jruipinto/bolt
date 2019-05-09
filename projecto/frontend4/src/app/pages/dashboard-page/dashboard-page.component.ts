@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { UI, UIService } from 'src/app/shared/rstate/ui.service';
+import { map} from 'rxjs/operators';
+import { UI, UIService } from 'src/app/shared/state';
 
 @Component({
   selector: 'app-dashboard-page',

@@ -9,9 +9,9 @@ import {
 } from './assistencia-modal.state';
 import { Assistencia } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
-import { UIService, UI } from 'src/app/shared/rstate/ui.service';
+import { UIService, UI } from 'src/app/shared/state/ui.service';
 import { map, concatMap, tap, first } from 'rxjs/operators';
-import { AssistenciasService } from 'src/app/shared/rstate/assistencias.service';
+import { AssistenciasService } from 'src/app/shared/state';
 
 
 @Component({
@@ -36,7 +36,7 @@ export class AssistenciaModalComponent implements OnInit {
         .pipe(
           map((assistencias: Assistencia[]) =>
             assistencias.filter((assistencia: Assistencia) =>
-              assistencia.id == uiState.assistenciaModalID)
+              assistencia.id === uiState.assistenciaModalID)
           ),
           map((assistencias: Assistencia[]) => assistencias[0])
         ))

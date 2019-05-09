@@ -9,7 +9,7 @@ export interface UI {
   // prints
 }
 
-export const defaults: UI = {
+const defaults: UI = {
   assistenciaModalVisible: false,
   assistenciaModalID: null
 };

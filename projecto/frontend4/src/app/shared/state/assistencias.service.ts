@@ -5,8 +5,7 @@ import { EntityStateAbstraction } from 'src/app/shared/abstraction-classes';
 @Injectable({ providedIn: 'root' })
 export class AssistenciasService extends EntityStateAbstraction {
 
-  constructor(
-    private assistenciasAPI: AssistenciasApiService) {
+  constructor(protected assistenciasAPI: AssistenciasApiService) {
       super(assistenciasAPI);
     }
 

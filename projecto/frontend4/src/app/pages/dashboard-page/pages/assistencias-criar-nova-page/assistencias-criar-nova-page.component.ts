@@ -3,7 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Observable} from 'rxjs';
 import { tap, concatMap } from 'rxjs/operators';
 
-import { AssistenciasApiService, UsersApiService, AuthService } from 'src/app/shared/services';
+import { AuthService } from 'src/app/shared/services';
+import { AssistenciasService, UsersService } from 'src/app/shared/state';
 import { PrintService } from 'src/app/pages/dashboard-page/prints';
 import { User, Assistencia } from 'src/app/shared/models';
 import { capitalize } from 'src/app/shared/utilities';
@@ -52,12 +53,12 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
 
     )
   );
-  private usersAPI$ = (contacto: number) => this.usersApiService.find({ query: { contacto } }) as Observable<User[]>;
+  private usersAPI$ = (contacto: number) => this.usersService.find({ query: { contacto } }) as Observable<User[]>;
 
 
   constructor(private fb: FormBuilder,
-    private usersApiService: UsersApiService,
-    private assistenciasApiService: AssistenciasApiService,
+    private usersService: UsersService,
+    private assistenciasService: AssistenciasService,
     private authService: AuthService,
     private printService: PrintService) { }
 
@@ -89,15 +90,15 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     };
     const assistenciasAPI = {
       create$: (data: Partial<Assistencia>) =>
-        this.assistenciasApiService.create(data).pipe(
+        this.assistenciasService.create(data).pipe(
           tap(() => {
             this.criarNovaForm.reset();
             // you can open print service here!
           }))
     };
     const usersAPI = {
-      create$: (data: Partial<User>) => this.usersApiService.create(data),
-      patch$: (id: number, data: Partial<User>) => this.usersApiService.patch(id, data)
+      create$: (data: Partial<User>) => this.usersService.create(data),
+      patch$: (id: number, data: Partial<User>) => this.usersService.patch(id, data)
     };
     const success = (response: Assistencia[]) => this.printService.printAssistenciaEntrada(response[0]);
     const error = err => {
