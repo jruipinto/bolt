@@ -20,17 +20,17 @@ import { capitalize } from 'src/app/shared/utilities';
 })
 export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
   /* Declaration of the 3 Forms on the UI */
-  private contactoClienteForm = this.fb.group({
+  public contactoClienteForm = this.fb.group({
     contacto: [null, Validators.min(200000000)] // por exemplo, contacto: 255486001
   });
-  private clienteForm = this.fb.group({
+  public clienteForm = this.fb.group({
     nome: [null, [Validators.required, Validators.minLength(3)]],
     email: [''],
     endereço: [''],
     nif: [''],
     id: [null]
   });
-  private criarNovaForm = this.fb.group({
+  public criarNovaForm = this.fb.group({
     categoria: ['', Validators.required],
     marca: [''],
     modelo: [''],
