@@ -1,10 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { tap, concatMap } from 'rxjs/operators';
 
 import { AuthService } from 'src/app/shared/services';
-import { AssistenciasService, UsersService } from 'src/app/shared/state';
+import { AssistenciasService, UsersService, UIService, UI } from 'src/app/shared/state';
 import { PrintService } from 'src/app/pages/dashboard-page/prints';
 import { User, Assistencia } from 'src/app/shared/models';
 import { capitalize } from 'src/app/shared/utilities';
@@ -18,7 +18,7 @@ import { capitalize } from 'src/app/shared/utilities';
   styleUrls: ['./assistencias-criar-nova-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AssistenciasCriarNovaPageComponent implements OnInit {
+export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
   /* Declaration of the 3 Forms on the UI */
   private contactoClienteForm = this.fb.group({
     contacto: [null, Validators.min(200000000)] // por exemplo, contacto: 255486001
@@ -49,14 +49,14 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
           this.clienteForm.reset();
         }
       })
-    )
-
-    )
+    ))
   );
   private usersAPI$ = (contacto: number) => this.usersService.find({ query: { contacto } }) as Observable<User[]>;
 
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
+    private uiService: UIService,
     private usersService: UsersService,
     private assistenciasService: AssistenciasService,
     private authService: AuthService,
@@ -64,6 +64,24 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
 
   ngOnInit() {
     this.clienteChange$.subscribe();
+    this.uiService.state$
+      .pipe(
+        tap((state: UI) => {
+          this.contactoClienteForm.patchValue(state.assistenciasCriarNovaPageContactoClienteForm);
+          this.clienteForm.patchValue(state.assistenciasCriarNovaPageClienteForm);
+          this.criarNovaForm.patchValue(state.assistenciasCriarNovaPageCriarNovaForm);
+        })
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy() {
+    this.uiService.patchState({
+      assistenciasCriarNovaPageContactoClienteForm: this.contactoClienteForm.value,
+      assistenciasCriarNovaPageClienteForm: this.clienteForm.value,
+      assistenciasCriarNovaPageCriarNovaForm: this.criarNovaForm
+    })
+    .subscribe();
   }
 
   onSubmit() {
@@ -75,10 +93,10 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     const updatedAt = new Date().toLocaleString();
     const processedCriarNovaForm = {
       ...this.criarNovaForm.value,
-      marca: capitalize( this.criarNovaForm.value.marca),
-      modelo: capitalize( this.criarNovaForm.value.modelo),
-      cor: capitalize( this.criarNovaForm.value.cor),
-      problema: capitalize( this.criarNovaForm.value.problema)
+      marca: capitalize(this.criarNovaForm.value.marca),
+      modelo: capitalize(this.criarNovaForm.value.modelo),
+      cor: capitalize(this.criarNovaForm.value.cor),
+      problema: capitalize(this.criarNovaForm.value.problema)
     };
     const assistencia = {
       ...{
@@ -103,16 +121,16 @@ export class AssistenciasCriarNovaPageComponent implements OnInit {
     const success = (response: Assistencia[]) => this.printService.printAssistenciaEntrada(response[0]);
     const error = err => {
       console.log('Falhou a submissão. Chame o Admin.', err);
-      alert ('Falhou a submissão. Chame o Admin. (detalhes: CTRL + SHIFT + I)');
-      };
+      alert('Falhou a submissão. Chame o Admin. (detalhes: CTRL + SHIFT + I)');
+    };
 
     if (this.clienteForm.dirty) {
       cliente.id
-      ? usersAPI.patch$(cliente.id, cliente).pipe(
-        concatMap( () => assistenciasAPI.create$(assistencia))
+        ? usersAPI.patch$(cliente.id, cliente).pipe(
+          concatMap(() => assistenciasAPI.create$(assistencia))
         ).subscribe(success, error)
-      : usersAPI.create$({...cliente, contacto, ...{tipo: 'cliente'} }).pipe(
-        concatMap( newUserArr => assistenciasAPI.create$({...assistencia, ...{cliente_user_id: newUserArr[0].id}}))
+        : usersAPI.create$({ ...cliente, contacto, ...{ tipo: 'cliente' } }).pipe(
+          concatMap(newUserArr => assistenciasAPI.create$({ ...assistencia, ...{ cliente_user_id: newUserArr[0].id } }))
         ).subscribe(success, error);
     } else {
       assistenciasAPI.create$(assistencia).subscribe(success, error);

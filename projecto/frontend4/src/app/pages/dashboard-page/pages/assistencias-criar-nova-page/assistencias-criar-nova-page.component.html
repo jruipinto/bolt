@@ -1,4 +1,4 @@
-<form class="separate clr-form" [formGroup]="contactoClienteForm" ngxsForm="criarNova.contactoClienteForm">
+<form class="separate clr-form" [formGroup]="contactoClienteForm">
   <div class="clr-row">
     <div class="clr-col-md-2">
       <label for="contacto">Contacto:</label>
@@ -10,8 +10,7 @@
   </div>
 </form>
 
-<form class="separate clr-form" [formGroup]="clienteForm" *ngIf="contactoClienteForm.valid"
-  ngxsForm="criarNova.clienteForm">
+<form class="separate clr-form" [formGroup]="clienteForm" *ngIf="contactoClienteForm.valid">
   <div class="clr-row">
     <div class="clr-col-md-2">
       <label for="nome">Nome:</label>
@@ -49,7 +48,7 @@
 
 <div class="separate" *ngIf="clienteForm.statusChanges | async as clientFormStatus">
   <form class="clr-form" [formGroup]="criarNovaForm" *ngIf="contactoClienteForm.valid && clientFormStatus === 'VALID'"
-    ngxsForm="criarNova.criarNovaForm" (ngSubmit)="onSubmit()">
+    (ngSubmit)="onSubmit()">
     <div class="clr-row">
       <div class="clr-col-md-2">
         <label for="categoria">Categoria:</label>

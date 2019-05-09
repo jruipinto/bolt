@@ -7,7 +7,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ClarityModule } from '@clr/angular';
 /* routing & custom modules */
 import { AppRoutingModule } from './app-routing.module';
-import { AppStoreModule } from './app-store.module';
 /* components */
 import { AppComponent } from './app.component';
 import { LoginPageComponent, SignupPageComponent } from './pages';
@@ -24,7 +23,6 @@ import { LoginPageComponent, SignupPageComponent } from './pages';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    AppStoreModule,
     AppRoutingModule,
     ClarityModule
   ],

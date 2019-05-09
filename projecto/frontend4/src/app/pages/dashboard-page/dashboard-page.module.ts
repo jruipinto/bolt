@@ -6,7 +6,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ClarityModule } from '@clr/angular';
 /* routing & custom modules */
 import { DashboardPageRoutingModule } from './dashboard-page-routing.module';
-import { DashboardPageStoreModule } from './dashboard-page-store.module';
 /* components */
 import { DashboardPageComponent } from './dashboard-page.component';
 import {
@@ -31,7 +30,6 @@ import { AssistenciaSaidaPrintComponent } from './prints/assistencia-saida-print
     ReactiveFormsModule,
     FormsModule,
     DashboardPageRoutingModule,
-    DashboardPageStoreModule,
     ClarityModule
   ],
   declarations: [

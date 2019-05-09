@@ -6,12 +6,22 @@ export interface UI {
   assistenciaModalVisible: boolean;
   assistenciaModalID: number;
   // pages
+  assistenciasCriarNovaPageContactoClienteForm: {};
+  assistenciasCriarNovaPageClienteForm: {};
+  assistenciasCriarNovaPageCriarNovaForm: {};
+
   // prints
 }
 
 const defaults: UI = {
+  // modals
   assistenciaModalVisible: false,
-  assistenciaModalID: null
+  assistenciaModalID: null,
+  // pages
+  assistenciasCriarNovaPageContactoClienteForm: {},
+  assistenciasCriarNovaPageClienteForm: {},
+  assistenciasCriarNovaPageCriarNovaForm: {},
+  // prints
 };
 
 @Injectable({ providedIn: 'root' })
