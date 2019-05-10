@@ -23,10 +23,28 @@ module.exports = function (app) {
     observacao: {
       type: Sequelize.TEXT
     },
+    //json, not null
+    registo_cronologico: {
+      type: Sequelize.JSON,
+      allowNull: false
+    },
     //varchar(45), not null
     estado: {
       type: Sequelize.STRING(45),
       allowNull: false
+      /*
+      estados possiveis:
+      registada
+      marcada para ir ao fornecedor
+      adquirida (quando se vai ao fornecedor buscar / = "recebido" mas mais especifico)
+      esgotada (quando não há mas se adivinha que vai haver e fica pendente)
+      sem fornecedor (quando nao se arranja material em lado nenhum)
+      aguarda reposta de fornecedor (quando fornecedor fica de dar uma resposta)
+      aguarda entrega (quando está comprado)
+      recebida
+      detectado defeito (igual a "registada", reinicia o processo + contacto pendente de assistencias + criar nota no todo do card)
+      entregue
+      */
     },
     //date, not null
     previsao_entrega: {

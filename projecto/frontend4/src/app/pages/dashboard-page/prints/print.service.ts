@@ -7,10 +7,10 @@ import { Assistencia } from 'src/app/shared';
 })
 export class PrintService {
   private assistenciaEntradaPrintSource = new BehaviorSubject<Assistencia>(null);
-  public currentAssistenciaEntradaPrint$ = this.assistenciaEntradaPrintSource.asObservable();
+  public currentAssistenciaEntradaPrint$ = this.assistenciaEntradaPrintSource;
 
   private assistenciaSaidaPrintSource = new BehaviorSubject<Assistencia>(null);
-  public currentAssistenciaSaidaPrint$ = this.assistenciaSaidaPrintSource.asObservable();
+  public currentAssistenciaSaidaPrint$ = this.assistenciaSaidaPrintSource;
 
   constructor() { }
 

@@ -11,8 +11,8 @@ module.exports = function (app) {
       type: Sequelize.INTEGER,
       allowNull: false
     },
-    //int, not null
-    tecnico_user_id: {
+    //json, not null
+    registo_cronologico: {
       type: Sequelize.JSON,
       allowNull: false
     },
