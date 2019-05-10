@@ -7,7 +7,7 @@ export abstract class UIStateAbstraction {
   public patchState = (patch) => this.source.pipe(
     first(),
     map( state => this.source.next({...state, ...patch}))
-  );
+  )
 
   constructor(private defaults) { }
 

@@ -1,14 +1,10 @@
-import { Injectable } from '@angular/core';
 import { from, Observable, fromEvent} from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import {  map } from 'rxjs/operators';
 
 import { FeathersService } from 'src/app/shared/services/feathers.service';
 import { reject } from 'q';
 
 
-@Injectable({
-  providedIn: 'root'
-})
 export abstract class EntitiesApiAbstrationService {
   private entityAPI = this.feathersService.service(this.entity);
 
