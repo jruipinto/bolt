@@ -41,7 +41,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
   });
   /*########################################### */
   private clienteChange$ = this.contactoClienteForm.valueChanges.pipe(
-    concatMap(({ contacto }) => this.user$(contacto).pipe(
+    concatMap(({ contacto }) => this.userService$(contacto).pipe(
+      map((users: User[]) => users.filter((user: User) => user.contacto === Number(contacto))),
       tap(clienteArr => {
         if (clienteArr.length > 0) {
           this.clienteForm.patchValue(clienteArr[0]);
@@ -51,11 +52,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
       })
     ))
   );
-  private user$ = (contacto: number) => this.usersService.state$
-    .pipe(
-      map((users: User[]) => users !== null ? users.filter((user: User) => user.contacto === contacto) : [])
-    )
-  // private userService$ = (contacto: number) => this.usersService.find({ query: { contacto } }) as Observable<User[]>;
+
+  private userService$ = (contacto: number) => this.usersService.find({ query: { contacto } }) as Observable<User[]>;
 
 
   constructor(
