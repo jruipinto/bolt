@@ -12,6 +12,7 @@ export abstract class EntitiesApiAbstrationService {
   }
 
   public find(query?: object) {
+    console.log('TCL: EntitiesApiAbstrationService -> publicfind -> query', query);
     const apiResponse$ = from(
       this.entityAPI.find(query)
         .then(apiResponse => apiResponse.data,
@@ -22,6 +23,7 @@ export abstract class EntitiesApiAbstrationService {
   }
 
   public get(id: number) {
+    console.log('TCL: EntitiesApiAbstrationService -> publicget -> id', id);
     const apiResponse$ = from(this.entityAPI.get(id)
       .then(apiResponse => [apiResponse],
         err => console.log('error:', err)
@@ -31,15 +33,17 @@ export abstract class EntitiesApiAbstrationService {
   }
 
   public create(data: object, actionType?: string) {
+    console.log('TCL: EntitiesApiAbstrationService -> publiccreate -> data', data);
     const apiResponse$ = from(this.entityAPI.create(data)
       .then(apiResponse => [apiResponse],
-        err => reject(err)
+        err => console.log('error:', err)
       ));
     // console.log(actionType);
     return apiResponse$ as Observable<any[]>;
   }
 
   public patch(id: number, data: object, actionType?: string) {
+    console.log('TCL: EntitiesApiAbstrationService -> publicpatch -> data', data);
     const apiResponse$ = from(this.entityAPI.patch(id, data)
       .then(apiResponse => [apiResponse],
         err => console.log('error:', err)

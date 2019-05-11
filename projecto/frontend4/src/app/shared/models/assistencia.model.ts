@@ -3,7 +3,7 @@ export interface Assistencia {
     cliente_user_id: number;
     cliente_user_name?: string;
     cliente_user_contacto?: number;
-    registo_cronologico: string; // JSON.stringify(data: EventoCronologico[])
+    registo_cronologico: EventoCronologico[]; // JSON.stringify(data: EventoCronologico[])
     categoria: string;
     marca: string;
     modelo: string;
