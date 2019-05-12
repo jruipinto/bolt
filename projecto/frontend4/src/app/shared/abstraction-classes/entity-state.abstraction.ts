@@ -4,7 +4,7 @@ import { unionBy } from 'lodash';
 import { EntitiesApiAbstrationService } from './entities-api-abstration.service';
 
 export abstract class EntityStateAbstraction {
-  private defaults = null;
+  private defaults = [];
   private source = new BehaviorSubject<any[]>(this.defaults);
   public state$ = this.source;
 
