@@ -18,3 +18,7 @@ export function capitalize(param: {} | string) {
   }
   return acc;
 }
+
+export function sortByID(list: any[]) {
+  return list.sort((a, b) => (a.id > b.id) ? 1 : -1);
+}
