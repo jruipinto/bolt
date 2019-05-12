@@ -10,13 +10,13 @@ import { DataService } from 'src/app/shared';
 })
 export class SignupPageComponent implements OnInit {
   signupForm = this.fb.group({
-    nome: ['', Validators.required],
-    contacto: ['', [Validators.required, Validators.min(200000000), Validators.max(999999999999)]],
-    email: [''],
-    password: [''],
-    endereco: [null],
+    nome: [null, Validators.required],
+    contacto: [null, [Validators.required, Validators.min(200000000), Validators.max(999999999999)]],
+    email: [null],
+    password: [null],
+    endereço: [null],
     nif: [null],
-    tipo: ['', Validators.required]
+    tipo: [null, Validators.required]
   });
 
   constructor(private fb: FormBuilder, private dataService: DataService) { }
@@ -25,7 +25,7 @@ export class SignupPageComponent implements OnInit {
   }
 
   onSubmit() {
-    // this.dataService.create$('users', {nome, contacto, email, password, endereco, nif, tipo});
+    // this.dataService.create$('users', {nome, contacto, email, password, endereço, nif, tipo});
     this.dataService.create$('users', this.signupForm.value);
   }
 

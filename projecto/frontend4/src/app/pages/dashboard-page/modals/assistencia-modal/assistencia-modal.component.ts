@@ -1,22 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { map, concatMap, tap, first } from 'rxjs/operators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 import { Assistencia } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 import { UIService, UI } from 'src/app/shared/state/ui.service';
-import { map, concatMap, tap, first } from 'rxjs/operators';
 import { AssistenciasService } from 'src/app/shared/state';
-import { AuthService } from 'src/app/shared';
 
 
+@AutoUnsubscribe()
 @Component({
   selector: 'app-assistencia-modal',
   templateUrl: './assistencia-modal.component.html',
   styleUrls: ['./assistencia-modal.component.scss']
 })
-export class AssistenciaModalComponent implements OnInit {
+export class AssistenciaModalComponent implements OnInit, OnDestroy {
 
   constructor(
-    private authService: AuthService,
     private printService: PrintService,
     private uiService: UIService,
     private assistencias: AssistenciasService) {
@@ -41,6 +41,8 @@ export class AssistenciaModalComponent implements OnInit {
       )
       .subscribe();
   }
+
+  ngOnDestroy() { }
 
   closeModal(modalIsOpen: boolean) {
     if (modalIsOpen) {

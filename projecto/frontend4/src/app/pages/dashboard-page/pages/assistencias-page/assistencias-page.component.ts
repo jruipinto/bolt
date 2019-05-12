@@ -1,14 +1,16 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { map, tap, first } from 'rxjs/operators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { UIService, UI, AssistenciasService } from 'src/app/shared/state';
 
+@AutoUnsubscribe()
 @Component({
   selector: 'app-assistencias-page',
   templateUrl: './assistencias-page.component.html',
   styleUrls: ['./assistencias-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AssistenciasPageComponent implements OnInit {
+export class AssistenciasPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private assistencias: AssistenciasService,
@@ -30,6 +32,8 @@ export class AssistenciasPageComponent implements OnInit {
       .findAndWatch({ query: { $limit: 200, estado: { $ne: 'entregue' } } })
       .subscribe();
   }
+
+  ngOnDestroy() { }
 
   openModal(id: number): void {
     this.uiService.state$

@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { tap, concatMap, map } from 'rxjs/operators';
+import { Observable, Subject, concat } from 'rxjs';
+import { tap, concatMap, map, takeUntil } from 'rxjs/operators';
 
 import { AssistenciasService, UsersService, UIService, UI } from 'src/app/shared/state';
 import { PrintService } from 'src/app/pages/dashboard-page/prints';
@@ -18,6 +18,9 @@ import { capitalize } from 'src/app/shared/utilities';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
+
+  private unsubscribe: Subject<void> = new Subject();
+
   /* Declaration of the 3 Forms on the UI */
   public contactoClienteForm = this.fb.group({
     contacto: [null, Validators.min(200000000)] // por exemplo, contacto: 255486001
@@ -63,16 +66,19 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
     private printService: PrintService) { }
 
   ngOnInit() {
-    this.clienteChange$.subscribe();
-    this.uiService.state$
-      .pipe(
-        tap((state: UI) => {
-          this.contactoClienteForm.patchValue(state.assistenciasCriarNovaPageContactoClienteForm);
-          this.clienteForm.patchValue(state.assistenciasCriarNovaPageClienteForm);
-          this.criarNovaForm.patchValue(state.assistenciasCriarNovaPageCriarNovaForm);
-        })
-      )
-      .subscribe();
+    const all$ = concat(
+      this.clienteChange$,
+      this.uiService.state$
+        .pipe(
+          takeUntil(this.unsubscribe),
+          tap((state: UI) => {
+            this.contactoClienteForm.patchValue(state.assistenciasCriarNovaPageContactoClienteForm);
+            this.clienteForm.patchValue(state.assistenciasCriarNovaPageClienteForm);
+            this.criarNovaForm.patchValue(state.assistenciasCriarNovaPageCriarNovaForm);
+          })
+        )
+    );
+    all$.pipe(takeUntil(this.unsubscribe)).subscribe();
   }
 
   ngOnDestroy() {
@@ -81,7 +87,14 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
       assistenciasCriarNovaPageClienteForm: this.clienteForm.value,
       assistenciasCriarNovaPageCriarNovaForm: this.criarNovaForm.value
     })
-      .subscribe();
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(
+        () => {
+          this.unsubscribe.next();
+          this.unsubscribe.complete();
+        }
+      );
+
   }
 
   onSubmit() {
