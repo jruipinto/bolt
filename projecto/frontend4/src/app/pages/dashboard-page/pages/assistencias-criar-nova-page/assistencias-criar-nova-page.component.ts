@@ -1,7 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable, Subject, concat } from 'rxjs';
-import { tap, concatMap, map, takeUntil } from 'rxjs/operators';
+import { Observable, merge } from 'rxjs';
+import { tap, concatMap, map, first } from 'rxjs/operators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 import { AssistenciasService, UsersService, UIService, UI } from 'src/app/shared/state';
 import { PrintService } from 'src/app/pages/dashboard-page/prints';
@@ -10,7 +11,7 @@ import { capitalize } from 'src/app/shared/utilities';
 
 
 
-
+@AutoUnsubscribe()
 @Component({
   selector: 'app-assistencias-criar-nova-page',
   templateUrl: './assistencias-criar-nova-page.component.html',
@@ -18,8 +19,6 @@ import { capitalize } from 'src/app/shared/utilities';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
-
-  private unsubscribe: Subject<void> = new Subject();
 
   /* Declaration of the 3 Forms on the UI */
   public contactoClienteForm = this.fb.group({
@@ -66,36 +65,34 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
     private printService: PrintService) { }
 
   ngOnInit() {
-    const all$ = concat(
+    merge(
       this.clienteChange$,
       this.uiService.state$
         .pipe(
-          takeUntil(this.unsubscribe),
+          first(),
           tap((state: UI) => {
             this.contactoClienteForm.patchValue(state.assistenciasCriarNovaPageContactoClienteForm);
             this.clienteForm.patchValue(state.assistenciasCriarNovaPageClienteForm);
             this.criarNovaForm.patchValue(state.assistenciasCriarNovaPageCriarNovaForm);
           })
-        )
-    );
-    all$.pipe(takeUntil(this.unsubscribe)).subscribe();
+        ),
+      this.contactoClienteForm.valueChanges
+        .pipe(
+          concatMap(value => this.uiService.patchState({ assistenciasCriarNovaPageContactoClienteForm: value }))
+        ),
+      this.clienteForm.valueChanges
+        .pipe(
+          concatMap(value => this.uiService.patchState({ assistenciasCriarNovaPageClienteForm: value }))
+        ),
+      this.criarNovaForm.valueChanges
+        .pipe(
+          concatMap(value => this.uiService.patchState({ assistenciasCriarNovaPageCriarNovaForm: value }))
+        ),
+    )
+      .subscribe();
   }
 
-  ngOnDestroy() {
-    this.uiService.patchState({
-      assistenciasCriarNovaPageContactoClienteForm: this.contactoClienteForm.value,
-      assistenciasCriarNovaPageClienteForm: this.clienteForm.value,
-      assistenciasCriarNovaPageCriarNovaForm: this.criarNovaForm.value
-    })
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(
-        () => {
-          this.unsubscribe.next();
-          this.unsubscribe.complete();
-        }
-      );
-
-  }
+  ngOnDestroy() { }
 
   onSubmit() {
     const estado = 'recebido';
