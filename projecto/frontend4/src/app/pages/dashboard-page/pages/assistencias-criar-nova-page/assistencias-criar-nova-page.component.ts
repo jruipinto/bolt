@@ -3,7 +3,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { tap, concatMap, map } from 'rxjs/operators';
 
-import { AuthService } from 'src/app/shared/services';
 import { AssistenciasService, UsersService, UIService, UI } from 'src/app/shared/state';
 import { PrintService } from 'src/app/pages/dashboard-page/prints';
 import { User, Assistencia } from 'src/app/shared/models';
@@ -80,7 +79,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
     this.uiService.patchState({
       assistenciasCriarNovaPageContactoClienteForm: this.contactoClienteForm.value,
       assistenciasCriarNovaPageClienteForm: this.clienteForm.value,
-      assistenciasCriarNovaPageCriarNovaForm: this.criarNovaForm
+      assistenciasCriarNovaPageCriarNovaForm: this.criarNovaForm.value
     })
       .subscribe();
   }
