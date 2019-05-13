@@ -7,7 +7,8 @@ import { AuthGuard } from 'src/app/shared';
 import { DashboardPageComponent } from './dashboard-page.component';
 import {
   PainelRapidoPageComponent, AssistenciasPageComponent, AssistenciasCriarNovaPageComponent,
-  EncomendasPageComponent, EncomendasCriarNovaPageComponent, EncomendasHistoricoPageComponent, StockPageComponent
+  EncomendasPageComponent, EncomendasCriarNovaPageComponent, EncomendasHistoricoPageComponent,
+  StockPageComponent, AssistenciasPesquisarPageComponent
 } from './pages';
 
 
@@ -24,6 +25,7 @@ const routes: Routes = [
           { path: 'painel-rapido', component: PainelRapidoPageComponent },
           { path: 'assistencias', component: AssistenciasPageComponent },
           { path: 'assistencias-criar-nova', component: AssistenciasCriarNovaPageComponent },
+          { path: 'assistencias-pesquisar', component: AssistenciasPesquisarPageComponent },
           { path: 'encomendas', component: EncomendasPageComponent },
           { path: 'encomendas-criar-nova', component: EncomendasCriarNovaPageComponent },
           { path: 'encomendas-historico', component: EncomendasHistoricoPageComponent },

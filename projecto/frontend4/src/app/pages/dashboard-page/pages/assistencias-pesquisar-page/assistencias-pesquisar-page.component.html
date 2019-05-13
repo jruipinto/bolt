@@ -1,0 +1,49 @@
+<form clrForm>
+  <div class="clr-row">
+    <div clas="clr-col-5">
+      <clr-input-container>
+        <label>Propriedade:</label>
+        <input clrInput placeholder='marca' name="propriedade" [(ngModel)]="propriedade" />
+      </clr-input-container>
+    </div>
+    <div clas="clr-col-5">
+      <clr-input-container>
+        <label>Valor:</label>
+        <input clrInput placeholder='samsung (obs: ainda não da para pesquisar por cliente)' name="valor"
+          [(ngModel)]="valor" />
+      </clr-input-container>
+    </div>
+    <div clas="clr-col-2">
+      <button class="btn btn-primary" (click)="search(propriedade, valor)">pesquisar</button>
+    </div>
+  </div>
+</form>
+
+<div *ngIf="(results$ | async) as results">
+  <div *ngIf="results.length>0">
+    <r-data-row class="clr-row" *ngFor="let result of results; let listaIndex=index" (click)="openModal(result.id)">
+      <div class="clr-col-lg-1 fontheavy">
+        {{result.id}}
+      </div>
+      <div class="clr-col-lg-2 lessimportant">
+        {{result.categoria}}:
+      </div>
+      <div class="clr-col-lg-2">
+        <span class="fontheavy">{{result.marca}}</span>
+        {{result.modelo}}
+      </div>
+      <div class="clr-col-lg-1 lessimportant">
+        {{result.cor}}
+      </div>
+      <div class="clr-col-lg-3 lessimportant">
+        {{result.problema}}
+      </div>
+      <div class="clr-col-lg-2 lessimportant">
+        Cliente:{{result.cliente_user_name}}
+      </div>
+      <div class="clr-col-lg-1 lessimportant">
+        {{result.estado}}
+      </div>
+    </r-data-row>
+  </div>
+</div>

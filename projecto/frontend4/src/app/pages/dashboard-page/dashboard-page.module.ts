@@ -21,6 +21,7 @@ import { EncomendasCriarNovaPageComponent } from './pages/encomendas-criar-nova-
 import { ArtigosCriarNovoModalComponent } from './modals/artigos-criar-novo-modal/artigos-criar-novo-modal.component';
 import { AssistenciaEntradaPrintComponent } from './prints/assistencia-entrada-print/assistencia-entrada-print.component';
 import { AssistenciaSaidaPrintComponent } from './prints/assistencia-saida-print/assistencia-saida-print.component';
+import { AssistenciasPesquisarPageComponent } from './pages/assistencias-pesquisar-page/assistencias-pesquisar-page.component';
 
 
 
@@ -48,7 +49,8 @@ import { AssistenciaSaidaPrintComponent } from './prints/assistencia-saida-print
     EncomendasCriarNovaPageComponent,
     ArtigosCriarNovoModalComponent,
     AssistenciaEntradaPrintComponent,
-    AssistenciaSaidaPrintComponent
+    AssistenciaSaidaPrintComponent,
+    AssistenciasPesquisarPageComponent
   ]
 })
 export class DashboardPageModule { }
