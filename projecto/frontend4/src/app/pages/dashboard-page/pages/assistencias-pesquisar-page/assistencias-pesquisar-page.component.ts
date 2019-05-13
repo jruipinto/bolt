@@ -11,6 +11,8 @@ import { Assistencia } from 'src/app/shared';
 })
 export class AssistenciasPesquisarPageComponent implements OnInit {
   results$: Observable<Assistencia[]>;
+  propriedade: string;
+  valor: string;
 
   constructor(
     private assistencias: AssistenciasService,
