@@ -105,8 +105,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
     };
     const assistenciasService = {
       create$: (data: Partial<Assistencia>) =>
-        this.assistenciasService.create(data).pipe(
-          tap(() => {
+        this.assistenciasService.create(data)
+          .pipe(tap(() => {
             this.criarNovaForm.reset();
             // you can open print service here!
           }))
@@ -123,16 +123,20 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
 
     if (this.clienteForm.dirty) {
       if (cliente.id) {
-        return usersService.patch$(cliente.id, cliente).pipe(
-          concatMap(() => assistenciasService.create$(assistencia))
-        ).subscribe(success, error);
+        return usersService.patch$(cliente.id, cliente)
+          .pipe(concatMap(() => assistenciasService.create$(assistencia)))
+          .subscribe(success, error);
       } else {
-        return usersService.create$({ ...cliente, contacto, ...{ tipo: 'cliente' } }).pipe(
-          concatMap(newUserArr => assistenciasService.create$({ ...assistencia, ...{ cliente_user_id: newUserArr[0].id } }))
-        ).subscribe(success, error);
+        return usersService.create$({ ...cliente, contacto, ...{ tipo: 'cliente' } })
+          .pipe(
+            // refresh contacto form to fix bug when creating new user
+            tap((newUserArr: User[]) => this.contactoClienteForm.patchValue({contacto: newUserArr[0].contacto})),
+            concatMap((newUserArr: User[]) => assistenciasService.create$({ ...assistencia, ...{ cliente_user_id: newUserArr[0].id } })))
+          .subscribe(success, error);
       }
     } else {
-      return assistenciasService.create$(assistencia).subscribe(success, error);
+      return assistenciasService.create$(assistencia)
+        .subscribe(success, error);
     }
   }
 
