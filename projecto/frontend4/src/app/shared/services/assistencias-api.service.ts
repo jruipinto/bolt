@@ -5,40 +5,50 @@ import { map, concatMap, toArray, mergeMap } from 'rxjs/operators';
 import { EntitiesApiAbstrationService } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
 import { Assistencia } from 'src/app/shared/models';
-import { UsersApiService } from './users-api.service';
+import { UsersService } from '../state/users.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssistenciasApiService extends EntitiesApiAbstrationService {
-  private usersAPI = this.usersApiService;
-  private insertUserNome = assistencia => this.usersAPI.get(assistencia.cliente_user_id).pipe(
-    map(apiUser => {
-      if (typeof assistencia.registo_cronologico === 'string') {
-        return assistencia = {
-          ...assistencia,
-          cliente_user_name: apiUser[0].nome,
-          cliente_user_contacto: apiUser[0].contacto,
-          registo_cronologico: JSON.parse(assistencia.registo_cronologico)
-        } as any;
-      } else {
-        return assistencia = {
-          ...assistencia,
-          cliente_user_name: apiUser[0].nome,
-          cliente_user_contacto: apiUser[0].contacto
-        } as any;
-      }
-    })
-  )
-  private transform = (assistencias$: Observable<Assistencia[]>) =>
-    assistencias$.pipe(
-      concatMap((assistencias: Assistencia[]) =>
-        concat(...assistencias.map(this.insertUserNome))
-      ),
+  private usersAPI = this.usersService;
+  /*private insertUserNome = assistencia => this.usersAPI.get(assistencia.cliente_user_id)
+    .pipe(
+      map(apiUser => {
+        if (typeof assistencia.registo_cronologico === 'string') {
+          return assistencia = {
+            ...assistencia,
+            cliente_user_name: apiUser[0].nome,
+            cliente_user_contacto: apiUser[0].contacto,
+            registo_cronologico: JSON.parse(assistencia.registo_cronologico)
+          } as any;
+        } else {
+          return assistencia = {
+            ...assistencia,
+            cliente_user_name: apiUser[0].nome,
+            cliente_user_contacto: apiUser[0].contacto
+          } as any;
+        }
+      })
+    )*/
+  private insertUserNome = assistencia => this.usersAPI.get(assistencia.cliente_user_id)
+    .pipe(
+      map(apiUser => assistencia = {
+        ...assistencia,
+        cliente_user_name: apiUser[0].nome,
+        cliente_user_contacto: apiUser[0].contacto
+      }),
+      map( assistenciaMapped => typeof assistenciaMapped.registo_cronologico === 'string'
+      ? {...assistenciaMapped, registo_cronologico: JSON.parse(assistenciaMapped.registo_cronologico)}
+      : assistenciaMapped)
+    )
+  private transform = (assistencias$: Observable<Assistencia[]>) => assistencias$
+    .pipe(
+      concatMap((assistencias: Assistencia[]) => concat(...assistencias.map(this.insertUserNome))),
       toArray()
     ) as Observable<Assistencia[]>
 
-  constructor(protected feathersService: FeathersService, private usersApiService: UsersApiService) {
+  constructor(protected feathersService: FeathersService, private usersService: UsersService) {
     super(feathersService, 'assistencias');
   }
 
