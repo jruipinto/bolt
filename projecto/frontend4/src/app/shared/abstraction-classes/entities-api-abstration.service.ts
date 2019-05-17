@@ -2,6 +2,7 @@ import { from, Observable, fromEvent} from 'rxjs';
 import {  map } from 'rxjs/operators';
 
 import { FeathersService } from 'src/app/shared/services/feathers.service';
+import { reject } from 'q';
 
 
 export abstract class EntitiesApiAbstrationService {
