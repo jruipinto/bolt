@@ -1,4 +1,4 @@
-import { of, concat, BehaviorSubject } from 'rxjs';
+import { of, BehaviorSubject, merge } from 'rxjs';
 import { map, tap, concatMap, switchMap, first } from 'rxjs/operators';
 import { unionBy } from 'lodash';
 import { EntitiesApiAbstrationService } from './entities-api-abstration.service';
@@ -69,16 +69,16 @@ export abstract class EntityStateAbstraction {
   }
   public onPatched() {
     // receive item from api => get state => set state + receivedItem
-    return this.xAPIservice.onCreated().pipe(
+    return this.xAPIservice.onPatched().pipe(
       concatMap(receivedItem => this.state$.pipe(
         first(),
-        tap(state => this.source.next(sortByID(unionBy(receivedItem, state))))
+        tap(state => this.source.next(sortByID(unionBy(receivedItem, state, 'id'))))
       ))
     );
   }
 
   public findAndWatch(query?: object) {
-    return concat(
+    return merge(
       this.find(query),
       this.onCreated(),
       this.onPatched()
