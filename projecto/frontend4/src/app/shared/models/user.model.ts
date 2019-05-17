@@ -6,5 +6,5 @@ export interface User {
     password: string;
     endereco: string;
     nif: number;
-    tipo: string
+    tipo: string;
 }
