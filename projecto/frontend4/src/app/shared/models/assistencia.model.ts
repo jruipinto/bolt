@@ -22,6 +22,7 @@ export interface Assistencia {
 
 export interface EventoCronologico {
     tecnico_user_id: number;
+    tecnico?: string;
     estado: string;
     updatedAt: string;
 }
