@@ -4,7 +4,7 @@ import { map, concatMap, toArray, mergeMap } from 'rxjs/operators';
 
 import { EntitiesApiAbstrationService } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
-import { Assistencia } from 'src/app/shared/models';
+import { Assistencia, EventoCronologico, User } from 'src/app/shared/models';
 import { UsersService } from '../state/users.service';
 
 @Injectable({
@@ -12,41 +12,57 @@ import { UsersService } from '../state/users.service';
 })
 export class AssistenciasApiService extends EntitiesApiAbstrationService {
   private usersAPI = this.usersService;
-  /*private insertUserNome = assistencia => this.usersAPI.get(assistencia.cliente_user_id)
-    .pipe(
-      map(apiUser => {
-        if (typeof assistencia.registo_cronologico === 'string') {
-          return assistencia = {
-            ...assistencia,
-            cliente_user_name: apiUser[0].nome,
-            cliente_user_contacto: apiUser[0].contacto,
-            registo_cronologico: JSON.parse(assistencia.registo_cronologico)
-          } as any;
-        } else {
-          return assistencia = {
-            ...assistencia,
-            cliente_user_name: apiUser[0].nome,
-            cliente_user_contacto: apiUser[0].contacto
-          } as any;
-        }
-      })
-    )*/
-  private insertUserNome = assistencia => this.usersAPI.get(assistencia.cliente_user_id)
-    .pipe(
-      map(apiUser => assistencia = {
+
+  private detailedEventoCronologico$ = (evento: EventoCronologico): Observable<EventoCronologico> =>
+    this.usersAPI.get(evento.tecnico_user_id)
+      .pipe(
+        map((user: User[]) => ({ ...evento, tecnico: user[0].nome }))
+      )
+
+  private detailedRegistoCronologico$ = (registoCronologico: EventoCronologico[]) =>
+    concat([...registoCronologico.map(this.detailedEventoCronologico$)])
+      .pipe(
+        concatMap(concats => concats),
+        toArray()
+      )
+  private assistenciaWithDetailedRegistoCronologico$ = (assistencia: Assistencia): Observable<Assistencia> =>
+    this.detailedRegistoCronologico$(assistencia.registo_cronologico)
+      .pipe(
+        map((detailedRegistoCronologico$) =>
+          ({ ...assistencia, registo_cronologico: detailedRegistoCronologico$ }))
+      )
+  private acceptClienteDetails = (cliente: User) =>
+    (assistencia: Assistencia): Assistencia =>
+      ({
         ...assistencia,
-        cliente_user_name: apiUser[0].nome,
-        cliente_user_contacto: apiUser[0].contacto
-      }),
-      map( assistenciaMapped => typeof assistenciaMapped.registo_cronologico === 'string'
-      ? {...assistenciaMapped, registo_cronologico: JSON.parse(assistenciaMapped.registo_cronologico)}
-      : assistenciaMapped)
-    )
-  private transform = (assistencias$: Observable<Assistencia[]>) => assistencias$
-    .pipe(
-      concatMap((assistencias: Assistencia[]) => concat(...assistencias.map(this.insertUserNome))),
-      toArray()
-    ) as Observable<Assistencia[]>
+        cliente_user_name: cliente.nome,
+        cliente_user_contacto: cliente.contacto
+      })
+
+  private assistenciaWithParsedRegistoCronologico = (assistencia: Assistencia): Assistencia =>
+    typeof assistencia.registo_cronologico === 'string'
+      ? { ...assistencia, registo_cronologico: JSON.parse(assistencia.registo_cronologico) }
+      : assistencia
+
+  private fullyDetailedAssistencia$ = (assistenciaFromApi: Assistencia) =>
+    this.usersAPI.get(assistenciaFromApi.cliente_user_id)
+      .pipe(
+        map(cliente => cliente[0]),
+        map(this.acceptClienteDetails),
+        map(curryAssistenciaWithClientDetails => curryAssistenciaWithClientDetails(assistenciaFromApi)),
+        map(this.assistenciaWithParsedRegistoCronologico),
+        concatMap(this.assistenciaWithDetailedRegistoCronologico$)
+      )
+
+  private fullyDetailedAssistenciasStream$ = (assistencias: Assistencia[]) =>
+    concat(...assistencias.map(this.fullyDetailedAssistencia$))
+
+  private fullyDetailedAssistencias$ = (assistencias$: Observable<Assistencia[]>) =>
+    assistencias$
+      .pipe(
+        concatMap(this.fullyDetailedAssistenciasStream$),
+        toArray()
+      )
 
   constructor(protected feathersService: FeathersService, private usersService: UsersService) {
     super(feathersService, 'assistencias');
@@ -54,28 +70,28 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
 
   find(query?: object) {
     const assistencias$ = super.find(query);
-    return this.transform(assistencias$);
+    return this.fullyDetailedAssistencias$(assistencias$);
   }
 
   get(id: number) {
     const assistencia$ = super.get(id);
-    return this.transform(assistencia$);
+    return this.fullyDetailedAssistencias$(assistencia$);
   }
 
   create(data: object, actionType?: string) {
     const assistencia$ = super.create(data);
-    return this.transform(assistencia$);
+    return this.fullyDetailedAssistencias$(assistencia$);
   }
 
   patch(id: number, data: object, actionType?: string) {
     const assistencia$ = super.patch(id, data);
-    return this.transform(assistencia$);
+    return this.fullyDetailedAssistencias$(assistencia$);
   }
 
   onCreated() {
     const assistencia$ = super.onCreated().pipe(
       map(assistencias => assistencias[0]),
-      mergeMap(this.insertUserNome),
+      mergeMap(this.fullyDetailedAssistencia$),
       map(assistencia => [assistencia]))
       ;
     return assistencia$;
@@ -84,7 +100,7 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
   onPatched() {
     const assistencia$ = super.onPatched().pipe(
       map(assistencias => assistencias[0]),
-      mergeMap(this.insertUserNome),
+      mergeMap(this.fullyDetailedAssistencia$),
       map(assistencia => [assistencia])
     );
     return assistencia$;
