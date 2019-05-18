@@ -1,6 +1,6 @@
 <div *ngIf="(assistencias$ | async) as assistencias">
   <div *ngIf="assistencias.length>0">
-    <r-data-row class="clr-row" *ngFor="let assistencia of assistencias; let listaIndex=index"
+    <r-data-row class="clr-row overflow-hidden" *ngFor="let assistencia of assistencias; let listaIndex=index"
       (click)="openModal(assistencia.id)">
       <div class="clr-col-lg-2">
         <div class="clr-row">
@@ -14,9 +14,12 @@
       </div>
       <div class="clr-col-lg-2">
         <span class="fontheavy">{{assistencia.marca}}</span>
-        {{assistencia.modelo}} {{assistencia.cor}}
+        {{assistencia.modelo}}
       </div>
-      <div class="clr-col-lg-3 lessimportant">
+      <div class="clr-col-lg-1">
+        {{assistencia.cor}}
+      </div>
+      <div class="clr-col-lg-2 lessimportant">
         {{assistencia.problema}}
       </div>
       <div class="clr-col-lg-2 lessimportant">
