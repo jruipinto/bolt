@@ -2,24 +2,28 @@
   <div *ngIf="assistencias.length>0">
     <r-data-row class="clr-row" *ngFor="let assistencia of assistencias; let listaIndex=index"
       (click)="openModal(assistencia.id)">
-      <div class="clr-col-lg-1 fontheavy">
-        {{assistencia.id}}
-      </div>
-      <div class="clr-col-lg-2 lessimportant">
-        {{assistencia.categoria}}:
+      <div class="clr-col-lg-2">
+        <div class="clr-row">
+          <div class="clr-col-lg-4 fontheavy">
+            549{{assistencia.id}}
+          </div>
+          <div class="clr-col-lg-6">
+            {{assistencia.categoria}}:
+          </div>
+        </div>
       </div>
       <div class="clr-col-lg-2">
         <span class="fontheavy">{{assistencia.marca}}</span>
-        {{assistencia.modelo}}
-      </div>
-      <div class="clr-col-lg-1 lessimportant">
-        {{assistencia.cor}}
+        {{assistencia.modelo}} {{assistencia.cor}}
       </div>
       <div class="clr-col-lg-3 lessimportant">
         {{assistencia.problema}}
       </div>
       <div class="clr-col-lg-2 lessimportant">
         Cliente:{{assistencia.cliente_user_name}}
+      </div>
+      <div class="clr-col-lg-2 lessimportant">
+        Técnico:{{assistencia.registo_cronologico[assistencia.registo_cronologico.length-1].tecnico}}
       </div>
       <div class="clr-col-lg-1 lessimportant">
         {{assistencia.estado}}
