@@ -6,35 +6,18 @@
         <clr-select-container>
           <label>Filtros</label>
           <select clrSelect name="options" [(ngModel)]="options" required>
-            <option *ngFor="let filtro of filtros$ | async" [value]=filtro>{{filtro | titlecase}}</option>
+            <option *ngFor="let filtro of filtros" [value]=filtro>{{filtro | titlecase}}</option>
           </select>
           <clr-control-helper>Adiciona quantos filtros quiseres</clr-control-helper>
           <clr-control-error>This field is required!</clr-control-error>
         </clr-select-container>
         <form clrForm>
-            <input clrInput placeholder="&#128270;" name="input" [(ngModel)]="input" />
-          </form>
+          <input clrInput placeholder="&#128270;" name="input" [(ngModel)]="input" />
+        </form>
       </div>
     </div>
-
   </div>
   <div class="modal-footer">
 
   </div>
 </clr-modal>
-
-
-parametros de pesquisa:
-
-id
-cliente_user_id
-cliente_user_name
-cliente_user_contacto
-categoria
-marca
-modelo
-cor
-serial
-problema
-estado
-createdAt

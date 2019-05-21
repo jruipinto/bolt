@@ -14,6 +14,21 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
   propriedade: string;
   valor: string;
 
+  public filtros = [
+    'id',
+    'cliente_user_id',
+    'cliente_user_name',
+    'cliente_user_contacto',
+    'categoria',
+    'marca',
+    'modelo',
+    'cor',
+    'serial',
+    'problema',
+    'estado',
+    'createdAt'
+  ];
+
   constructor(
     private assistencias: AssistenciasService,
     private uiService: UIService) { }

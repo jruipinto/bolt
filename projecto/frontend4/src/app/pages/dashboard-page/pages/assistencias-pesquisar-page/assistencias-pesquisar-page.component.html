@@ -1,23 +1,19 @@
-<form clrForm>
-  <div class="clr-row">
-    <div clas="clr-col-5">
-      <clr-input-container>
-        <label>Campo:</label>
-        <input clrInput placeholder='marca' name="propriedade" [(ngModel)]="propriedade" />
-      </clr-input-container>
-    </div>
-    <div clas="clr-col-5">
-      <clr-input-container>
-        <label>Valor:</label>
-        <input clrInput placeholder='samsung (obs: ainda não da para pesquisar por cliente)' name="valor"
-          [(ngModel)]="valor" />
-      </clr-input-container>
-    </div>
-    <div clas="clr-col-2">
-      <button class="btn btn-primary" (click)="search(propriedade, valor)">pesquisar</button>
-    </div>
+<div class="clr-row box">
+  <div class="clr-col-md-2">
+    <p>➕ Escolha filtro:</p>
   </div>
-</form>
+  <div class="clr-col-md-3">
+    <select clrSelect name="options" [(ngModel)]="options" required>
+      <option *ngFor="let filtro of filtros" [value]=filtro>{{filtro | uppercase}}</option>
+    </select>
+  </div>
+  <div class="clr-col-md-3">
+    <input clrInput placeholder="✏️ Insira: {{options}}" name="input" [(ngModel)]="input" />
+  </div>
+  <div class="clr-col-md-1">
+    <button class="btn btn-outline">Adicionar</button>
+  </div>
+</div>
 
 <div *ngIf="(results$ | async) as results">
   <div *ngIf="results.length>0">
