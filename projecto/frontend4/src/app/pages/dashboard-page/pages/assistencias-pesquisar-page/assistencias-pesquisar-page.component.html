@@ -3,15 +3,21 @@
     <p>➕ Escolha filtro:</p>
   </div>
   <div class="clr-col-md-3">
-    <select clrSelect name="options" [(ngModel)]="options" required>
+    <select clrSelect name="options" [(ngModel)]="selectedOption" required>
       <option *ngFor="let filtro of filtros" [value]=filtro>{{filtro | uppercase}}</option>
     </select>
   </div>
   <div class="clr-col-md-3">
-    <input clrInput placeholder="✏️ Insira: {{options}}" name="input" [(ngModel)]="input" />
+    <input clrInput placeholder="✏️ Insira: {{selectedOption}}" name="input" [(ngModel)]="input" />
   </div>
   <div class="clr-col-md-1">
-    <button class="btn btn-outline">Adicionar</button>
+    <button class="btn btn-outline" (click)="addFilter({column: selectedOption, condition: input})">Adicionar</button>
+  </div>
+</div>
+
+<div class="clr-row">
+  <div class="clr-col">
+    {{querys | json}}
   </div>
 </div>
 

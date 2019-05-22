@@ -4,6 +4,11 @@ import { tap, first } from 'rxjs/operators';
 import { AssistenciasService, UIService, UI } from 'src/app/shared/state';
 import { Assistencia } from 'src/app/shared';
 
+export interface Query {
+  column: string;
+  condition: string;
+}
+
 @Component({
   selector: 'app-assistencias-pesquisar-page',
   templateUrl: './assistencias-pesquisar-page.component.html',
@@ -13,6 +18,10 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
   results$: Observable<Assistencia[]>;
   propriedade: string;
   valor: string;
+
+  public selectedOption: string;
+  public input: string;
+  public querys: Query[];
 
   public filtros = [
     'id',
@@ -26,7 +35,7 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
     'serial',
     'problema',
     'estado',
-    'createdAt'
+    // 'createdAt'
   ];
 
   constructor(
@@ -36,13 +45,13 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
   ngOnInit() {
   }
 
-  search(proprieadade: string, valor: string) {
-    const expression = '{ "query": { "$limit": "200", "' + proprieadade + '" : "' + valor + '" } }';
+  search(propriedade: string, valor: string) {
+    const extenseQuery = propriedade + ' : ' + valor;
+    const expression = { query: { $limit: 200, extenseQuery} };
+    // const expression = '{ "query": { "$limit": "200", "' + propriedade + '" : "' + valor + '" } }';
     console.log(expression);
-    const query = JSON.parse(expression);
-    console.log(query);
     this.results$ = this.assistencias
-      .findAndWatch(query);
+      .findAndWatch(expression);
   }
 
   openModal(id: number): void {
@@ -54,6 +63,12 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
         )
       )
       .subscribe();
+  }
+
+  addFilter(query: Query) {
+    this.querys
+    ? this.querys = [...this.querys, query]
+    : this.querys = [query];
   }
 
 }
