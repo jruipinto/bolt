@@ -1,16 +1,16 @@
 <div class="clr-row box">
-  <div class="clr-col-md-2">
+  <div class="clr-col-xl-2">
     <p>➕ Escolha filtro:</p>
   </div>
-  <div class="clr-col-md-3">
+  <div class="clr-col-xl-3">
     <select clrSelect name="options" [(ngModel)]="selectedOption" required>
       <option *ngFor="let filtro of filtros" [value]=filtro>{{filtro | uppercase}}</option>
     </select>
   </div>
-  <div class="clr-col-md-3">
+  <div class="clr-col-xl-3">
     <input clrInput placeholder="✏️ Insira: {{selectedOption}}" name="input" [(ngModel)]="input" />
   </div>
-  <div class="clr-col-md-1">
+  <div class="clr-col-xl-1">
     <button class="btn btn-outline" (click)="addFilter({column: selectedOption, condition: input})">Adicionar</button>
   </div>
 </div>
@@ -20,7 +20,11 @@
     {{querys | json}}
   </div>
 </div>
-
+<div class="clr-row">
+  <div class="clr-col-lg">
+    <button class="btn btn-primary" (click)="search()">Pesquisar</button>
+  </div>
+</div>
 <div *ngIf="(results$ | async) as results">
   <div *ngIf="results.length>0">
     <r-data-row class="clr-row" *ngFor="let result of results; let listaIndex=index" (click)="openModal(result.id)">

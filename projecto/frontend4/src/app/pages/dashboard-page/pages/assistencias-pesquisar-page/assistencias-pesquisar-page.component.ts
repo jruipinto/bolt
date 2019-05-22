@@ -45,14 +45,30 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
   ngOnInit() {
   }
 
-  search(propriedade: string, valor: string) {
-    const extenseQuery = propriedade + ' : ' + valor;
-    const expression = { query: { $limit: 200, extenseQuery} };
+  search() {
+    let extenseQuery: {};
+    this.querys.forEach((query: Query) => {
+      const x = '{"' + query.column + '" : { "$like" : "' + query.condition + '"} }';
+      console.log('TCL: AssistenciasPesquisarPageComponent -> search -> x', x);
+      const parsedQuery = JSON.parse(x);
+      extenseQuery = { ...extenseQuery, ...parsedQuery };
+    });
+    // const extenseQuery = query.column + ' : ' + query.condition;
+    const expression = { query: { $limit: 200, ...extenseQuery } };
     // const expression = '{ "query": { "$limit": "200", "' + propriedade + '" : "' + valor + '" } }';
     console.log(expression);
     this.results$ = this.assistencias
       .findAndWatch(expression);
   }
+
+/*
+  search(param: string) {
+    const expression = { query: { $limit: 200, $like: param } };
+    console.log(expression);
+    this.results$ = this.assistencias
+      .findAndWatch(expression);
+  }
+*/
 
   openModal(id: number): void {
     this.uiService.state$
@@ -67,8 +83,8 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
 
   addFilter(query: Query) {
     this.querys
-    ? this.querys = [...this.querys, query]
-    : this.querys = [query];
+      ? this.querys = [...this.querys, query]
+      : this.querys = [query];
   }
 
 }
