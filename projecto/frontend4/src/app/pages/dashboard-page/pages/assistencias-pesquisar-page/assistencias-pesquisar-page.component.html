@@ -8,7 +8,18 @@
     </select>
   </div>
   <div class="clr-col-xl-3">
-    <input clrInput placeholder="✏️ Insira: {{selectedOption}}" name="input" [(ngModel)]="input" />
+    <div class="clr-row">
+      <div class="clr-col-sm-10">
+        <input clrInput placeholder="✏️ Insira: {{selectedOption}}" name="input" [(ngModel)]="input" />
+      </div>
+      <div class="clr-col-sm-2">
+        <a href="https://www.w3schools.com/sql/sql_like.asp" role="tooltip" aria-haspopup="true"
+          class="tooltip tooltip-lg tooltip-bottom-left" style="padding-top: 1em">
+          <clr-icon shape="info-circle" size="24"></clr-icon>
+          <span class="tooltip-content">Para procurar com apenas parte da palavra podes usar o %</span>
+        </a>
+      </div>
+    </div>
   </div>
   <div class="clr-col-xl-1">
     <button class="btn btn-outline" (click)="addFilter({column: selectedOption, condition: input})">Adicionar</button>

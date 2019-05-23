@@ -24,7 +24,7 @@ export abstract class EntityStateAbstraction {
                 // const newState = [...new Set([...state, ...response])]; in ES6 syntax
                 const newState = unionBy(state, response, 'id');
                 this.source.next(sortByID(newState));
-                return newState;
+                return response;
               })
             )
         ));
