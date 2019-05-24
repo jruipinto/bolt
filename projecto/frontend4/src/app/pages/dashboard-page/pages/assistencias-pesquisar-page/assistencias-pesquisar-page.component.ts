@@ -45,17 +45,6 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
   ngOnInit() {
   }
 
-  search() {
-    let dbQueryParams: {};
-    this.searchFilters.forEach((searchFilter: Query) => {
-      const newdbQueryParam = JSON.parse('{"' + searchFilter.column + '" : { "$like" : "%' + searchFilter.condition + '%"} }');
-      dbQueryParams = { ...dbQueryParams, ...newdbQueryParam };
-    });
-    const dbQuery = { query: { $limit: 200, ...dbQueryParams } };
-    this.results$ = this.assistencias
-      .findAndWatch(dbQuery);
-  }
-
   openModal(id: number): void {
     this.uiService.state$
       .pipe(
@@ -71,6 +60,20 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
     this.searchFilters
       ? this.searchFilters = [...this.searchFilters, newSearchFilter]
       : this.searchFilters = [newSearchFilter];
+  }
+
+  search() {
+    let dbQueryParams: {};
+    if (!this.searchFilters) {
+      this.searchFilters = [{column: this.selectedOption, condition: this.input}];
+    }
+    this.searchFilters.forEach((searchFilter: Query) => {
+      const newdbQueryParam = JSON.parse('{"' + searchFilter.column + '" : { "$like" : "%' + searchFilter.condition + '%"} }');
+      dbQueryParams = { ...dbQueryParams, ...newdbQueryParam };
+    });
+    const dbQuery = { query: { $limit: 200, ...dbQueryParams } };
+    this.results$ = this.assistencias
+      .findAndWatch(dbQuery);
   }
 
 }

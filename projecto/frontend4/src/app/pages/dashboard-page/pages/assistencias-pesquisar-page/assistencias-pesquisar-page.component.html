@@ -1,30 +1,30 @@
-<div class="clr-row box">
-  <div class="clr-col-xl-2">
-    <p>➕ Escolha filtro:</p>
+<div class="box">
+  <div class="clr-row">
+    <div class="clr-col-xl-2">
+      <p>➕ Escolha filtro:</p>
+    </div>
+    <div class="clr-col-xl-3">
+      <select clrSelect name="options" [(ngModel)]="selectedOption" required>
+        <option *ngFor="let filterOption of filterOptions" [value]=filterOption>{{filterOption | uppercase}}</option>
+      </select>
+    </div>
+    <div class="clr-col-xl-3">
+      <input clrInput placeholder="✏️ Insira: {{selectedOption}}" name="input" [(ngModel)]="input" />
+    </div>
+    <div class="clr-col-xl-2">
+      <button class="btn btn-outline" (click)="addFilter({column: selectedOption, condition: input})">Adicionar</button>
+    </div>
+    <div class="clr-col-xl-2">
+      <button class="btn btn-primary" (click)="search()">Pesquisar</button>
+    </div>
   </div>
-  <div class="clr-col-xl-3">
-    <select clrSelect name="options" [(ngModel)]="selectedOption" required>
-      <option *ngFor="let filterOption of filterOptions" [value]=filterOption>{{filterOption | uppercase}}</option>
-    </select>
-  </div>
-  <div class="clr-col-xl-3">
-    <input clrInput placeholder="✏️ Insira: {{selectedOption}}" name="input" [(ngModel)]="input" />
-  </div>
-  <div class="clr-col-xl-1">
-    <button class="btn btn-outline" (click)="addFilter({column: selectedOption, condition: input})">Adicionar</button>
-  </div>
-</div>
 
-<div class="clr-row">
-  <div class="clr-col">
-    <ul class="list-unstyled">
+  <div class="clr-row">
+    <div class="clr-col">
+      <ul class="list-unstyled">
         <li *ngFor="let searchFilter of searchFilters" [value]=searchFilter>{{searchFilter | json}}</li>
-    </ul>
-  </div>
-</div>
-<div class="clr-row">
-  <div class="clr-col-lg">
-    <button class="btn btn-primary" (click)="search()">Pesquisar</button>
+      </ul>
+    </div>
   </div>
 </div>
 <div *ngIf="(results$ | async) as results">
