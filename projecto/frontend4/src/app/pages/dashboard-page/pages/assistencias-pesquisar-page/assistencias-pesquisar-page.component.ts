@@ -21,9 +21,9 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
 
   public selectedOption: string;
   public input: string;
-  public querys: Query[];
+  public searchFilters: Query[];
 
-  public filtros = [
+  public filterOptions = [
     'id',
     'cliente_user_id',
     'cliente_user_name',
@@ -46,29 +46,15 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
   }
 
   search() {
-    let extenseQuery: {};
-    this.querys.forEach((query: Query) => {
-      const x = '{"' + query.column + '" : { "$like" : "' + query.condition + '"} }';
-      console.log('TCL: AssistenciasPesquisarPageComponent -> search -> x', x);
-      const parsedQuery = JSON.parse(x);
-      extenseQuery = { ...extenseQuery, ...parsedQuery };
+    let dbQueryParams: {};
+    this.searchFilters.forEach((searchFilter: Query) => {
+      const newdbQueryParam = JSON.parse('{"' + searchFilter.column + '" : { "$like" : "%' + searchFilter.condition + '%"} }');
+      dbQueryParams = { ...dbQueryParams, ...newdbQueryParam };
     });
-    // const extenseQuery = query.column + ' : ' + query.condition;
-    const expression = { query: { $limit: 200, ...extenseQuery } };
-    // const expression = '{ "query": { "$limit": "200", "' + propriedade + '" : "' + valor + '" } }';
-    console.log(expression);
+    const dbQuery = { query: { $limit: 200, ...dbQueryParams } };
     this.results$ = this.assistencias
-      .findAndWatch(expression);
+      .findAndWatch(dbQuery);
   }
-
-/*
-  search(param: string) {
-    const expression = { query: { $limit: 200, $like: param } };
-    console.log(expression);
-    this.results$ = this.assistencias
-      .findAndWatch(expression);
-  }
-*/
 
   openModal(id: number): void {
     this.uiService.state$
@@ -81,10 +67,10 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
       .subscribe();
   }
 
-  addFilter(query: Query) {
-    this.querys
-      ? this.querys = [...this.querys, query]
-      : this.querys = [query];
+  addFilter(newSearchFilter: Query) {
+    this.searchFilters
+      ? this.searchFilters = [...this.searchFilters, newSearchFilter]
+      : this.searchFilters = [newSearchFilter];
   }
 
 }
