@@ -64,6 +64,10 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
     this.selectedOption = null;
   }
 
+  removeSearchFilter(i: number) {
+
+  }
+
   search() {
     let dbQueryParams: {};
     if (!this.searchFilters) {
