@@ -1,28 +1,31 @@
 <div class="box">
   <div class="clr-row">
     <div class="clr-col-xl-2">
-      <p>➕ Escolha filtro:</p>
+      <p>Escolha filtro:</p>
     </div>
     <div class="clr-col-xl-3">
       <select clrSelect name="options" [(ngModel)]="selectedOption" required>
+        <option value="" disabled selected hidden>👉 Escolha filtro</option>
         <option *ngFor="let filterOption of filterOptions" [value]=filterOption>{{filterOption | uppercase}}</option>
       </select>
     </div>
     <div class="clr-col-xl-3">
-      <input clrInput placeholder="✏️ Insira: {{selectedOption}}" name="input" [(ngModel)]="input" />
+      <input clrInput placeholder="✏️ Digite {{selectedOption}}..." name="input" [(ngModel)]="input" />
     </div>
     <div class="clr-col-xl-2">
-      <button class="btn btn-outline" (click)="addFilter({column: selectedOption, condition: input})">Adicionar</button>
+      <button class="btn btn-outline" (click)="addFilter({column: selectedOption, condition: input})">➕
+        Adicionar</button>
     </div>
     <div class="clr-col-xl-2">
-      <button class="btn btn-primary" (click)="search()">Pesquisar</button>
+      <button class="btn btn-primary" (click)="search()">🔎 Pesquisar</button>
     </div>
   </div>
 
   <div class="clr-row">
     <div class="clr-col">
       <ul class="list-unstyled">
-        <li *ngFor="let searchFilter of searchFilters" [value]=searchFilter>{{searchFilter | json}}</li>
+        <li *ngFor="let searchFilter of searchFilters; index as i;  trackById" [value]=searchFilter (click)="removeSearchFilter(i)">{{searchFilter.column | uppercase}}:
+          "{{searchFilter.condition}}"</li>
       </ul>
     </div>
   </div>

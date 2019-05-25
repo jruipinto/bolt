@@ -60,12 +60,14 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
     this.searchFilters
       ? this.searchFilters = [...this.searchFilters, newSearchFilter]
       : this.searchFilters = [newSearchFilter];
+    this.input = null;
+    this.selectedOption = null;
   }
 
   search() {
     let dbQueryParams: {};
     if (!this.searchFilters) {
-      this.searchFilters = [{column: this.selectedOption, condition: this.input}];
+      this.searchFilters = [{ column: this.selectedOption, condition: this.input }];
     }
     this.searchFilters.forEach((searchFilter: Query) => {
       const newdbQueryParam = JSON.parse('{"' + searchFilter.column + '" : { "$like" : "%' + searchFilter.condition + '%"} }');
@@ -74,6 +76,9 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
     const dbQuery = { query: { $limit: 200, ...dbQueryParams } };
     this.results$ = this.assistencias
       .findAndWatch(dbQuery);
+    this.input = null;
+    this.selectedOption = null;
+    this.searchFilters = null;
   }
 
 }
