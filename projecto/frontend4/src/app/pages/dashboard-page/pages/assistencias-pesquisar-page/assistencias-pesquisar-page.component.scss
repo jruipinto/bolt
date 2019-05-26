@@ -1,5 +1,8 @@
-.box{
-    background-color: rgba(0, 0, 0, 0.068);
+.box {
+    border-radius: 3px;
+    border-style: solid;
+    border-color: #0079b8;
+    border-width: 1px;
     margin: 0 0 1em 0;
     padding: 0 1em 1em 1em;
 }
@@ -8,7 +11,7 @@
     cursor: default;
     margin: 0.7em;
     padding: 0 0.4em 0 0.4em;
-    background-color: rgba(255, 255, 255, 0.966);
+    background-color: rgba(255, 253, 110, 0.644);
     border-radius: 1.5em;
 }
 
