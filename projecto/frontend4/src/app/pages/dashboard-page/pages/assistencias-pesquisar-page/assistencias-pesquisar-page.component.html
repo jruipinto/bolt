@@ -1,37 +1,47 @@
 <div class="box">
   <div class="clr-row">
-    <div class="clr-col-xl-2">
-      <p>Escolha filtro:</p>
+    <div class="clr-col-xl-2 clr-col-md-4">
+      <p>Escolhe filtro:</p>
     </div>
-    <div class="clr-col-xl-3">
+    <div class="clr-col-xl-3 clr-col-md-4">
       <select clrSelect name="options" [(ngModel)]="selectedOption" required>
         <option value="" disabled selected hidden>👉 Escolha filtro</option>
         <option *ngFor="let filterOption of filterOptions" [value]=filterOption>{{filterOption | uppercase}}</option>
       </select>
     </div>
-    <div class="clr-col-xl-3">
+    <div class="clr-col-xl-3 clr-col-md-4">
       <input clrInput placeholder="✏️ Digite {{selectedOption}}..." name="input" [(ngModel)]="input" />
     </div>
-    <div class="clr-col-xl-2">
-      <button class="btn btn-outline" (click)="addFilter({column: selectedOption, condition: input})">➕
-        Adicionar</button>
+    <div class="clr-col-xl-2 clr-col-md-3">
+      <button class="btn btn-outline" (click)="addFilter({column: selectedOption, condition: input})">
+        + Adicionar</button>
     </div>
-    <div class="clr-col-xl-2">
+    <div class="clr-col-xl-2 clr-col-md-3">
       <button class="btn btn-primary" (click)="search()">🔎 Pesquisar</button>
     </div>
   </div>
 
   <div class="clr-row">
-    <div class="clr-col">
+    <div class="clr-col-md-6 clr-col-lg-5 clr-col-lg-4">
       <ul class="list-unstyled">
-        <li *ngFor="let searchFilter of searchFilters; index as i;  trackById" [value]=searchFilter (click)="removeSearchFilter(i)">{{searchFilter.column | uppercase}}:
-          "{{searchFilter.condition}}"</li>
+        <li *ngFor="let searchFilter of searchFilters; index as i;  trackById" class="filter" [value]=searchFilter>
+          <div class="clr-row">
+            <div class="clr-col-10">
+              {{searchFilter.column | uppercase}}: "{{searchFilter.condition}}"
+            </div>
+            <div class="clr-col-2 clickable" (click)="removeSearchFilter(i)">
+              X
+            </div>
+          </div>
+        </li>
       </ul>
     </div>
   </div>
 </div>
 <div *ngIf="(results$ | async) as results">
+  <div *ngIf="results.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
   <div *ngIf="results.length>0">
+    <h4>Resultados:</h4>
     <r-data-row class="clr-row" *ngFor="let result of results; let listaIndex=index" (click)="openModal(result.id)">
       <div class="clr-col-lg-1 fontheavy">
         {{result.id}}

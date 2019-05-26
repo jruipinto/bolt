@@ -16,8 +16,6 @@ export interface Query {
 })
 export class AssistenciasPesquisarPageComponent implements OnInit {
   results$: Observable<Assistencia[]>;
-  propriedade: string;
-  valor: string;
 
   public selectedOption: string;
   public input: string;
@@ -57,6 +55,10 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
   }
 
   addFilter(newSearchFilter: Query) {
+    if (!this.selectedOption) {
+      alert('Tens de decidir o que queres procurar primeiro!');
+      return;
+    }
     this.searchFilters
       ? this.searchFilters = [...this.searchFilters, newSearchFilter]
       : this.searchFilters = [newSearchFilter];
@@ -65,12 +67,16 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
   }
 
   removeSearchFilter(i: number) {
-
+    this.searchFilters.splice(i, 1);
   }
 
   search() {
     let dbQueryParams: {};
     if (!this.searchFilters) {
+      if (!this.selectedOption) {
+        alert('Tens de decidir o que queres procurar primeiro!');
+        return;
+      }
       this.searchFilters = [{ column: this.selectedOption, condition: this.input }];
     }
     this.searchFilters.forEach((searchFilter: Query) => {

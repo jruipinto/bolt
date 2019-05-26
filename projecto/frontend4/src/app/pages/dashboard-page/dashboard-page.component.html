@@ -10,12 +10,12 @@
     <div class="header-actions">
       <clr-dropdown>
         <button class="nav-text" clrDropdownTrigger>
-          {{userName}}
+          😃 {{userName}}
           <clr-icon shape="caret down"></clr-icon>
         </button>
         <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
           <!--<a href="." clrDropdownItem>Preferências</a>-->
-          <a (click)="logOut()" clrDropdownItem>Sair</a>
+          <a (click)="logOut()" clrDropdownItem>🚪 Sair</a>
         </clr-dropdown-menu>
       </clr-dropdown>
     </div>
@@ -34,7 +34,8 @@
           <label for="tabexample1">Assistências</label>
           <ul class="nav-list">
             <li><a class="nav-link" routerLink="./assistencias" routerLinkActive="active">Assist. Activas</a></li>
-            <li><a class="nav-link" routerLink="./assistencias-criar-nova" routerLinkActive="active">Receber Nova</a></li>
+            <li><a class="nav-link" routerLink="./assistencias-criar-nova" routerLinkActive="active">Receber Nova</a>
+            </li>
             <li><a class="nav-link" routerLink="./assistencias-pesquisar" routerLinkActive="active">Pesquisar</a></li>
           </ul>
         </section>
