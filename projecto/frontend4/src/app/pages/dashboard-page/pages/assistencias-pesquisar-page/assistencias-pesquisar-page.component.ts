@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap, first } from 'rxjs/operators';
-import { AssistenciasService, UIService, UI } from 'src/app/shared/state';
+import { AssistenciasService, UIService, UI, UsersService } from 'src/app/shared/state';
 import { Assistencia } from 'src/app/shared';
 
 export interface Query {
@@ -38,6 +38,7 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
 
   constructor(
     private assistencias: AssistenciasService,
+    private users: UsersService,
     private uiService: UIService) { }
 
   ngOnInit() {
@@ -79,6 +80,9 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
       }
       this.searchFilters = [{ column: this.selectedOption, condition: this.input }];
     }
+
+    // search client_id here!
+
     this.searchFilters.forEach((searchFilter: Query) => {
       const newdbQueryParam = JSON.parse('{"' + searchFilter.column + '" : { "$like" : "%' + searchFilter.condition + '%"} }');
       dbQueryParams = { ...dbQueryParams, ...newdbQueryParam };
@@ -89,6 +93,24 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
     this.input = null;
     this.selectedOption = null;
     this.searchFilters = null;
+  }
+
+  private findClientUserIDbyContacto (searchFilters: Query[]) {
+    const userContactoIndex = searchFilters
+      .findIndex((searchFilter: Query) => searchFilter.column === 'cliente_user_contacto');
+    const clienteUserContacto = searchFilters.splice(userContactoIndex);
+    return this.users.find({query: {cliente_user_contacto: { $like: '%' + clienteUserContacto[0].condition + '%'}}});
+  }
+
+  private findClientUserIDbyName (searchFilters: Query[]): Query[] {
+    const userContactoIndex = searchFilters
+      .findIndex((searchFilter: Query) => searchFilter.column === 'cliente_user_contacto');
+    const userNameIndex = searchFilters
+      .findIndex((searchFilter: Query) => searchFilter.column === 'cliente_user_name');
+    const clienteUserContacto = searchFilters.splice(userContactoIndex);
+    const clienteUserName = searchFilters.splice(userNameIndex);
+
+    return searchFilters;
   }
 
 }
