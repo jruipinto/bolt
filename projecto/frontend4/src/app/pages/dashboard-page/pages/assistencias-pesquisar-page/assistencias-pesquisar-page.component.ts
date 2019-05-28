@@ -70,11 +70,9 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
 
   private patchSearchFilters(newSearchFilterToAdd: Query, searchFiltersToPatch: Query[]): Query[] {
     if (searchFiltersToPatch) {
-      searchFiltersToPatch
-        .splice(
-          searchFiltersToPatch
-            .findIndex((searchFilter: Query) => searchFilter.column === newSearchFilterToAdd.column)
-        );
+      const i = searchFiltersToPatch
+        .findIndex((searchFilter: Query) => searchFilter.column === newSearchFilterToAdd.column);
+      if (i > -1) { searchFiltersToPatch.splice(i); }
       return searchFiltersToPatch = [...searchFiltersToPatch, newSearchFilterToAdd];
     } else {
       return searchFiltersToPatch = [newSearchFilterToAdd];
@@ -82,79 +80,81 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
   }
   private findClienteIdByNameOrContactAndPatchSearchFilters(newSearchFilter: Query): Observable<User> {
     const column = (a) => {
-      a.column === 'cliente_user_name'
-        ? 'nome'
-      : 'contacto'
-  }
+      if (a === 'cliente_user_name') {
+        return 'nome';
+      } else {
+        return 'contacto';
+      }
+    };
     return this.users
-  .find({
-    query: {
-      $limit: 200,
-      ...JSON.parse('{"' + newSearchFilter.column + '" : { "$like" : "%' + newSearchFilter.condition + '%"} }')
-    }
-  })
-  .pipe(
-    map((res: User[]) => res[0]),
-    tap((user: User) => {
-      const searchFilter: Query = {
-        column: 'cliente_user_id',
-        condition: user.id
-      };
-      this.searchFilters = this.patchSearchFilters(searchFilter, this.searchFilters);
-    })
-  );
+      .find({
+        query: {
+          $limit: 200,
+          ...JSON.parse('{"' + column(newSearchFilter.column) + '" : { "$like" : "%' + newSearchFilter.condition + '%"} }')
+        }
+      })
+      .pipe(
+        map((res: User[]) => res[0]),
+        tap((user: User) => {
+          const searchFilter: Query = {
+            column: 'cliente_user_id',
+            condition: user.id
+          };
+          this.searchFilters = this.patchSearchFilters(searchFilter, this.searchFilters);
+        })
+      );
   }
 
-addFilter(newSearchFilter: Query) {
-  if (!newSearchFilter.column) {
-    alert('Tens de decidir o que queres procurar primeiro!');
-    return;
-  }
-
-  switch (newSearchFilter.column) {
-    case 'cliente_user_name':
-      this.findClienteIdByNameOrContactAndPatchSearchFilters(newSearchFilter)
-        .subscribe();
-      break;
-    case 'cliente_user_contacto':
-      this.findClienteIdByNameOrContactAndPatchSearchFilters(newSearchFilter)
-        .subscribe();
-      break;
-    default:
-      this.searchFilters = this.patchSearchFilters(newSearchFilter, this.searchFilters);
-      break;
-  }
-
-  this.input = null;
-  this.selectedOption = null;
-}
-
-removeSearchFilter(i: number) {
-  this.searchFilters.splice(i, 1);
-}
-
-search() {
-  let dbQueryParams: {};
-  if (!this.searchFilters) {
-    if (!this.selectedOption) {
+  addFilter(newSearchFilter: Query) {
+    if (!newSearchFilter.column) {
       alert('Tens de decidir o que queres procurar primeiro!');
       return;
     }
-    this.searchFilters = [{ column: this.selectedOption, condition: this.input }];
+
+    switch (newSearchFilter.column) {
+      case 'cliente_user_name':
+        this.findClienteIdByNameOrContactAndPatchSearchFilters(newSearchFilter)
+          .subscribe();
+        break;
+      case 'cliente_user_contacto':
+        this.findClienteIdByNameOrContactAndPatchSearchFilters(newSearchFilter)
+          .subscribe();
+        break;
+      default:
+        this.searchFilters = this.patchSearchFilters(newSearchFilter, this.searchFilters);
+        break;
+    }
+
+    this.input = null;
+    this.selectedOption = null;
   }
 
-  // search client_id here!
+  removeSearchFilter(i: number) {
+    this.searchFilters.splice(i, 1);
+  }
 
-  this.searchFilters.forEach((searchFilter: Query) => {
-    const newdbQueryParam = JSON.parse('{"' + searchFilter.column + '" : { "$like" : "%' + searchFilter.condition + '%"} }');
-    dbQueryParams = { ...dbQueryParams, ...newdbQueryParam };
-  });
-  const dbQuery = { query: { $limit: 200, ...dbQueryParams } };
-  this.results$ = this.assistencias
-    .findAndWatch(dbQuery);
-  this.input = null;
-  this.selectedOption = null;
-  this.searchFilters = null;
-}
+  search() {
+    let dbQueryParams: {};
+    if (!this.searchFilters) {
+      if (!this.selectedOption) {
+        alert('Tens de decidir o que queres procurar primeiro!');
+        return;
+      }
+      this.searchFilters = [{ column: this.selectedOption, condition: this.input }];
+    }
+
+    // search client_id here!
+
+    this.searchFilters.forEach((searchFilter: Query) => {
+      const newdbQueryParam = JSON.parse('{"' + searchFilter.column + '" : { "$like" : "%' + searchFilter.condition + '%"} }');
+      dbQueryParams = { ...dbQueryParams, ...newdbQueryParam };
+    });
+    const dbQuery = { query: { $limit: 200, ...dbQueryParams } };
+    this.results$ = this.assistencias
+      .findAndWatch(dbQuery);
+    this.input = null;
+    this.selectedOption = null;
+    this.searchFilters = null;
+  }
 
 }
