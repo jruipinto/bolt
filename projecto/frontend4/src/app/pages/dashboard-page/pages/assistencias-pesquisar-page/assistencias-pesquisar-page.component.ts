@@ -72,7 +72,7 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
     if (searchFiltersToPatch) {
       const i = searchFiltersToPatch
         .findIndex((searchFilter: Query) => searchFilter.column === newSearchFilterToAdd.column);
-      if (i > -1) { searchFiltersToPatch.splice(i); }
+      if (i > -1) { searchFiltersToPatch.splice(i, 1); }
       return searchFiltersToPatch = [...searchFiltersToPatch, newSearchFilterToAdd];
     } else {
       return searchFiltersToPatch = [newSearchFilterToAdd];
