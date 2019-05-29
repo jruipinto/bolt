@@ -140,7 +140,8 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
         alert('Tens de decidir o que queres procurar primeiro!');
         return;
       }
-      this.searchFilters = [{ column: this.selectedOption, condition: this.input }];
+      // this.searchFilters = [{ column: this.selectedOption, condition: this.input }];
+      this.addFilter({ column: this.selectedOption, condition: this.input });
     }
 
     // search client_id here!
