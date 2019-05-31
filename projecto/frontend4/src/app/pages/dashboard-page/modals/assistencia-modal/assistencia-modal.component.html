@@ -1,9 +1,9 @@
 <div *ngIf="assistencia$ | async as assistencia">
-  <clr-modal [clrModalOpen]="true" (clrModalOpenChange)="closeModal(true)" [clrModalSize]="'lg'">
+  <clr-modal *ngIf="assistencia" [clrModalOpen]="true" (clrModalOpenChange)="closeModal(true)" [clrModalSize]="'lg'">
 
     <h3 class="modal-title">{{assistencia.id}}</h3>
 
-    <div class="modal-body" *ngIf="assistencia">
+    <div class="modal-body">
       <div class="separate">
         <div class="clr-row">
           <div class="clr-col-md-2 fontheavy">
@@ -110,7 +110,7 @@
       </div>
     </div>
 
-    <div class="modal-footer">
+    <div class="modal-footer" *ngIf="assistencia.estado != 'entregue'">
       <clr-dropdown>
         <button type="button" class="btn" clrDropdownTrigger>
           <clr-icon shape="caret down"></clr-icon>
@@ -130,5 +130,10 @@
         Guardar
       </button>
     </div>
+    <div class="modal-footer" *ngIf="assistencia.estado === 'entregue'">
+        <button class="btn" (click)="openNewAssistWithThisData(assistencia)">
+          receber novamente
+        </button>
+      </div>
   </clr-modal>
 </div>

@@ -6,6 +6,7 @@ import { Assistencia } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 import { UIService, UI } from 'src/app/shared/state/ui.service';
 import { AssistenciasService } from 'src/app/shared/state';
+import { Router } from '@angular/router';
 
 
 @AutoUnsubscribe()
@@ -19,7 +20,8 @@ export class AssistenciaModalComponent implements OnInit, OnDestroy {
   constructor(
     private printService: PrintService,
     private uiService: UIService,
-    private assistencias: AssistenciasService) {
+    private assistencias: AssistenciasService,
+    private router: Router) {
   }
 
   public assistencia$ = this.uiService.state$
@@ -76,6 +78,26 @@ export class AssistenciaModalComponent implements OnInit, OnDestroy {
         )
         .subscribe();
     }
+  }
+
+  openNewAssistWithThisData(assistencia: Assistencia) {
+    this.uiService.patchState(
+      {
+        // modals
+        assistenciaModalVisible: false,
+        // pages
+        assistenciasCriarNovaPageContactoClienteForm: {
+          contacto: assistencia.cliente_user_contacto
+        },
+        assistenciasCriarNovaPageCriarNovaForm: {
+          ...assistencia,
+          problema: `(Ficha anterior: ${assistencia.id}) `,
+          orcamento: null
+        },
+        // prints
+      }
+    )
+      .subscribe(() => this.router.navigate(['/dashboard/assistencias-criar-nova']));
   }
 
 }
