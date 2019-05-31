@@ -56,4 +56,8 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
+  saveAssist(newEstado: string, assistencia: Assistencia) {
+    return this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado })
+      .subscribe();
+  }
 }

@@ -32,24 +32,30 @@
   </div>
   <div class="clr-col-lg-4">
     <h5>Orçamentos</h5>
+    <div *ngIf="orcamentos$ | async as orcamentos">
+      <div *ngIf="orcamentos.length === 0">💪 Não há mais orçamentos!</div>
+    </div>
     <div class="card" *ngFor="let orcamento of orcamentos$ | async">
       <div class="card-block">
         <div class="card-text">
-            <p>{{orcamento.cliente_user_name}} | {{orcamento.cliente_user_contacto}} | {{orcamento.preco}}€</p>
-            <button class="btn btn-sm btn-link" (click)="openAssistencia(orcamento.id)">abrir</button>
+          <p>{{orcamento.cliente_user_name}} | {{orcamento.cliente_user_contacto}} | {{orcamento.preco}}€</p>
+          <button class="btn btn-sm btn-link" (click)="openAssistencia(orcamento.id)">abrir</button>
         </div>
       </div>
       <div class="card-footer">
-        <button class="btn btn-success btn-sm">Aceite</button>
+        <button class="btn btn-success btn-sm" (click)="saveAssist('orçamento aprovado', orcamento)">Aceite</button>
         <clr-dropdown>
           <button type="button" class="btn btn-sm" clrDropdownTrigger>
             mais acções
             <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button type="button" clrDropdownItem>Recusado</button>
-            <button type="button" clrDropdownItem>Cliente adiou resposta</button>
-            <button type="button" clrDropdownItem>Não atendeu</button>
+            <button type="button" clrDropdownItem
+              (click)="saveAssist('orçamento recusado', orcamento)">Recusado</button>
+            <button type="button" clrDropdownItem (click)="saveAssist('cliente adiou orç.', orcamento)">Cliente adiou
+              resposta</button>
+            <button type="button" clrDropdownItem (click)="saveAssist('não atendeu p/ orç.', orcamento)">Não
+              atendeu</button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>
@@ -57,23 +63,30 @@
   </div>
   <div class="clr-col-lg-4">
     <h5>P. Contact. Cliente</h5>
+    <div *ngIf="pedidosContactoCliente$ | async as pedidosContactoCliente">
+      <div *ngIf="pedidosContactoCliente.length === 0">💪 Não há mais pedidos de contacto!</div>
+    </div>
     <div class="card" *ngFor="let pedidoContactoCliente of pedidosContactoCliente$ | async">
       <div class="card-block">
         <div class="card-text">
-            <p>{{pedidoContactoCliente.cliente_user_name}} | {{pedidoContactoCliente.cliente_user_contacto}} | {{pedidoContactoCliente.relatorio_cliente}}</p>
-            <button class="btn btn-sm btn-link" (click)="openAssistencia(pedidoContactoCliente.id)">abrir</button>
+          <p>{{pedidoContactoCliente.cliente_user_name}} | {{pedidoContactoCliente.cliente_user_contacto}} |
+            {{pedidoContactoCliente.relatorio_cliente}}</p>
+          <button class="btn btn-sm btn-link" (click)="openAssistencia(pedidoContactoCliente.id)">abrir</button>
         </div>
       </div>
       <div class="card-footer">
-        <button class="btn btn-success btn-sm">Sucesso</button>
+        <button class="btn btn-success btn-sm"
+          (click)="saveAssist('contactado', pedidoContactoCliente)">Sucesso</button>
         <clr-dropdown>
           <button type="button" class="btn btn-sm" clrDropdownTrigger>
             mais acções
             <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button type="button" clrDropdownItem>Não atendeu</button>
-            <button type="button" clrDropdownItem>Cliente adiou resposta</button>
+            <button type="button" clrDropdownItem
+              (click)="saveAssist('não atendeu p/ cont.', pedidoContactoCliente)">Não atendeu</button>
+            <button type="button" clrDropdownItem
+              (click)="saveAssist('cliente adiou resp.', pedidoContactoCliente)">Cliente adiou resposta</button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>

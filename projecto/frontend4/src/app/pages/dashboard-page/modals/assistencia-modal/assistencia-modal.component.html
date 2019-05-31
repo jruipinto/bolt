@@ -110,7 +110,10 @@
       </div>
     </div>
 
-    <div class="modal-footer" *ngIf="assistencia.estado != 'entregue'">
+    <div class="modal-footer" *ngIf="assistencia.estado != 'entregue'
+    && assistencia.estado != 'contacto pendente'
+    && assistencia.estado != 'orçamento pendente'
+    && assistencia.estado != 'aguarda material'">
       <clr-dropdown>
         <button type="button" class="btn" clrDropdownTrigger>
           <clr-icon shape="caret down"></clr-icon>
@@ -131,9 +134,17 @@
       </button>
     </div>
     <div class="modal-footer" *ngIf="assistencia.estado === 'entregue'">
-        <button class="btn" (click)="openNewAssistWithThisData(assistencia)">
-          receber novamente
-        </button>
-      </div>
+      <button class="btn" (click)="openNewAssistWithThisData(assistencia)">
+        receber novamente
+      </button>
+    </div>
+    <!--
+    <div class="modal-footer"
+      *ngIf="assistencia.estado === 'contacto pendente' || assistencia.estado === 'orçamento pendente'">
+      <button class="btn btn-danger-outline" (click)="saveModal('entregue', assistencia)">
+        Entregar
+      </button>
+    </div>
+    -->
   </clr-modal>
 </div>

@@ -71,9 +71,13 @@ module.exports = function (app) {
       recebido
       em análise
       contacto pendente
+      não atendeu p/ cont.
+      cliente adiou resp.
       contactado
       incontactável
       orçamento pendente
+      não atendeu p/ orç.
+      cliente adiou orç.
       orçamento aprovado
       orçamento recusado
       aguarda material
@@ -83,12 +87,12 @@ module.exports = function (app) {
       */
     },
   }, {
-    hooks: {
-      beforeCount(options) {
-        options.raw = true;
+      hooks: {
+        beforeCount(options) {
+          options.raw = true;
+        }
       }
-    }
-  });
+    });
 
   // eslint-disable-next-line no-unused-vars
   assistencias.associate = function (models) {
