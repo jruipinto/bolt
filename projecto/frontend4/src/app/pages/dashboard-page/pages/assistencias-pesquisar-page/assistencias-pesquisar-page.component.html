@@ -22,26 +22,20 @@
   </div>
 
   <div class="clr-row">
-    <div class="clr-col-md-6 clr-col-lg-5 clr-col-lg-4">
-      <ul class="list-unstyled">
-        <li *ngFor="let searchFilter of searchFilters; index as i;  trackById" class="filter" [value]=searchFilter>
-          <div class="clr-row">
-            <div class="clr-col-10">
-              {{searchFilter.column | uppercase}}: "{{searchFilter.condition}}"
-            </div>
-            <div class="clr-col-2 clickable" (click)="removeSearchFilter(i)">
-              X
-            </div>
-          </div>
-        </li>
-      </ul>
+    <div class="clr-col">
+      <div *ngFor="let searchFilter of searchFilters; index as i;  trackById">
+        <a href="javascript:void(0)" class="label clickable" (click)="removeSearchFilter(i)">
+          {{searchFilter.column | titlecase}}: "{{searchFilter.condition}}" X
+        </a>
+      </div>
     </div>
   </div>
 </div>
+
+<h4>Resultados:</h4>
 <div *ngIf="(results$ | async) as results">
   <div *ngIf="results.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
   <div *ngIf="results.length>0">
-    <h4>Resultados:</h4>
     <r-data-row class="clr-row" *ngFor="let result of results; let listaIndex=index" (click)="openModal(result.id)">
       <div class="clr-col-lg-1 fontheavy">
         {{result.id}}
