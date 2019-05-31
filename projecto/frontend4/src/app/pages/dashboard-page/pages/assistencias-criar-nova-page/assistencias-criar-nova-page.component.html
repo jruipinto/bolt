@@ -46,6 +46,19 @@
   </div>
 </form>
 
+<div *ngIf="oldAssists.length > 0">
+  <clr-signpost>
+    <clr-signpost-content *clrIfOpen>
+      <h5>Últimas fichas</h5>
+      <p class="p7">(marca modelo cor serial)</p>
+      <div *ngFor="let oldAssist of oldAssists">
+        <p> {{oldAssist.marca}} {{oldAssist.modelo}} {{oldAssist.cor}} {{oldAssist.serial}} </p>
+        <button class="btn btn-sm btn-link" (click)="copyToCriarNovaForm(oldAssist)">copiar</button>
+      </div>
+    </clr-signpost-content>
+  </clr-signpost>
+</div>
+
 <div class="separate" *ngIf="clienteForm.statusChanges | async as clientFormStatus">
   <form class="clr-form" [formGroup]="criarNovaForm" *ngIf="contactoClienteForm.valid && clientFormStatus === 'VALID'"
     (ngSubmit)="onSubmit()">

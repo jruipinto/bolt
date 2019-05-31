@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable, merge } from 'rxjs';
-import { tap, concatMap, map, first } from 'rxjs/operators';
+import { Observable, merge, of, iif, defer } from 'rxjs';
+import { tap, concatMap, map, first, switchMap, mergeMap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 import { AssistenciasService, UsersService, UIService, UI } from 'src/app/shared/state';
@@ -19,6 +19,8 @@ import { capitalize } from 'src/app/shared/utilities';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
+
+  public oldAssists: Assistencia[] = [];
 
   /* Declaration of the 3 Forms on the UI */
   public contactoClienteForm = this.fb.group({
@@ -44,13 +46,26 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
   private clienteChange$ = this.contactoClienteForm.valueChanges.pipe(
     concatMap(({ contacto }) => this.userService$(contacto).pipe(
       map((users: User[]) => users.filter((user: User) => user.contacto === Number(contacto))),
-      tap(clienteArr => {
+      tap(console.log),
+      mergeMap(clienteArr => defer(() => {
         if (clienteArr.length > 0) {
-          this.clienteForm.patchValue(clienteArr[0]);
+          return this.assistenciasService.find({ query: { cliente_user_id: clienteArr[0].id, estado: 'entregue' } })
+            .pipe(
+              tap((oldAssists: Assistencia[]) => {
+                this.clienteForm.patchValue(clienteArr[0]);
+                this.oldAssists = oldAssists;
+              })
+            );
         } else {
-          this.clienteForm.reset();
+          return of()
+            .pipe(
+              tap(() => {
+                this.clienteForm.reset();
+                this.oldAssists = [];
+              })
+            );
         }
-      })
+      }))
     ))
   );
 
@@ -130,7 +145,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
         return usersService.create$({ ...cliente, contacto, ...{ tipo: 'cliente' } })
           .pipe(
             // refresh contacto form to fix bug when creating new user
-            tap((newUserArr: User[]) => this.contactoClienteForm.patchValue({contacto: newUserArr[0].contacto})),
+            tap((newUserArr: User[]) => this.contactoClienteForm.patchValue({ contacto: newUserArr[0].contacto })),
             concatMap((newUserArr: User[]) => assistenciasService.create$({ ...assistencia, ...{ cliente_user_id: newUserArr[0].id } })))
           .subscribe(success, error);
       }
@@ -140,4 +155,11 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  copyToCriarNovaForm(assistencia: Assistencia) {
+    this.criarNovaForm.patchValue(assistencia);
+    this.criarNovaForm.patchValue({
+      problema: `(Ficha anterior: ${assistencia.id}) `,
+      orcamento: null
+    });
+  }
 }
