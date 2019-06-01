@@ -36,9 +36,9 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
       map(state =>
         state
           ? state.filter(assistencia =>
-            assistencia.estado === 'contacto pendente' ||
-            assistencia.estado === 'não atendeu p/ cont.' ||
-            assistencia.estado === 'cliente adiou resp.')
+            assistencia.estado === 'contacto pendente'
+            || assistencia.estado === 'não atendeu p/ cont.'
+            || assistencia.estado === 'cliente adiou resp.')
           : null
       )
     );

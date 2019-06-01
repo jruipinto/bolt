@@ -60,27 +60,23 @@ export class AssistenciaModalComponent implements OnInit, OnDestroy {
   }
 
   saveModal(newEstado: string, assistencia: Assistencia) {
-    if (newEstado === 'entregue' && assistencia.estado !== 'concluído') {
-      return alert('Primeiro tens de concluir a assistencia!');
-    } else {
-      if (newEstado !== 'em análise' && !assistencia.relatorio_cliente) {
-        return alert('Preenche o relatório para o cliente!');
-      }
-      return this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado })
-        .pipe(
-          concatMap(() =>
-            this.uiService.state$
-              .pipe(
-                first(),
-                tap((uiState: UI) => this.uiService.source.next({ ...uiState, assistenciaModalVisible: false }))
-              )
-          ),
-          tap(() => {
-            if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
-          })
-        )
-        .subscribe();
+    if (newEstado !== 'em análise' && !assistencia.relatorio_cliente) {
+      return alert('Preenche o relatório para o cliente!');
     }
+    return this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado })
+      .pipe(
+        concatMap(() =>
+          this.uiService.state$
+            .pipe(
+              first(),
+              tap((uiState: UI) => this.uiService.source.next({ ...uiState, assistenciaModalVisible: false }))
+            )
+        ),
+        tap(() => {
+          if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
+        })
+      )
+      .subscribe();
   }
 
   openNewAssistWithThisData(assistencia: Assistencia) {

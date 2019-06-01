@@ -70,6 +70,15 @@
             <div class="clr-row">
               <div class="clr-col">
                 <textarea name="relatorio_interno" id="relatorio_interno"
+                [attr.readonly]="assistencia.estado === 'contacto pendente'
+                || assistencia.estado === 'não atendeu p/ cont.'
+                || assistencia.estado === 'cliente adiou resp.'
+                || assistencia.estado === 'orçamento pendente'
+                || assistencia.estado === 'não atendeu p/ orç.'
+                || assistencia.estado === 'cliente adiou orç.'
+                || assistencia.estado === 'aguarda material'
+                || assistencia.estado === 'concluído'
+                || assistencia.estado === 'entregue'"
                   [(ngModel)]='assistencia.relatorio_interno'></textarea>
               </div>
             </div>
@@ -110,6 +119,8 @@
       </div>
     </div>
 
+
+
     <div class="modal-footer" *ngIf="assistencia.estado === 'recebido'
     || assistencia.estado === 'em análise'
     || assistencia.estado === 'contactado'
@@ -128,7 +139,6 @@
           <button type="button" clrDropdownItem (click)="saveModal('contacto pendente', assistencia)">
             Contactar</button>
           <button type="button" clrDropdownItem (click)="saveModal('concluído', assistencia)">Concluir</button>
-          <button type="button" clrDropdownItem (click)="saveModal('entregue', assistencia)">Entregar</button>
         </clr-dropdown-menu>
       </clr-dropdown>
       <button class="btn btn-primary btn-icon" (click)="saveModal('em análise', assistencia)">
@@ -136,23 +146,58 @@
         Guardar
       </button>
     </div>
+
+    <div class="modal-footer" *ngIf="assistencia.estado === 'orçamento pendente'
+    || assistencia.estado === 'não atendeu p/ orç.'
+    || assistencia.estado === 'cliente adiou orç.'">
+      <clr-dropdown>
+        <button type="button" class="btn" clrDropdownTrigger>
+          <clr-icon shape="caret down"></clr-icon>
+          + Opções
+        </button>
+        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+          <button type="button" clrDropdownItem (click)="saveModal('orçamento recusado', assistencia)">Recusado</button>
+          <button type="button" clrDropdownItem (click)="saveModal('cliente adiou orç.', assistencia)">Cliente adiou
+            resposta</button>
+          <button type="button" clrDropdownItem (click)="saveModal('não atendeu p/ orç.', assistencia)">Não
+            atendeu</button>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+      <button class="btn btn-success" (click)="saveModal('orçamento aprovado', assistencia)">
+        Aceite
+      </button>
+    </div>
+
+    <div class="modal-footer" *ngIf="assistencia.estado === 'contacto pendente'
+    || assistencia.estado === 'não atendeu p/ cont.'
+    || assistencia.estado === 'cliente adiou resp.'">
+      <clr-dropdown>
+        <button type="button" class="btn" clrDropdownTrigger>
+          <clr-icon shape="caret down"></clr-icon>
+          + Opções
+        </button>
+        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+          <button type="button" clrDropdownItem (click)="saveModal('não atendeu p/ cont.', assistencia)">Não
+            atendeu</button>
+          <button type="button" clrDropdownItem (click)="saveModal('cliente adiou resp.', assistencia)">Cliente adiou
+            resposta</button>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+      <button class="btn btn-success" (click)="saveModal('contactado', assistencia)">
+        Sucesso
+      </button>
+    </div>
+
     <div class="modal-footer" *ngIf="assistencia.estado === 'concluído'">
       <button class="btn btn-danger" (click)="saveModal('entregue', assistencia)">
         Entregar
       </button>
     </div>
+
     <div class="modal-footer" *ngIf="assistencia.estado === 'entregue'">
       <button class="btn" (click)="openNewAssistWithThisData(assistencia)">
-        receber novamente
+        Receber Novamente
       </button>
     </div>
-    <!--
-    <div class="modal-footer"
-      *ngIf="assistencia.estado === 'contacto pendente' || assistencia.estado === 'orçamento pendente'">
-      <button class="btn btn-danger-outline" (click)="saveModal('entregue', assistencia)">
-        Entregar
-      </button>
-    </div>
-    -->
   </clr-modal>
 </div>
