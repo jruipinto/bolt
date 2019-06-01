@@ -110,14 +110,13 @@
       </div>
     </div>
 
-    <div class="modal-footer" *ngIf="assistencia.estado != 'entregue'
-    && assistencia.estado != 'contacto pendente'
-    && assistencia.estado != 'não atendeu p/ cont.'
-    && assistencia.estado != 'cliente adiou resp.'
-    && assistencia.estado != 'orçamento pendente'
-    && assistencia.estado != 'não atendeu p/ orç.'
-    && assistencia.estado != 'cliente adiou orç.'
-    && assistencia.estado != 'aguarda material'">
+    <div class="modal-footer" *ngIf="assistencia.estado === 'recebido'
+    || assistencia.estado === 'em análise'
+    || assistencia.estado === 'contactado'
+    || assistencia.estado === 'incontactável'
+    || assistencia.estado === 'orçamento aprovado'
+    || assistencia.estado === 'orçamento recusado'
+    || assistencia.estado === 'material recebido'">
       <clr-dropdown>
         <button type="button" class="btn" clrDropdownTrigger>
           <clr-icon shape="caret down"></clr-icon>
@@ -135,6 +134,11 @@
       <button class="btn btn-primary btn-icon" (click)="saveModal('em análise', assistencia)">
         <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
         Guardar
+      </button>
+    </div>
+    <div class="modal-footer" *ngIf="assistencia.estado === 'concluído'">
+      <button class="btn btn-danger" (click)="saveModal('entregue', assistencia)">
+        Entregar
       </button>
     </div>
     <div class="modal-footer" *ngIf="assistencia.estado === 'entregue'">

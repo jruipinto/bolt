@@ -63,6 +63,9 @@ export class AssistenciaModalComponent implements OnInit, OnDestroy {
     if (newEstado === 'entregue' && assistencia.estado !== 'concluído') {
       return alert('Primeiro tens de concluir a assistencia!');
     } else {
+      if (newEstado !== 'em análise' && !assistencia.relatorio_cliente) {
+        return alert('Preenche o relatório para o cliente!');
+      }
       return this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado })
         .pipe(
           concatMap(() =>
