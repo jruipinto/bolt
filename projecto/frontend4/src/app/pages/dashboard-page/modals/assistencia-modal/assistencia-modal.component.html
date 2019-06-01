@@ -112,7 +112,11 @@
 
     <div class="modal-footer" *ngIf="assistencia.estado != 'entregue'
     && assistencia.estado != 'contacto pendente'
+    && assistencia.estado != 'não atendeu p/ cont.'
+    && assistencia.estado != 'cliente adiou resp.'
     && assistencia.estado != 'orçamento pendente'
+    && assistencia.estado != 'não atendeu p/ orç.'
+    && assistencia.estado != 'cliente adiou orç.'
     && assistencia.estado != 'aguarda material'">
       <clr-dropdown>
         <button type="button" class="btn" clrDropdownTrigger>

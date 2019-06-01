@@ -24,7 +24,10 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
     .pipe(
       map(state =>
         state
-          ? state.filter(assistencia => assistencia.estado === 'orçamento pendente')
+          ? state.filter(assistencia =>
+            assistencia.estado === 'orçamento pendente'
+            || assistencia.estado === 'não atendeu p/ orç.'
+            || assistencia.estado === 'cliente adiou orç.')
           : null
       )
     );
@@ -32,7 +35,10 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
     .pipe(
       map(state =>
         state
-          ? state.filter(assistencia => assistencia.estado === 'contacto pendente')
+          ? state.filter(assistencia =>
+            assistencia.estado === 'contacto pendente' ||
+            assistencia.estado === 'não atendeu p/ cont.' ||
+            assistencia.estado === 'cliente adiou resp.')
           : null
       )
     );

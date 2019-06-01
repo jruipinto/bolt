@@ -31,14 +31,23 @@
     </div>
   </div>
   <div class="clr-col-lg-4">
-    <h5>Orçamentos</h5>
+    <h5>
+      Orçamentos
+      <span *ngIf="orcamentos$ | async as orcamentos">
+        <span class="badge badge-light-blue" *ngIf="orcamentos.length > 0">{{orcamentos.length}}</span>
+      </span>
+    </h5>
     <div *ngIf="orcamentos$ | async as orcamentos">
       <div *ngIf="orcamentos.length === 0">💪 Não há mais orçamentos!</div>
     </div>
     <div class="card" *ngFor="let orcamento of orcamentos$ | async">
       <div class="card-block">
         <div class="card-text">
-          <p>{{orcamento.cliente_user_name}} | {{orcamento.cliente_user_contacto}} | {{orcamento.preco}}€</p>
+          <span class="label label-blue">{{orcamento.estado}} -> {{orcamento.updatedAt  | date:'shortDate'}}</span>
+          <p>{{orcamento.cliente_user_name}} | {{orcamento.cliente_user_contacto}}</p>
+          <p>{{orcamento.preco}}€ | {{orcamento.relatorio_cliente | slice:0:29}}
+            <span *ngIf="orcamento.relatorio_cliente.length > 30">...</span>
+          </p>
           <button class="btn btn-sm btn-link" (click)="openAssistencia(orcamento.id)">abrir</button>
         </div>
       </div>
@@ -62,15 +71,24 @@
     </div>
   </div>
   <div class="clr-col-lg-4">
-    <h5>P. Contact. Cliente</h5>
+    <h5>
+      P. Contact. Cliente
+      <span *ngIf="pedidosContactoCliente$ | async as pedidosContactoCliente">
+        <span class="badge badge-light-blue" *ngIf="pedidosContactoCliente.length > 0">{{pedidosContactoCliente.length}}</span>
+      </span>
+    </h5>
     <div *ngIf="pedidosContactoCliente$ | async as pedidosContactoCliente">
       <div *ngIf="pedidosContactoCliente.length === 0">💪 Não há mais pedidos de contacto!</div>
     </div>
     <div class="card" *ngFor="let pedidoContactoCliente of pedidosContactoCliente$ | async">
       <div class="card-block">
         <div class="card-text">
-          <p>{{pedidoContactoCliente.cliente_user_name}} | {{pedidoContactoCliente.cliente_user_contacto}} |
-            {{pedidoContactoCliente.relatorio_cliente}}</p>
+          <span class="label label-blue">{{pedidoContactoCliente.estado}} ->
+            {{pedidoContactoCliente.updatedAt | date:'shortDate'}}</span>
+          <p>{{pedidoContactoCliente.cliente_user_name}} | {{pedidoContactoCliente.cliente_user_contacto}}</p>
+          <p>{{pedidoContactoCliente.relatorio_cliente | slice:0:29}}
+            <span *ngIf="pedidoContactoCliente.relatorio_cliente.length > 30">...</span>
+          </p>
           <button class="btn btn-sm btn-link" (click)="openAssistencia(pedidoContactoCliente.id)">abrir</button>
         </div>
       </div>
