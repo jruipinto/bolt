@@ -43,7 +43,7 @@
     <div class="card" *ngFor="let orcamento of orcamentos$ | async">
       <div class="card-block">
         <div class="card-text">
-          <span class="label label-blue">{{orcamento.estado}} -> {{orcamento.updatedAt  | date:'shortDate'}}</span>
+          <span class="label label-blue">{{orcamento.estado}} -> {{orcamento.updatedAt  | date:'mediumDate'}}</span>
           <p>{{orcamento.cliente_user_name}} | {{orcamento.cliente_user_contacto}}</p>
           <p>{{orcamento.preco}}€ | {{orcamento.relatorio_cliente | slice:0:29}}
             <span *ngIf="orcamento.relatorio_cliente.length > 30">...</span>
@@ -84,7 +84,7 @@
       <div class="card-block">
         <div class="card-text">
           <span class="label label-blue">{{pedidoContactoCliente.estado}} ->
-            {{pedidoContactoCliente.updatedAt | date:'shortDate'}}</span>
+            {{pedidoContactoCliente.updatedAt | date:'mediumDate'}}</span>
           <p>{{pedidoContactoCliente.cliente_user_name}} | {{pedidoContactoCliente.cliente_user_contacto}}</p>
           <p>{{pedidoContactoCliente.relatorio_cliente | slice:0:29}}
             <span *ngIf="pedidoContactoCliente.relatorio_cliente.length > 30">...</span>
