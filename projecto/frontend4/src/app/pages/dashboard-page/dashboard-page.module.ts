@@ -23,6 +23,7 @@ import { AssistenciaEntradaPrintComponent } from './prints/assistencia-entrada-p
 import { AssistenciaSaidaPrintComponent } from './prints/assistencia-saida-print/assistencia-saida-print.component';
 import { AssistenciasPesquisarPageComponent } from './pages/assistencias-pesquisar-page/assistencias-pesquisar-page.component';
 import { AssistenciasPesquisarModalComponent } from './modals/assistencias-pesquisar-modal/assistencias-pesquisar-modal.component';
+import { ArtigoModalComponent } from './modals/artigo-modal/artigo-modal.component';
 
 
 
@@ -52,7 +53,8 @@ import { AssistenciasPesquisarModalComponent } from './modals/assistencias-pesqu
     AssistenciaEntradaPrintComponent,
     AssistenciaSaidaPrintComponent,
     AssistenciasPesquisarPageComponent,
-    AssistenciasPesquisarModalComponent
+    AssistenciasPesquisarModalComponent,
+    ArtigoModalComponent
   ]
 })
 export class DashboardPageModule { }

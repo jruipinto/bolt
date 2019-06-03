@@ -5,6 +5,8 @@ export interface UI {
   // modals
   assistenciaModalVisible: boolean;
   assistenciaModalID: number;
+  artigoModalVisible: boolean;
+  artigoModalID: number;
   // pages
   assistenciasCriarNovaPageContactoClienteForm: {};
   assistenciasCriarNovaPageClienteForm: {};
@@ -17,6 +19,8 @@ const defaults: UI = {
   // modals
   assistenciaModalVisible: false,
   assistenciaModalID: null,
+  artigoModalVisible: false,
+  artigoModalID: null,
   // pages
   assistenciasCriarNovaPageContactoClienteForm: {},
   assistenciasCriarNovaPageClienteForm: {},

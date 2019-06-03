@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap, first, map } from 'rxjs/operators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { AssistenciasService, UIService, UI, UsersService } from 'src/app/shared/state';
 import { Assistencia, User } from 'src/app/shared';
 
@@ -9,12 +10,13 @@ export interface Query {
   condition: string | number;
 }
 
+@AutoUnsubscribe()
 @Component({
   selector: 'app-assistencias-pesquisar-page',
   templateUrl: './assistencias-pesquisar-page.component.html',
   styleUrls: ['./assistencias-pesquisar-page.component.scss']
 })
-export class AssistenciasPesquisarPageComponent implements OnInit {
+export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
   results$: Observable<Assistencia[]>;
 
   public selectedOption: string;
@@ -42,6 +44,9 @@ export class AssistenciasPesquisarPageComponent implements OnInit {
     private uiService: UIService) { }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
   }
 
   openModal(id: number): void {

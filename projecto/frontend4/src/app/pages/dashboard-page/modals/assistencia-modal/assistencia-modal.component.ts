@@ -51,9 +51,7 @@ export class AssistenciaModalComponent implements OnInit, OnDestroy {
       this.uiService.state$
         .pipe(
           first(),
-          tap((uiState: UI) =>
-            this.uiService.source.next({ ...uiState, assistenciaModalVisible: false })
-          )
+          concatMap(() => this.uiService.patchState({ assistenciaModalVisible: false }))
         )
         .subscribe();
     }
@@ -69,7 +67,7 @@ export class AssistenciaModalComponent implements OnInit, OnDestroy {
           this.uiService.state$
             .pipe(
               first(),
-              tap((uiState: UI) => this.uiService.source.next({ ...uiState, assistenciaModalVisible: false }))
+              concatMap(() => this.uiService.patchState({ assistenciaModalVisible: false }))
             )
         ),
         tap(() => {
