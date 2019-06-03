@@ -1,9 +1,33 @@
 <clr-modal [clrModalOpen]="true" (clrModalOpenChange)="closeModal(true)" [clrModalSize]="'lg'">
   <h3 class="modal-title">Artigo {{artigo?.id}}</h3>
-  <div class="modal-body" >
-       
+  <div class="modal-body">
+    <form>
+      <div class="clr-row">
+        <div class="clr-col">
+          <input type="text" name="marca" id="marca">
+        </div>
+        <div class="clr-col">
+          <input type="text" name="modelo" id="modelo">
+        </div>
+        <div class="clr-col">
+          <input type="text" name="descricao" id="descricao">
+        </div>
+        <div class="clr-col">
+          <input type="text" name="qty" id="qty">
+        </div>
+        <div class="clr-col">
+          <input type="text" name="localizacao" id="localizacao">
+        </div>
+        <div class="clr-col">
+          <input type="text" name="preco" id="preco">
+        </div>
+        <div class="clr-col">
+          <input type="text" name="pvp" id="pvp">
+        </div>
+      </div>
+    </form>
   </div>
   <div class="modal-footer">
-
+    <input type="submit" value="Criar" (click)="createArtigo(artigo)">
   </div>
 </clr-modal>

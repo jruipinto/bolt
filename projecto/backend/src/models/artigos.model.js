@@ -26,15 +26,23 @@ module.exports = function (app) {
     //int
     qty: {
       type: Sequelize.INTEGER
+    },
+    //decimal(4,2) example: 9999,99€
+    preco: {
+      type: Sequelize.DECIMAL(4, 2)
+    },
+    //decimal(4,2) example: 9999,99€
+    pvp: {
+      type: Sequelize.DECIMAL(4, 2)
     }
-
-  }, {
-    hooks: {
-      beforeCount(options) {
-        options.raw = true;
+  },
+    {
+      hooks: {
+        beforeCount(options) {
+          options.raw = true;
+        }
       }
-    }
-  });
+    });
 
   // eslint-disable-next-line no-unused-vars
   artigos.associate = function (models) {
