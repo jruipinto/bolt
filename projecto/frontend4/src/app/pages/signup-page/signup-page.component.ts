@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { DataService } from 'src/app/shared';
+import { UsersService } from 'src/app/shared/state';
 
 @Component({
   selector: 'app-signup-page',
@@ -19,14 +20,19 @@ export class SignupPageComponent implements OnInit {
     tipo: [null, Validators.required]
   });
 
-  constructor(private fb: FormBuilder, private dataService: DataService) { }
+  constructor(
+    private fb: FormBuilder,
+    private users: UsersService,
+    private router: Router) { }
 
   ngOnInit() {
   }
 
   onSubmit() {
     // this.dataService.create$('users', {nome, contacto, email, password, endereço, nif, tipo});
-    this.dataService.create$('users', this.signupForm.value);
+    // this.dataService.create$('users', this.signupForm.value);
+    this.users.create(this.signupForm.value)
+      .subscribe(() => this.router.navigate(['/']));
   }
 
 }

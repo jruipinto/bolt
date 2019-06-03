@@ -5,4 +5,6 @@ export interface Artigo {
     descricao: string;
     localizacao: string;
     qty: number;
+    preco: number;
+    pvp: number;
 }

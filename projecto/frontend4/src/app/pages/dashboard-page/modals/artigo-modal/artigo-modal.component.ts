@@ -3,6 +3,7 @@ import { first, tap, concatMap, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ArtigosService, UIService, UI } from 'src/app/shared/state';
 import { Artigo } from 'src/app/shared';
+import { FormBuilder } from '@angular/forms';
 
 @AutoUnsubscribe()
 @Component({
@@ -12,10 +13,20 @@ import { Artigo } from 'src/app/shared';
 })
 export class ArtigoModalComponent implements OnInit, OnDestroy {
   public artigo: Artigo;
+  public artigoForm = this.fb.group({
+    marca: [null],
+    modelo: [null],
+    descricao: [null],
+    localizacao: [null],
+    qty: [null],
+    preco: [null],
+    pvp: [null]
+  });
 
   constructor(
     private uiService: UIService,
-    private artigos: ArtigosService
+    private artigos: ArtigosService,
+    private fb: FormBuilder
   ) { }
 
   public artigo$ = this.uiService.state$
