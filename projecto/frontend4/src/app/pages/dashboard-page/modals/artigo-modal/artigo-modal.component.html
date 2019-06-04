@@ -1,33 +1,66 @@
-<clr-modal [clrModalOpen]="true" (clrModalOpenChange)="closeModal()" [clrModalSize]="'lg'">
-  <h3 class="modal-title">Artigo {{artigo?.id}}</h3>
+<clr-modal [clrModalOpen]="true" (clrModalOpenChange)="closeModal()" [clrModalSize]="'md'">
+  <h3 class="modal-title">Artigo {{artigoForm?.id}}</h3>
   <div class="modal-body">
-    <form>
+    <form [formGroup]="artigoForm">
       <div class="clr-row">
-        <div class="clr-col">
-          <input type="text" name="marca" id="marca">
+        <div class="clr-col-md-2">
+          Marca:
         </div>
-        <div class="clr-col">
-          <input type="text" name="modelo" id="modelo">
+        <div class="clr-col-md-10">
+          <input type="text" name="marca" id="marca" formControlName="marca">
         </div>
-        <div class="clr-col">
-          <input type="text" name="descricao" id="descricao">
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-md-2">
+          Modelo:
         </div>
-        <div class="clr-col">
-          <input type="text" name="qty" id="qty">
+        <div class="clr-col-md-10">
+          <input type="text" name="modelo" id="modelo" formControlName="modelo">
         </div>
-        <div class="clr-col">
-          <input type="text" name="localizacao" id="localizacao">
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-md-2">
+          Descrição:
         </div>
-        <div class="clr-col">
-          <input type="text" name="preco" id="preco">
+        <div class="clr-col-md-10">
+          <input type="text" name="descricao" id="descricao" formControlName="descricao">
         </div>
-        <div class="clr-col">
-          <input type="text" name="pvp" id="pvp">
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-md-2">
+          Localização:
+        </div>
+        <div class="clr-col-md-10">
+          <input type="text" name="localizacao" id="localizacao" formControlName="localizacao">
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-md-2">
+          QTY:
+        </div>
+        <div class="clr-col-md-10">
+          <input type="number" name="qty" id="qty" formControlName="qty">
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-md-2">
+          Preço:
+        </div>
+        <div class="clr-col-md-10">
+          €<input type="number" name="preco" id="preco" formControlName="preco">
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-md-2">
+          PVP:
+        </div>
+        <div class="clr-col-md-10">
+          €<input type="number" name="pvp" id="pvp" formControlName="pvp">
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <input type="submit" value="Criar" (click)="createArtigo(artigo)">
+    <button class="btn btn-primary" (click)="createArtigo(artigoForm.value)">Criar</button>
   </div>
 </clr-modal>

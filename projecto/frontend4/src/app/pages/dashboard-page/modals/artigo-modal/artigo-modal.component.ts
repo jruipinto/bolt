@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { first, tap, concatMap, map } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { concatMap, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ArtigosService, UIService, UI } from 'src/app/shared/state';
 import { Artigo } from 'src/app/shared';
@@ -14,6 +15,7 @@ import { FormBuilder } from '@angular/forms';
 export class ArtigoModalComponent implements OnInit, OnDestroy {
   public artigo: Artigo;
   public artigoForm = this.fb.group({
+    id: [null],
     marca: [null],
     modelo: [null],
     descricao: [null],
@@ -31,24 +33,36 @@ export class ArtigoModalComponent implements OnInit, OnDestroy {
 
   public artigo$ = this.uiService.state$
     .pipe(
-      concatMap((uiState: UI) => this.artigos.state$
-        .pipe(
-          map((artigos: Artigo[]) =>
-            artigos.filter((artigo: Artigo) =>
-              artigo.id === uiState.artigoModalID)
-          ),
-          map((artigos: Artigo[]) => artigos[0])
-        ))
+      concatMap((uiState: UI) => {
+        if (uiState.artigoModalID) {
+          return this.artigos.state$
+            .pipe(
+              map((artigos: Artigo[]) =>
+                artigos.filter((artigo: Artigo) =>
+                  artigo.id === uiState.artigoModalID)
+              ),
+              map((artigos: Artigo[]) => artigos[0])
+            );
+        } else {
+          return of();
+        }
+      })
     );
 
   ngOnInit() {
     this.uiService.state$
       .pipe(
-        concatMap((uiState: UI) => this.artigos.get(uiState.artigoModalID))
+        concatMap((uiState: UI) => {
+          if (uiState.artigoModalID) {
+            return this.artigos.get(uiState.artigoModalID);
+          } else {
+            return of();
+          }
+        })
       )
       .subscribe();
     this.artigo$
-      .subscribe(artigo => this.artigo = artigo);
+      .subscribe(artigo => this.artigoForm.patchValue(artigo));
   }
 
   ngOnDestroy() { }
