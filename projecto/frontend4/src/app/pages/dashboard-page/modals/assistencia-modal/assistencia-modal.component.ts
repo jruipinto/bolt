@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { map, concatMap, tap, first } from 'rxjs/operators';
+import { map, concatMap, tap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 import { Assistencia } from 'src/app/shared/models';
@@ -48,11 +48,7 @@ export class AssistenciaModalComponent implements OnInit, OnDestroy {
 
   closeModal(modalIsOpen: boolean) {
     if (modalIsOpen) {
-      this.uiService.state$
-        .pipe(
-          first(),
-          concatMap(() => this.uiService.patchState({ assistenciaModalVisible: false }))
-        )
+      return this.uiService.patchState({ assistenciaModalVisible: false })
         .subscribe();
     }
   }
@@ -64,11 +60,7 @@ export class AssistenciaModalComponent implements OnInit, OnDestroy {
     return this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado })
       .pipe(
         concatMap(() =>
-          this.uiService.state$
-            .pipe(
-              first(),
-              concatMap(() => this.uiService.patchState({ assistenciaModalVisible: false }))
-            )
+          this.uiService.patchState({ assistenciaModalVisible: false })
         ),
         tap(() => {
           if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }

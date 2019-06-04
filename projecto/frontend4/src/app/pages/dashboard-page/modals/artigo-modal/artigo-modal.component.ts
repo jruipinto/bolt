@@ -53,28 +53,16 @@ export class ArtigoModalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() { }
 
-  closeModal(modalIsOpen: boolean) {
-    if (modalIsOpen) {
-      this.uiService.state$
-        .pipe(
-          first(),
-          tap((uiState: UI) =>
-            this.uiService.source.next({ ...uiState, artigoModalVisible: false })
-          )
-        )
-        .subscribe();
-    }
+  closeModal() {
+    return this.uiService.patchState({ artigoModalVisible: false })
+      .subscribe();
   }
 
   saveArtigo(artigo: Artigo) {
     return this.artigos.patch(artigo.id, artigo)
       .pipe(
         concatMap(() =>
-          this.uiService.state$
-            .pipe(
-              first(),
-              concatMap(() => this.uiService.patchState({ artigoModalVisible: false }))
-            )
+          this.uiService.patchState({ artigoModalVisible: false })
         )
       )
       .subscribe();
@@ -84,11 +72,7 @@ export class ArtigoModalComponent implements OnInit, OnDestroy {
     return this.artigos.create(artigo)
       .pipe(
         concatMap(() =>
-          this.uiService.state$
-            .pipe(
-              first(),
-              concatMap(() => this.uiService.patchState({ artigoModalVisible: false }))
-            )
+          this.uiService.patchState({ artigoModalVisible: false })
         )
       )
       .subscribe();

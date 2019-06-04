@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap, first, map } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { AssistenciasService, UIService, UI, UsersService } from 'src/app/shared/state';
+import { AssistenciasService, UIService, UsersService } from 'src/app/shared/state';
 import { Assistencia, User } from 'src/app/shared';
 
 export interface Query {
@@ -50,13 +50,7 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
   }
 
   openModal(id: number): void {
-    this.uiService.state$
-      .pipe(
-        first(),
-        tap((uiState: UI) =>
-          this.uiService.source.next({ ...uiState, ...{ assistenciaModalID: id, assistenciaModalVisible: true } })
-        )
-      )
+    this.uiService.patchState({ assistenciaModalID: id, assistenciaModalVisible: true })
       .subscribe();
   }
   /*

@@ -21,6 +21,10 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     .pipe(
       map((uiState: UI) => uiState.assistenciaModalVisible)
     );
+  public artigoModalVisible$: Observable<boolean> = this.uiService.state$
+    .pipe(
+      map((uiState: UI) => uiState.artigoModalVisible)
+    );
 
   ngOnInit() {
     this.authService.getUserName$().subscribe(res => this.userName = res[0].nome);

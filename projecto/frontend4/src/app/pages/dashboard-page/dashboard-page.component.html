@@ -25,6 +25,7 @@
     <main class="content-area">
       <router-outlet></router-outlet>
       <app-assistencia-modal *ngIf="assistenciaModalVisible$ | async"></app-assistencia-modal>
+      <app-artigo-modal *ngIf="artigoModalVisible$ | async"></app-artigo-modal>
     </main>
     <nav class="sidenav" [clr-nav-level]="1">
       <section class="sidenav-content">

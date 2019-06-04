@@ -1,5 +1,5 @@
-<div class="separate">
-  <input type="submit" value="Criar" (click)="openArtigoModal()">
+<div>
+  <button class="btn btn-link btn-sm" (click)="openArtigoModal()">Novo artigo</button>
 </div>
 <div class="separate">
   <form (ngSubmit)="search(input)">
@@ -18,7 +18,7 @@
 <div *ngIf="(results$ | async) as artigos">
   <div *ngIf="artigos.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
   <div *ngIf="artigos.length>0">
-    <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index" (click)="openModal(artigo.id)">
+    <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index" (click)="openArtigoModal(artigo.id)">
       <div class="clr-col-lg-3">
         <span class="fontheavy">{{artigo.marca}}</span>
         {{artigo.modelo}}

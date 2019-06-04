@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, tap, first, concatMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Encomenda, Assistencia } from 'src/app/shared/models';
-import { UI, UIService, AssistenciasService } from 'src/app/shared/state';
+import { UIService, AssistenciasService } from 'src/app/shared/state';
 
 
 @AutoUnsubscribe()
@@ -51,14 +51,8 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() { }
 
-  openAssistencia(id: number): void {
-    this.uiService.state$
-      .pipe(
-        first(),
-        concatMap(() =>
-          this.uiService.patchState({ assistenciaModalID: id, assistenciaModalVisible: true })
-        )
-      )
+  openAssistencia(id: number) {
+    return this.uiService.patchState({ assistenciaModalID: id, assistenciaModalVisible: true })
       .subscribe();
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { map, tap, first, concatMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { UIService, UI, AssistenciasService } from 'src/app/shared/state';
+import { UIService, AssistenciasService } from 'src/app/shared/state';
 
 @AutoUnsubscribe()
 @Component({
@@ -41,14 +41,8 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() { }
 
-  openModal(id: number): void {
-    this.uiService.state$
-      .pipe(
-        first(),
-        concatMap(() =>
-          this.uiService.patchState({ assistenciaModalID: id, assistenciaModalVisible: true })
-        )
-      )
+  openModal(id: number) {
+    return this.uiService.patchState({ assistenciaModalID: id, assistenciaModalVisible: true })
       .subscribe();
   }
 
