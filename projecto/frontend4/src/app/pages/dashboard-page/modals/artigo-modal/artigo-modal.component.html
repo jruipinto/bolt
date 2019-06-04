@@ -1,5 +1,5 @@
 <clr-modal [clrModalOpen]="true" (clrModalOpenChange)="closeModal()" [clrModalSize]="'md'">
-  <h3 class="modal-title">Artigo {{artigoForm?.id}}</h3>
+  <h3 class="modal-title">Artigo {{artigoForm?.value.id}}</h3>
   <div class="modal-body">
     <form [formGroup]="artigoForm">
       <div class="clr-row">
