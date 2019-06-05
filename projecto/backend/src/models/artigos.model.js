@@ -27,13 +27,13 @@ module.exports = function (app) {
     qty: {
       type: Sequelize.INTEGER
     },
-    //decimal(4,2) example: 9999,99€
+    //decimal(6,2) example: 9999,99€
     preco: {
-      type: Sequelize.DECIMAL(4, 2)
+      type: Sequelize.DECIMAL(6, 2)
     },
-    //decimal(4,2) example: 9999,99€
+    //decimal(6,2) example: 9999,99€
     pvp: {
-      type: Sequelize.DECIMAL(4, 2)
+      type: Sequelize.DECIMAL(6, 2)
     }
   },
     {
