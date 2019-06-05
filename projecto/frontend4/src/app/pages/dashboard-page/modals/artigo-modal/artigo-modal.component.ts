@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ArtigosService, UIService, UI } from 'src/app/shared/state';
-import { Artigo } from 'src/app/shared';
+import { Artigo, capitalize } from 'src/app/shared';
 import { FormBuilder } from '@angular/forms';
 
 @AutoUnsubscribe()
@@ -13,7 +13,6 @@ import { FormBuilder } from '@angular/forms';
   styleUrls: ['./artigo-modal.component.scss']
 })
 export class ArtigoModalComponent implements OnInit, OnDestroy {
-  public artigo: Artigo;
   public artigoForm = this.fb.group({
     id: [null],
     marca: [null],
@@ -73,7 +72,7 @@ export class ArtigoModalComponent implements OnInit, OnDestroy {
   }
 
   saveArtigo(artigo: Artigo) {
-    return this.artigos.patch(artigo.id, artigo)
+    return this.artigos.patch(artigo.id, capitalize(artigo))
       .pipe(
         concatMap(() =>
           this.uiService.patchState({ artigoModalVisible: false })
@@ -83,7 +82,7 @@ export class ArtigoModalComponent implements OnInit, OnDestroy {
   }
 
   createArtigo(artigo: Artigo) {
-    return this.artigos.create(artigo)
+    return this.artigos.create(capitalize(artigo))
       .pipe(
         concatMap(() =>
           this.uiService.patchState({ artigoModalVisible: false })

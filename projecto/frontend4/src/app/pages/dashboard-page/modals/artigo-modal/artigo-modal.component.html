@@ -61,6 +61,11 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-primary" (click)="createArtigo(artigoForm.value)">Criar</button>
+    <div *ngIf="artigoForm.value.id">
+      <button class="btn btn-primary" (click)="saveArtigo(artigoForm.value)">Guardar</button>
+    </div>
+    <div *ngIf="!artigoForm.value.id">
+      <button class="btn btn-primary" (click)="createArtigo(artigoForm.value)">Criar</button>
+    </div>
   </div>
 </clr-modal>
