@@ -1,1 +1,67 @@
-<p>👷 Encomendas em construção!</p>
+<form [formGroup]="encomendaForm">
+    <div class="clr-row">
+        <div class="clr-col-md-2">
+            ArtigoID:
+        </div>
+        <div class="clr-col-md-10">
+            <input type="text" name="artigo_id" id="artigo_id" formControlName="artigo_id">
+        </div>
+    </div>
+    <div class="clr-row">
+        <div class="clr-col-md-2">
+            AssistenciaID:
+        </div>
+        <div class="clr-col-md-10">
+            <input type="text" name="assistencia_id" id="assistencia_id" formControlName="assistencia_id">
+        </div>
+    </div>
+    <div class="clr-row">
+        <div class="clr-col-md-2">
+            ClienteUserID:
+        </div>
+        <div class="clr-col-md-10">
+            <input type="text" name="cliente_user_id" id="cliente_user_id" formControlName="cliente_user_id">
+        </div>
+    </div>
+    <div class="clr-row">
+        <div class="clr-col-md-2">
+            Observação:
+        </div>
+        <div class="clr-col-md-10">
+            <input type="text" name="observacao" id="observacao" formControlName="observacao">
+        </div>
+    </div>
+    <div class="clr-row">
+        <div class="clr-col-md-2">
+            Previsao de entrega:
+        </div>
+        <div class="clr-col-md-10">
+            <input type="text" name="previsao_entrega" id="previsao_entrega" formControlName="previsao_entrega">
+        </div>
+    </div>
+    <div class="clr-row">
+        <div class="clr-col-md-2">
+            Orçamento:
+        </div>
+        <div class="clr-col-md-10">
+            <input type="text" name="orcamento" id="orcamento" formControlName="orcamento">
+        </div>
+    </div>
+    <div class="clr-row">
+        <div class="clr-col-md-2">
+            Fornecedor:
+        </div>
+        <div class="clr-col-md-10">
+            <input type="text" name="fornecedor" id="fornecedor" formControlName="fornecedor">
+        </div>
+    </div>
+    <div class="clr-row">
+        <div class="clr-col-md-2">
+            Qty:
+        </div>
+        <div class="clr-col-md-10">
+            <input type="text" name="qty" id="qty" formControlName="qty">
+        </div>
+    </div>
+    <input class="btn btn-primary" type="submit" value="Criar" (click)="createEncomenda(encomendaForm.value)">
+</form>
