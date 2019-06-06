@@ -1,3 +1,204 @@
-<p>
-  assistencia-page works!
-</p>
+<div *ngIf="assistencia$ | async as assistencia">
+  <div *ngIf="assistencia">
+
+    <h3 class="modal-title">{{assistencia.id}}</h3>
+
+    <div class="modal-body">
+      <div class="separate">
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Estado:
+          </div>
+          <div class="clr-col">
+            {{assistencia.estado}}
+          </div>
+        </div>
+      </div>
+      <div class="separate">
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Cliente:
+          </div>
+          <div class="clr-col">
+            {{assistencia.cliente_user_name}}
+          </div>
+        </div>
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Técnico:
+          </div>
+          <div class="clr-col">
+            {{assistencia.registo_cronologico[assistencia.registo_cronologico.length-1].tecnico}}
+          </div>
+        </div>
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Equipamento:
+          </div>
+          <div class="clr-col">
+            {{assistencia.categoria}}
+            {{assistencia.marca}}
+            {{assistencia.modelo}}
+            {{assistencia.cor}}
+          </div>
+        </div>
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Serial:
+          </div>
+          <div class="clr-col">
+            {{assistencia.serial}}
+          </div>
+        </div>
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Problema:
+          </div>
+          <div class="clr-col">
+            {{assistencia.problema}}
+          </div>
+        </div>
+      </div>
+      <div class="separate">
+        <div class="clr-row">
+          <div class="clr-col-md-6">
+            <div class="clr-row">
+              <div class="clr-col fontheavy">
+                Informação técnica interna:
+              </div>
+            </div>
+            <div class="clr-row">
+              <div class="clr-col">
+                <textarea name="relatorio_interno" id="relatorio_interno" [attr.readonly]="assistencia.estado === 'contacto pendente'
+                || assistencia.estado === 'não atendeu p/ cont.'
+                || assistencia.estado === 'cliente adiou resp.'
+                || assistencia.estado === 'orçamento pendente'
+                || assistencia.estado === 'não atendeu p/ orç.'
+                || assistencia.estado === 'cliente adiou orç.'
+                || assistencia.estado === 'aguarda material'
+                || assistencia.estado === 'concluído'
+                || assistencia.estado === 'entregue'" [(ngModel)]='assistencia.relatorio_interno'></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="clr-col-md-6">
+            <div class="clr-row">
+              <div class="clr-col fontheavy">
+                Informação para o cliente:
+              </div>
+            </div>
+            <div class="clr-row">
+              <div class="clr-col">
+                <textarea name="relatorio_cliente" id="relatorio_cliente"
+                  [(ngModel)]='assistencia.relatorio_cliente'></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="separate">
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Orçamento:
+          </div>
+          <div class="clr-col">
+            <span *ngIf="assistencia.orcamento">€ {{assistencia.orcamento}}</span>
+            <span *ngIf="!assistencia.orcamento">não tem</span>
+          </div>
+        </div>
+        <div class="clr-row">
+          <div class="clr-col-md-2 fontheavy">
+            Preço:
+          </div>
+          <div class="clr-col-md-4">
+            €<input type="number" name="preco" id="preco" [(ngModel)]='assistencia.preco'>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div *ngIf="assistencia.estado === 'recebido'
+    || assistencia.estado === 'em análise'
+    || assistencia.estado === 'contactado'
+    || assistencia.estado === 'incontactável'
+    || assistencia.estado === 'orçamento aprovado'
+    || assistencia.estado === 'orçamento recusado'
+    || assistencia.estado === 'material recebido'">
+      <clr-dropdown>
+        <button type="button" class="btn" clrDropdownTrigger>
+          <clr-icon shape="caret down"></clr-icon>
+          + Opções
+        </button>
+        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+          <button type="button" clrDropdownItem
+            (click)="saveAssistencia('orçamento pendente', assistencia)">Orçamentar</button>
+          <button type="button" clrDropdownItem (click)="saveAssistencia('contacto pendente', assistencia)">
+            Contactar</button>
+          <button type="button" clrDropdownItem (click)="saveAssistencia('concluído', assistencia)">Concluir</button>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+      <button class="btn btn-primary btn-icon" (click)="saveAssistencia('em análise', assistencia)">
+        <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
+        Guardar
+      </button>
+    </div>
+
+    <div *ngIf="assistencia.estado === 'orçamento pendente'
+    || assistencia.estado === 'não atendeu p/ orç.'
+    || assistencia.estado === 'cliente adiou orç.'">
+      <clr-dropdown>
+        <button type="button" class="btn" clrDropdownTrigger>
+          <clr-icon shape="caret down"></clr-icon>
+          + Opções
+        </button>
+        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+          <button type="button" clrDropdownItem
+            (click)="saveAssistencia('orçamento recusado', assistencia)">Recusado</button>
+          <button type="button" clrDropdownItem (click)="saveAssistencia('cliente adiou orç.', assistencia)">Cliente
+            adiou
+            resposta</button>
+          <button type="button" clrDropdownItem (click)="saveAssistencia('não atendeu p/ orç.', assistencia)">Não
+            atendeu</button>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+      <button class="btn btn-success" (click)="saveAssistencia('orçamento aprovado', assistencia)">
+        Aceite
+      </button>
+    </div>
+
+    <div *ngIf="assistencia.estado === 'contacto pendente'
+    || assistencia.estado === 'não atendeu p/ cont.'
+    || assistencia.estado === 'cliente adiou resp.'">
+      <clr-dropdown>
+        <button type="button" class="btn" clrDropdownTrigger>
+          <clr-icon shape="caret down"></clr-icon>
+          + Opções
+        </button>
+        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+          <button type="button" clrDropdownItem (click)="saveAssistencia('não atendeu p/ cont.', assistencia)">Não
+            atendeu</button>
+          <button type="button" clrDropdownItem (click)="saveAssistencia('cliente adiou resp.', assistencia)">Cliente
+            adiou
+            resposta</button>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+      <button class="btn btn-success" (click)="saveAssistencia('contactado', assistencia)">
+        Sucesso
+      </button>
+    </div>
+
+    <div *ngIf="assistencia.estado === 'concluído'">
+      <button class="btn btn-danger" (click)="saveAssistencia('entregue', assistencia)">
+        Entregar
+      </button>
+    </div>
+
+    <div *ngIf="assistencia.estado === 'entregue'">
+      <button class="btn" (click)="openNewAssistWithThisData(assistencia)">
+        Receber Novamente
+      </button>
+    </div>
+  </div>
+</div>

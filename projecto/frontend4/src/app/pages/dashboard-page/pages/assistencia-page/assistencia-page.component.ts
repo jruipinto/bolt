@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { map, concatMap, tap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -24,37 +24,40 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute) {
   }
 
-  public assistencia$ = this.uiService.state$
+  public assistencia$ = this.route.paramMap
     .pipe(
-      concatMap((uiState: UI) => this.assistencias.state$
+      concatMap((params: ParamMap) => this.assistencias.state$
         .pipe(
           map((assistencias: Assistencia[]) =>
             assistencias.filter((assistencia: Assistencia) =>
-              assistencia.id === uiState.assistenciaModalID)
+              assistencia.id === +params.get('id'))
           ),
           map((assistencias: Assistencia[]) => assistencias[0])
         ))
     );
 
-  ngOnInit() {
+  ngOnInit() {/*
     this.uiService.state$
       .pipe(
         concatMap((uiState: UI) => this.assistencias.get(uiState.assistenciaModalID))
+      )
+      .subscribe();
+      */
+    this.route.paramMap
+      .pipe(
+        concatMap((params: ParamMap) => this.assistencias.get(+params.get('id')))
       )
       .subscribe();
   }
 
   ngOnDestroy() { }
 
-  saveModal(newEstado: string, assistencia: Assistencia) {
+  saveAssistencia(newEstado: string, assistencia: Assistencia) {
     if (newEstado !== 'em análise' && !assistencia.relatorio_cliente) {
       return alert('Preenche o relatório para o cliente!');
     }
     return this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado })
       .pipe(
-        concatMap(() =>
-          this.uiService.patchState({ assistenciaModalVisible: false })
-        ),
         tap(() => {
           if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
         })
@@ -66,7 +69,6 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     this.uiService.patchState(
       {
         // modals
-        assistenciaModalVisible: false,
         // pages
         assistenciasCriarNovaPageContactoClienteForm: {
           contacto: assistencia.cliente_user_contacto

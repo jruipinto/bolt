@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/
 import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { UIService, AssistenciasService } from 'src/app/shared/state';
+import { Router } from '@angular/router';
 
 @AutoUnsubscribe()
 @Component({
@@ -14,7 +15,8 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private assistencias: AssistenciasService,
-    private uiService: UIService) {
+    private uiService: UIService,
+    private router: Router) {
   }
 
   public assistencias$ = this.assistencias.state$
@@ -41,9 +43,15 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() { }
 
+  /*
   openModal(id: number) {
     return this.uiService.patchState({ assistenciaModalID: id, assistenciaModalVisible: true })
       .subscribe();
+  }
+  */
+
+  openAssistencia(assistenciaID: number) {
+    return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
   }
 
 }
