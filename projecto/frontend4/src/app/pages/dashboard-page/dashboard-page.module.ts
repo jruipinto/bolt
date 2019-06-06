@@ -20,6 +20,7 @@ import {
   EncomendasHistoricoPageComponent, EncomendasPageComponent,
   StockPageComponent, PainelRapidoPageComponent
 } from './pages';
+import { AssistenciaPageComponent } from './pages/assistencia-page/assistencia-page.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import {
     AssistenciaEntradaPrintComponent,
     AssistenciaSaidaPrintComponent,
     AssistenciasPesquisarPageComponent,
-    ArtigoModalComponent
+    ArtigoModalComponent,
+    AssistenciaPageComponent
   ]
 })
 export class DashboardPageModule { }

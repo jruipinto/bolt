@@ -1,7 +1,7 @@
 <div *ngIf="(assistencias$ | async) as assistencias">
   <div *ngIf="assistencias.length>0">
     <r-data-row class="clr-row overflow-hidden" *ngFor="let assistencia of assistencias; let listaIndex=index"
-      (click)="openModal(assistencia.id)">
+    routerLink="['/dashboard/assistencia', assistencia.id]">
       <div class="clr-col-lg-2">
         <div class="clr-row">
           <div class="clr-col-lg-4 fontheavy">

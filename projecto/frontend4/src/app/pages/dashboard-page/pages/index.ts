@@ -1,3 +1,4 @@
+export * from './assistencia-page';
 export * from './assistencias-page';
 export * from './assistencias-criar-nova-page';
 export * from './assistencias-pesquisar-page';

@@ -8,7 +8,7 @@ import { DashboardPageComponent } from './dashboard-page.component';
 import {
   PainelRapidoPageComponent, AssistenciasPageComponent, AssistenciasCriarNovaPageComponent,
   EncomendasPageComponent, EncomendasCriarNovaPageComponent, EncomendasHistoricoPageComponent,
-  StockPageComponent, AssistenciasPesquisarPageComponent
+  StockPageComponent, AssistenciasPesquisarPageComponent, AssistenciaPageComponent
 } from './pages';
 
 
@@ -23,6 +23,7 @@ const routes: Routes = [
         canActivateChild: [AuthGuard],
         children: [
           { path: 'painel-rapido', component: PainelRapidoPageComponent },
+          { path: 'assistencia/:id', component: AssistenciaPageComponent },
           { path: 'assistencias', component: AssistenciasPageComponent },
           { path: 'assistencias-criar-nova', component: AssistenciasCriarNovaPageComponent },
           { path: 'assistencias-pesquisar', component: AssistenciasPesquisarPageComponent },
