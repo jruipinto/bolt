@@ -8,7 +8,7 @@ import { DashboardPageComponent } from './dashboard-page.component';
 import {
   PainelRapidoPageComponent, AssistenciasPageComponent, AssistenciasCriarNovaPageComponent,
   EncomendasPageComponent, EncomendasCriarNovaPageComponent, EncomendasHistoricoPageComponent,
-  StockPageComponent, AssistenciasPesquisarPageComponent, AssistenciaPageComponent
+  StockPageComponent, AssistenciasPesquisarPageComponent, AssistenciaPageComponent, ArtigoPageComponent
 } from './pages';
 
 
@@ -27,6 +27,8 @@ const routes: Routes = [
           { path: 'assistencias', component: AssistenciasPageComponent },
           { path: 'assistencias-criar-nova', component: AssistenciasCriarNovaPageComponent },
           { path: 'assistencias-pesquisar', component: AssistenciasPesquisarPageComponent },
+          { path: 'artigo/:id', component: ArtigoPageComponent },
+          { path: 'artigo', component: ArtigoPageComponent },
           { path: 'encomendas', component: EncomendasPageComponent },
           { path: 'encomendas-criar-nova', component: EncomendasCriarNovaPageComponent },
           { path: 'encomendas-historico', component: EncomendasHistoricoPageComponent },

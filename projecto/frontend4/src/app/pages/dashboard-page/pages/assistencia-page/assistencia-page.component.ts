@@ -7,6 +7,7 @@ import { Assistencia } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 import { UIService, UI } from 'src/app/shared/state/ui.service';
 import { AssistenciasService } from 'src/app/shared/state';
+import { Observable } from 'rxjs';
 
 @AutoUnsubscribe()
 @Component({
@@ -15,6 +16,7 @@ import { AssistenciasService } from 'src/app/shared/state';
   styleUrls: ['./assistencia-page.component.scss']
 })
 export class AssistenciaPageComponent implements OnInit, OnDestroy {
+  public assistencia: Assistencia;
 
   constructor(
     private printService: PrintService,
@@ -24,30 +26,14 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute) {
   }
 
-  public assistencia$ = this.route.paramMap
-    .pipe(
-      concatMap((params: ParamMap) => this.assistencias.state$
-        .pipe(
-          map((assistencias: Assistencia[]) =>
-            assistencias.filter((assistencia: Assistencia) =>
-              assistencia.id === +params.get('id'))
-          ),
-          map((assistencias: Assistencia[]) => assistencias[0])
-        ))
-    );
-
-  ngOnInit() {/*
-    this.uiService.state$
-      .pipe(
-        concatMap((uiState: UI) => this.assistencias.get(uiState.assistenciaModalID))
-      )
-      .subscribe();
-      */
+  ngOnInit() {
     this.route.paramMap
       .pipe(
-        concatMap((params: ParamMap) => this.assistencias.get(+params.get('id')))
+        concatMap((params: ParamMap) => this.assistencias.getAndWatch(+params.get('id')))
       )
-      .subscribe();
+      .subscribe(
+        (assistencia: Assistencia[]) => this.assistencia = assistencia[0]
+      );
   }
 
   ngOnDestroy() { }
@@ -60,12 +46,13 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
       .pipe(
         tap(() => {
           if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
-        })
+        }),
+        tap(() => window.history.back())
       )
       .subscribe();
   }
 
-  openNewAssistWithThisData(assistencia: Assistencia) {
+  openNewAssistenciaWithThisData(assistencia: Assistencia) {
     this.uiService.patchState(
       {
         // modals

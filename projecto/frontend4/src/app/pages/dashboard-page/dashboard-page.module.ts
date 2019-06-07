@@ -18,9 +18,10 @@ import {
   AssistenciasPageComponent, AssistenciasPesquisarPageComponent,
   AssistenciasCriarNovaPageComponent, EncomendasCriarNovaPageComponent,
   EncomendasHistoricoPageComponent, EncomendasPageComponent,
-  StockPageComponent, PainelRapidoPageComponent
+  StockPageComponent, PainelRapidoPageComponent,
+  AssistenciaPageComponent, ArtigoPageComponent
 } from './pages';
-import { AssistenciaPageComponent } from './pages/assistencia-page/assistencia-page.component';
+import { EncomendaPageComponent } from './pages/encomenda-page/encomenda-page.component';
 
 
 @NgModule({
@@ -49,7 +50,9 @@ import { AssistenciaPageComponent } from './pages/assistencia-page/assistencia-p
     AssistenciaSaidaPrintComponent,
     AssistenciasPesquisarPageComponent,
     ArtigoModalComponent,
-    AssistenciaPageComponent
+    AssistenciaPageComponent,
+    ArtigoPageComponent,
+    EncomendaPageComponent
   ]
 })
 export class DashboardPageModule { }

@@ -1,4 +1,4 @@
-import { of, BehaviorSubject, merge } from 'rxjs';
+import { of, BehaviorSubject, merge, fromEvent } from 'rxjs';
 import { map, tap, concatMap, switchMap, first } from 'rxjs/operators';
 import { unionBy } from 'lodash';
 import { EntitiesApiAbstrationService } from './entities-api-abstration.service';
@@ -8,10 +8,24 @@ export abstract class EntityStateAbstraction {
   private defaults = [];
   private source = new BehaviorSubject<any[]>(this.defaults);
   public state$ = this.source;
+  private lostConnection = false;
+
+  private windowOffline$ = fromEvent(window, 'offline');
+  private windowOnline$ = fromEvent(window, 'online');
 
 
   constructor(
-    private xAPIservice: EntitiesApiAbstrationService) { }
+    private xAPIservice: EntitiesApiAbstrationService) {
+    this.windowOffline$
+      .subscribe(() => this.lostConnection = true);
+    this.windowOnline$
+      .subscribe(
+        () => {
+          // reset state + reset lostConnection flag
+          this.source.next(this.defaults);
+          this.lostConnection = false;
+        });
+  }
 
   public find(query?: object) {
     return this.state$
@@ -31,12 +45,18 @@ export abstract class EntityStateAbstraction {
   }
   public get(id: number) {
     const dbGetAndSave$ = state => this.xAPIservice.get(id)
-      .pipe( tap(e => this.source.next(sortByID([...state, e]))));
+      .pipe(tap(e => this.source.next(sortByID([...state, ...e]))));
 
     return this.state$.pipe(
       first(),
       map(state => [...state.filter(item => item.id === id)]),
-      switchMap(state => (state[0] ? of(state) : dbGetAndSave$(state)))
+      switchMap(state => {
+        if (state[0]) {
+          return of(state);
+        } else {
+          return dbGetAndSave$(state);
+        }
+      })
     );
   }
   public create(data: object) {
@@ -83,6 +103,15 @@ export abstract class EntityStateAbstraction {
       this.onCreated(),
       this.onPatched()
     );
+  }
+
+  public getAndWatch(id: number) {
+    return merge(
+      this.get(id),
+      this.onCreated(),
+      this.onPatched()
+    );
+
   }
 
 }
