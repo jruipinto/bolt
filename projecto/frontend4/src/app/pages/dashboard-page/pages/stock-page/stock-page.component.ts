@@ -1,26 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Artigo } from 'src/app/shared';
 import { Observable } from 'rxjs';
 import { ArtigosService, UIService } from 'src/app/shared/state';
-import { Router } from '@angular/router';
 
+@AutoUnsubscribe()
 @Component({
   selector: 'app-stock-page',
   templateUrl: './stock-page.component.html',
   styleUrls: ['./stock-page.component.scss']
 })
-export class StockPageComponent implements OnInit {
-  results$: Observable<Artigo[]>;
+export class StockPageComponent implements OnInit, OnDestroy {
+  public results$: Observable<Artigo[]>;
+  public artigoSearchForm = this.fb.group({
+    input: [null]
+  });
 
   constructor(
     private artigos: ArtigosService,
     private uiService: UIService,
-    private router: Router) { }
+    private router: Router,
+    private fb: FormBuilder) { }
 
   ngOnInit() {
   }
 
-  search(input?: string) {
+  ngOnDestroy() {
+  }
+
+  searchArtigo(input?: string) {
     if (input) {
       const inputSplited = input.split(' ');
       const inputMapped = inputSplited.map(word =>

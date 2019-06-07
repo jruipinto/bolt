@@ -1,4 +1,4 @@
-<form (ngSubmit)="search(input)">
+<form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
   <div class="clr-row">
     <div class="clr-col-xl-2 clr-col-lg-3">
       <input type="submit" class="btn btn-primary" value="🔎 Pesquisar" />
@@ -7,7 +7,7 @@
       <button class="btn" (click)="openArtigo()">👶 Novo artigo</button>
     </div>
     <div class="clr-col-xl-8 clr-col-lg-6">
-      <input type="text" class="wd-100" placeholder="Digita algo..." name="input" [(ngModel)]="input" />
+      <input type="text" class="wd-100" placeholder="Digita algo..." name="input" formControlName="input" />
     </div>
   </div>
 </form>

@@ -16,12 +16,12 @@ import { AssistenciaModalComponent, ArtigoModalComponent } from './modals';
 import { AssistenciaEntradaPrintComponent, AssistenciaSaidaPrintComponent } from './prints';
 import {
   AssistenciasPageComponent, AssistenciasPesquisarPageComponent,
-  AssistenciasCriarNovaPageComponent, EncomendasCriarNovaPageComponent,
+  AssistenciasCriarNovaPageComponent, EncomendaPageComponent,
+  EncomendasCriarNovaPageComponent,
   EncomendasHistoricoPageComponent, EncomendasPageComponent,
   StockPageComponent, PainelRapidoPageComponent,
   AssistenciaPageComponent, ArtigoPageComponent
 } from './pages';
-import { EncomendaPageComponent } from './pages/encomenda-page/encomenda-page.component';
 
 
 @NgModule({
