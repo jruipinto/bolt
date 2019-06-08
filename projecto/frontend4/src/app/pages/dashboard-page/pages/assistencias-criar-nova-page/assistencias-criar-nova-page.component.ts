@@ -43,33 +43,32 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
     orcamento: [null]
   });
   /*########################################### */
-  private clienteChange$ = this.contactoClienteForm.valueChanges.pipe(
-    concatMap(({ contacto }) => this.userService$(contacto).pipe(
-      map((users: User[]) => users.filter((user: User) => user.contacto === Number(contacto))),
-      tap(console.log),
-      mergeMap(clienteArr => defer(() => {
-        if (clienteArr.length > 0) {
-          return this.assistenciasService.find({ query: { cliente_user_id: clienteArr[0].id, estado: 'entregue' } })
-            .pipe(
-              tap((oldAssists: Assistencia[]) => {
-                this.clienteForm.patchValue(clienteArr[0]);
-                this.oldAssists = oldAssists;
-              })
-            );
-        } else {
-          return of()
-            .pipe(
-              tap(() => {
-                this.clienteForm.reset();
-                this.oldAssists = [];
-              })
-            );
-        }
-      }))
-    ))
-  );
+  private clienteChange$ = this.contactoClienteForm.valueChanges
+    .pipe(
+      tap(() => {
+        this.clienteForm.reset();
+        this.oldAssists = [];
+      }),
+      concatMap(({ contacto }) => this.user$(contacto).pipe(
+        map((users: User[]) => users.filter((user: User) => user.contacto === +contacto)),
+        map((users: User[]) => users[0]),
+        mergeMap((cliente: User) => {
+          if (cliente) {
+            return this.assistenciasService.find({ query: { cliente_user_id: cliente.id, estado: 'entregue' } })
+              .pipe(
+                tap((oldAssists: Assistencia[]) => {
+                  this.clienteForm.patchValue(cliente);
+                  this.oldAssists = oldAssists;
+                })
+              );
+          } else {
+            return of();
+          }
+        })
+      ))
+    );
 
-  private userService$ = (contacto: number) => this.usersService.find({ query: { contacto } }) as Observable<User[]>;
+  private user$ = (contacto: number) => this.usersService.find({ query: { contacto } }) as Observable<User[]>;
 
 
   constructor(
