@@ -1,6 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { tap, concatMap, map, first } from 'rxjs/operators';
+import { Observable, merge } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { User } from 'src/app/shared/models';
+import { UsersService, UI, UIService } from 'src/app/shared/state';
 
 @AutoUnsubscribe()
 @Component({
@@ -32,11 +36,55 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
     qty: [null]
   });
 
+  private clienteChange$ = this.contactoClienteForm.valueChanges
+    .pipe(
+      tap(() => {
+        this.clienteForm.reset();
+      }),
+      concatMap(({ contacto }) => this.user$(contacto).pipe(
+        map((users: User[]) => users.filter((user: User) => user.contacto === +contacto)),
+        map((users: User[]) => users[0]),
+        tap((cliente: User) => {
+          if (cliente) { this.clienteForm.patchValue(cliente); }
+        })
+      ))
+    );
+
+  private user$ = (contacto: number) => this.usersService.find({ query: { contacto } }) as Observable<User[]>;
+
+
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private usersService: UsersService,
+    private uiService: UIService
   ) { }
 
   ngOnInit() {
+    merge(
+      this.clienteChange$,
+      this.uiService.state$
+      .pipe(
+        first(),
+        tap((state: UI) => {
+          this.contactoClienteForm.patchValue(state.encomendaPageContactoClienteForm);
+          this.clienteForm.patchValue(state.encomendaPageClienteForm);
+          this.encomendaForm.patchValue(state.encomendaPageEncomendaForm);
+        })
+      ),
+      this.contactoClienteForm.valueChanges
+      .pipe(
+        concatMap(value => this.uiService.patchState({ encomendaPageContactoClienteForm: value }))
+      ),
+    this.clienteForm.valueChanges
+      .pipe(
+        concatMap(value => this.uiService.patchState({ encomendaPageClienteForm: value }))
+      ),
+    this.encomendaForm.valueChanges
+      .pipe(
+        concatMap(value => this.uiService.patchState({ encomendaPageEncomendaForm: value }))
+      ),
+    )
+      .subscribe();
   }
 
   ngOnDestroy() {

@@ -11,6 +11,9 @@ export interface UI {
   assistenciasCriarNovaPageContactoClienteForm: {};
   assistenciasCriarNovaPageClienteForm: {};
   assistenciasCriarNovaPageCriarNovaForm: {};
+  encomendaPageContactoClienteForm: {};
+  encomendaPageClienteForm: {};
+  encomendaPageEncomendaForm: {};
 
   // prints
 }
@@ -25,6 +28,9 @@ const defaults: UI = {
   assistenciasCriarNovaPageContactoClienteForm: {},
   assistenciasCriarNovaPageClienteForm: {},
   assistenciasCriarNovaPageCriarNovaForm: {},
+  encomendaPageContactoClienteForm: {},
+  encomendaPageClienteForm: {},
+  encomendaPageEncomendaForm: {},
   // prints
 };
 
