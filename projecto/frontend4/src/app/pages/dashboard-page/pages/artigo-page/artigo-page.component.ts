@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { tap, concatMap, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -28,6 +28,7 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private artigos: ArtigosService,
+    private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder
   ) { }
@@ -69,6 +70,10 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
         tap(() => window.history.back())
       )
       .subscribe();
+  }
+
+  orderArtigo(artigoID: number) {
+    return this.router.navigate(['/dashboard/encomenda', artigoID]);
   }
 
 }

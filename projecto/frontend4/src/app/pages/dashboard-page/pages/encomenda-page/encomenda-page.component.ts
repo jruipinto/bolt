@@ -5,6 +5,7 @@ import { Observable, merge } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { User } from 'src/app/shared/models';
 import { UsersService, UI, UIService } from 'src/app/shared/state';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @AutoUnsubscribe()
 @Component({
@@ -25,12 +26,12 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
   });
   public encomendaForm = this.fb.group({
     id: [null],
-    artigo_id: [null],
+    artigo_id: [null, [Validators.required]],
     assistencia_id: [null],
     cliente_user_id: [null],
     observacao: [null],
     estado: [null],
-    previsao_entrega: [null],
+    previsao_entrega: [null, [Validators.required]],
     orcamento: [null],
     fornecedor: [null],
     qty: [null]
@@ -40,12 +41,16 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
     .pipe(
       tap(() => {
         this.clienteForm.reset();
+        this.encomendaForm.patchValue({ cliente_user_id: null });
       }),
       concatMap(({ contacto }) => this.user$(contacto).pipe(
         map((users: User[]) => users.filter((user: User) => user.contacto === +contacto)),
         map((users: User[]) => users[0]),
         tap((cliente: User) => {
-          if (cliente) { this.clienteForm.patchValue(cliente); }
+          if (cliente) {
+            this.clienteForm.patchValue(cliente);
+            this.encomendaForm.patchValue({ cliente_user_id: cliente.id });
+          }
         })
       ))
     );
@@ -56,33 +61,39 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
-    private uiService: UIService
+    private uiService: UIService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
     merge(
       this.clienteChange$,
       this.uiService.state$
-      .pipe(
-        first(),
-        tap((state: UI) => {
-          this.contactoClienteForm.patchValue(state.encomendaPageContactoClienteForm);
-          this.clienteForm.patchValue(state.encomendaPageClienteForm);
-          this.encomendaForm.patchValue(state.encomendaPageEncomendaForm);
-        })
-      ),
+        .pipe(
+          first(),
+          tap((state: UI) => {
+            this.contactoClienteForm.patchValue(state.encomendaPageContactoClienteForm);
+            this.clienteForm.patchValue(state.encomendaPageClienteForm);
+            this.encomendaForm.patchValue(state.encomendaPageEncomendaForm);
+          })
+        ),
       this.contactoClienteForm.valueChanges
-      .pipe(
-        concatMap(value => this.uiService.patchState({ encomendaPageContactoClienteForm: value }))
-      ),
-    this.clienteForm.valueChanges
-      .pipe(
-        concatMap(value => this.uiService.patchState({ encomendaPageClienteForm: value }))
-      ),
-    this.encomendaForm.valueChanges
-      .pipe(
-        concatMap(value => this.uiService.patchState({ encomendaPageEncomendaForm: value }))
-      ),
+        .pipe(
+          concatMap(value => this.uiService.patchState({ encomendaPageContactoClienteForm: value }))
+        ),
+      this.clienteForm.valueChanges
+        .pipe(
+          concatMap(value => this.uiService.patchState({ encomendaPageClienteForm: value }))
+        ),
+      this.encomendaForm.valueChanges
+        .pipe(
+          concatMap(value => this.uiService.patchState({ encomendaPageEncomendaForm: value }))
+        ),
+      this.route.paramMap
+        .pipe(
+          map((params: ParamMap) => +params.get('id')),
+          tap((artigoID: number) => this.encomendaForm.patchValue({ artigo_id: artigoID }))
+        )
     )
       .subscribe();
   }
