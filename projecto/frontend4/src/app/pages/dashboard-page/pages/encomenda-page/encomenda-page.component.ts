@@ -3,8 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { tap, concatMap, map, first } from 'rxjs/operators';
 import { Observable, merge } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { User } from 'src/app/shared/models';
-import { UsersService, UI, UIService } from 'src/app/shared/state';
+import { User, Encomenda } from 'src/app/shared/models';
+import { UsersService, UI, UIService, EncomendasService } from 'src/app/shared/state';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @AutoUnsubscribe()
@@ -24,17 +24,27 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
     nif: [''],
     id: [null]
   });
+  public artigoForm = this.fb.group({
+    id: [null],
+    marca: [null],
+    modelo: [null],
+    descricao: [null],
+    localizacao: [null],
+    qty: [null],
+    preco: [null],
+    pvp: [null]
+  });
   public encomendaForm = this.fb.group({
     id: [null],
     artigo_id: [null, [Validators.required]],
     assistencia_id: [null],
     cliente_user_id: [null],
     observacao: [null],
-    estado: [null],
+    estado: ['registada'],
     previsao_entrega: [null, [Validators.required]],
     orcamento: [null],
     fornecedor: [null],
-    qty: [null]
+    qty: [null, [Validators.required]]
   });
 
   private clienteChange$ = this.contactoClienteForm.valueChanges
@@ -61,6 +71,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
+    private encomendasService: EncomendasService,
     private uiService: UIService,
     private route: ActivatedRoute
   ) { }
@@ -74,6 +85,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
           tap((state: UI) => {
             this.contactoClienteForm.patchValue(state.encomendaPageContactoClienteForm);
             this.clienteForm.patchValue(state.encomendaPageClienteForm);
+            this.artigoForm.patchValue(state.encomendaPageArtigoForm);
             this.encomendaForm.patchValue(state.encomendaPageEncomendaForm);
           })
         ),
@@ -85,20 +97,32 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
         .pipe(
           concatMap(value => this.uiService.patchState({ encomendaPageClienteForm: value }))
         ),
+      this.artigoForm.valueChanges
+        .pipe(
+          concatMap(value => this.uiService.patchState({ encomendaPageArtigoForm: value }))
+        ),
       this.encomendaForm.valueChanges
         .pipe(
           concatMap(value => this.uiService.patchState({ encomendaPageEncomendaForm: value }))
-        ),
-      this.route.paramMap
-        .pipe(
-          map((params: ParamMap) => +params.get('id')),
-          tap((artigoID: number) => this.encomendaForm.patchValue({ artigo_id: artigoID }))
         )
     )
       .subscribe();
+    this.encomendaForm.patchValue({ artigo_id: this.artigoForm.value.id });
   }
 
   ngOnDestroy() {
+  }
+
+  createEncomenda(encomenda: Encomenda) {
+    return this.encomendasService.create(encomenda)
+      .subscribe(
+        () => {
+          this.artigoForm.reset();
+          this.encomendaForm.reset();
+          alert('Sucesso!');
+        },
+        error => alert(error)
+      );
   }
 
 }

@@ -4,6 +4,7 @@ import { tap, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { AssistenciasService, UIService, UsersService } from 'src/app/shared/state';
 import { Assistencia, User } from 'src/app/shared';
+import { Router } from '@angular/router';
 
 export interface Query {
   column: string;
@@ -41,7 +42,8 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
   constructor(
     private assistencias: AssistenciasService,
     private users: UsersService,
-    private uiService: UIService) { }
+    private uiService: UIService,
+    private router: Router) { }
 
   ngOnInit() {
   }
@@ -52,6 +54,10 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
   openModal(id: number): void {
     this.uiService.patchState({ assistenciaModalID: id, assistenciaModalVisible: true })
       .subscribe();
+  }
+
+  openAssistencia(assistenciaID: number) {
+    return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
   }
   /*
     addFilter(newSearchFilter: Query) {

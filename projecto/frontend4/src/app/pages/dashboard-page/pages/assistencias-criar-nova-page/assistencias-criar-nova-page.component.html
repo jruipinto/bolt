@@ -1,23 +1,22 @@
 <form class="separate clr-form" [formGroup]="contactoClienteForm">
   <div class="clr-row">
     <div class="clr-col-md-2">
-      <label for="contacto">Contacto:</label>
+      <label for="contacto">Contacto:*</label>
     </div>
     <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="wd-100" type="tel" name="contacto" id="contacto" placeholder="☎️ (obrigatório)" required autofocus
+      <input class="wd-100" type="tel" name="contacto" id="contacto" placeholder="☎️" required autofocus
         formControlName="contacto">
     </div>
   </div>
 </form>
 
-<form class="separate clr-form" [formGroup]="clienteForm" *ngIf="contactoClienteForm.valid">
+<form class="separate clr-form" [formGroup]="clienteForm">
   <div class="clr-row">
     <div class="clr-col-md-2">
-      <label for="nome">Nome:</label>
+      <label for="nome">Nome:*</label>
     </div>
     <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="wd-100" type="text" name="nome" id="nome" placeholder="(obrigatório)" required
-        formControlName="nome">
+      <input class="wd-100" type="text" name="nome" id="nome" required formControlName="nome">
     </div>
   </div>
   <div class="clr-row">
@@ -59,17 +58,15 @@
   </clr-signpost>
 </div>
 
-<div class="separate" *ngIf="clienteForm.statusChanges | async as clientFormStatus">
-  <form class="clr-form" [formGroup]="criarNovaForm" *ngIf="contactoClienteForm.valid && clientFormStatus === 'VALID'"
-    (ngSubmit)="onSubmit()">
+<div class="separate">
+  <form class="clr-form" [formGroup]="criarNovaForm" (ngSubmit)="onSubmit()">
     <div class="clr-row">
       <div class="clr-col-md-2">
-        <label for="categoria">Categoria:</label>
+        <label for="categoria">Categoria:*</label>
       </div>
       <div class="clr-col-md-9 clr-col-lg-6">
         <div class="clr-select-wrapper wd-100">
-          <select class="clr-select wd-100" name="categoria" id="categoria" formControlName="categoria"
-            placeholder="(obrigatório)">
+          <select class="clr-select wd-100" name="categoria" id="categoria" formControlName="categoria">
             <option value="Telemóvel">Telemóvel</option>
             <option value="Tablet">Tablet</option>
             <option value="Portátil">Portátil</option>
@@ -102,11 +99,10 @@
     </div>
     <div class="clr-row">
       <div class="clr-col-md-2">
-        <label for="cor">Cor:</label>
+        <label for="cor">Cor: *</label>
       </div>
       <div class="clr-col-md-9 clr-col-lg-6">
-        <input class="wd-100" type="text" name="cor" id="cor" placeholder="(obrigatório)" required
-          formControlName="cor">
+        <input class="wd-100" type="text" name="cor" id="cor" required formControlName="cor">
       </div>
     </div>
     <div class="clr-row">
@@ -120,12 +116,10 @@
     </div>
     <div class="clr-row">
       <div class="clr-col-md-2">
-        <label for="problema">Problema:</label>
+        <label for="problema">Problema:*</label>
       </div>
       <div class="clr-col-md-9 clr-col-lg-6">
-        <!-- <input type="text" name="problema" id="problema" placeholder="(obrigatório)" required formControlName="problema"> -->
-        <textarea name="problema" id="problema" placeholder="(obrigatório)" required
-          formControlName="problema"></textarea>
+        <textarea name="problema" id="problema" required formControlName="problema"></textarea>
       </div>
     </div>
     <div class="clr-row">
@@ -138,7 +132,7 @@
     </div>
     <div class="clr-row no-gutters">
       <div class="clr-col-md-12 clr-col-lg-2">
-        <input class="btn btn-primary wd-100" type="submit" [disabled]="!criarNovaForm.valid">
+        <input class="btn btn-primary wd-100" type="submit" [disabled]="!contactoClienteForm.valid && !clienteForm.valid && !criarNovaForm.valid">
       </div>
     </div>
   </form>

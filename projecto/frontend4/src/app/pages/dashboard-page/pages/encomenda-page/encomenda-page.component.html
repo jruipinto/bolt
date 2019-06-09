@@ -1,24 +1,26 @@
-<!--
-artigo
-
-cliente ou assistencia
-
-encomenda
--->
-
-<h3>Nova Encomenda <span *ngIf="encomendaForm.value.artigo_id"> de artigo {{encomendaForm.value.artigo_id}}</span></h3>
-
-<div *ngIf="!encomendaForm.value.artigo_id">
-  <a [routerLink]="['/dashboard/stock']" routerLinkActive="active" >Dirija-se, em primeiro lugar, à pesquisa do Stock, para escolher o artigo que vai encomendar</a>
+<div class="separate clr-form clr-row">
+  <div class="clr-col-md-2">
+    <label for="">Artigo:*</label>
+  </div>
+  <div class="clr-col-md-9 clr-col-lg-6">
+    <span *ngIf="encomendaForm.value.artigo_id">
+      {{artigoForm.value.descricao}} {{artigoForm.value.marca}} {{artigoForm.value.modelo}}
+    </span>
+    <span *ngIf="!encomendaForm.value.artigo_id">
+      <a [routerLink]="['/dashboard/stock']" routerLinkActive="active">Dirija-se, em primeiro lugar, à pesquisa do
+        Stock,
+        para escolher o artigo que vai encomendar</a>
+    </span>
+  </div>
 </div>
 
 <form class="separate clr-form" [formGroup]="contactoClienteForm">
   <div class="clr-row">
     <div class="clr-col-md-2">
-      <label for="contacto">Contacto:</label>
+      <label for="contacto">Contacto:*</label>
     </div>
     <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="wd-100" type="tel" name="contacto" id="contacto" placeholder="☎️ (obrigatório)" required autofocus
+      <input class="wd-100" type="tel" name="contacto" id="contacto" placeholder="☎️" required autofocus
         formControlName="contacto">
     </div>
   </div>
@@ -27,11 +29,10 @@ encomenda
 <form class="separate clr-form" [formGroup]="clienteForm">
   <div class="clr-row">
     <div class="clr-col-md-2">
-      <label for="nome">Nome:</label>
+      <label for="nome">Nome:*</label>
     </div>
     <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="wd-100" type="text" name="nome" id="nome" placeholder="(obrigatório)" required
-        formControlName="nome">
+      <input class="wd-100" type="text" name="nome" id="nome" required formControlName="nome">
     </div>
   </div>
   <div class="clr-row">
@@ -62,48 +63,48 @@ encomenda
 
 <form class="separate clr-form" [formGroup]="encomendaForm">
   <div class="clr-row">
-      <div class="clr-col-md-2">
-          Observação:
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-          <input type="text" class="wd-100" name="observacao" id="observacao" placeholder="outras informações importantes..." formControlName="observacao">
-      </div>
+    <div class="clr-col-md-2">
+      <label for="observacao">Observação:</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input type="text" class="wd-100" name="observacao" id="observacao" formControlName="observacao">
+    </div>
   </div>
   <div class="clr-row">
-      <div class="clr-col-md-2">
-          Previsao de entrega:
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-          <input type="date" class="wd-100" name="previsao_entrega" id="previsao_entrega" formControlName="previsao_entrega">
-      </div>
+    <div class="clr-col-md-2">
+      <label for="previsao_entrega">Previsão de entrega:*</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input type="date" class="wd-100" name="previsao_entrega" id="previsao_entrega"
+        formControlName="previsao_entrega">
+    </div>
   </div>
   <div class="clr-row">
-      <div class="clr-col-md-2">
-          Orçamento (€):
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-          <input type="number" class="wd-100" name="orcamento" id="orcamento" plaxceholder="0" formControlName="orcamento">
-      </div>
+    <div class="clr-col-md-2">
+      <label for="orcamento">Orçamento (€):</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input type="number" class="wd-100" name="orcamento" id="orcamento" placeholder="(valor combinado com o cliente)"
+        formControlName="orcamento">
+    </div>
   </div>
   <div class="clr-row">
-      <div class="clr-col-md-2">
-          Fornecedor:
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-          <input type="text" class="wd-100" name="fornecedor" id="fornecedor" placeholder="p. ex: link onde viu o artigo" formControlName="fornecedor">
-      </div>
+    <div class="clr-col-md-2">
+      <label for="fornecedor">Fornecedor:</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input type="text" class="wd-100" name="fornecedor" id="fornecedor" placeholder="(link ou fornecedor)"
+        formControlName="fornecedor">
+    </div>
   </div>
   <div class="clr-row">
-      <div class="clr-col-md-2">
-          Qty:
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-          <input type="number" class="wd-100" name="qty" id="qty" placeholder="0" formControlName="qty">
-      </div>
+    <div class="clr-col-md-2">
+      <label for="qty">Qty:*</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input type="number" class="wd-100" name="qty" id="qty" placeholder="0" formControlName="qty">
+    </div>
   </div>
-  <input class="btn btn-primary" type="submit" value="Criar" (click)="createEncomenda(encomendaForm.value)">
+  <input class="btn btn-primary" type="submit" value="Criar" (click)="createEncomenda(encomendaForm.value)"
+    [disabled]="!contactoClienteForm.valid && !clienteForm.valid && !encomendaForm.valid">
 </form>
-
-
-
-

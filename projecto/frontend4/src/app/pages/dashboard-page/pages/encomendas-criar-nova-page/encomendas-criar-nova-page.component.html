@@ -1,67 +1,110 @@
-<form [formGroup]="encomendaForm">
-    <div class="clr-row">
+<div class="separate clr-form clr-row">
         <div class="clr-col-md-2">
-            ArtigoID:
+          <label for="">Artigo:*</label>
         </div>
-        <div class="clr-col-md-10">
-            <input type="text" name="artigo_id" id="artigo_id" formControlName="artigo_id">
+        <div class="clr-col-md-9 clr-col-lg-6">
+          <span *ngIf="encomendaForm.value.artigo_id">
+            {{artigoForm.value.descricao}} {{artigoForm.value.marca}} {{artigoForm.value.modelo}}
+          </span>
+          <span *ngIf="!encomendaForm.value.artigo_id">
+            <a [routerLink]="['/dashboard/stock']" routerLinkActive="active">Dirija-se, em primeiro lugar, à pesquisa do
+              Stock,
+              para escolher o artigo que vai encomendar</a>
+          </span>
         </div>
-    </div>
-    <div class="clr-row">
-        <div class="clr-col-md-2">
-            AssistenciaID:
+      </div>
+      
+      <form class="separate clr-form" [formGroup]="contactoClienteForm">
+        <div class="clr-row">
+          <div class="clr-col-md-2">
+            <label for="contacto">Contacto:*</label>
+          </div>
+          <div class="clr-col-md-9 clr-col-lg-6">
+            <input class="wd-100" type="tel" name="contacto" id="contacto" placeholder="☎️" required autofocus
+              formControlName="contacto">
+          </div>
         </div>
-        <div class="clr-col-md-10">
-            <input type="text" name="assistencia_id" id="assistencia_id" formControlName="assistencia_id">
+      </form>
+      
+      <form class="separate clr-form" [formGroup]="clienteForm">
+        <div class="clr-row">
+          <div class="clr-col-md-2">
+            <label for="nome">Nome:*</label>
+          </div>
+          <div class="clr-col-md-9 clr-col-lg-6">
+            <input class="wd-100" type="text" name="nome" id="nome" required formControlName="nome">
+          </div>
         </div>
-    </div>
-    <div class="clr-row">
-        <div class="clr-col-md-2">
-            ClienteUserID:
+        <div class="clr-row">
+          <div class="clr-col-md-2">
+            <label for="email">Email:</label>
+          </div>
+          <div class="clr-col-md-9 clr-col-lg-6">
+            <input class="wd-100" type="email" name="email" id="email" formControlName="email">
+          </div>
         </div>
-        <div class="clr-col-md-10">
-            <input type="text" name="cliente_user_id" id="cliente_user_id" formControlName="cliente_user_id">
+        <div class="clr-row">
+          <div class="clr-col-md-2">
+            <label for="endereco">Endereço:</label>
+          </div>
+          <div class="clr-col-md-9 clr-col-lg-6">
+            <input class="wd-100" type="text" name="endereço" id="endereço" formControlName="endereço">
+          </div>
         </div>
-    </div>
-    <div class="clr-row">
-        <div class="clr-col-md-2">
-            Observação:
+        <div class="clr-row">
+          <div class="clr-col-md-2">
+            <label for="nif">NIF:</label>
+          </div>
+          <div class="clr-col-md-9 clr-col-lg-6">
+            <input class="wd-100" type="number" name="nif" id="nif" formControlName="nif">
+          </div>
         </div>
-        <div class="clr-col-md-10">
-            <input type="text" name="observacao" id="observacao" formControlName="observacao">
+      </form>
+      
+      <form class="separate clr-form" [formGroup]="encomendaForm">
+        <div class="clr-row">
+          <div class="clr-col-md-2">
+            <label for="observacao">Observação:</label>
+          </div>
+          <div class="clr-col-md-9 clr-col-lg-6">
+            <input type="text" class="wd-100" name="observacao" id="observacao" formControlName="observacao">
+          </div>
         </div>
-    </div>
-    <div class="clr-row">
-        <div class="clr-col-md-2">
-            Previsao de entrega:
+        <div class="clr-row">
+          <div class="clr-col-md-2">
+            <label for="previsao_entrega">Previsão de entrega:*</label>
+          </div>
+          <div class="clr-col-md-9 clr-col-lg-6">
+            <input type="date" class="wd-100" name="previsao_entrega" id="previsao_entrega"
+              formControlName="previsao_entrega" required>
+          </div>
         </div>
-        <div class="clr-col-md-10">
-            <input type="text" name="previsao_entrega" id="previsao_entrega" formControlName="previsao_entrega">
+        <div class="clr-row">
+          <div class="clr-col-md-2">
+            <label for="orcamento">Orçamento (€):</label>
+          </div>
+          <div class="clr-col-md-9 clr-col-lg-6">
+            <input type="number" class="wd-100" name="orcamento" id="orcamento" placeholder="(valor combinado com o cliente)"
+              formControlName="orcamento">
+          </div>
         </div>
-    </div>
-    <div class="clr-row">
-        <div class="clr-col-md-2">
-            Orçamento:
+        <div class="clr-row">
+          <div class="clr-col-md-2">
+            <label for="fornecedor">Fornecedor:</label>
+          </div>
+          <div class="clr-col-md-9 clr-col-lg-6">
+            <input type="text" class="wd-100" name="fornecedor" id="fornecedor" placeholder="(link ou fornecedor)"
+              formControlName="fornecedor">
+          </div>
         </div>
-        <div class="clr-col-md-10">
-            <input type="text" name="orcamento" id="orcamento" formControlName="orcamento">
+        <div class="clr-row">
+          <div class="clr-col-md-2">
+            <label for="qty">Qty:*</label>
+          </div>
+          <div class="clr-col-md-9 clr-col-lg-6">
+            <input type="number" class="wd-100" name="qty" id="qty" placeholder="0" formControlName="qty" required>
+          </div>
         </div>
-    </div>
-    <div class="clr-row">
-        <div class="clr-col-md-2">
-            Fornecedor:
-        </div>
-        <div class="clr-col-md-10">
-            <input type="text" name="fornecedor" id="fornecedor" formControlName="fornecedor">
-        </div>
-    </div>
-    <div class="clr-row">
-        <div class="clr-col-md-2">
-            Qty:
-        </div>
-        <div class="clr-col-md-10">
-            <input type="text" name="qty" id="qty" formControlName="qty">
-        </div>
-    </div>
-    <input class="btn btn-primary" type="submit" value="Criar" (click)="createEncomenda(encomendaForm.value)">
-</form>
+        <input class="btn btn-primary" type="submit" value="Criar" (click)="createEncomenda(encomendaForm.value)"
+          [disabled]="encomendaForm.invalid || contactoClienteForm.invalid || clienteForm.invalid">
+      </form>

@@ -61,7 +61,8 @@ module.exports = function (app) {
     },
     //int
     qty: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
+      allowNull: false
     }
 
   }, {

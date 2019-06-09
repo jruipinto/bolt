@@ -1,13 +1,13 @@
 <form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
   <div class="clr-row">
-    <div class="clr-col-xl-2 clr-col-lg-3">
-      <input type="submit" class="btn btn-primary" value="🔎 Pesquisar" />
-    </div>
-    <div class="clr-col-xl-2 clr-col-lg-3">
-      <button class="btn" (click)="openArtigo()">👶 Novo artigo</button>
-    </div>
-    <div class="clr-col-xl-8 clr-col-lg-6">
+    <div class="clr-col-xl-9 clr-col-lg-12 padding-bottom-05">
       <input type="text" class="wd-100" placeholder="Digita algo..." name="input" formControlName="input" />
+    </div>
+    <div class="clr-col-xl-3 clr-col-lg-12 padding-bottom-05">
+      <div class="btn-group btn-primary">
+        <input type="submit" class="btn" value="🔎 Pesquisar" />
+        <button class="btn" (click)="openArtigo()">+ Novo</button>
+      </div>
     </div>
   </div>
 </form>

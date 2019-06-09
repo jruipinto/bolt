@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { tap, concatMap, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { capitalize } from 'src/app/shared/utilities';
 import { Artigo } from 'src/app/shared/models';
-import { ArtigosService } from 'src/app/shared/state';
+import { ArtigosService, UIService } from 'src/app/shared/state';
 import { of } from 'rxjs';
 
 @AutoUnsubscribe()
@@ -19,7 +19,7 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
     id: [null],
     marca: [null],
     modelo: [null],
-    descricao: [null],
+    descricao: [null, [Validators.required]],
     localizacao: [null],
     qty: [null],
     preco: [null],
@@ -30,7 +30,8 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
     private artigos: ArtigosService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private uiService: UIService
   ) { }
 
   ngOnInit() {
@@ -72,8 +73,11 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  orderArtigo(artigoID: number) {
-    return this.router.navigate(['/dashboard/encomenda', artigoID]);
+  orderArtigo(artigo: Artigo) {
+    console.log(artigo);
+    this.uiService.patchState({ encomendaPageArtigoForm: artigo })
+    .subscribe();
+    return this.router.navigate(['/dashboard/encomendas-criar-nova']);
   }
 
 }
