@@ -13,6 +13,7 @@ export interface UI {
   assistenciasCriarNovaPageCriarNovaForm: {};
   encomendaPageContactoClienteForm: {};
   encomendaPageClienteForm: {};
+  encomendaPageArtigoForm: {};
   encomendaPageEncomendaForm: {};
 
   // prints
@@ -30,6 +31,7 @@ const defaults: UI = {
   assistenciasCriarNovaPageCriarNovaForm: {},
   encomendaPageContactoClienteForm: {},
   encomendaPageClienteForm: {},
+  encomendaPageArtigoForm: {},
   encomendaPageEncomendaForm: {},
   // prints
 };
