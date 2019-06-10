@@ -1,1 +1,124 @@
-{{encomenda | json}}
+<!--
+{
+    id: number;
+    artigo_id: number;
+    artigo_marca?: string;
+    artigo_modelo?: string;
+    artigo_descricao?: string;
+    assistencia_id: number;
+    cliente_user_id: number;
+    cliente_user_name?: string;
+    cliente_user_contacto?: number;
+    observacao: string;
+    registo_cronologico: EventoCronologico[]; // JSON.stringify(data: EventoCronologico[])
+    estado: string;
+    previsao_entrega: string;
+    orcamento: number;
+    fornecedor: string;
+    qty: number;
+}
+-->
+<div *ngIf="!encomenda">A carregar dados...</div>
+
+<div *ngIf="encomenda">
+
+    <h3>Encomenda {{encomenda.id}}</h3>
+
+    <div class="separate">
+        <div class="clr-row">
+            <div class="clr-col-md-2 fontheavy">
+                Estado:
+            </div>
+            <div class="clr-col">
+                {{encomenda.estado}}
+            </div>
+        </div>
+    </div>
+    <div class="separate">
+        <div class="clr-row">
+            <div class="clr-col-md-2 fontheavy">
+                Prazo de entrega:
+            </div>
+            <div class="clr-col">
+                {{encomenda.previsao_entrega}}
+            </div>
+        </div>
+    </div>
+    <div class="separate">
+        <div class="clr-row" *ngIf="encomenda.assistencia_id">
+            <div class="clr-col-md-2 fontheavy">
+                Assistencia:
+            </div>
+            <div class="clr-col">
+                {{encomenda.assistencia_id}}
+            </div>
+        </div>
+        <div class="clr-row" *ngIf="encomenda.cliente_user_id">
+            <div class="clr-col-md-2 fontheavy">
+                Cliente:
+            </div>
+            <div class="clr-col">
+                {{encomenda.cliente_user_name}}
+            </div>
+        </div>
+        <div class="clr-row" *ngIf="encomenda.cliente_user_id">
+            <div class="clr-col-md-2 fontheavy">
+                Contacto:
+            </div>
+            <div class="clr-col">
+                {{encomenda.cliente_user_contacto}}
+            </div>
+        </div>
+    </div>
+    <div class="separate">
+        <div class="clr-row">
+            <div class="clr-col-md-2 fontheavy">
+                Artigo:
+            </div>
+            <div class="clr-col">
+                {{encomenda.qty}} x {{encomenda.artigo_descricao}} {{encomenda.artigo_marca}}
+                {{encomenda.artigo_modelo}}
+            </div>
+        </div>
+        <div class="clr-row">
+            <div class="clr-col-md-2 fontheavy">
+                Orçamento:
+            </div>
+            <div class="clr-col">
+                <span *ngIf="!encomenda.orcamento">Nenhum orçamento</span>
+                {{encomenda?.orcamento | currency: 'EUR'}}
+            </div>
+        </div>
+        <div class="clr-row">
+            <div class="clr-col-md-2 fontheavy">
+                Fornecedor:
+            </div>
+            <div class="clr-col">
+                {{encomenda?.fornecedor}} <span *ngIf="!encomenda.fornecedor">Nenhuma sugestão</span>
+            </div>
+        </div>
+        <div class="clr-row">
+            <div class="clr-col-md-2 fontheavy">
+                Observação:
+            </div>
+            <div class="clr-col">
+                {{encomenda?.observacao}} <span *ngIf="!encomenda.observacao">Nenhuma observação</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="separate">
+
+        <clr-button-group class="btn-primary" [clrMenuPosition]="'top-left'">
+            <clr-button (click)="saveEncomenda('aguarda entrega', encomenda)">Encomendado</clr-button>
+            <clr-button [clrInMenu]="true" (click)="saveEncomenda('esgotada', encomenda)">Esgotado</clr-button>
+            <clr-button [clrInMenu]="true" (click)="saveEncomenda('marcada para ir ao fornecedor', encomenda)">Marcado
+                para ir ao fornecedor</clr-button>
+            <clr-button [clrInMenu]="true" (click)="saveEncomenda('adquirida', encomenda)">Adquirido no fornecedor
+            </clr-button>
+            <clr-button [clrInMenu]="true" (click)="saveEncomenda('aguarda reposta de fornecedor', encomenda)">Aguarda
+                reposta de fornecedor</clr-button>
+        </clr-button-group>
+
+    </div>
+</div>

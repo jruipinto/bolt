@@ -16,7 +16,7 @@
         -->
         <div class="card-text">
           <span class="label label-blue">{{encomenda.estado}} -> {{encomenda.updatedAt  | date:'mediumDate'}}</span>
-          <p>{{encomenda?.artigo_descricao}} {{encomenda?.artigo_marca}} {{encomenda?.artigo_modelo}} | Até:
+          <p>{{encomenda.qty}} x {{encomenda?.artigo_descricao}} {{encomenda?.artigo_marca}} {{encomenda?.artigo_modelo}} | Até:
             {{encomenda.previsao_entrega}}</p>
           <p *ngIf="encomenda.orcamento || encomenda.observacao">
             <span *ngIf="encomenda.orcamento">{{encomenda.orcamento}}€ </span><span *ngIf="encomenda?.observacao">|

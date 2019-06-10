@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { concatMap } from 'rxjs/operators';
+import { concatMap, tap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Encomenda } from 'src/app/shared/models';
 import { EncomendasService } from 'src/app/shared/state';
@@ -30,5 +30,12 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() { }
 
+  saveEncomenda(newEstado: string, encomenda: Encomenda) {
+    return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
+      .pipe(
+        tap(() => window.history.back())
+      )
+      .subscribe();
+  }
 
 }
