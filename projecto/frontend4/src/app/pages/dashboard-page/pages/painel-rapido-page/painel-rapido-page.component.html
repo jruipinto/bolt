@@ -1,6 +1,11 @@
 <div class="clr-row">
   <div class="clr-col-lg-4">
-    <h5>Encomendas</h5>
+    <h5>
+      Encomendas
+      <span *ngIf="encomendas$ | async as encomendas">
+          <span class="badge badge-light-blue" *ngIf="encomendas.length > 0">{{encomendas.length}}</span>
+        </span>
+    </h5>
     <p>👷 Em construção</p>
     <div class="card" *ngFor="let encomenda of encomendas$ | async">
       <div class="card-block">
@@ -10,21 +15,33 @@
         </div>
         -->
         <div class="card-text">
-          <p>3 x Modulo Iphone 6 Preto</p>
-          <button class="btn btn-sm btn-link">abrir</button>
+          <span class="label label-blue">{{encomenda.estado}} -> {{encomenda.updatedAt  | date:'mediumDate'}}</span>
+          <p>{{encomenda?.artigo_descricao}} {{encomenda?.artigo_marca}} {{encomenda?.artigo_modelo}} | Até:
+            {{encomenda.previsao_entrega}}</p>
+          <p *ngIf="encomenda.orcamento || encomenda.observacao">
+            <span *ngIf="encomenda.orcamento">{{encomenda.orcamento}}€ </span><span *ngIf="encomenda?.observacao">|
+              {{encomenda.observacao | slice:0:29}}
+            <span *ngIf="encomenda?.observacao.length > 30">...</span></span>
+          </p>
+          <button class="btn btn-sm btn-link" (click)="openEncomenda(encomenda.id)">abrir</button>
         </div>
       </div>
       <div class="card-footer">
-        <button class="btn btn-success btn-sm">Comprado</button>
+        <button class="btn btn-success btn-sm"
+          (click)="saveEncomenda('aguarda entrega', encomenda)">Encomendado</button>
         <clr-dropdown>
           <button type="button" class="btn btn-sm" clrDropdownTrigger>
             + Opções
             <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button type="button" clrDropdownItem>Esgotado</button>
-            <button type="button" clrDropdownItem>Chega em 30 dias</button>
-            <button type="button" clrDropdownItem>Anular</button>
+            <button type="button" clrDropdownItem (click)="saveEncomenda('esgotada', encomenda)">Esgotado</button>
+            <button type="button" clrDropdownItem
+              (click)="saveEncomenda('marcada para ir ao fornecedor', encomenda)">Marcado para ir ao fornecedor</button>
+            <button type="button" clrDropdownItem (click)="saveEncomenda('adquirida', encomenda)">Adquirida no
+              fornecedor</button>
+            <button type="button" clrDropdownItem
+              (click)="saveEncomenda('aguarda reposta de fornecedor', encomenda)">Aguarda reposta de fornecedor</button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>
@@ -74,7 +91,8 @@
     <h5>
       P. Contact. Cliente
       <span *ngIf="pedidosContactoCliente$ | async as pedidosContactoCliente">
-        <span class="badge badge-light-blue" *ngIf="pedidosContactoCliente.length > 0">{{pedidosContactoCliente.length}}</span>
+        <span class="badge badge-light-blue"
+          *ngIf="pedidosContactoCliente.length > 0">{{pedidosContactoCliente.length}}</span>
       </span>
     </h5>
     <div *ngIf="pedidosContactoCliente$ | async as pedidosContactoCliente">

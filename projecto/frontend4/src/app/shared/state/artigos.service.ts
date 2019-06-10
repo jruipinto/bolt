@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ArtigosApiService } from 'src/app/shared/services';
+import { ArtigosApiService } from 'src/app/shared/services/artigos-api.service';
 import { EntityStateAbstraction } from 'src/app/shared/abstraction-classes';
 
 @Injectable({ providedIn: 'root' })

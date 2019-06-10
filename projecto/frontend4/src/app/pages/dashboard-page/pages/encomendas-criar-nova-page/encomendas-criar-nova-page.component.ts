@@ -40,7 +40,7 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
     assistencia_id: [null],
     cliente_user_id: [null],
     observacao: [null],
-    estado: ['registada'],
+    estado: [null],
     previsao_entrega: [null, [Validators.required]],
     orcamento: [null],
     fornecedor: [null],
@@ -114,7 +114,7 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
   }
 
   createEncomenda(encomenda: Encomenda) {
-    return this.encomendasService.create(encomenda)
+    return this.encomendasService.create({...encomenda, estado: 'registada'})
       .subscribe(
         () => {
           this.artigoForm.reset();

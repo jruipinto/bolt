@@ -67,6 +67,7 @@
         </div>
         <div class="clr-row">
           <div class="clr-col">
+            <!--
             <textarea name="relatorio_interno" id="relatorio_interno" [attr.readonly]="assistencia.estado === 'contacto pendente'
                 || assistencia.estado === 'não atendeu p/ cont.'
                 || assistencia.estado === 'cliente adiou resp.'
@@ -76,6 +77,9 @@
                 || assistencia.estado === 'aguarda material'
                 || assistencia.estado === 'concluído'
                 || assistencia.estado === 'entregue'" [(ngModel)]='assistencia.relatorio_interno'></textarea>
+              -->
+            <textarea name="relatorio_interno" id="relatorio_interno"
+              [(ngModel)]='assistencia.relatorio_interno'></textarea>
           </div>
         </div>
       </div>

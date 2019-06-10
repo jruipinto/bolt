@@ -32,7 +32,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
         concatMap((params: ParamMap) => this.assistencias.getAndWatch(+params.get('id')))
       )
       .subscribe(
-        (assistencia: Assistencia[]) => this.assistencia = assistencia[0]
+        (assistencias: Assistencia[]) => this.assistencia = assistencias[0]
       );
   }
 
