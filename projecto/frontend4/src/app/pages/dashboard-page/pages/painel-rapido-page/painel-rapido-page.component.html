@@ -3,8 +3,8 @@
     <h5>
       Encomendas
       <span *ngIf="encomendas$ | async as encomendas">
-          <span class="badge badge-light-blue" *ngIf="encomendas.length > 0">{{encomendas.length}}</span>
-        </span>
+        <span class="badge badge-light-blue" *ngIf="encomendas.length > 0">{{encomendas.length}}</span>
+      </span>
     </h5>
     <p>👷 Em construção</p>
     <div class="card" *ngFor="let encomenda of encomendas$ | async">
@@ -16,12 +16,13 @@
         -->
         <div class="card-text">
           <span class="label label-blue">{{encomenda.estado}} -> {{encomenda.updatedAt  | date:'mediumDate'}}</span>
-          <p>{{encomenda.qty}} x {{encomenda?.artigo_descricao}} {{encomenda?.artigo_marca}} {{encomenda?.artigo_modelo}} | Até:
+          <p>{{encomenda.qty}} x {{encomenda?.artigo_descricao}} {{encomenda?.artigo_marca}}
+            {{encomenda?.artigo_modelo}} | Até:
             {{encomenda.previsao_entrega}}</p>
           <p *ngIf="encomenda.orcamento || encomenda.observacao">
             <span *ngIf="encomenda.orcamento">{{encomenda.orcamento}}€ </span><span *ngIf="encomenda?.observacao">|
               {{encomenda.observacao | slice:0:29}}
-            <span *ngIf="encomenda?.observacao.length > 30">...</span></span>
+              <span *ngIf="encomenda?.observacao.length > 30">...</span></span>
           </p>
           <button class="btn btn-sm btn-link" (click)="openEncomenda(encomenda.id)">abrir</button>
         </div>
@@ -35,13 +36,15 @@
             <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button type="button" clrDropdownItem (click)="saveEncomenda('esgotada', encomenda)">Esgotado</button>
+            <button type="button" clrDropdownItem
+              (click)="saveEncomenda('aguarda reposta de fornecedor', encomenda)">Aguarda reposta de fornecedor</button>
             <button type="button" clrDropdownItem
               (click)="saveEncomenda('marcada para ir ao fornecedor', encomenda)">Marcado para ir ao fornecedor</button>
             <button type="button" clrDropdownItem (click)="saveEncomenda('adquirida', encomenda)">Adquirida no
               fornecedor</button>
-            <button type="button" clrDropdownItem
-              (click)="saveEncomenda('aguarda reposta de fornecedor', encomenda)">Aguarda reposta de fornecedor</button>
+            <button type="button" clrDropdownItem (click)="saveEncomenda('esgotada', encomenda)">Esgotado</button>
+            <button type="button" clrDropdownItem (click)="saveEncomenda('sem fornecedor', encomenda)">Sem
+              fornecedor</button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>
@@ -82,6 +85,8 @@
               resposta</button>
             <button type="button" clrDropdownItem (click)="saveAssist('não atendeu p/ orç.', orcamento)">Não
               atendeu</button>
+            <button type="button" clrDropdownItem
+              (click)="saveAssist('incontactável', orcamento)">Incontactável</button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>
@@ -120,9 +125,11 @@
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
             <button type="button" clrDropdownItem
+              (click)="saveAssist('cliente adiou resp.', pedidoContactoCliente)">Cliente adiou resposta</button>
+            <button type="button" clrDropdownItem
               (click)="saveAssist('não atendeu p/ cont.', pedidoContactoCliente)">Não atendeu</button>
             <button type="button" clrDropdownItem
-              (click)="saveAssist('cliente adiou resp.', pedidoContactoCliente)">Cliente adiou resposta</button>
+              (click)="saveAssist('incontactável', orcamento)">Incontactável</button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>

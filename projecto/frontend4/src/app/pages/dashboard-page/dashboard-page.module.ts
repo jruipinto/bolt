@@ -22,6 +22,7 @@ import {
   StockPageComponent, PainelRapidoPageComponent,
   AssistenciaPageComponent, ArtigoPageComponent
 } from './pages';
+import { EncomendasPesquisarPageComponent } from './pages/encomendas-pesquisar-page/encomendas-pesquisar-page.component';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import {
     ArtigoModalComponent,
     AssistenciaPageComponent,
     ArtigoPageComponent,
-    EncomendaPageComponent
+    EncomendaPageComponent,
+    EncomendasPesquisarPageComponent
   ]
 })
 export class DashboardPageModule { }

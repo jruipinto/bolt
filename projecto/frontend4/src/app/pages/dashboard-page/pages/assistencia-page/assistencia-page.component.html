@@ -147,10 +147,14 @@
           || assistencia.estado === 'cliente adiou orç.'">
       <clr-button-group class="btn-primary" [clrMenuPosition]="'top-left'">
         <clr-button (click)="saveAssistencia('orçamento aprovado', assistencia)">Aceite</clr-button>
-        <clr-button [clrInMenu]="true" (click)="saveAssistencia('não atendeu p/ orç.', assistencia)">Não atendeu
+        <clr-button [clrInMenu]="true" (click)="saveAssistencia('orçamento recusado', assistencia)">Recusado
         </clr-button>
         <clr-button [clrInMenu]="true" (click)="saveAssistencia('cliente adiou orç.', assistencia)">Cliente adiou
           resposta</clr-button>
+        <clr-button [clrInMenu]="true" (click)="saveAssistencia('não atendeu p/ orç.', assistencia)">Não atendeu
+        </clr-button>
+        <clr-button [clrInMenu]="true" (click)="saveAssistencia('incontactável', assistencia)">Incontactável
+        </clr-button>
       </clr-button-group>
     </div>
 
@@ -159,10 +163,12 @@
           || assistencia.estado === 'cliente adiou resp.'">
       <clr-button-group class="btn-primary" [clrMenuPosition]="'top-left'">
         <clr-button (click)="saveAssistencia('contactado', assistencia)">Sucesso</clr-button>
-        <clr-button [clrInMenu]="true" (click)="saveAssistencia('não atendeu p/ cont.', assistencia)">Não atendeu
-        </clr-button>
         <clr-button [clrInMenu]="true" (click)="saveAssistencia('cliente adiou resp.', assistencia)">Cliente adiou
           resposta</clr-button>
+        <clr-button [clrInMenu]="true" (click)="saveAssistencia('não atendeu p/ cont.', assistencia)">Não atendeu
+        </clr-button>
+        <clr-button [clrInMenu]="true" (click)="saveAssistencia('incontactável', assistencia)">Incontactável
+        </clr-button>
       </clr-button-group>
     </div>
 

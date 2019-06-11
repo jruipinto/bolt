@@ -10,7 +10,8 @@ import {
   EncomendasPageComponent, EncomendasHistoricoPageComponent,
   StockPageComponent, AssistenciasPesquisarPageComponent,
   AssistenciaPageComponent, ArtigoPageComponent, EncomendaPageComponent,
-  EncomendasCriarNovaPageComponent
+  EncomendasCriarNovaPageComponent,
+  EncomendasPesquisarPageComponent
 } from './pages';
 
 
@@ -35,7 +36,7 @@ const routes: Routes = [
           // { path: 'encomenda', component: EncomendaPageComponent },
           // { path: 'encomendas', component: EncomendasPageComponent },
           { path: 'encomendas-criar-nova', component: EncomendasCriarNovaPageComponent },
-          { path: 'encomendas-historico', component: EncomendasHistoricoPageComponent },
+          { path: 'encomendas-pesquisar', component: EncomendasPesquisarPageComponent },
           { path: 'stock', component: StockPageComponent },
           { path: 'login', redirectTo: '/login' },
           { path: '', redirectTo: '/dashboard/painel-rapido', pathMatch: 'full' },

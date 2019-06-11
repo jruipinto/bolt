@@ -61,11 +61,12 @@ export class StockPageComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  openArtigo(artigoID?: number) {
-    if (artigoID) {
-      return this.router.navigate(['/dashboard/artigo', artigoID]);
-    } else {
-      return this.router.navigate(['/dashboard/artigo']);
-    }
+  openArtigo(artigoID: number) {
+    return this.router.navigate(['/dashboard/artigo', artigoID]);
   }
+
+  newArtigo() {
+    return this.router.navigate(['/dashboard/artigo']);
+  }
+
 }

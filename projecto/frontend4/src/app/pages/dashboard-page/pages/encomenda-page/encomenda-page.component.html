@@ -111,13 +111,15 @@
 
         <clr-button-group class="btn-primary" [clrMenuPosition]="'top-left'">
             <clr-button (click)="saveEncomenda('aguarda entrega', encomenda)">Encomendado</clr-button>
-            <clr-button [clrInMenu]="true" (click)="saveEncomenda('esgotada', encomenda)">Esgotado</clr-button>
+            <clr-button [clrInMenu]="true" (click)="saveEncomenda('aguarda reposta de fornecedor', encomenda)">Aguarda
+                reposta de fornecedor</clr-button>
             <clr-button [clrInMenu]="true" (click)="saveEncomenda('marcada para ir ao fornecedor', encomenda)">Marcado
                 para ir ao fornecedor</clr-button>
             <clr-button [clrInMenu]="true" (click)="saveEncomenda('adquirida', encomenda)">Adquirido no fornecedor
             </clr-button>
-            <clr-button [clrInMenu]="true" (click)="saveEncomenda('aguarda reposta de fornecedor', encomenda)">Aguarda
-                reposta de fornecedor</clr-button>
+            <clr-button [clrInMenu]="true" (click)="saveEncomenda('esgotada', encomenda)">Esgotado</clr-button>
+            <clr-button [clrInMenu]="true" (click)="saveEncomenda('sem fornecedor', encomenda)">Sem fornecedor
+            </clr-button>
         </clr-button-group>
 
     </div>
