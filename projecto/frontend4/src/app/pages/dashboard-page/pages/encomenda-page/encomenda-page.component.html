@@ -109,18 +109,39 @@
 
     <div class="separate">
 
+        <div *ngIf="encomenda.estado === 'registada'
+        || encomenda.estado === 'esgotada'
+        || encomenda.estado === 'aguarda reposta de fornecedor'
+        || encomenda.estado === 'aguarda entrega'
+        || encomenda.estado === 'detectado defeito'"></div>
+
         <clr-button-group class="btn-primary" [clrMenuPosition]="'top-left'">
             <clr-button (click)="saveEncomenda('aguarda entrega', encomenda)">Encomendado</clr-button>
             <clr-button [clrInMenu]="true" (click)="saveEncomenda('aguarda reposta de fornecedor', encomenda)">Aguarda
                 reposta de fornecedor</clr-button>
             <clr-button [clrInMenu]="true" (click)="saveEncomenda('marcada para ir ao fornecedor', encomenda)">Marcado
                 para ir ao fornecedor</clr-button>
-            <clr-button [clrInMenu]="true" (click)="saveEncomenda('adquirida', encomenda)">Adquirido no fornecedor
-            </clr-button>
             <clr-button [clrInMenu]="true" (click)="saveEncomenda('esgotada', encomenda)">Esgotado</clr-button>
             <clr-button [clrInMenu]="true" (click)="saveEncomenda('sem fornecedor', encomenda)">Sem fornecedor
             </clr-button>
         </clr-button-group>
+
+        <div *ngIf="encomenda.estado === 'marcada para ir ao fornecedor'">
+            <clr-button-group class="btn-primary" [clrMenuPosition]="'top-left'">
+                <clr-button (click)="saveEncomenda('adquirida', encomenda)">Adquirido</clr-button>
+                <clr-button (click)="saveEncomenda('esgotada', encomenda)">Esgotado</clr-button>
+            </clr-button-group>
+        </div>
+
+        <div *ngIf="encomenda.estado === 'aguarda entrega'">
+            <button class="btn btn-primary" (click)="saveEncomenda('recebida', encomenda)">Recebida</button>
+        </div>
+
+        <div *ngIf="encomenda.estado='recebida'
+        || encomenda.estado === 'adquirida'
+        || encomenda.estado === 'sem fornecedor'">
+            <button class="btn btn-primary" (click)="saveEncomenda('entregue', encomenda)">Entregar</button>
+        </div>
 
     </div>
 </div>
