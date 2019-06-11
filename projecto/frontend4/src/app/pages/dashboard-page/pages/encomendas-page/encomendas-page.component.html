@@ -1,30 +1,19 @@
-<div class="clr-row">
-  <div class="clr-col">
-    <h5>Encomendas</h5>
-    <p>👷 Em construção</p>
-    <!--
-    <div class="card" *ngFor="let encomenda of encomendas">
-      <div class="card-block">
-        <div class="card-text">
-          <p>3 x Modulo Iphone 6 Preto</p>
-          <button class="btn btn-sm btn-link">abrir</button>
-        </div>
-      </div>
-      <div class="card-footer">
-        <button class="btn btn-success btn-sm">Comprado</button>
-        <clr-dropdown>
-          <button type="button" class="btn btn-sm" clrDropdownTrigger>
-            mais acções
-            <clr-icon shape="caret down"></clr-icon>
-          </button>
-          <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button type="button" clrDropdownItem>Esgotado</button>
-            <button type="button" clrDropdownItem>Chega em 30 dias</button>
-            <button type="button" clrDropdownItem>Anular</button>
-          </clr-dropdown-menu>
-        </clr-dropdown>
-      </div>
-    </div>
-    -->
+<r-data-row class="clr-row" *ngFor="let encomenda of encomendas$ | async; let listaIndex=index"
+  (click)="openEncomenda(encomenda.id)">
+  <div class="clr-col-lg-1 fontheavy">
+    {{encomenda.id}}
   </div>
-</div>
+  <div class="clr-col-lg-2">
+    Prazo: {{encomenda.previsao_entrega}}
+  </div>
+  <div class="clr-col-lg-5">
+    {{encomenda.qty}} x {{encomenda.artigo_descricao}} {{encomenda.artigo_marca}}
+    {{encomenda.artigo_modelo}}
+  </div>
+  <div class="clr-col-lg-2">
+    Orç: {{encomenda.orcamento | currency: 'EUR'}}
+  </div>
+  <div class="clr-col-lg-2">
+    {{encomenda.estado}}
+  </div>
+</r-data-row>

@@ -50,22 +50,17 @@
       <div class="clr-col-lg-1 fontheavy">
         {{result.id}}
       </div>
-      <div class="clr-col-lg-2 lessimportant">
-        -
+      <div class="clr-col-lg-2">
+        Prazo: {{result.previsao_entrega}}
+      </div>
+      <div class="clr-col-lg-5">
+        {{result.qty}} x {{result.artigo_descricao}} {{result.artigo_marca}}
+        {{result.artigo_modelo}}
       </div>
       <div class="clr-col-lg-2">
-        -
+        Orç: {{result.orcamento | currency: 'EUR'}}
       </div>
-      <div class="clr-col-lg-1 lessimportant">
-        -
-      </div>
-      <div class="clr-col-lg-3 lessimportant">
-        -
-      </div>
-      <div class="clr-col-lg-2 lessimportant">
-        Cliente:{{result.cliente_user_name}}
-      </div>
-      <div class="clr-col-lg-1 lessimportant">
+      <div class="clr-col-lg-2">
         {{result.estado}}
       </div>
     </r-data-row>
