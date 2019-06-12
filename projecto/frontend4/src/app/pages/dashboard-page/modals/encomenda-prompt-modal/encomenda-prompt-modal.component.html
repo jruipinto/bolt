@@ -1,3 +1,10 @@
-<p>
-  encomenda-prompt-modal works!
-</p>
+<clr-modal [clrModalOpen]="true" [clrModalSize]="'sm'">
+  <h3 class="modal-title">I have a nice title</h3>
+  <div class="modal-body">
+      <p>A quantidade deste artigo está muito baixa. Quer encomendar mais?</p>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-outline" (click)="close()">Não</button>
+      <button type="button" class="btn btn-primary" (click)="orderArtigo(artigo)">Sim</button>
+  </div>
+</clr-modal>
