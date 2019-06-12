@@ -11,6 +11,7 @@ import { EncomendasService, UIService } from 'src/app/shared/state';
   styleUrls: ['./encomendas-page.component.scss']
 })
 export class EncomendasPageComponent implements OnInit, OnDestroy {
+  public radioOption: 'todas' | 'marcadas' = 'todas';
 
   constructor(
     private encomendas: EncomendasService,
@@ -32,7 +33,7 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
     entregue
   */
 
-  public encomendas$ = this.encomendas.state$
+  public encomendasActivas$ = this.encomendas.state$
     .pipe(
       map(state =>
         state
@@ -46,6 +47,17 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
             || encomenda.estado === 'aguarda entrega'
             || encomenda.estado === 'recebida'
             || encomenda.estado === 'detectado defeito')
+          : null
+      )
+    );
+
+  public encomendasMarcadas$ = this.encomendas.state$
+    .pipe(
+      map(state =>
+        state
+          ? state.filter(encomenda =>
+            encomenda.estado === 'marcada para ir ao fornecedor'
+          )
           : null
       )
     );

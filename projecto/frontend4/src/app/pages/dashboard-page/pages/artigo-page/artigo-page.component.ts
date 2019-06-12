@@ -60,6 +60,7 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
   saveArtigo(artigo: Artigo) {
     return this.artigos.patch(artigo.id, capitalize(artigo))
       .pipe(
+        concatMap(() => artigo.qty === 0 ? this.uiService.patchState({encomendaPromptModalVisible: true}) : of()),
         tap(() => window.history.back())
       )
       .subscribe();
@@ -68,6 +69,7 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
   createArtigo(artigo: Artigo) {
     return this.artigos.create(capitalize(artigo))
       .pipe(
+        concatMap(() => artigo.qty === 0 ? this.uiService.patchState({encomendaPromptModalVisible: true}) : of()),
         tap(() => window.history.back())
       )
       .subscribe();

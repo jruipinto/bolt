@@ -23,6 +23,7 @@ import {
   AssistenciaPageComponent, ArtigoPageComponent
 } from './pages';
 import { EncomendasPesquisarPageComponent } from './pages/encomendas-pesquisar-page/encomendas-pesquisar-page.component';
+import { EncomendaPromptModalComponent } from './modals/encomenda-prompt-modal/encomenda-prompt-modal.component';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { EncomendasPesquisarPageComponent } from './pages/encomendas-pesquisar-p
     AssistenciaPageComponent,
     ArtigoPageComponent,
     EncomendaPageComponent,
-    EncomendasPesquisarPageComponent
+    EncomendasPesquisarPageComponent,
+    EncomendaPromptModalComponent
   ]
 })
 export class DashboardPageModule { }
