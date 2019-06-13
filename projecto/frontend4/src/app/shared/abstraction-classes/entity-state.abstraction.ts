@@ -83,7 +83,8 @@ export abstract class EntityStateAbstraction {
     return this.xAPIservice.onCreated().pipe(
       concatMap(receivedItem => this.state$.pipe(
         first(),
-        tap(state => this.source.next(sortByID([...state, receivedItem])))
+        tap(state => this.source.next(sortByID([...state, receivedItem]))),
+        map(() => receivedItem)
       ))
     );
   }
@@ -92,7 +93,8 @@ export abstract class EntityStateAbstraction {
     return this.xAPIservice.onPatched().pipe(
       concatMap(receivedItem => this.state$.pipe(
         first(),
-        tap(state => this.source.next(sortByID(unionBy(receivedItem, state, 'id'))))
+        tap(state => this.source.next(sortByID(unionBy(receivedItem, state, 'id')))),
+        map(() => receivedItem)
       ))
     );
   }

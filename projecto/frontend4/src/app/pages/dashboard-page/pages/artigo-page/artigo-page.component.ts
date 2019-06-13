@@ -66,7 +66,7 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
               encomendaPromptModalVisible: true,
               encomendaPromptModalArtigo: artigo,
             })
-            : of()
+            : of(true)
         ),
         tap(() => window.history.back())
       )
@@ -76,13 +76,14 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
   createArtigo(artigo: Artigo) {
     return this.artigos.create(capitalize(artigo))
       .pipe(
+        map((res: Artigo[]) => res[0]),
         concatMap(
-          () => artigo.qty === 0
+          (newArtigo: Artigo) => artigo.qty === 0
             ? this.uiService.patchState({
               encomendaPromptModalVisible: true,
-              encomendaPromptModalArtigo: artigo,
+              encomendaPromptModalArtigo: newArtigo,
             })
-            : of()
+            : of(true)
         ),
         tap(() => window.history.back())
       )
