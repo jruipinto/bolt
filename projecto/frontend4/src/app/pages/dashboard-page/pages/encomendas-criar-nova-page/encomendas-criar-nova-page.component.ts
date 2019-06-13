@@ -65,13 +65,13 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
       ))
     );
 
-  private user$ = (contacto: number) => this.usersService.find({ query: { contacto } }) as Observable<User[]>;
+  private user$ = (contacto: number) => this.users.find({ query: { contacto } }) as Observable<User[]>;
 
 
   constructor(
     private fb: FormBuilder,
-    private usersService: UsersService,
-    private encomendasService: EncomendasService,
+    private users: UsersService,
+    private encomendas: EncomendasService,
     private uiService: UIService,
     private route: ActivatedRoute
   ) { }
@@ -114,6 +114,43 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
   }
 
   createEncomenda(encomenda: Encomenda) {
+    encomenda = { ...encomenda, estado: 'registada' };
+    const success = () => {
+      this.artigoForm.reset();
+      this.encomendaForm.reset();
+      alert('Sucesso!');
+    };
+    const error = err => {
+      console.log('Falhou a submissão. Chame o Admin.', err);
+      alert('Falhou a submissão. Chame o Admin. (detalhes: CTRL + SHIFT + I)');
+    };
+
+    if (this.clienteForm.dirty) {
+      if (this.clienteForm.value.id) {
+        return this.users.patch(this.clienteForm.value.id, this.clienteForm.value)
+          .pipe(concatMap(() => this.encomendas.create(encomenda)))
+          .subscribe(success, error);
+      } else {
+        return this.users.create({
+          ...this.clienteForm.value,
+          contacto: this.contactoClienteForm.value.contacto,
+          ...{ tipo: 'cliente' }
+        })
+          .pipe(
+            map((newUserArr: User[]) => newUserArr[0]),
+            // refresh contacto form to fix bug when creating new user
+            tap((newUser: User) => this.contactoClienteForm.patchValue({ contacto: newUser.contacto })),
+            concatMap((newUser: User) => this.encomendas.create({ ...encomenda, ...{ cliente_user_id: newUser.id } })))
+          .subscribe(success, error);
+      }
+    } else {
+      return this.encomendas.create(encomenda)
+        .subscribe(success, error);
+    }
+  }
+
+  /*
+    createEncomenda(encomenda: Encomenda) {
     return this.encomendasService.create({...encomenda, estado: 'registada'})
       .subscribe(
         () => {
@@ -123,6 +160,7 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
         },
         error => alert(error)
       );
-  }
+    }
+  */
 
 }

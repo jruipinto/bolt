@@ -31,13 +31,21 @@ export class EncomendaPromptModalComponent implements OnInit {
   }
 
   orderArtigo(artigo: Artigo) {
-    this.uiService.patchState({ encomendaPageArtigoForm: artigo })
+    this.uiService.patchState({
+      encomendaPageContactoClienteForm: { contacto: 918867376 },
+      encomendaPageArtigoForm: artigo,
+      encomendaPromptModalVisible: false,
+      encomendaPromptModalArtigo: {}
+    })
       .subscribe();
     return this.router.navigate(['/dashboard/encomendas-criar-nova']);
   }
 
   close() {
-    this.uiService.patchState({ encomendaPromptModalVisible: false })
+    this.uiService.patchState({
+      encomendaPromptModalVisible: false,
+      encomendaPromptModalArtigo: {}
+    })
       .subscribe();
   }
 
