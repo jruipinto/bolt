@@ -18,7 +18,13 @@
     qty: number;
 }
 -->
-<div *ngIf="!encomenda">A carregar dados...</div>
+<div *ngIf="!encomenda">
+    <span class="spinner spinner-inline">
+    </span>
+    <span>
+        A carregar dados...
+    </span>
+</div>
 
 <div *ngIf="encomenda">
     <button type="button" class="btn btn-link btn-icon" style="margin:0; padding:0" (click)="navigateBack()">

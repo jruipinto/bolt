@@ -1,3 +1,5 @@
+import { Artigo } from './artigo.model';
+
 export interface Assistencia {
     id: number;
     cliente_user_id: number;
@@ -13,7 +15,7 @@ export interface Assistencia {
     orcamento: number;
     relatorio_interno: string;
     relatorio_cliente: string;
-    material: JSON;
+    material: Partial<Artigo>[];
     preco: number;
     estado: string;
     createdAt: string;

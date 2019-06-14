@@ -1,4 +1,10 @@
-<div *ngIf="!assistencia">A carregar dados...</div>
+<div *ngIf="!assistencia">
+  <span class="spinner spinner-inline">
+  </span>
+  <span>
+    A carregar dados...
+  </span>
+</div>
 
 <div *ngIf="assistencia">
   <button type="button" class="btn btn-link btn-icon" style="margin:0; padding:0" (click)="navigateBack()">
@@ -155,7 +161,7 @@
       <button class="btn btn-success" (click)="saveAssistencia('orçamento aprovado', assistencia)">Aceite</button>
       <clr-dropdown>
         <button clrDropdownTrigger class="btn btn-outline-primary">+ Opções <clr-icon shape="caret down"></clr-icon>
-          </button>
+        </button>
         <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
           <button clrDropdownItem (click)="saveAssistencia('orçamento recusado', assistencia)">Recusado
           </button>
