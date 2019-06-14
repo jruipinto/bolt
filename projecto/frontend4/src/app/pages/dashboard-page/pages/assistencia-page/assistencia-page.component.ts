@@ -71,4 +71,8 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
       .subscribe(() => this.router.navigate(['/dashboard/assistencias-criar-nova']));
   }
 
+  navigateBack() {
+    window.history.back();
+  }
+
 }

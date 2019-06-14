@@ -6,7 +6,9 @@
         <span class="badge badge-light-blue" *ngIf="encomendas.length > 0">{{encomendas.length}}</span>
       </span>
     </h5>
-    <p>👷 Em construção</p>
+    <div *ngIf="encomendas$ | async as encomendas">
+        <div *ngIf="encomendas.length === 0">💪 Não há mais encomendas!</div>
+      </div>
     <div class="card" *ngFor="let encomenda of encomendas$ | async">
       <div class="card-block">
         <!--
@@ -17,7 +19,7 @@
         <div class="card-text">
           <span class="label label-blue">{{encomenda.estado}} -> {{encomenda.updatedAt  | date:'mediumDate'}}</span>
           <p>{{encomenda.qty}} x {{encomenda?.artigo_descricao}} {{encomenda?.artigo_marca}}
-            {{encomenda?.artigo_modelo}} | Até:
+            {{encomenda?.artigo_modelo}} <br> Até:
             {{encomenda.previsao_entrega}}</p>
           <p *ngIf="encomenda.orcamento || encomenda.observacao">
             <span *ngIf="encomenda.orcamento">{{encomenda.orcamento}}€ </span><span *ngIf="encomenda?.observacao">|

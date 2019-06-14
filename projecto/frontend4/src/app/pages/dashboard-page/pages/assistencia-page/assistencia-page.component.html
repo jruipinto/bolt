@@ -1,6 +1,9 @@
 <div *ngIf="!assistencia">A carregar dados...</div>
 
 <div *ngIf="assistencia">
+  <button type="button" class="btn btn-link btn-icon" style="margin:0; padding:0" (click)="navigateBack()">
+    <clr-icon class="is-solid" size="36" shape="arrow" style="transform: rotate(270deg);"></clr-icon>
+  </button>
 
   <h3>Assistência {{assistencia.id}}</h3>
 
@@ -129,51 +132,64 @@
           || assistencia.estado === 'orçamento aprovado'
           || assistencia.estado === 'orçamento recusado'
           || assistencia.estado === 'material recebido'">
-      <clr-button-group class="btn-primary" [clrMenuPosition]="'top-left'">
-        <clr-button class="btn btn-primary btn-icon" (click)="saveAssistencia('em análise', assistencia)">
-          <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
-          Guardar
-        </clr-button>
-        <clr-button [clrInMenu]="true" (click)="saveAssistencia('orçamento pendente', assistencia)">Orçamentar
-        </clr-button>
-        <clr-button [clrInMenu]="true" (click)="saveAssistencia('contacto pendente', assistencia)">Contactar
-        </clr-button>
-        <clr-button [clrInMenu]="true" (click)="saveAssistencia('concluído', assistencia)">Concluir</clr-button>
-      </clr-button-group>
+      <button class="btn btn-primary btn-icon" (click)="saveAssistencia('em análise', assistencia)">
+        <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
+        Guardar
+      </button>
+      <clr-dropdown>
+        <button clrDropdownTrigger class="btn btn-outline-primary">+ Opções <clr-icon shape="caret down"></clr-icon>
+        </button>
+        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+          <button clrDropdownItem (click)="saveAssistencia('orçamento pendente', assistencia)">Orçamentar
+          </button>
+          <button clrDropdownItem (click)="saveAssistencia('contacto pendente', assistencia)">Contactar
+          </button>
+          <button clrDropdownItem (click)="saveAssistencia('concluído', assistencia)">Concluir</button>
+        </clr-dropdown-menu>
+      </clr-dropdown>
     </div>
 
     <div *ngIf="assistencia.estado === 'orçamento pendente'
           || assistencia.estado === 'não atendeu p/ orç.'
           || assistencia.estado === 'cliente adiou orç.'">
-      <clr-button-group class="btn-primary" [clrMenuPosition]="'top-left'">
-        <clr-button (click)="saveAssistencia('orçamento aprovado', assistencia)">Aceite</clr-button>
-        <clr-button [clrInMenu]="true" (click)="saveAssistencia('orçamento recusado', assistencia)">Recusado
-        </clr-button>
-        <clr-button [clrInMenu]="true" (click)="saveAssistencia('cliente adiou orç.', assistencia)">Cliente adiou
-          resposta</clr-button>
-        <clr-button [clrInMenu]="true" (click)="saveAssistencia('não atendeu p/ orç.', assistencia)">Não atendeu
-        </clr-button>
-        <clr-button [clrInMenu]="true" (click)="saveAssistencia('incontactável', assistencia)">Incontactável
-        </clr-button>
-      </clr-button-group>
+      <button class="btn btn-success" (click)="saveAssistencia('orçamento aprovado', assistencia)">Aceite</button>
+      <clr-dropdown>
+        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+          <button clrDropdownItem (click)="saveAssistencia('orçamento recusado', assistencia)">Recusado
+          </button>
+          <button clrDropdownItem (click)="saveAssistencia('cliente adiou orç.', assistencia)">Cliente adiou
+            resposta</button>
+          <button clrDropdownItem (click)="saveAssistencia('não atendeu p/ orç.', assistencia)">Não atendeu
+          </button>
+          <button clrDropdownItem (click)="saveAssistencia('incontactável', assistencia)">Incontactável
+          </button>
+        </clr-dropdown-menu>
+      </clr-dropdown>
     </div>
 
     <div *ngIf="assistencia.estado === 'contacto pendente'
           || assistencia.estado === 'não atendeu p/ cont.'
           || assistencia.estado === 'cliente adiou resp.'">
-      <clr-button-group class="btn-primary" [clrMenuPosition]="'top-left'">
-        <clr-button (click)="saveAssistencia('contactado', assistencia)">Sucesso</clr-button>
-        <clr-button [clrInMenu]="true" (click)="saveAssistencia('cliente adiou resp.', assistencia)">Cliente adiou
-          resposta</clr-button>
-        <clr-button [clrInMenu]="true" (click)="saveAssistencia('não atendeu p/ cont.', assistencia)">Não atendeu
-        </clr-button>
-        <clr-button [clrInMenu]="true" (click)="saveAssistencia('incontactável', assistencia)">Incontactável
-        </clr-button>
-      </clr-button-group>
+      <button type="button" class="btn btn-success" (click)="saveAssistencia('contactado', assistencia)">
+        Sucesso
+        <clr-icon shape="caret down"></clr-icon>
+      </button>
+      <clr-dropdown>
+        <button clrDropdownTrigger class="btn btn-outline-primary">+ Opções <clr-icon shape="caret down"></clr-icon>
+        </button>
+        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+          <button type="button" (click)="saveAssistencia('contactado', assistencia)" clrDropdownItem>Cliente adiou
+            resposta</button>
+          <button type="button" (click)="saveAssistencia('não atendeu p/ cont.', assistencia)" clrDropdownItem>Não
+            atendeu</button>
+          <button type="button" (click)="saveAssistencia('incontactável', assistencia)"
+            clrDropdownItem>Incontactável</button>
+        </clr-dropdown-menu>
+      </clr-dropdown>
     </div>
 
     <div *ngIf="assistencia.estado === 'concluído'">
-      <button class="btn btn-danger" (click)="saveAssistencia('entregue', assistencia)">
+      <button class="btn btn-warning" (click)="saveAssistencia('entregue', assistencia)">
         Entregar
       </button>
     </div>

@@ -41,14 +41,24 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
     */
 
   saveEncomenda(newEstado: string, encomenda: Encomenda) {
-    if (encomenda.cliente_user_contacto === 918867376 && newEstado === 'recebida') {
-      return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
-        .pipe(
-          tap(
-            () => this.router.navigate(['/dashboard/artigo', encomenda.artigo_id])
+    if (newEstado === 'recebida' || newEstado === 'entregue') {
+      if (encomenda.cliente_user_contacto === 918867376) {
+        return this.encomendas.patch(encomenda.id, { ...encomenda, estado: 'entregue' })
+          .pipe(
+            tap(
+              () => this.router.navigate(['/dashboard/artigo', encomenda.artigo_id])
+            )
           )
-        )
-        .subscribe();
+          .subscribe();
+      } else {
+        return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
+          .pipe(
+            tap(
+              () => this.router.navigate(['/dashboard/artigo', encomenda.artigo_id])
+            )
+          )
+          .subscribe();
+      }
     } else {
       return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
         .pipe(
