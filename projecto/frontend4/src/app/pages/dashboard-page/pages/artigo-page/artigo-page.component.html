@@ -1,3 +1,7 @@
+<button type="button" class="btn btn-link btn-icon" style="margin:0; padding:0" (click)="navigateBack()">
+  <clr-icon class="is-solid" size="36" shape="arrow" style="transform: rotate(270deg);"></clr-icon>
+</button>
+
 <h3 class="modal-title">Artigo {{artigoForm?.value.id}}</h3>
 <form [formGroup]="artigoForm">
   <div class="clr-row">
@@ -61,15 +65,13 @@
 </form>
 
 <div class="clr-row separate" *ngIf="artigoForm.value.id">
-  <div class="clr-col-md-12 clr-col-lg-2">
-    <div class="btn-group btn-primary">
-      <button class="btn btn-primary" (click)="saveArtigo(artigoForm.value)">Guardar</button>
-      <button class="btn" (click)="orderArtigo(artigoForm.value)">Encomendar</button>
-    </div>
+  <div class="clr-col">
+    <button class="btn btn-primary" (click)="saveArtigo(artigoForm.value)">Guardar</button>
+    <button class="btn" (click)="orderArtigo(artigoForm.value)">Encomendar</button>
   </div>
 </div>
 <div class="clr-row separate" *ngIf="!artigoForm.value.id">
-  <div class="clr-col-md-12 clr-col-lg-2">
+  <div class="clr-col">
     <button class="btn btn-primary" (click)="createArtigo(artigoForm.value)">Criar</button>
   </div>
 </div>

@@ -96,4 +96,8 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
     return this.router.navigate(['/dashboard/encomendas-criar-nova']);
   }
 
+  navigateBack() {
+    window.history.back();
+  }
+
 }

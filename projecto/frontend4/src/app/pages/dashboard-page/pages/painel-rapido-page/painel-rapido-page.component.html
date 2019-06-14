@@ -7,7 +7,7 @@
       </span>
     </h5>
     <div *ngIf="encomendas$ | async as encomendas">
-        <div *ngIf="encomendas.length === 0">💪 Não há mais encomendas!</div>
+        <div *ngIf="encomendas.length === 0">😎 Não há mais encomendas!</div>
       </div>
     <div class="card" *ngFor="let encomenda of encomendas$ | async">
       <div class="card-block">
@@ -58,7 +58,7 @@
       </span>
     </h5>
     <div *ngIf="orcamentos$ | async as orcamentos">
-      <div *ngIf="orcamentos.length === 0">💪 Não há mais orçamentos!</div>
+      <div *ngIf="orcamentos.length === 0">😎 Não há mais orçamentos!</div>
     </div>
     <div class="card" *ngFor="let orcamento of orcamentos$ | async">
       <div class="card-block">
@@ -101,7 +101,7 @@
       </span>
     </h5>
     <div *ngIf="pedidosContactoCliente$ | async as pedidosContactoCliente">
-      <div *ngIf="pedidosContactoCliente.length === 0">💪 Não há mais pedidos de contacto!</div>
+      <div *ngIf="pedidosContactoCliente.length === 0">😎 Não há mais pedidos de contacto!</div>
     </div>
     <div class="card" *ngFor="let pedidoContactoCliente of pedidosContactoCliente$ | async">
       <div class="card-block">

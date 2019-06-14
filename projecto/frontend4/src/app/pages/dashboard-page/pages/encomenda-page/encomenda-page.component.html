@@ -21,6 +21,9 @@
 <div *ngIf="!encomenda">A carregar dados...</div>
 
 <div *ngIf="encomenda">
+    <button type="button" class="btn btn-link btn-icon" style="margin:0; padding:0" (click)="navigateBack()">
+        <clr-icon class="is-solid" size="36" shape="arrow" style="transform: rotate(270deg);"></clr-icon>
+    </button>
 
     <h3>Encomenda {{encomenda.id}}</h3>
 
@@ -131,7 +134,8 @@
         || encomenda.estado === 'detectado defeito'">
             <button class="btn btn-success" (click)="saveEncomenda('aguarda entrega', encomenda)">Encomendado</button>
             <clr-dropdown>
-                <button clrDropdownTrigger class="btn btn-outline-primary">+ Opções <clr-icon shape="caret down"></clr-icon></button>
+                <button clrDropdownTrigger class="btn btn-outline-primary">+ Opções <clr-icon shape="caret down">
+                    </clr-icon></button>
                 <clr-dropdown-menu clrPosition="top-left">
                     <button clrDropdownItem type="button"
                         (click)="saveEncomenda('aguarda reposta de fornecedor', encomenda)">

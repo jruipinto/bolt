@@ -68,4 +68,8 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  navigateBack() {
+    window.history.back();
+  }
+
 }
