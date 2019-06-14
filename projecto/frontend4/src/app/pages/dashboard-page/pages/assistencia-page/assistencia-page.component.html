@@ -69,6 +69,9 @@
     </div>
   </div>
   <div class="separate">
+    <button class="btn btn-link" (click)="basic = true">Adicionar material</button>
+  </div>
+  <div class="separate">
     <div class="clr-row">
       <div class="clr-col-md-6">
         <div class="clr-row">
@@ -210,3 +213,14 @@
   </div>
 
 </div>
+
+<clr-modal [(clrModalOpen)]="basic">
+  <h3 class="modal-title">Adicionar Material</h3>
+  <div class="modal-body">
+    <p>👷 Em construção...</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="basic = false">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="basic = false">Ok</button>
+  </div>
+</clr-modal>

@@ -17,6 +17,7 @@ import { Observable } from 'rxjs';
 })
 export class AssistenciaPageComponent implements OnInit, OnDestroy {
   public assistencia: Assistencia;
+  public basic = false;
 
   constructor(
     private printService: PrintService,
