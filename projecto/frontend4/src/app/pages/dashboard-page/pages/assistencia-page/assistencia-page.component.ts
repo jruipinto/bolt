@@ -3,11 +3,12 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { map, concatMap, tap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
-import { Assistencia } from 'src/app/shared/models';
+import { Assistencia, Artigo } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 import { UIService, UI } from 'src/app/shared/state/ui.service';
-import { AssistenciasService } from 'src/app/shared/state';
+import { AssistenciasService, ArtigosService } from 'src/app/shared/state';
 import { Observable } from 'rxjs';
+import { FormBuilder } from '@angular/forms';
 
 @AutoUnsubscribe()
 @Component({
@@ -18,13 +19,20 @@ import { Observable } from 'rxjs';
 export class AssistenciaPageComponent implements OnInit, OnDestroy {
   public assistencia: Assistencia;
   public basic = false;
+  public artigoSearchForm = this.fb.group({
+    input: [null]
+  });
+  public results$: Observable<Artigo[]>;
+  public material: Artigo[];
 
   constructor(
     private printService: PrintService,
     private uiService: UIService,
     private assistencias: AssistenciasService,
+    private artigos: ArtigosService,
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private fb: FormBuilder) {
   }
 
   ngOnInit() {
@@ -74,6 +82,38 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
 
   navigateBack() {
     window.history.back();
+  }
+
+  searchArtigo(input?: string) {
+    if (input) {
+      const inputSplited = input.split(' ');
+      const inputMapped = inputSplited.map(word =>
+        '{"$or": [' +
+        '{ "marca": { "$like": "%' + word + '%" }},' +
+        '{ "modelo": { "$like": "%' + word + '%" }},' +
+        '{ "descricao": { "$like": "%' + word + '%" }}' +
+        ' ]}'
+      );
+      const dbQuery =
+        '{' +
+        '"query": {' +
+        '"$limit": "200",' +
+        '"$and": [' +
+        inputMapped +
+        ']' +
+        '}' +
+        '}';
+
+      this.results$ = this.artigos
+        .findAndWatch(JSON.parse(dbQuery));
+    }
+  }
+
+  addArtigo(artigo: Artigo) {
+    this.material
+    ? this.material = [...this.material, artigo]
+    : this.material = [artigo];
+    this.basic = false;
   }
 
 }
