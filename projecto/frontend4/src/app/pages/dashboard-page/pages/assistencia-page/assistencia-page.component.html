@@ -71,12 +71,39 @@
   <div class="separate">
     <div class="clr-row">
       <div class="clr-col">
-        <p *ngFor="let artigo of material"> {{artigo.qty}} x {{artigo.descricao}} {{artigo.marca}} {{artigo.modelo}}</p>
+        <div class="clr-row">
+          <div class="clr-col">
+            <button class="btn btn-link" (click)="basic = true">Adicionar material</button>
+          </div>
+        </div>
+        <div class="clr-row" *ngIf="material">
+          <div class="clr-col">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="left">Qty</th>
+                  <th>Descrição</th>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>Local</th>
+                  <th class="left">Custo p/ unidade</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let artigo of material">
+                  <td class="left">{{artigo.qty}}</td>
+                  <td>{{artigo.descricao}}</td>
+                  <td>{{artigo.marca}}</td>
+                  <td>{{artigo.modelo}}</td>
+                  <td>{{artigo.localizacao}}</td>
+                  <td class="left">{{artigo.preco | currency: 'EUR'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="separate">
-    <button class="btn btn-link" (click)="basic = true">Adicionar material</button>
   </div>
   <div class="separate">
     <div class="clr-row">
