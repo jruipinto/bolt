@@ -18,7 +18,7 @@ import { FormBuilder } from '@angular/forms';
 })
 export class AssistenciaPageComponent implements OnInit, OnDestroy {
   public assistencia: Assistencia;
-  public basic = false;
+  public modal = false;
   public artigoSearchForm = this.fb.group({
     input: [null]
   });
@@ -110,10 +110,25 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
   }
 
   addArtigo(artigo: Artigo) {
-    this.material
-    ? this.material = [...this.material, artigo]
-    : this.material = [artigo];
-    this.basic = false;
+    artigo = { ...artigo, qty: 1 };
+    if (this.material) {
+      this.material.map(
+        a => {
+          if (a.id === artigo.id) {
+            a.qty++;
+            return a;
+          } else {
+            return a;
+          }
+        }
+      );
+      if (this.material.findIndex(a => a.id === artigo.id) < 0) {
+        this.material = [...this.material, artigo];
+      }
+    } else {
+      this.material = [artigo];
+    }
+    this.modal = false;
   }
 
 }

@@ -73,7 +73,7 @@
       <div class="clr-col">
         <div class="clr-row">
           <div class="clr-col">
-            <button class="btn btn-link" (click)="basic = true">Adicionar material</button>
+            <button class="btn btn-link" (click)="modal = true">Adicionar material</button>
           </div>
         </div>
         <div class="clr-row" *ngIf="material">
@@ -83,8 +83,6 @@
                 <tr>
                   <th class="left">Qty</th>
                   <th>Descrição</th>
-                  <th>Marca</th>
-                  <th>Modelo</th>
                   <th>Local</th>
                   <th class="left">Custo p/ unidade</th>
                 </tr>
@@ -92,9 +90,7 @@
               <tbody>
                 <tr *ngFor="let artigo of material">
                   <td class="left">{{artigo.qty}}</td>
-                  <td>{{artigo.descricao}}</td>
-                  <td>{{artigo.marca}}</td>
-                  <td>{{artigo.modelo}}</td>
+                  <td>{{artigo.descricao}} {{artigo.marca}} {{artigo.modelo}}</td>
                   <td>{{artigo.localizacao}}</td>
                   <td class="left">{{artigo.preco | currency: 'EUR'}}</td>
                 </tr>
@@ -248,7 +244,7 @@
 
 </div>
 
-<clr-modal [(clrModalOpen)]="basic" [clrModalSize]="'lg'">
+<clr-modal [(clrModalOpen)]="modal" [clrModalSize]="'lg'">
   <h3 class="modal-title">Adicionar Material (👷 Em construção...)</h3>
   <div class="modal-body">
     <form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
