@@ -111,9 +111,9 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
   }
 
   addArtigo(artigoInStock: Artigo) {
+    const artigo = { ...artigoInStock, qty: 1 };
+    let list = this.material;
     if (artigoInStock.qty > 0) {
-      const artigo = { ...artigoInStock, qty: 1 };
-      let list = this.material;
       if (list) {
         list.map(
           item => {
