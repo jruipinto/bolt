@@ -22,7 +22,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
   public artigoSearchForm = this.fb.group({
     input: [null]
   });
-  public results$: Observable<Artigo[]>;
+  public results: Artigo[];
   public material: Artigo[];
 
   constructor(
@@ -104,31 +104,36 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
         '}' +
         '}';
 
-      this.results$ = this.artigos
-        .findAndWatch(JSON.parse(dbQuery));
+      this.artigos
+        .findAndWatch(JSON.parse(dbQuery))
+        .subscribe((res: Artigo[]) => this.results = res);
     }
   }
 
-  addArtigo(artigo: Artigo) {
-    artigo = { ...artigo, qty: 1 };
-    if (this.material) {
-      this.material.map(
-        a => {
-          if (a.id === artigo.id) {
-            a.qty++;
-            return a;
-          } else {
-            return a;
+  addArtigo(artigoInStock: Artigo) {
+    if (artigoInStock.qty > 0) {
+      const artigo = { ...artigoInStock, qty: 1 };
+      let list = this.material;
+      if (list) {
+        list.map(
+          item => {
+            if (item.id === artigo.id) {
+              item.qty++;
+              return item;
+            } else {
+              return item;
+            }
           }
+        );
+        if (list.findIndex(a => a.id === artigo.id) < 0) {
+          list = [...list, artigo];
         }
-      );
-      if (this.material.findIndex(a => a.id === artigo.id) < 0) {
-        this.material = [...this.material, artigo];
+      } else {
+        list = [artigo];
       }
-    } else {
-      this.material = [artigo];
+      this.material = list;
+      this.modal = false;
     }
-    this.modal = false;
   }
 
 }
