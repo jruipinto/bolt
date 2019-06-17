@@ -106,6 +106,25 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
 
       this.artigos
         .findAndWatch(JSON.parse(dbQuery))
+        .pipe(
+          map((artigos: Artigo[]) => {
+            if (this.material) {
+              return artigos.map(
+                artigo => {
+                  const id = this.material.findIndex(item => item.id === artigo.id);
+                  if (id < 0) {
+                    artigo.qty = artigo.qty - this.material[id].qty;
+                    return artigo;
+                  } else {
+                    return artigo;
+                  }
+                }
+              );
+            } else {
+              return artigos;
+            }
+          })
+        )
         .subscribe((res: Artigo[]) => this.results = res);
     }
   }
@@ -119,6 +138,10 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
           item => {
             if (item.id === artigo.id) {
               item.qty++;
+              const resultIndex = this.results.findIndex(result => result.id === item.id);
+              if (resultIndex > -1) {
+                this.results[resultIndex].qty = this.results[resultIndex].qty - item.qty;
+              }
               return item;
             } else {
               return item;
