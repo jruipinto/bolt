@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { map, concatMap, tap } from 'rxjs/operators';
+import { map, concatMap, tap, toArray } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 import { Assistencia, Artigo } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 import { UIService, UI } from 'src/app/shared/state/ui.service';
 import { AssistenciasService, ArtigosService } from 'src/app/shared/state';
-import { Observable } from 'rxjs';
+import { Observable, concat } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 
 @AutoUnsubscribe()
@@ -38,10 +38,32 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.paramMap
       .pipe(
-        concatMap((params: ParamMap) => this.assistencias.getAndWatch(+params.get('id')))
+        concatMap((params: ParamMap) => this.assistencias.getAndWatch(+params.get('id'))),
+        map((res: Assistencia[]) => res[0]),
+        concatMap(
+          (assistencia) => {
+            let assistMaterial: Partial<Artigo>[];
+            typeof assistencia.material === 'string'
+              ? assistMaterial = JSON.parse(assistencia.material)
+              : assistMaterial = assistencia.material;
+            return concat(
+              assistMaterial.map(
+                (artigo: Partial<Artigo>) => {
+                  return this.artigos.get(artigo.id)
+                    .pipe(
+                      map(res => res[0])
+                    );
+                }
+              )
+            ).pipe(toArray());
+          }
+        ),
+        map( (artigos: Artigo[]) => {
+          
+        })        
       )
       .subscribe(
-        (assistencias: Assistencia[]) => this.assistencia = assistencias[0]
+        (assistencia: Assistencia) => this.assistencia = assistencia
       );
   }
 
