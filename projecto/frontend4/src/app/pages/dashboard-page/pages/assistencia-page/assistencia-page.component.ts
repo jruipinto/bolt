@@ -71,18 +71,37 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() { }
 
+  saveChangesOnStock({ material }: Partial<Assistencia>) {
+    return concat(material.map(
+      (artigo: Artigo) => this.artigos.get(artigo.id)
+        .pipe(
+          map(res => res[0]),
+          concatMap(
+            (dbArtigo: Artigo) => {
+              const artigoToSave = { ...dbArtigo, qty: dbArtigo.qty - artigo.qty };
+              return this.artigos.patch(dbArtigo.id, artigoToSave);
+            }
+          )
+        )
+    )).pipe(toArray());
+  }
+
   saveAssistencia(newEstado: string, assistencia: Assistencia) {
     if (newEstado !== 'em análise' && !assistencia.relatorio_cliente) {
       return alert('Preenche o relatório para o cliente!');
     }
-    return this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado })
+    return this.saveChangesOnStock(assistencia)
       .pipe(
-        tap(() => {
-          if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
-        }),
-        tap(() => window.history.back())
-      )
-      .subscribe();
+        concatMap(
+          _ => this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado })
+            .pipe(
+              tap(() => {
+                if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
+              }),
+              tap(() => window.history.back())
+            )
+        )
+      ).subscribe();
   }
 
   openNewAssistenciaWithThisData(assistencia: Assistencia) {
