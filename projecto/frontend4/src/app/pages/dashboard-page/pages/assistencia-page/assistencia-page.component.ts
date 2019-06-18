@@ -7,7 +7,7 @@ import { Assistencia, Artigo } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 import { UIService, UI } from 'src/app/shared/state/ui.service';
 import { AssistenciasService, ArtigosService } from 'src/app/shared/state';
-import { Observable, concat } from 'rxjs';
+import { Observable, concat, of } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 
 @AutoUnsubscribe()
@@ -40,30 +40,32 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
       .pipe(
         concatMap((params: ParamMap) => this.assistencias.getAndWatch(+params.get('id'))),
         map((res: Assistencia[]) => res[0]),
+        tap((assistencia: Assistencia) => this.assistencia = assistencia),
         concatMap(
-          (assistencia) => {
+          assistencia => {
             let assistMaterial: Partial<Artigo>[];
             typeof assistencia.material === 'string'
               ? assistMaterial = JSON.parse(assistencia.material)
               : assistMaterial = assistencia.material;
-            return concat(
-              assistMaterial.map(
-                (artigo: Partial<Artigo>) => {
-                  return this.artigos.get(artigo.id)
-                    .pipe(
-                      map(res => res[0])
-                    );
-                }
-              )
-            ).pipe(toArray());
+            if (assistMaterial) {
+              return concat(
+                assistMaterial.map(
+                  (artigo: Partial<Artigo>) => {
+                    return this.artigos.get(artigo.id)
+                      .pipe(
+                        map(res => res[0])
+                      );
+                  }
+                )
+              ).pipe(toArray());
+            } else {
+              return of(null);
+            }
           }
-        ),
-        map( (artigos: Artigo[]) => {
-          
-        })        
+        )
       )
       .subscribe(
-        (assistencia: Assistencia) => this.assistencia = assistencia
+        (material: Partial<Artigo[]> | null) => this.assistencia = { ...this.assistencia, material }
       );
   }
 
