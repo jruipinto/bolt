@@ -48,16 +48,19 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
               ? assistMaterial = JSON.parse(assistencia.material)
               : assistMaterial = assistencia.material;
             if (assistMaterial) {
+              console.log('init');
               return concat(
                 assistMaterial.map(
                   (artigo: Partial<Artigo>) => {
                     return this.artigos.get(artigo.id)
                       .pipe(
-                        map(res => res[0])
+                        map((res: Artigo[]) => res[0])
                       );
                   }
                 )
-              ).pipe(toArray());
+              ).pipe(
+                concatMap(concats => concats),
+                toArray());
             } else {
               return of(null);
             }
@@ -65,35 +68,44 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
         )
       )
       .subscribe(
-        (material: Partial<Artigo[]> | null) => this.assistencia = { ...this.assistencia, material }
+        (material: Partial<Artigo[]> | null) => {
+          console.log(material);
+          this.assistencia = { ...this.assistencia, material };
+        }
       );
   }
 
   ngOnDestroy() { }
 
-  saveChangesOnStock({ material }: Partial<Assistencia>) {
-    return concat(material.map(
-      (artigo: Artigo) => this.artigos.get(artigo.id)
-        .pipe(
-          map(res => res[0]),
-          concatMap(
-            (dbArtigo: Artigo) => {
-              const artigoToSave = { ...dbArtigo, qty: dbArtigo.qty - artigo.qty };
-              return this.artigos.patch(dbArtigo.id, artigoToSave);
-            }
+  saveChangesOnStock(material: Artigo[]) {
+    if (material) {
+      console.log(material);
+      return concat(material.map(
+        (artigo: Artigo) => this.artigos.get(artigo.id)
+          .pipe(
+            map(res => res[0]),
+            concatMap(
+              (dbArtigo: Artigo) => {
+                const artigoToSave = { ...dbArtigo, qty: dbArtigo.qty - artigo.qty };
+                return this.artigos.patch(dbArtigo.id, artigoToSave);
+              }
+            )
           )
-        )
-    )).pipe(toArray());
+      )).pipe(toArray());
+    } else {
+      console.log(null);
+      return of(null);
+    }
   }
 
   saveAssistencia(newEstado: string, assistencia: Assistencia) {
     if (newEstado !== 'em análise' && !assistencia.relatorio_cliente) {
       return alert('Preenche o relatório para o cliente!');
     }
-    return this.saveChangesOnStock(assistencia)
+    return this.saveChangesOnStock(this.material)
       .pipe(
         concatMap(
-          _ => this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado })
+          _ => this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado, material: this.material })
             .pipe(
               tap(() => {
                 if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
