@@ -170,7 +170,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
                 artigo => {
                   const id = this.material.findIndex(item => item.id === artigo.id);
                   if (id > 0) {
-                    artigo.qty = artigo.qty - this.material[id].qty;
+                    artigo.qty = artigo.qty + this.assistencia.material[id].qty - this.material[id].qty;
                     return artigo;
                   } else {
                     return artigo;
