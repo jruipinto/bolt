@@ -23,7 +23,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     input: [null]
   });
   public results: Artigo[];
-  public material: Artigo[];
+  public material: Partial<Artigo>[];
 
   constructor(
     private printService: PrintService,
@@ -54,7 +54,8 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
                   (artigo: Partial<Artigo>) => {
                     return this.artigos.get(artigo.id)
                       .pipe(
-                        map((res: Artigo[]) => res[0])
+                        map((res: Artigo[]) => res[0]),
+                        map(res => res = { ...res, qty: artigo.qty })
                       );
                   }
                 )
@@ -70,14 +71,15 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
       .subscribe(
         (material: Partial<Artigo[]> | null) => {
           console.log(material);
-          this.assistencia = { ...this.assistencia, material };
+          this.assistencia.material = material;
+          this.material = material;
         }
       );
   }
 
   ngOnDestroy() { }
 
-  saveChangesOnStock(material: Artigo[]) {
+  saveChangesOnStock(material: Partial<Artigo>[]) {
     if (material) {
       console.log(material);
       return concat(material.map(
@@ -86,12 +88,12 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
             map(res => res[0]),
             concatMap(
               (dbArtigo: Artigo) => {
-                const artigoToSave = { ...dbArtigo, qty: dbArtigo.qty - artigo.qty };
+                const artigoToSave = { id: dbArtigo.id, qty: dbArtigo.qty - artigo.qty };
                 return this.artigos.patch(dbArtigo.id, artigoToSave);
               }
             )
           )
-      )).pipe(toArray());
+      )).pipe(concatMap(a => a), toArray());
     } else {
       console.log(null);
       return of(null);
@@ -167,7 +169,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
               return artigos.map(
                 artigo => {
                   const id = this.material.findIndex(item => item.id === artigo.id);
-                  if (id < 0) {
+                  if (id > 0) {
                     artigo.qty = artigo.qty - this.material[id].qty;
                     return artigo;
                   } else {
