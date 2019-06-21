@@ -9,6 +9,7 @@ import { UIService, UI } from 'src/app/shared/state/ui.service';
 import { AssistenciasService, ArtigosService } from 'src/app/shared/state';
 import { Observable, concat, of } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
+import { ArtigosApiService } from 'src/app/shared';
 
 @AutoUnsubscribe()
 @Component({
@@ -30,6 +31,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     private uiService: UIService,
     private assistencias: AssistenciasService,
     private artigos: ArtigosService,
+    private artigosApi: ArtigosApiService,
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder) {
@@ -47,7 +49,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
               typeof assistencia.material === 'string'
                 ? assistMaterial = JSON.parse(assistencia.material)
                 : assistMaterial = assistencia.material;
-              const arr = assistMaterial.map(
+              return concat([...assistMaterial.map(
                 (artigo: Partial<Artigo>) => {
                   return this.artigos.get(artigo.id)
                     .pipe(
@@ -55,17 +57,17 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
                       map(res => res = { ...res, qty: artigo.qty })
                     );
                 }
-              );
-              return concat(arr).pipe(
-                concatMap(concats => concats),
-                toArray(),
-                map(material => ({ ...assistencia, material })));
+              )])
+                .pipe(
+                  concatMap(concats => concats),
+                  toArray(),
+                  map(material => ({ ...assistencia, material })));
             } else {
               return of(assistencia);
             }
           }
         ),
-        tap(assistencia => this.assistenciaOpen = assistencia)
+        tap(assistencia => { this.assistenciaOpen = assistencia; })
       )
       .subscribe(
         (assistencia) => {
@@ -78,11 +80,11 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
 
   saveChangesOnStock(material: Partial<Artigo>[]) {
     if (material) {
-      const concats = material.map(
+      return concat([...material.map(
         (artigo: Artigo) => this.artigos.get(artigo.id)
           .pipe(
             map(res => res[0]),
-            tap(console.log),
+            tap(a => { console.log(a); }),
             concatMap(
               (dbArtigo: Artigo) => {
                 let id: number;
@@ -103,8 +105,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
               }
             )
           )
-      );
-      return concat(concats).pipe(concatMap(a => a), toArray());
+      )]).pipe(concatMap(a => a), toArray());
     } else {
       return of(null);
     }
@@ -122,7 +123,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
               tap(() => {
                 if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
               }),
-              tap(() => window.history.back())
+              tap(() => { window.history.back(); })
             )
         )
       ).subscribe();
@@ -144,7 +145,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
         // prints
       }
     )
-      .subscribe(() => this.router.navigate(['/dashboard/assistencias-criar-nova']));
+      .subscribe(() => { this.router.navigate(['/dashboard/assistencias-criar-nova']); });
   }
 
   navigateBack() {
@@ -172,7 +173,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
         '}';
 
       this.artigos
-        .findAndWatch(JSON.parse(dbQuery))
+        .find(JSON.parse(dbQuery))
         .pipe(
           map((artigos: Artigo[]) => {
             if (this.material) {
@@ -195,7 +196,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
             }
           })
         )
-        .subscribe((res: Artigo[]) => this.results = res);
+        .subscribe((res: Artigo[]) => { this.results = res; });
     }
   }
 
@@ -209,7 +210,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
         } else {
           materialQ = materialQ.map(
             itemQ => {
-              if (+itemQ.id === +artigo.id) {
+              if (itemQ.id === artigo.id) {
                 return { ...itemQ, qty: itemQ.qty + 1 };
               } else {
                 return itemQ;

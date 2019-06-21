@@ -7,7 +7,7 @@ import { sortByID } from '../utilities';
 export abstract class EntityStateAbstraction {
   private defaults = [];
   private source = new BehaviorSubject<any[]>(this.defaults);
-  public state$ = this.source;
+  public state$ = this.source.asObservable();
   private lostConnection = false;
 
   private windowOffline$ = fromEvent(window, 'offline');
@@ -22,9 +22,13 @@ export abstract class EntityStateAbstraction {
       .subscribe(
         () => {
           // reset state + reset lostConnection flag
-          this.source.next(this.defaults);
+          this.setState(this.defaults);
           this.lostConnection = false;
         });
+  }
+  private setState(value: any) {
+    this.source.next(value);
+    console.log('state mutation:', value);
   }
 
   public find(query?: object) {
@@ -34,18 +38,19 @@ export abstract class EntityStateAbstraction {
         concatMap(state =>
           this.xAPIservice.find(query)
             .pipe(
-              map(response => {
+              first(),
+              tap(response => {
                 // const newState = [...new Set([...state, ...response])]; in ES6 syntax
                 const newState = unionBy(state, response, 'id');
-                this.source.next(sortByID(newState));
-                return response;
+                this.setState(sortByID(newState));
+                // this.setState(newState);
               })
             )
         ));
   }
   public get(id: number) {
     const dbGetAndSave$ = state => this.xAPIservice.get(id)
-      .pipe(tap(e => this.source.next(sortByID([...state, ...e]))));
+      .pipe(tap(e => this.setState(sortByID([...state, ...e]))));
 
     return this.state$.pipe(
       first(),
@@ -64,7 +69,7 @@ export abstract class EntityStateAbstraction {
     return this.state$.pipe(
       first(),
       concatMap(state => this.xAPIservice.create(data).pipe(
-        tap(newItem => this.source.next(sortByID([...state, newItem])))
+        tap(newItem => this.setState(sortByID([...state, newItem])))
       ))
     );
   }
@@ -73,7 +78,7 @@ export abstract class EntityStateAbstraction {
     // get state => set state + data => send patch data to api
     return this.state$.pipe(
       first(),
-      tap(state => this.source.next(sortByID(unionBy([data], state, 'id')))),
+      tap(state => this.setState(sortByID(unionBy([data], state, 'id')))),
       concatMap(() => this.xAPIservice.patch(id, data))
     );
   }
@@ -83,7 +88,7 @@ export abstract class EntityStateAbstraction {
     return this.xAPIservice.onCreated().pipe(
       concatMap(receivedItem => this.state$.pipe(
         first(),
-        tap(state => this.source.next(sortByID([...state, receivedItem]))),
+        tap(state => this.setState(sortByID([...state, receivedItem]))),
         map(() => receivedItem)
       ))
     );
@@ -93,7 +98,7 @@ export abstract class EntityStateAbstraction {
     return this.xAPIservice.onPatched().pipe(
       concatMap(receivedItem => this.state$.pipe(
         first(),
-        tap(state => this.source.next(sortByID(unionBy(receivedItem, state, 'id')))),
+        tap(state => this.setState(sortByID(unionBy(receivedItem, state, 'id')))),
         map(() => receivedItem)
       ))
     );
