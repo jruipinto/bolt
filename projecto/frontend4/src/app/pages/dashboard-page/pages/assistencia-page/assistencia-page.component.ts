@@ -17,7 +17,7 @@ import { FormBuilder } from '@angular/forms';
   styleUrls: ['./assistencia-page.component.scss']
 })
 export class AssistenciaPageComponent implements OnInit, OnDestroy {
-  public assistencia: Assistencia;
+  public assistenciaOpen: Assistencia;
   public modal = false;
   public artigoSearchForm = this.fb.group({
     input: [null]
@@ -40,39 +40,36 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
       .pipe(
         concatMap((params: ParamMap) => this.assistencias.getAndWatch(+params.get('id'))),
         map((res: Assistencia[]) => res[0]),
-        tap((assistencia: Assistencia) => this.assistencia = assistencia),
         concatMap(
           assistencia => {
-            let assistMaterial: Partial<Artigo>[];
-            typeof assistencia.material === 'string'
-              ? assistMaterial = JSON.parse(assistencia.material)
-              : assistMaterial = assistencia.material;
-            if (assistMaterial) {
-              console.log('init');
-              return concat(
-                assistMaterial.map(
-                  (artigo: Partial<Artigo>) => {
-                    return this.artigos.get(artigo.id)
-                      .pipe(
-                        map((res: Artigo[]) => res[0]),
-                        map(res => res = { ...res, qty: artigo.qty })
-                      );
-                  }
-                )
-              ).pipe(
+            if (assistencia.material) {
+              let assistMaterial: Partial<Artigo>[];
+              typeof assistencia.material === 'string'
+                ? assistMaterial = JSON.parse(assistencia.material)
+                : assistMaterial = assistencia.material;
+              const arr = assistMaterial.map(
+                (artigo: Partial<Artigo>) => {
+                  return this.artigos.get(artigo.id)
+                    .pipe(
+                      map((res: Artigo[]) => res[0]),
+                      map(res => res = { ...res, qty: artigo.qty })
+                    );
+                }
+              );
+              return concat(arr).pipe(
                 concatMap(concats => concats),
-                toArray());
+                toArray(),
+                map(material => ({ ...assistencia, material })));
             } else {
-              return of(null);
+              return of(assistencia);
             }
           }
-        )
+        ),
+        tap(assistencia => this.assistenciaOpen = assistencia)
       )
       .subscribe(
-        (material: Partial<Artigo[]> | null) => {
-          console.log(material);
-          this.assistencia.material = material;
-          this.material = material;
+        (assistencia) => {
+          this.material = assistencia.material;
         }
       );
   }
@@ -81,21 +78,34 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
 
   saveChangesOnStock(material: Partial<Artigo>[]) {
     if (material) {
-      console.log(material);
-      return concat(material.map(
+      const concats = material.map(
         (artigo: Artigo) => this.artigos.get(artigo.id)
           .pipe(
             map(res => res[0]),
+            tap(console.log),
             concatMap(
               (dbArtigo: Artigo) => {
-                const artigoToSave = { id: dbArtigo.id, qty: dbArtigo.qty - artigo.qty };
+                let id: number;
+                let artigoToSave: Partial<Artigo>;
+                if (!this.assistenciaOpen.material) {
+                  console.log('TCL: AssistenciaPageComponent -> saveChangesOnStock -> artigo.qty', artigo.qty);
+                  console.log('TCL: AssistenciaPageComponent -> saveChangesOnStock -> dbArtigo.qty', dbArtigo.qty);
+                  artigoToSave = { id: dbArtigo.id, qty: dbArtigo.qty - artigo.qty };
+                } else {
+                  id = this.assistenciaOpen.material.findIndex(obj => obj.id === artigo.id);
+                  if (id < 0) {
+                    artigoToSave = { id: dbArtigo.id, qty: dbArtigo.qty - artigo.qty };
+                  } else {
+                    artigoToSave = { id: dbArtigo.id, qty: dbArtigo.qty - (artigo.qty - this.assistenciaOpen.material[id].qty) };
+                  }
+                }
                 return this.artigos.patch(dbArtigo.id, artigoToSave);
               }
             )
           )
-      )).pipe(concatMap(a => a), toArray());
+      );
+      return concat(concats).pipe(concatMap(a => a), toArray());
     } else {
-      console.log(null);
       return of(null);
     }
   }
@@ -107,7 +117,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     return this.saveChangesOnStock(this.material)
       .pipe(
         concatMap(
-          _ => this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado, material: this.material })
+          () => this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado, material: this.material })
             .pipe(
               tap(() => {
                 if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
@@ -169,9 +179,12 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
               return artigos.map(
                 artigo => {
                   const id = this.material.findIndex(item => item.id === artigo.id);
-                  if (id > 0) {
-                    artigo.qty = artigo.qty + this.assistencia.material[id].qty - this.material[id].qty;
-                    return artigo;
+                  if (id > -1) {
+                    if (!this.assistenciaOpen.material || !this.assistenciaOpen.material[id].qty) {
+                      return { ...artigo, qty: artigo.qty - this.material[id].qty };
+                    } else {
+                      return { ...artigo, qty: artigo.qty - (this.material[id].qty - this.assistenciaOpen.material[id].qty) };
+                    }
                   } else {
                     return artigo;
                   }
@@ -188,28 +201,28 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
 
   addArtigo(artigoInStock: Artigo) {
     const artigo = { ...artigoInStock, qty: 1 };
-    let list = this.material;
+    let materialQ = this.material;
     if (artigoInStock.qty > 0) {
-      if (list) {
-        list.map(
-          item => {
-            if (item.id === artigo.id) {
-              item.qty++;
-              return item;
-            } else {
-              return item;
+      if (materialQ) {
+        if (materialQ.findIndex(item => item.id === artigo.id) < 0) {
+          materialQ = [...materialQ, artigo];
+        } else {
+          materialQ = materialQ.map(
+            itemQ => {
+              if (+itemQ.id === +artigo.id) {
+                return { ...itemQ, qty: itemQ.qty + 1 };
+              } else {
+                return itemQ;
+              }
             }
-          }
-        );
-        if (list.findIndex(a => a.id === artigo.id) < 0) {
-          list = [...list, artigo];
+          );
         }
       } else {
-        list = [artigo];
+        materialQ = [artigo];
       }
       const resultIndex = this.results.findIndex(result => result.id === artigo.id);
       this.results[resultIndex].qty = this.results[resultIndex].qty - artigo.qty;
-      this.material = list;
+      this.material = materialQ;
       this.modal = false;
     }
   }
