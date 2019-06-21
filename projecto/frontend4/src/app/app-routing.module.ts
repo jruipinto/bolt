@@ -18,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    loadChildren: './pages/dashboard-page/dashboard-page.module#DashboardPageModule',
+    loadChildren: () => import('./pages/dashboard-page/dashboard-page.module').then(m => m.DashboardPageModule),
     canLoad: [AuthGuard]
   },
   { path: '',   redirectTo: '/dashboard/painel-rapido', pathMatch: 'full' },
