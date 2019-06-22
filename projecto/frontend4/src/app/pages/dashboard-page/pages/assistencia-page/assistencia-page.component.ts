@@ -31,7 +31,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     private uiService: UIService,
     private assistencias: AssistenciasService,
     private artigos: ArtigosService,
-    private artigosApi: ArtigosApiService,
+    // private artigosApi: ArtigosApiService,
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder) {
@@ -53,27 +53,23 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
                 (artigo: Partial<Artigo>) => {
                   return this.artigos.get(artigo.id)
                     .pipe(
-                      map((res: Artigo[]) => res[0]),
-                      map(res => res = { ...res, qty: artigo.qty })
+                      map((dbArtigo: Artigo[]) => dbArtigo[0]),
+                      map(dbArtigo => dbArtigo = { ...dbArtigo, qty: artigo.qty })
                     );
                 }
               )])
                 .pipe(
                   concatMap(concats => concats),
                   toArray(),
-                  map(material => ({ ...assistencia, material })));
+                  map((material: Artigo[]) => ({ ...assistencia, material }) as Assistencia));
             } else {
               return of(assistencia);
             }
           }
         ),
-        tap(assistencia => { this.assistenciaOpen = assistencia; })
+        tap(assistencia => this.assistenciaOpen = assistencia)
       )
-      .subscribe(
-        (assistencia) => {
-          this.material = assistencia.material;
-        }
-      );
+      .subscribe(assistencia => this.material = assistencia.material);
   }
 
   ngOnDestroy() { }
@@ -83,22 +79,19 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
       return concat([...material.map(
         (artigo: Artigo) => this.artigos.get(artigo.id)
           .pipe(
-            map(res => res[0]),
-            tap(a => { console.log(a); }),
+            map((res: Artigo[]) => res[0]),
             concatMap(
-              (dbArtigo: Artigo) => {
+              dbArtigo => {
                 let id: number;
                 let artigoToSave: Partial<Artigo>;
                 if (!this.assistenciaOpen.material) {
-                  console.log('TCL: AssistenciaPageComponent -> saveChangesOnStock -> artigo.qty', artigo.qty);
-                  console.log('TCL: AssistenciaPageComponent -> saveChangesOnStock -> dbArtigo.qty', dbArtigo.qty);
-                  artigoToSave = { id: dbArtigo.id, qty: dbArtigo.qty - artigo.qty };
+                  artigoToSave = { ...dbArtigo, qty: dbArtigo.qty - artigo.qty };
                 } else {
                   id = this.assistenciaOpen.material.findIndex(obj => obj.id === artigo.id);
                   if (id < 0) {
-                    artigoToSave = { id: dbArtigo.id, qty: dbArtigo.qty - artigo.qty };
+                    artigoToSave = { ...dbArtigo, qty: dbArtigo.qty - artigo.qty };
                   } else {
-                    artigoToSave = { id: dbArtigo.id, qty: dbArtigo.qty - (artigo.qty - this.assistenciaOpen.material[id].qty) };
+                    artigoToSave = { ...dbArtigo, qty: dbArtigo.qty - (artigo.qty - this.assistenciaOpen.material[id].qty) };
                   }
                 }
                 return this.artigos.patch(dbArtigo.id, artigoToSave);
@@ -123,7 +116,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
               tap(() => {
                 if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
               }),
-              tap(() => { window.history.back(); })
+              tap(() => window.history.back())
             )
         )
       ).subscribe();
@@ -145,7 +138,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
         // prints
       }
     )
-      .subscribe(() => { this.router.navigate(['/dashboard/assistencias-criar-nova']); });
+      .subscribe(() => this.router.navigate(['/dashboard/assistencias-criar-nova']));
   }
 
   navigateBack() {
@@ -196,7 +189,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
             }
           })
         )
-        .subscribe((res: Artigo[]) => { this.results = res; });
+        .subscribe((res: Artigo[]) => this.results = res);
     }
   }
 

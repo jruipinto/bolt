@@ -3,7 +3,7 @@ import { map, tap, concatMap, switchMap, first } from 'rxjs/operators';
 import { unionBy } from 'lodash';
 import { EntitiesApiAbstrationService } from './entities-api-abstration.service';
 import { sortByID } from '../utilities';
-import {fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 
 export abstract class EntityStateAbstraction {
   private defaults = [];
@@ -52,7 +52,9 @@ export abstract class EntityStateAbstraction {
   }
   public get(id: number) {
     const dbGetAndSave$ = state => this.xAPIservice.get(id)
-      .pipe(tap(e => this.setState(sortByID([...state, ...e]))));
+      .pipe(
+        map(e => e[0]),
+        tap(e => this.setState(sortByID([...state, e]))));
 
     return this.state$.pipe(
       first(),
@@ -70,9 +72,11 @@ export abstract class EntityStateAbstraction {
     // get state => create new item in api => set state + newItem
     return this.state$.pipe(
       first(),
-      concatMap(state => this.xAPIservice.create(data).pipe(
-        tap(newItem => this.setState(sortByID([...state, newItem])))
-      ))
+      concatMap(state => this.xAPIservice.create(data)
+        .pipe(
+          map(newItem => newItem[0]),
+          tap(newItem => this.setState(sortByID([...state, newItem])))
+        ))
     );
   }
   // public update() {}
@@ -81,29 +85,39 @@ export abstract class EntityStateAbstraction {
     return this.state$.pipe(
       first(),
       tap(state => this.setState(sortByID(unionBy([data], state, 'id')))),
-      concatMap(() => this.xAPIservice.patch(id, data))
+      concatMap(
+        () => this.xAPIservice.patch(id, data)
+          .pipe(
+            map(res => res[0])
+          )
+      )
     );
   }
   // public delete() { }
   public onCreated() {
     // receive item from api => get state => set state + receivedItem
-    return this.xAPIservice.onCreated().pipe(
-      concatMap(receivedItem => this.state$.pipe(
-        first(),
-        tap(state => this.setState(sortByID([...state, receivedItem]))),
-        map(() => receivedItem)
-      ))
-    );
+    return this.xAPIservice.onCreated()
+      .pipe(
+        map(receivedItem => receivedItem[0]),
+        concatMap(receivedItem => this.state$
+          .pipe(
+            first(),
+            tap(state => this.setState(sortByID([...state, receivedItem]))),
+            map(() => receivedItem)
+          ))
+      );
   }
   public onPatched() {
     // receive item from api => get state => set state + receivedItem
-    return this.xAPIservice.onPatched().pipe(
-      concatMap(receivedItem => this.state$.pipe(
-        first(),
-        tap(state => this.setState(sortByID(unionBy(receivedItem, state, 'id')))),
-        map(() => receivedItem)
-      ))
-    );
+    return this.xAPIservice.onPatched()
+      .pipe(
+        map(receivedItem => receivedItem[0]),
+        concatMap(receivedItem => this.state$.pipe(
+          first(),
+          tap(state => this.setState(sortByID(unionBy(receivedItem, state, 'id')))),
+          map(() => receivedItem)
+        ))
+      );
   }
 
   public findAndWatch(query?: object) {
