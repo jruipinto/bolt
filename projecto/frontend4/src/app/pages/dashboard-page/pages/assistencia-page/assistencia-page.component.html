@@ -122,7 +122,7 @@
                 || assistencia.estado === 'concluído'
                 || assistencia.estado === 'entregue'" [(ngModel)]='assistencia.relatorio_interno'></textarea>
               -->
-            <textarea name="relatorio_interno" id="relatorio_interno"
+            <textarea class="clr-textarea wd-100" name="relatorio_interno" id="relatorio_interno"
               [(ngModel)]='assistencia.relatorio_interno'></textarea>
           </div>
         </div>
@@ -135,7 +135,7 @@
         </div>
         <div class="clr-row">
           <div class="clr-col">
-            <textarea name="relatorio_cliente" id="relatorio_cliente"
+            <textarea class="clr-textarea wd-100" name="relatorio_cliente" id="relatorio_cliente"
               [(ngModel)]='assistencia.relatorio_cliente'></textarea>
           </div>
         </div>
@@ -157,7 +157,7 @@
         Preço:
       </div>
       <div class="clr-col-md-4">
-        €<input type="number" name="preco" id="preco" [(ngModel)]='assistencia.preco'>
+        €<input class="clr-input" type="number" name="preco" id="preco" [(ngModel)]='assistencia.preco'>
       </div>
     </div>
   </div>
@@ -250,7 +250,7 @@
     <form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
       <div class="clr-row">
         <div class="clr-col-12 padding-bottom-05">
-          <input type="text" class="wd-100" placeholder="Digita algo..." name="input" formControlName="input" />
+          <input type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input" formControlName="input" />
         </div>
       </div>
     </form>
