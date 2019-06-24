@@ -19,7 +19,8 @@ import { ArtigosApiService } from 'src/app/shared';
 })
 export class AssistenciaPageComponent implements OnInit, OnDestroy {
   public assistenciaOpen: Assistencia;
-  public modal = false;
+  public materialModal = false;
+  public qtyModal = false;
   public artigoSearchForm = this.fb.group({
     input: [null]
   });
@@ -217,8 +218,10 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
       const resultIndex = this.results.findIndex(result => result.id === artigo.id);
       this.results[resultIndex].qty = this.results[resultIndex].qty - artigo.qty;
       this.material = materialQ;
-      this.modal = false;
+      this.materialModal = false;
     }
   }
+
+  editQty () {}
 
 }

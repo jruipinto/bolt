@@ -73,7 +73,7 @@
       <div class="clr-col">
         <div class="clr-row">
           <div class="clr-col">
-            <button class="btn btn-link" (click)="modal = true">Adicionar material</button>
+            <button class="btn btn-link" (click)="materialModal = true">Adicionar material</button>
           </div>
         </div>
         <div class="clr-row" *ngIf="material">
@@ -89,7 +89,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let artigo of material">
-                  <td class="left">{{artigo.qty}}</td>
+                  <td class="left pointer" (click)="qtyModal = true">{{artigo.qty}}</td>
                   <td>{{artigo.descricao}} {{artigo.marca}} {{artigo.modelo}}</td>
                   <td>{{artigo.localizacao}}</td>
                   <td class="left">{{artigo.preco | currency: 'EUR'}}</td>
@@ -244,13 +244,14 @@
 
 </div>
 
-<clr-modal [(clrModalOpen)]="modal" [clrModalSize]="'lg'">
+<clr-modal [(clrModalOpen)]="materialModal" [clrModalSize]="'lg'">
   <h3 class="modal-title">Adicionar Material (👷 Em construção...)</h3>
   <div class="modal-body">
     <form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
       <div class="clr-row">
         <div class="clr-col-12 padding-bottom-05">
-          <input type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input" formControlName="input" />
+          <input type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input"
+            formControlName="input" />
         </div>
       </div>
     </form>
@@ -275,5 +276,11 @@
         </r-data-row>
       </div>
     </div>
+  </div>
+</clr-modal>
+
+<clr-modal [(clrModalOpen)]="qtyModal" [clrModalSize]="'md'">
+  <h3 class="modal-title">Editar Qty (👷 Em construção...)</h3>
+  <div class="modal-body">
   </div>
 </clr-modal>
