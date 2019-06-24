@@ -26,6 +26,8 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
   });
   public results: Artigo[];
   public material: Partial<Artigo>[];
+  public openDBArtigo: Artigo;
+  public openArtigo: Artigo;
 
   constructor(
     private printService: PrintService,
@@ -222,6 +224,16 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  editQty () {}
+  openQtyModal(artigo: Artigo) {
+    this.qtyModal = true;
+    this.openArtigo = artigo;
+    this.artigos.get(artigo.id)
+      .pipe(
+        map(a => a[0])
+      )
+      .subscribe(dbArtigo => this.openDBArtigo = dbArtigo);
+  }
+
+  editQty() { }
 
 }
