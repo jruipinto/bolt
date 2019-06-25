@@ -27,7 +27,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
   public results: Artigo[];
   public material: Partial<Artigo>[];
   public openDBArtigo: Artigo;
-  public openArtigo: Artigo;
+  public openArtigo: Artigo = null;
 
   constructor(
     private printService: PrintService,
@@ -86,18 +86,25 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
             concatMap(
               dbArtigo => {
                 let id: number;
-                let artigoToSave: Partial<Artigo>;
                 if (!this.assistenciaOpen.material) {
-                  artigoToSave = { ...dbArtigo, qty: dbArtigo.qty - artigo.qty };
+                  return this.artigos.patch(
+                    dbArtigo.id,
+                    { ...dbArtigo, qty: dbArtigo.qty - artigo.qty }
+                  );
                 } else {
                   id = this.assistenciaOpen.material.findIndex(obj => obj.id === artigo.id);
                   if (id < 0) {
-                    artigoToSave = { ...dbArtigo, qty: dbArtigo.qty - artigo.qty };
+                    return this.artigos.patch(
+                      dbArtigo.id,
+                      { ...dbArtigo, qty: dbArtigo.qty - artigo.qty }
+                    );
                   } else {
-                    artigoToSave = { ...dbArtigo, qty: dbArtigo.qty - (artigo.qty - this.assistenciaOpen.material[id].qty) };
+                    return this.artigos.patch(
+                      dbArtigo.id,
+                      { ...dbArtigo, qty: dbArtigo.qty - (artigo.qty - this.assistenciaOpen.material[id].qty) }
+                    );
                   }
                 }
-                return this.artigos.patch(dbArtigo.id, artigoToSave);
               }
             )
           )
@@ -234,6 +241,20 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
       .subscribe(dbArtigo => this.openDBArtigo = dbArtigo);
   }
 
-  editQty() { }
+  editQty(artigo: Artigo) {
+    if (artigo.qty > this.openDBArtigo.qty) {
+      artigo.qty = this.openDBArtigo.qty;
+    }
+    this.material = this.material.map(
+      artigoItem => {
+        if (artigoItem.id === artigo.id) {
+          return artigo;
+        } else {
+          return artigoItem;
+        }
+      }
+    );
+    this.qtyModal = false;
+  }
 
 }
