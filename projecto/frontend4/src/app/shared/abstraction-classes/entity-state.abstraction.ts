@@ -46,7 +46,7 @@ export abstract class EntityStateAbstraction {
               first(),
               tap(response => {
                 // const newState = [...new Set([...state, ...response])]; in ES6 syntax
-                const newState = unionBy(state, response, 'id');
+                const newState = unionBy(state.toJS, response, 'id');
                 this.setState(sortByID(newState));
                 // this.setState(newState);
               })
@@ -85,7 +85,7 @@ export abstract class EntityStateAbstraction {
     // get state => set state + data => send patch data to api
     return this.state$.pipe(
       first(),
-      tap(state => this.setState(sortByID(unionBy([data], state, 'id')))),
+      tap(state => this.setState(sortByID(unionBy([data], state.toJS(), 'id')))),
       concatMap(() => this.xAPIservice.patch(id, data))
     );
   }
@@ -108,7 +108,7 @@ export abstract class EntityStateAbstraction {
       .pipe(
         concatMap(receivedItem => this.state$.pipe(
           first(),
-          tap(state => this.setState(sortByID(unionBy(receivedItem[0], state, 'id')))),
+          tap(state => this.setState(sortByID(unionBy(receivedItem[0], state.toJS(), 'id')))),
           map(() => receivedItem)
         ))
       );
