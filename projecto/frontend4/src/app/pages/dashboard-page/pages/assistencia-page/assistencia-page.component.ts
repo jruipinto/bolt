@@ -10,7 +10,7 @@ import { AssistenciasService, ArtigosService } from 'src/app/shared/state';
 import { Observable, concat, of } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { ArtigosApiService } from 'src/app/shared';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 
 @AutoUnsubscribe()
 @Component({
@@ -49,7 +49,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
         concatMap(
           assistencia => {
             if (assistencia.material) {
-              let assistMaterial: Partial<Artigo>[];
+              let assistMaterial: List<Partial<Artigo>>;
               typeof assistencia.material === 'string'
                 ? assistMaterial = JSON.parse(assistencia.material)
                 : assistMaterial = assistencia.material;
@@ -65,7 +65,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
                 .pipe(
                   concatMap(concats => concats),
                   toArray(),
-                  map((material: List<Artigo>) => ({ ...assistencia, material }) as Assistencia));
+                  map((material: List<Artigo>) => Map({ ...assistencia, material })));
             } else {
               return of(assistencia);
             }
@@ -78,12 +78,12 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() { }
 
-  saveChangesOnStock(material: Partial<Artigo>[]) {
+  saveChangesOnStock(material: List<Partial<Artigo>>) {
     if (material) {
       return concat([...material.map(
         (artigo: Artigo) => this.artigos.get(artigo.id)
           .pipe(
-            map((res: Artigo[]) => res[0]),
+            map((res: List<Artigo>) => res.get(0)),
             concatMap(
               dbArtigo => {
                 let id: number;
