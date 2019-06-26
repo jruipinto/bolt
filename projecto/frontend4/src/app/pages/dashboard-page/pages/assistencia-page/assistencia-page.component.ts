@@ -10,6 +10,7 @@ import { AssistenciasService, ArtigosService } from 'src/app/shared/state';
 import { Observable, concat, of } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { ArtigosApiService } from 'src/app/shared';
+import { List } from 'immutable';
 
 @AutoUnsubscribe()
 @Component({
@@ -44,7 +45,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     this.route.paramMap
       .pipe(
         concatMap((params: ParamMap) => this.assistencias.getAndWatch(+params.get('id'))),
-        map((res: Assistencia[]) => res[0]),
+        map((res: List<Assistencia>) => res.get(0)),
         concatMap(
           assistencia => {
             if (assistencia.material) {
@@ -56,7 +57,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
                 (artigo: Partial<Artigo>) => {
                   return this.artigos.get(artigo.id)
                     .pipe(
-                      map((dbArtigo: Artigo[]) => dbArtigo[0]),
+                      map((dbArtigo: List<Artigo>) => dbArtigo.get(0)),
                       map(dbArtigo => dbArtigo = { ...dbArtigo, qty: artigo.qty })
                     );
                 }
@@ -64,7 +65,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
                 .pipe(
                   concatMap(concats => concats),
                   toArray(),
-                  map((material: Artigo[]) => ({ ...assistencia, material }) as Assistencia));
+                  map((material: List<Artigo>) => ({ ...assistencia, material }) as Assistencia));
             } else {
               return of(assistencia);
             }

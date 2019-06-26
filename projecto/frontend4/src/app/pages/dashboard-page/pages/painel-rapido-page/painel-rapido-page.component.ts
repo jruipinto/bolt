@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Encomenda, Assistencia } from 'src/app/shared/models';
 import { AssistenciasService, EncomendasService } from 'src/app/shared/state';
+import { List } from 'immutable';
 
 
 @AutoUnsubscribe()
@@ -21,10 +22,10 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
     private encomendas: EncomendasService,
     private router: Router) { }
 
-  public encomendas$: Observable<Encomenda[]> = this.encomendas.state$
+  public encomendas$: Observable<List<Encomenda>> = this.encomendas.state$
     .pipe(
       map(
-        (encomendas: Encomenda[]) =>
+        (encomendas: List<Encomenda>) =>
           encomendas
             ? encomendas.filter(encomenda =>
               encomenda.estado === 'registada'
@@ -34,7 +35,7 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
             : null
       )
     );
-  public orcamentos$: Observable<Partial<Assistencia[]>> = this.assistencias.state$
+  public orcamentos$: Observable<Partial<List<Assistencia>>> = this.assistencias.state$
     .pipe(
       map(state =>
         state
@@ -45,7 +46,7 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
           : null
       )
     );
-  public pedidosContactoCliente$: Observable<Partial<Assistencia[]>> = this.assistencias.state$
+  public pedidosContactoCliente$: Observable<Partial<List<Assistencia>>> = this.assistencias.state$
     .pipe(
       map(state =>
         state
