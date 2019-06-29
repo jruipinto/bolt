@@ -10,6 +10,7 @@ import { AssistenciasService, ArtigosService } from 'src/app/shared/state';
 import { Observable, concat, of } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { ArtigosApiService } from 'src/app/shared';
+import { clone } from 'ramda';
 
 @AutoUnsubscribe()
 @Component({
@@ -51,7 +52,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
               let assistMaterial: Partial<Artigo>[];
               typeof assistencia.material === 'string'
                 ? assistMaterial = JSON.parse(assistencia.material)
-                : assistMaterial = assistencia.material;
+                : assistMaterial = clone(assistencia.material);
               return concat([...assistMaterial.map(
                 (artigo: Partial<Artigo>) => {
                   return this.artigos.get(artigo.id)
@@ -70,9 +71,9 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
             }
           }
         ),
-        tap(assistencia => this.assistenciaOpen = assistencia)
+        tap(assistencia => this.assistenciaOpen = clone(assistencia))
       )
-      .subscribe(assistencia => this.material = assistencia.material);
+      .subscribe(assistencia => this.material = clone(assistencia.material));
   }
 
   ngOnDestroy() { }
@@ -199,13 +200,13 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
             }
           })
         )
-        .subscribe((res: Artigo[]) => this.results = res);
+        .subscribe((res: Artigo[]) => this.results = clone(res));
     }
   }
 
   addArtigo(artigoInStock: Artigo) {
     const artigo = { ...artigoInStock, qty: 1 };
-    let materialQ = this.material;
+    let materialQ = clone(this.material);
     if (artigoInStock.qty > 0) {
       if (materialQ) {
         if (materialQ.findIndex(item => item.id === artigo.id) < 0) {
@@ -222,28 +223,28 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
           );
         }
       } else {
-        materialQ = [artigo];
+        materialQ = clone([artigo]);
       }
       const resultIndex = this.results.findIndex(result => result.id === artigo.id);
       this.results[resultIndex].qty = this.results[resultIndex].qty - artigo.qty;
-      this.material = materialQ;
+      this.material = clone(materialQ);
       this.materialModal = false;
     }
   }
 
   openQtyModal(artigo: Artigo) {
     this.qtyModal = true;
-    this.openArtigo = artigo;
+    this.openArtigo = clone(artigo);
     this.artigos.get(artigo.id)
       .pipe(
         map(a => a[0])
       )
-      .subscribe(dbArtigo => this.openDBArtigo = dbArtigo);
+      .subscribe(dbArtigo => this.openDBArtigo = clone(dbArtigo));
   }
 
   editQty(artigo: Artigo) {
     if (artigo.qty > this.openDBArtigo.qty) {
-      artigo.qty = this.openDBArtigo.qty;
+      artigo.qty = clone(this.openDBArtigo.qty);
     }
     this.material = this.material.map(
       artigoItem => {
