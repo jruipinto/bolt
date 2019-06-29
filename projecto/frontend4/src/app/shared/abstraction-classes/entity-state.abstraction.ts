@@ -3,11 +3,11 @@ import { map, tap, concatMap, switchMap, first } from 'rxjs/operators';
 import { unionBy } from 'lodash';
 import { EntitiesApiAbstrationService } from './entities-api-abstration.service';
 import { sortByID } from '../utilities';
-import { fromJS, List } from 'immutable';
+import { fromJS } from 'immutable';
 
 export abstract class EntityStateAbstraction {
-  private defaults = fromJS([]);
-  private source = new BehaviorSubject<List<any>>(this.defaults);
+  private defaults = [];
+  private source = new BehaviorSubject<any[]>(this.defaults);
   public state$ = this.source.asObservable();
   private lostConnection = false;
 
@@ -27,13 +27,10 @@ export abstract class EntityStateAbstraction {
           this.lostConnection = false;
         });
   }
-  private setState(value: List<any> | any[]) {
-    if (Array.isArray(value)) {
-      this.source.next(fromJS(value));
-    } else {
-      this.source.next(value);
-    }
-    console.log('state mutation:', value);
+  private setState(value: any) {
+    const imutableValue = fromJS(value);
+    this.source.next(imutableValue.toJS());
+    console.log('state mutation:', imutableValue.toJS());
   }
 
   public find(query?: object) {
