@@ -3,7 +3,6 @@ import { map, tap, concatMap, switchMap, first } from 'rxjs/operators';
 import { unionBy } from 'lodash';
 import { EntitiesApiAbstrationService } from './entities-api-abstration.service';
 import { sortByID } from '../utilities';
-import { fromJS } from 'immutable';
 
 export abstract class EntityStateAbstraction {
   private defaults = [];
