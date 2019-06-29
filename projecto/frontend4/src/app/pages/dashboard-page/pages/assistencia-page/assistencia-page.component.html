@@ -279,12 +279,12 @@
   </div>
 </clr-modal>
 
-<clr-modal *ngIf="openArtigo" [(clrModalOpen)]="qtyModal" [clrModalSize]="'md'">
+<clr-modal [(clrModalOpen)]="qtyModal" [clrModalSize]="'md'">
   <h3 class="modal-title">Editar Qty (👷 Em construção...)</h3>
   <div class="modal-body">
     <div class="clr-row">
       <div class="clr-col-4">
-        Total disponível:
+        Qty disponivel:
       </div>
       <div class="clr-col">
         {{openDBArtigo?.qty}}
@@ -292,15 +292,23 @@
     </div>
     <div class="clr-row">
       <div class="clr-col-4">
-        Qty:
+        Qty anterior:
       </div>
       <div class="clr-col">
-        <input class="clr-input" type="number" name="newQty" id="newQty" [(ngModel)]="openArtigo.qty" [max]=openDBArtigo?.qty>
+        {{openArtigo?.qty}}
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-4">
+        Qty nova:
+      </div>
+      <div class="clr-col">
+        <input class="clr-input" type="number" name="newQty" id="newQty">
       </div>
     </div>
   </div>
   <div class="modal-footer">
       <button class="btn btn-outline" type="button" (click)="qtyModal = false">Cancelar</button>
-      <button class="btn btn-primary" type="button" (click)="editQty(openArtigo)">Guardar</button>
+      <button class="btn btn-primary" type="button">Guardar</button>
   </div>
 </clr-modal>
