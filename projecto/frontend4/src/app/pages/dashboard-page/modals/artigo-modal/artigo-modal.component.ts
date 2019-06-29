@@ -5,7 +5,6 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ArtigosService, UIService, UI } from 'src/app/shared/state';
 import { Artigo, capitalize } from 'src/app/shared';
 import { FormBuilder } from '@angular/forms';
-import { List } from 'immutable';
 
 @AutoUnsubscribe()
 @Component({
@@ -37,11 +36,11 @@ export class ArtigoModalComponent implements OnInit, OnDestroy {
         if (uiState.artigoModalID) {
           return this.artigos.state$
             .pipe(
-              map((artigos: List<Artigo>) =>
+              map((artigos: Artigo[]) =>
                 artigos.filter((artigo: Artigo) =>
                   artigo.id === uiState.artigoModalID)
               ),
-              map((artigos: List<Artigo>) => artigos.get(0))
+              map((artigos: Artigo[]) => artigos[0])
             );
         } else {
           return of();

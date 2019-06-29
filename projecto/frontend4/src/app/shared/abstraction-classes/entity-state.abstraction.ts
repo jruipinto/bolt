@@ -42,7 +42,7 @@ export abstract class EntityStateAbstraction {
               first(),
               tap(response => {
                 // const newState = [...new Set([...state, ...response])]; in ES6 syntax
-                const newState = unionBy(state.toJS(), response.toJS(), 'id');
+                const newState = unionBy(state.toJS, response, 'id');
                 this.setState(sortByID(newState));
                 // this.setState(newState);
               })
@@ -50,15 +50,15 @@ export abstract class EntityStateAbstraction {
         ));
   }
   public get(id: number) {
-    const dbGetAndSave$ = (state: List<any>) => this.xAPIservice.get(id)
+    const dbGetAndSave$ = state => this.xAPIservice.get(id)
       .pipe(
-        tap(e => this.setState(sortByID([...state.toJS(), ...e.toJS()]))));
+        tap(e => this.setState(sortByID([...state, ...e]))));
 
     return this.state$.pipe(
       first(),
-      map(state => state.filter(item => item.id === id)),
+      map(state => [...state.filter(item => item.id === id)]),
       switchMap(state => {
-        if (state.get(0)) {
+        if (state[0]) {
           return of(state);
         } else {
           return dbGetAndSave$(state);
@@ -72,7 +72,7 @@ export abstract class EntityStateAbstraction {
       first(),
       concatMap(state => this.xAPIservice.create(data)
         .pipe(
-          tap(newItem => this.setState(sortByID([...state.toJS(), newItem.get(0)])))
+          tap(newItem => this.setState(sortByID([...state, newItem[0]])))
         ))
     );
   }
@@ -93,7 +93,7 @@ export abstract class EntityStateAbstraction {
         concatMap(receivedItem => this.state$
           .pipe(
             first(),
-            tap(state => this.setState(sortByID([...state.toJS(), receivedItem.get(0)]))),
+            tap(state => this.setState(sortByID([...state, receivedItem[0]]))),
             map(() => receivedItem)
           ))
       );
@@ -104,7 +104,7 @@ export abstract class EntityStateAbstraction {
       .pipe(
         concatMap(receivedItem => this.state$.pipe(
           first(),
-          tap(state => this.setState(sortByID(unionBy(receivedItem.get(0), state.toJS(), 'id')))),
+          tap(state => this.setState(sortByID(unionBy(receivedItem[0], state.toJS(), 'id')))),
           map(() => receivedItem)
         ))
       );

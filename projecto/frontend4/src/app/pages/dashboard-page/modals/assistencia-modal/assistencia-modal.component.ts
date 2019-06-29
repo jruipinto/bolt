@@ -7,7 +7,6 @@ import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service'
 import { UIService, UI } from 'src/app/shared/state/ui.service';
 import { AssistenciasService } from 'src/app/shared/state';
 import { Router } from '@angular/router';
-import { List } from 'immutable';
 
 
 @AutoUnsubscribe()
@@ -29,11 +28,11 @@ export class AssistenciaModalComponent implements OnInit, OnDestroy {
     .pipe(
       concatMap((uiState: UI) => this.assistencias.state$
         .pipe(
-          map((assistencias: List<Assistencia>) =>
+          map((assistencias: Assistencia[]) =>
             assistencias.filter((assistencia: Assistencia) =>
               assistencia.id === uiState.assistenciaModalID)
           ),
-          map((assistencias: List<Assistencia>) => assistencias.get(0))
+          map((assistencias: Assistencia[]) => assistencias[0])
         ))
     );
 
