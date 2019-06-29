@@ -28,9 +28,8 @@ export abstract class EntityStateAbstraction {
         });
   }
   private setState(value: any) {
-    const imutableValue = fromJS(value);
-    this.source.next(imutableValue.toJS());
-    console.log('state mutation:', imutableValue.toJS());
+    this.source.next(value);
+    console.log('state mutation:', value);
   }
 
   public find(query?: object) {
