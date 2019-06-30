@@ -89,7 +89,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let artigo of material">
-                  <td class="left pointer" (click)="openQtyModal(artigo, material)">{{artigo.qty}}</td>
+                  <td class="left"><input class="clr-input small-input" type="number" name="newQty" id="newQty" [(ngModel)]="artigo.qty" [max]=openDBArtigo?.qty></td>
                   <td>{{artigo.descricao}} {{artigo.marca}} {{artigo.modelo}}</td>
                   <td>{{artigo.localizacao}}</td>
                   <td class="left">{{artigo.preco | currency: 'EUR'}}</td>
@@ -276,31 +276,5 @@
         </r-data-row>
       </div>
     </div>
-  </div>
-</clr-modal>
-
-<clr-modal *ngIf="openArtigo" [(clrModalOpen)]="qtyModal" [clrModalSize]="'md'">
-  <h3 class="modal-title">Editar Qty (👷 Em construção...)</h3>
-  <div class="modal-body">
-    <div class="clr-row">
-      <div class="clr-col-4">
-        Total disponível:
-      </div>
-      <div class="clr-col">
-        {{openDBArtigo?.qty}}
-      </div>
-    </div>
-    <div class="clr-row">
-      <div class="clr-col-4">
-        Qty:
-      </div>
-      <div class="clr-col">
-        <input class="clr-input" type="number" name="newQty" id="newQty" [(ngModel)]="openArtigo.qty" [max]=openDBArtigo?.qty>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer">
-      <button class="btn btn-outline" type="button" (click)="qtyModal = false">Cancelar</button>
-      <button class="btn btn-primary" type="button" (click)="editQty(openArtigo)">Guardar</button>
   </div>
 </clr-modal>

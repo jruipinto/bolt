@@ -21,7 +21,6 @@ import { clone } from 'ramda';
 export class AssistenciaPageComponent implements OnInit, OnDestroy {
   public assistenciaOpen: Assistencia;
   public materialModal = false;
-  public qtyModal = false;
   public artigoSearchForm = this.fb.group({
     input: [null]
   });
@@ -230,32 +229,6 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
       this.material = clone(materialQ);
       this.materialModal = false;
     }
-  }
-
-  openQtyModal(artigo: Artigo) {
-    this.qtyModal = true;
-    this.openArtigo = clone(artigo);
-    this.artigos.get(artigo.id)
-      .pipe(
-        map(a => a[0])
-      )
-      .subscribe(dbArtigo => this.openDBArtigo = clone(dbArtigo));
-  }
-
-  editQty(artigo: Artigo) {
-    if (artigo.qty > this.openDBArtigo.qty) {
-      artigo.qty = clone(this.openDBArtigo.qty);
-    }
-    this.material = this.material.map(
-      artigoItem => {
-        if (artigoItem.id === artigo.id) {
-          return artigo;
-        } else {
-          return artigoItem;
-        }
-      }
-    );
-    this.qtyModal = false;
   }
 
 }
