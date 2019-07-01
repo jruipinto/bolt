@@ -78,9 +78,9 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
       const i = searchFiltersToPatch
         .findIndex((searchFilter: Query) => searchFilter.column === newSearchFilterToAdd.column);
       if (i > -1) { searchFiltersToPatch.splice(i, 1); }
-      return searchFiltersToPatch = [...searchFiltersToPatch, newSearchFilterToAdd];
+      return [...searchFiltersToPatch, newSearchFilterToAdd];
     } else {
-      return searchFiltersToPatch = [newSearchFilterToAdd];
+      return [newSearchFilterToAdd];
     }
   }
   private findClienteIdByNameOrContactAndPatchSearchFilters(newSearchFilter: Query): Observable<User> {
