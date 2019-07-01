@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { map, concatMap, tap, toArray } from 'rxjs/operators';
+import { map, concatMap, tap, toArray, first } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 import { Assistencia, Artigo } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 import { UIService, UI } from 'src/app/shared/state/ui.service';
 import { AssistenciasService, ArtigosService } from 'src/app/shared/state';
-import { Observable, concat, of } from 'rxjs';
+import { Observable, concat, of, BehaviorSubject } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { ArtigosApiService } from 'src/app/shared';
 import { clone } from 'ramda';
@@ -19,15 +19,14 @@ import { clone } from 'ramda';
   styleUrls: ['./assistencia-page.component.scss']
 })
 export class AssistenciaPageComponent implements OnInit, OnDestroy {
-  public assistenciaOpen: Assistencia;
-  public materialModal = false;
+  public assistencia: Assistencia;
+  public artigoSearchModal = false;
   public artigoSearchForm = this.fb.group({
     input: [null]
   });
-  public results: Artigo[];
+  public artigoSearchResults: Artigo[];
   public material: Partial<Artigo>[];
-  public openDBArtigo: Artigo;
-  public openArtigo: Artigo = null;
+  public assistenciaOnInit: Assistencia;
 
   constructor(
     private printService: PrintService,
@@ -48,19 +47,17 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
         concatMap(
           assistencia => {
             if (assistencia.material) {
-              let assistMaterial: Partial<Artigo>[];
-              typeof assistencia.material === 'string'
-                ? assistMaterial = JSON.parse(assistencia.material)
-                : assistMaterial = clone(assistencia.material);
-              return concat([...assistMaterial.map(
-                (artigo: Partial<Artigo>) => {
-                  return this.artigos.get(artigo.id)
+              if (typeof assistencia.material === 'string') {
+                assistencia.material = JSON.parse(assistencia.material);
+              }
+              return concat(assistencia.material
+                .map(
+                  (artigo: Partial<Artigo>) => this.artigos.get(artigo.id)
                     .pipe(
                       map((dbArtigo: Artigo[]) => dbArtigo[0]),
                       map(dbArtigo => dbArtigo = { ...dbArtigo, qty: artigo.qty })
-                    );
-                }
-              )])
+                    )
+                ))
                 .pipe(
                   concatMap(concats => concats),
                   toArray(),
@@ -70,29 +67,48 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
             }
           }
         ),
-        tap(assistencia => this.assistenciaOpen = clone(assistencia))
+        tap(assistencia => this.assistenciaOnInit = clone(assistencia))
       )
-      .subscribe(assistencia => this.material = clone(assistencia.material));
+      .subscribe(assistencia => {
+        if (this.assistencia) {
+          const receivedAssistencia = clone(assistencia);
+          this.assistencia = {
+            ...receivedAssistencia,
+            relatorio_interno: `alterado por outro utilizador ${receivedAssistencia.updatedAt}:
+${receivedAssistencia.relatorio_interno}
+-------------------------------------
+tuas alterações:
+${this.assistencia.relatorio_interno}`,
+            relatorio_cliente: `alterado por outro utilizador ${receivedAssistencia.updatedAt}:
+${receivedAssistencia.relatorio_cliente}
+-------------------------------------
+tuas alterações:
+${this.assistencia.relatorio_cliente}`
+          };
+        } else {
+          this.assistencia = clone(assistencia);
+        }
+      });
   }
 
   ngOnDestroy() { }
 
   saveChangesOnStock(material: Partial<Artigo>[]) {
     if (material) {
-      return concat([...material.map(
+      return concat(material.map(
         (artigo: Artigo) => this.artigos.get(artigo.id)
           .pipe(
             map((res: Artigo[]) => res[0]),
             concatMap(
               dbArtigo => {
                 let id: number;
-                if (!this.assistenciaOpen.material) {
+                if (!this.assistenciaOnInit.material) {
                   return this.artigos.patch(
                     dbArtigo.id,
                     { ...dbArtigo, qty: dbArtigo.qty - artigo.qty }
                   );
                 } else {
-                  id = this.assistenciaOpen.material.findIndex(obj => obj.id === artigo.id);
+                  id = this.assistenciaOnInit.material.findIndex(obj => obj.id === artigo.id);
                   if (id < 0) {
                     return this.artigos.patch(
                       dbArtigo.id,
@@ -101,14 +117,14 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
                   } else {
                     return this.artigos.patch(
                       dbArtigo.id,
-                      { ...dbArtigo, qty: dbArtigo.qty - (artigo.qty - this.assistenciaOpen.material[id].qty) }
+                      { ...dbArtigo, qty: dbArtigo.qty - (artigo.qty - this.assistenciaOnInit.material[id].qty) }
                     );
                   }
                 }
               }
             )
           )
-      )]).pipe(concatMap(a => a), toArray());
+      )).pipe(concatMap(a => a), toArray());
     } else {
       return of(null);
     }
@@ -118,10 +134,10 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     if (newEstado !== 'em análise' && !assistencia.relatorio_cliente) {
       return alert('Preenche o relatório para o cliente!');
     }
-    return this.saveChangesOnStock(this.material)
+    return this.saveChangesOnStock(this.assistencia.material)
       .pipe(
         concatMap(
-          () => this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado, material: this.material })
+          () => this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado, material: this.assistencia.material })
             .pipe(
               tap(() => {
                 if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
@@ -179,15 +195,15 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
         .find(JSON.parse(dbQuery))
         .pipe(
           map((artigos: Artigo[]) => {
-            if (this.material) {
+            if (this.assistencia.material) {
               return artigos.map(
                 artigo => {
-                  const id = this.material.findIndex(item => item.id === artigo.id);
+                  const id = this.assistencia.material.findIndex(item => item.id === artigo.id);
                   if (id > -1) {
-                    if (!this.assistenciaOpen.material || !this.assistenciaOpen.material[id].qty) {
-                      return { ...artigo, qty: artigo.qty - this.material[id].qty };
+                    if (!this.assistenciaOnInit.material || !this.assistenciaOnInit.material[id].qty) {
+                      return { ...artigo, qty: artigo.qty - this.assistencia.material[id].qty };
                     } else {
-                      return { ...artigo, qty: artigo.qty - (this.material[id].qty - this.assistenciaOpen.material[id].qty) };
+                      return { ...artigo, qty: artigo.qty - (this.assistencia.material[id].qty - this.assistenciaOnInit.material[id].qty) };
                     }
                   } else {
                     return artigo;
@@ -199,35 +215,35 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
             }
           })
         )
-        .subscribe((res: Artigo[]) => this.results = clone(res));
+        .subscribe((res: Artigo[]) => this.artigoSearchResults = clone(res));
     }
   }
 
   addArtigo(artigoInStock: Artigo) {
     const artigo = { ...artigoInStock, qty: 1 };
-    let materialQ = clone(this.material);
+    let material = clone(this.assistencia.material);
     if (artigoInStock.qty > 0) {
-      if (materialQ) {
-        if (materialQ.findIndex(item => item.id === artigo.id) < 0) {
-          materialQ = [...materialQ, artigo];
+      if (material) {
+        if (material.findIndex(item => item.id === artigo.id) < 0) {
+          material = [...material, artigo];
         } else {
-          materialQ = materialQ.map(
-            itemQ => {
-              if (itemQ.id === artigo.id) {
-                return { ...itemQ, qty: itemQ.qty + 1 };
+          material = material.map(
+            item => {
+              if (item.id === artigo.id) {
+                return { ...item, qty: item.qty + 1 };
               } else {
-                return itemQ;
+                return item;
               }
             }
           );
         }
       } else {
-        materialQ = clone([artigo]);
+        material = clone([artigo]);
       }
-      const resultIndex = this.results.findIndex(result => result.id === artigo.id);
-      this.results[resultIndex].qty = this.results[resultIndex].qty - artigo.qty;
-      this.material = clone(materialQ);
-      this.materialModal = false;
+      const resultIndex = this.artigoSearchResults.findIndex(result => result.id === artigo.id);
+      this.artigoSearchResults[resultIndex].qty = this.artigoSearchResults[resultIndex].qty - artigo.qty;
+      this.assistencia.material = clone(material);
+      this.artigoSearchModal = false;
     }
   }
 

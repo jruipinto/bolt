@@ -1,4 +1,4 @@
-<div *ngIf="!assistenciaOpen">
+<div *ngIf="!assistencia">
   <span class="spinner spinner-inline">
   </span>
   <span>
@@ -6,7 +6,7 @@
   </span>
 </div>
 
-<div *ngIf="assistenciaOpen as assistencia">
+<div *ngIf="assistencia">
   <button type="button" class="btn btn-link btn-icon" style="margin:0; padding:0" (click)="navigateBack()">
     <clr-icon class="is-solid" size="36" shape="arrow" style="transform: rotate(270deg);"></clr-icon>
   </button>
@@ -15,7 +15,7 @@
 
   <div class="separate">
     <div class="clr-row">
-      <div class="clr-col-md-2 fontheavy">
+      <div class="clr-col-4 clr-col-md-2 fontheavy">
         Estado:
       </div>
       <div class="clr-col">
@@ -25,7 +25,7 @@
   </div>
   <div class="separate">
     <div class="clr-row">
-      <div class="clr-col-md-2 fontheavy">
+      <div class="clr-col-4 clr-col-md-2 fontheavy">
         Cliente:
       </div>
       <div class="clr-col">
@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="clr-row">
-      <div class="clr-col-md-2 fontheavy">
+      <div class="clr-col-4 clr-col-md-2 fontheavy">
         Técnico:
       </div>
       <div class="clr-col">
@@ -41,7 +41,7 @@
       </div>
     </div>
     <div class="clr-row">
-      <div class="clr-col-md-2 fontheavy">
+      <div class="clr-col-4 clr-col-md-2 fontheavy">
         Equipamento:
       </div>
       <div class="clr-col">
@@ -52,7 +52,7 @@
       </div>
     </div>
     <div class="clr-row">
-      <div class="clr-col-md-2 fontheavy">
+      <div class="clr-col-4 clr-col-md-2 fontheavy">
         Serial:
       </div>
       <div class="clr-col">
@@ -60,7 +60,7 @@
       </div>
     </div>
     <div class="clr-row">
-      <div class="clr-col-md-2 fontheavy">
+      <div class="clr-col-4 clr-col-md-2 fontheavy">
         Problema:
       </div>
       <div class="clr-col">
@@ -73,10 +73,10 @@
       <div class="clr-col">
         <div class="clr-row">
           <div class="clr-col">
-            <button class="btn btn-link" (click)="materialModal = true">Adicionar material</button>
+            <button class="btn btn-link" (click)="artigoSearchModal = true">Adicionar material</button>
           </div>
         </div>
-        <div class="clr-row" *ngIf="material">
+        <div class="clr-row" *ngIf="assistencia.material">
           <div class="clr-col">
             <table class="table">
               <thead>
@@ -88,7 +88,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let artigo of material">
+                <tr *ngFor="let artigo of assistencia.material">
                   <td class="left"><input class="clr-input small-input" type="number" name="newQty" id="newQty" [(ngModel)]="artigo.qty" [max]=openDBArtigo?.qty></td>
                   <td>{{artigo.descricao}} {{artigo.marca}} {{artigo.modelo}}</td>
                   <td>{{artigo.localizacao}}</td>
@@ -144,7 +144,7 @@
   </div>
   <div class="separate">
     <div class="clr-row">
-      <div class="clr-col-md-2 fontheavy">
+      <div class="clr-col-4 clr-col-md-2 fontheavy">
         Orçamento:
       </div>
       <div class="clr-col">
@@ -153,11 +153,11 @@
       </div>
     </div>
     <div class="clr-row">
-      <div class="clr-col-md-2 fontheavy">
+      <div class="clr-col-4 clr-col-md-2 fontheavy">
         Preço:
       </div>
-      <div class="clr-col-md-4">
-        €<input class="clr-input" type="number" name="preco" id="preco" [(ngModel)]='assistencia.preco'>
+      <div class="clr-col-3">
+        €<input class="clr-input wd-80" type="number" name="preco" id="preco" [(ngModel)]='assistencia.preco'>
       </div>
     </div>
   </div>
@@ -244,7 +244,7 @@
 
 </div>
 
-<clr-modal [(clrModalOpen)]="materialModal" [clrModalSize]="'lg'">
+<clr-modal [(clrModalOpen)]="artigoSearchModal" [clrModalSize]="'lg'">
   <h3 class="modal-title">Adicionar Material (👷 Em construção...)</h3>
   <div class="modal-body">
     <form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
@@ -256,7 +256,7 @@
       </div>
     </form>
     <h4>Resultados:</h4>
-    <div *ngIf="results as artigos">
+    <div *ngIf="artigoSearchResults as artigos">
       <div *ngIf="artigos.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
       <div *ngIf="artigos.length>0">
         <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index" (click)="addArtigo(artigo)">
