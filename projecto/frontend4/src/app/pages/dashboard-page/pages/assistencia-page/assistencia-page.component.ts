@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { map, concatMap, tap, toArray, first } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -25,6 +25,8 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     input: [null]
   });
   public artigoSearchResults: Artigo[];
+  public encomendaWizard = false;
+  @ViewChild('wizard', {static: false}) wizard;
   public material: Partial<Artigo>[];
   public assistenciaOnInit: Assistencia;
 
@@ -245,6 +247,10 @@ ${this.assistencia.relatorio_cliente}`
       this.assistencia.material = clone(material);
       this.artigoSearchModal = false;
     }
+  }
+
+  addEncomenda() {
+    this.wizard.reset();
   }
 
 }

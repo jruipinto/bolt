@@ -71,33 +71,52 @@
   <div class="separate">
     <div class="clr-row">
       <div class="clr-col">
-        <div class="clr-row">
-          <div class="clr-col">
-            <button class="btn btn-link" (click)="artigoSearchModal = true">Adicionar material</button>
-          </div>
-        </div>
-        <div class="clr-row" *ngIf="assistencia.material">
-          <div class="clr-col">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th class="left">Qty</th>
-                  <th>Descrição</th>
-                  <th>Local</th>
-                  <th class="left">Custo p/ unidade</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let artigo of assistencia.material">
-                  <td class="left"><input class="clr-input small-input" type="number" name="newQty" id="newQty" [(ngModel)]="artigo.qty" [max]=openDBArtigo?.qty></td>
-                  <td>{{artigo.descricao}} {{artigo.marca}} {{artigo.modelo}}</td>
-                  <td>{{artigo.localizacao}}</td>
-                  <td class="left">{{artigo.preco | currency: 'EUR'}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <clr-accordion>
+          <clr-accordion-panel>
+            <clr-accordion-title>Material</clr-accordion-title>
+            <clr-accordion-content *clrIfExpanded>
+              <div class="clr-row">
+                <div class="clr-col">
+                  <button class="btn btn-link" (click)="artigoSearchModal = true">Adicionar material</button>
+                </div>
+              </div>
+              <div class="clr-row" *ngIf="assistencia.material">
+                <div class="clr-col">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="left">Qty</th>
+                        <th>Descrição</th>
+                        <th>Local</th>
+                        <th class="left">Custo p/ unidade</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let artigo of assistencia.material">
+                        <td class="left"><input class="clr-input small-input" type="number" name="newQty" id="newQty"
+                            [(ngModel)]="artigo.qty" [max]=openDBArtigo?.qty></td>
+                        <td>{{artigo.descricao}} {{artigo.marca}} {{artigo.modelo}}</td>
+                        <td>{{artigo.localizacao}}</td>
+                        <td class="left">{{artigo.preco | currency: 'EUR'}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </clr-accordion-content>
+          </clr-accordion-panel>
+
+          <clr-accordion-panel>
+            <clr-accordion-title>Encomendas</clr-accordion-title>
+            <clr-accordion-content *clrIfExpanded>
+              <div class="clr-row">
+                <div class="clr-col">
+                  <button class="btn btn-link" (click)="encomendaWizard = true">Adicionar encomenda</button>
+                </div>
+              </div>
+            </clr-accordion-content>
+          </clr-accordion-panel>
+        </clr-accordion>
       </div>
     </div>
   </div>
@@ -278,3 +297,22 @@
     </div>
   </div>
 </clr-modal>
+
+  <clr-wizard #wizard [(clrWizardOpen)]="encomendaWizard" clrWizardSize="lg" (clrWizardOnFinish)="addEncomenda()">
+    <clr-wizard-title>Encomendar Artigo (👷 Em construção...)</clr-wizard-title>
+
+    <clr-wizard-button [type]="'cancel'">Cancelar</clr-wizard-button>
+    <clr-wizard-button [type]="'previous'">Voltar</clr-wizard-button>
+    <clr-wizard-button [type]="'next'">Seguinte</clr-wizard-button>
+    <clr-wizard-button [type]="'finish'">Terminar</clr-wizard-button>
+
+    <clr-wizard-page>
+      <ng-template clrPageTitle>Escolher Artigo</ng-template>
+      ...
+    </clr-wizard-page>
+
+    <clr-wizard-page>
+      <ng-template clrPageTitle>Editar Encomenda</ng-template>
+      ...
+    </clr-wizard-page>
+  </clr-wizard>
