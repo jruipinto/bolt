@@ -298,21 +298,101 @@
   </div>
 </clr-modal>
 
-  <clr-wizard #wizard [(clrWizardOpen)]="encomendaWizard" clrWizardSize="lg" (clrWizardOnFinish)="addEncomenda()">
-    <clr-wizard-title>Encomendar Artigo (👷 Em construção...)</clr-wizard-title>
+<clr-wizard #wizard [(clrWizardOpen)]="encomendaWizard" clrWizardSize="lg" (clrWizardOnFinish)="addEncomenda()">
+  <clr-wizard-title>Encomendar Artigo (👷 Em construção...)</clr-wizard-title>
 
-    <clr-wizard-button [type]="'cancel'">Cancelar</clr-wizard-button>
-    <clr-wizard-button [type]="'previous'">Voltar</clr-wizard-button>
-    <clr-wizard-button [type]="'next'">Seguinte</clr-wizard-button>
-    <clr-wizard-button [type]="'finish'">Terminar</clr-wizard-button>
+  <clr-wizard-button [type]="'cancel'">Cancelar</clr-wizard-button>
+  <clr-wizard-button [type]="'previous'">Voltar</clr-wizard-button>
+  <clr-wizard-button [type]="'next'">Seguinte</clr-wizard-button>
+  <clr-wizard-button [type]="'finish'">Terminar</clr-wizard-button>
 
-    <clr-wizard-page>
-      <ng-template clrPageTitle>Escolher Artigo</ng-template>
-      ...
-    </clr-wizard-page>
+  <clr-wizard-page>
+    <ng-template clrPageTitle>Escolher Artigo</ng-template>
+    <form [formGroup]="wizardArtigoSearchForm" (ngSubmit)="searchArtigo(wizardArtigoSearchForm.value.input)">
+      <div class="clr-row">
+        <div class="clr-col-12 padding-bottom-05">
+          <input type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input"
+            formControlName="input" />
+        </div>
+      </div>
+    </form>
+    <h4>Resultados:</h4>
+    <div *ngIf="artigoSearchResults as artigos">
+      <div *ngIf="artigos.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
+      <div *ngIf="artigos.length>0">
+        <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index"
+          (click)="pushToWizardEncomendaForm(artigo)">
+          <div class="clr-col-lg-3">
+            <span class="fontheavy">{{artigo.marca}}</span>
+            {{artigo.modelo}}
+          </div>
+          <div class="clr-col-lg-6 lessimportant">
+            {{artigo.descricao}}
+          </div>
+          <div class="clr-col-lg-1 lessimportant">
+            Qty: {{artigo.qty}}
+          </div>
+          <div class="clr-col-lg-2 lessimportant">
+            Local: {{artigo.localizacao}}
+          </div>
+        </r-data-row>
+      </div>
+    </div>
+  </clr-wizard-page>
 
-    <clr-wizard-page>
-      <ng-template clrPageTitle>Editar Encomenda</ng-template>
-      ...
-    </clr-wizard-page>
-  </clr-wizard>
+  <clr-wizard-page #wizardPageTwo>
+    <ng-template clrPageTitle>Editar Encomenda</ng-template>
+    <div class="clr-row">
+      <div class="clr-col-sm-2">
+        Artigo:
+      </div>
+      <div class="clr-col">
+        {{wizardEncomendaForm?.value.artigo_descricao}} {{wizardEncomendaForm?.value.artigo_marca}}
+        {{wizardEncomendaForm?.value.artigo_modelo}}
+      </div>
+    </div>
+    <form [formGroup]="wizardEncomendaform">
+      <div class="clr-row">
+        <div class="clr-col-sm-3">
+          Observação:
+        </div>
+        <div class="clr-col">
+          <input type="text" class="clr-input wd-100" placeholder="" name="observacao" formControlName="observacao" />
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-sm-3">
+          Prazo:
+        </div>
+        <div class="clr-col">
+          <input type="date" class="clr-input wd-100" placeholder="" name="previsao_entrega"
+            formControlName="previsao_entrega" />
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-sm-3">
+          Orçamento:
+        </div>
+        <div class="clr-col">
+          <input type="number" class="clr-input wd-100" placeholder="" name="orcamento" formControlName="orcamento" />
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-sm-3">
+          Fornecedor:
+        </div>
+        <div class="clr-col">
+          <input type="text" class="clr-input wd-100" placeholder="" name="fornecedor" formControlName="fornecedor" />
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-sm-3">
+          Qty:
+        </div>
+        <div class="clr-col">
+          <input type="number" class="clr-input wd-100" placeholder="" name="qty" formControlName="qty" />
+        </div>
+      </div>
+    </form>
+  </clr-wizard-page>
+</clr-wizard>

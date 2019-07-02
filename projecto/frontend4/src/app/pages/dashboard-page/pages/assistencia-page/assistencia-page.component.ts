@@ -24,9 +24,26 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
   public artigoSearchForm = this.fb.group({
     input: [null]
   });
+  public wizardArtigoSearchForm = this.fb.group({
+    input: [null]
+  });
+  public wizardEncomendaform = this.fb.group({
+    artigo_id: [null],
+    artigo_marca: [null],
+    artigo_modelo: [null],
+    artigo_descricao: [null],
+    assistencia_id: [null],
+    observacao: [null],
+    estado: [null],
+    previsao_entrega: [null],
+    orcamento: [null],
+    fornecedor: [null],
+    qty: [null]
+  });
   public artigoSearchResults: Artigo[];
   public encomendaWizard = false;
-  @ViewChild('wizard', {static: false}) wizard;
+  @ViewChild('wizard', { static: false }) wizard;
+  @ViewChild('wizardPageTwo', { static: false }) wizardPageTwo;
   public material: Partial<Artigo>[];
   public assistenciaOnInit: Assistencia;
 
@@ -247,6 +264,11 @@ ${this.assistencia.relatorio_cliente}`
       this.assistencia.material = clone(material);
       this.artigoSearchModal = false;
     }
+  }
+
+  pushToWizardEncomendaForm(artigo) {
+    this.wizardEncomendaform.patchValue(clone(artigo));
+    this.wizard.navService.currentPage = this.wizardPageTwo;
   }
 
   addEncomenda() {
