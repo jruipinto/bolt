@@ -114,6 +114,29 @@
                   <button class="btn btn-link" (click)="encomendaWizard = true">Adicionar encomenda</button>
                 </div>
               </div>
+              <div class="clr-row" *ngIf="assistencia.encomendas">
+                <div class="clr-col">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="left">Qty</th>
+                        <th>Descrição</th>
+                        <th>Prazo</th>
+                        <th class="left">Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let encomenda of assistencia.encomendas">
+                        <td class="left"><input class="clr-input small-input" type="number" name="newQty" id="newQty"
+                            [(ngModel)]="encomenda.qty" [max]=openDBArtigo?.qty></td>
+                        <td>{{encomenda.artigo_descricao}} {{encomenda.artigo_marca}} {{encomenda.artigo_modelo}}</td>
+                        <td>{{encomenda.previsao_entrega}}</td>
+                        <td class="left">{{encomenda.estado}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </clr-accordion-content>
           </clr-accordion-panel>
         </clr-accordion>
@@ -298,7 +321,7 @@
   </div>
 </clr-modal>
 
-<clr-wizard #wizard [(clrWizardOpen)]="encomendaWizard" clrWizardSize="lg" (clrWizardOnFinish)="addEncomenda()">
+<clr-wizard #wizard [(clrWizardOpen)]="encomendaWizard" clrWizardSize="lg" (clrWizardOnFinish)="addEncomenda(wizardEncomendaForm.value)">
   <clr-wizard-title>Encomendar Artigo (👷 Em construção...)</clr-wizard-title>
 
   <clr-wizard-button [type]="'cancel'">Cancelar</clr-wizard-button>
@@ -351,7 +374,7 @@
         {{wizardEncomendaForm?.value.artigo_modelo}}
       </div>
     </div>
-    <form [formGroup]="wizardEncomendaform">
+    <form [formGroup]="wizardEncomendaForm">
       <div class="clr-row">
         <div class="clr-col-sm-3">
           Observação:
@@ -362,7 +385,7 @@
       </div>
       <div class="clr-row">
         <div class="clr-col-sm-3">
-          Prazo:
+          Prazo:*
         </div>
         <div class="clr-col">
           <input type="date" class="clr-input wd-100" placeholder="" name="previsao_entrega"
@@ -387,7 +410,7 @@
       </div>
       <div class="clr-row">
         <div class="clr-col-sm-3">
-          Qty:
+          Qty:*
         </div>
         <div class="clr-col">
           <input type="number" class="clr-input wd-100" placeholder="" name="qty" formControlName="qty" />

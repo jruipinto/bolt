@@ -1,4 +1,5 @@
 import { Artigo } from './artigo.model';
+import { Encomenda } from './encomenda.model';
 
 export interface Assistencia {
     id: number;
@@ -16,6 +17,7 @@ export interface Assistencia {
     relatorio_interno: string;
     relatorio_cliente: string;
     material: Partial<Artigo>[];
+    encomendas: Partial<Encomenda>[];
     preco: number;
     estado: string;
     createdAt: string;

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { map, concatMap, tap, toArray, first } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
-import { Assistencia, Artigo } from 'src/app/shared/models';
+import { Assistencia, Artigo, Encomenda } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 import { UIService, UI } from 'src/app/shared/state/ui.service';
 import { AssistenciasService, ArtigosService } from 'src/app/shared/state';
@@ -27,14 +27,14 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
   public wizardArtigoSearchForm = this.fb.group({
     input: [null]
   });
-  public wizardEncomendaform = this.fb.group({
+  public wizardEncomendaForm = this.fb.group({
     artigo_id: [null],
     artigo_marca: [null],
     artigo_modelo: [null],
     artigo_descricao: [null],
     assistencia_id: [null],
     observacao: [null],
-    estado: [null],
+    estado: ['registada'],
     previsao_entrega: [null],
     orcamento: [null],
     fornecedor: [null],
@@ -266,13 +266,25 @@ ${this.assistencia.relatorio_cliente}`
     }
   }
 
-  pushToWizardEncomendaForm(artigo) {
-    this.wizardEncomendaform.patchValue(clone(artigo));
+  pushToWizardEncomendaForm(arg: Artigo) {
+    const artigo = {...arg};
+    this.wizardEncomendaForm.patchValue({
+      artigo_id: artigo.id,
+      artigo_marca: artigo.marca,
+      artigo_modelo: artigo.modelo,
+      artigo_descricao: artigo.descricao
+    });
     this.wizard.navService.currentPage = this.wizardPageTwo;
   }
 
-  addEncomenda() {
+  addEncomenda(arg: Encomenda) {
+    console.log(arg);
+    const encomenda = {...arg, assistencia_id: this.assistencia.id};
+    this.assistencia.encomendas
+    ? this.assistencia.encomendas = [...this.assistencia.encomendas, encomenda]
+    : this.assistencia.encomendas = [encomenda];
     this.wizard.reset();
+    console.log(this.assistencia.encomendas);
   }
 
 }
