@@ -8,7 +8,7 @@ import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service'
 import { UIService, UI } from 'src/app/shared/state/ui.service';
 import { AssistenciasService, ArtigosService } from 'src/app/shared/state';
 import { Observable, concat, of, BehaviorSubject } from 'rxjs';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ArtigosApiService } from 'src/app/shared';
 import { clone } from 'ramda';
 
@@ -28,17 +28,17 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     input: [null]
   });
   public wizardEncomendaForm = this.fb.group({
-    artigo_id: [null],
+    artigo_id: [null, [Validators.required]],
     artigo_marca: [null],
     artigo_modelo: [null],
     artigo_descricao: [null],
     assistencia_id: [null],
     observacao: [null],
     estado: ['registada'],
-    previsao_entrega: [null],
+    previsao_entrega: [null, [Validators.required]],
     orcamento: [null],
     fornecedor: [null],
-    qty: [null]
+    qty: [null, [Validators.required]]
   });
   public artigoSearchResults: Artigo[];
   public encomendaWizard = false;
@@ -278,13 +278,11 @@ ${this.assistencia.relatorio_cliente}`
   }
 
   addEncomenda(arg: Encomenda) {
-    console.log(arg);
     const encomenda = {...arg, assistencia_id: this.assistencia.id};
     this.assistencia.encomendas
     ? this.assistencia.encomendas = [...this.assistencia.encomendas, encomenda]
     : this.assistencia.encomendas = [encomenda];
     this.wizard.reset();
-    console.log(this.assistencia.encomendas);
   }
 
 }

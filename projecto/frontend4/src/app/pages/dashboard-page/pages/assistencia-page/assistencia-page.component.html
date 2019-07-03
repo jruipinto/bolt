@@ -363,7 +363,7 @@
     </div>
   </clr-wizard-page>
 
-  <clr-wizard-page #wizardPageTwo>
+  <clr-wizard-page #wizardPageTwo [clrWizardPageNextDisabled]="!wizardEncomendaForm.valid">
     <ng-template clrPageTitle>Editar Encomenda</ng-template>
     <div class="clr-row">
       <div class="clr-col-sm-2">
