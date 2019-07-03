@@ -212,7 +212,8 @@
           || assistencia.estado === 'incontactável'
           || assistencia.estado === 'orçamento aprovado'
           || assistencia.estado === 'orçamento recusado'
-          || assistencia.estado === 'material recebido'">
+          || assistencia.estado === 'material recebido'
+          && hasEncomendas() === false">
       <button class="btn btn-primary btn-icon" (click)="saveAssistencia('em análise', assistencia)">
         <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
         Guardar

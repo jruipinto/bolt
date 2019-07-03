@@ -267,7 +267,7 @@ ${this.assistencia.relatorio_cliente}`
   }
 
   pushToWizardEncomendaForm(arg: Artigo) {
-    const artigo = {...arg};
+    const artigo = { ...arg };
     this.wizardEncomendaForm.patchValue({
       artigo_id: artigo.id,
       artigo_marca: artigo.marca,
@@ -278,11 +278,19 @@ ${this.assistencia.relatorio_cliente}`
   }
 
   addEncomenda(arg: Encomenda) {
-    const encomenda = {...arg, assistencia_id: this.assistencia.id};
+    const encomenda = { ...arg, assistencia_id: this.assistencia.id };
     this.assistencia.encomendas
-    ? this.assistencia.encomendas = [...this.assistencia.encomendas, encomenda]
-    : this.assistencia.encomendas = [encomenda];
+      ? this.assistencia.encomendas = [...this.assistencia.encomendas, encomenda]
+      : this.assistencia.encomendas = [encomenda];
     this.wizard.reset();
+  }
+
+  hasEncomendas = () => {
+    if (this.assistencia.encomendas.findIndex(encomenda => encomenda.estado === 'registado') > -1) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }
