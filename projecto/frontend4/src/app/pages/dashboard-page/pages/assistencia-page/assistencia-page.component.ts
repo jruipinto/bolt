@@ -6,7 +6,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Assistencia, Artigo, Encomenda } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 import { UIService, UI } from 'src/app/shared/state/ui.service';
-import { AssistenciasService, ArtigosService } from 'src/app/shared/state';
+import { AssistenciasService, ArtigosService, EncomendasService } from 'src/app/shared/state';
 import { Observable, concat, of, BehaviorSubject } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ArtigosApiService } from 'src/app/shared';
@@ -53,6 +53,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     private uiService: UIService,
     private assistencias: AssistenciasService,
     private artigos: ArtigosService,
+    private encomendas: EncomendasService,
     // private artigosApi: ArtigosApiService,
     private router: Router,
     private route: ActivatedRoute,
@@ -150,14 +151,37 @@ ${this.assistencia.relatorio_cliente}`
     }
   }
 
+  createEncomendasOnApi(args: Partial<Encomenda>[]) {
+    if (args) {
+      const encomendas = clone(args);
+      return concat(encomendas
+        .map(encomenda => this.encomendas.create(encomenda)
+          .pipe(
+            map((encomendaDB: Encomenda[]) => encomendaDB[0])
+          )
+        )).pipe(concatMap(a => a), toArray());
+    } else {
+      return of(null);
+    }
+  }
+
   saveAssistencia(newEstado: string, assistencia: Assistencia) {
     if (newEstado !== 'em análise' && !assistencia.relatorio_cliente) {
       return alert('Preenche o relatório para o cliente!');
     }
     return this.saveChangesOnStock(this.assistencia.material)
       .pipe(
+        concatMap(() => this.createEncomendasOnApi(this.assistencia.encomendas)),
         concatMap(
-          () => this.assistencias.patch(assistencia.id, { ...assistencia, estado: newEstado, material: this.assistencia.material })
+          (encomendas) => this.assistencias
+            .patch(
+              assistencia.id,
+              {
+                ...assistencia,
+                estado: newEstado,
+                material: this.assistencia.material,
+                encomendas
+              })
             .pipe(
               tap(() => {
                 if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
