@@ -57,6 +57,9 @@ module.exports = function (app) {
     material: {
       type: Sequelize.JSON
     },
+    encomendas: {
+      type: Sequelize.JSON
+    },
     //varchar(8)
     preco: {
       type: Sequelize.STRING(8)
