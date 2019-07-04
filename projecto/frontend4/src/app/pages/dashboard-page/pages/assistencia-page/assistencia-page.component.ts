@@ -27,6 +27,10 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
   public wizardArtigoSearchForm = this.fb.group({
     input: [null]
   });
+  public artigoSearchResults: Artigo[];
+  public encomendaWizard = false;
+  @ViewChild('wizard', { static: false }) wizard;
+  @ViewChild('wizardPageTwo', { static: false }) wizardPageTwo;
   public wizardEncomendaForm = this.fb.group({
     artigo_id: [null, [Validators.required]],
     artigo_marca: [null],
@@ -40,10 +44,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     fornecedor: [null],
     qty: [null, [Validators.required]]
   });
-  public artigoSearchResults: Artigo[];
-  public encomendaWizard = false;
-  @ViewChild('wizard', { static: false }) wizard;
-  @ViewChild('wizardPageTwo', { static: false }) wizardPageTwo;
+  public newEncomendasCounter = 0;
   public material: Partial<Artigo>[];
   public assistenciaOnInit: Assistencia;
 
@@ -283,14 +284,7 @@ ${this.assistencia.relatorio_cliente}`
       ? this.assistencia.encomendas = [...this.assistencia.encomendas, encomenda]
       : this.assistencia.encomendas = [encomenda];
     this.wizard.reset();
-  }
-
-  hasEncomendas = () => {
-    if (this.assistencia.encomendas.findIndex(encomenda => encomenda.estado === 'registado') > -1) {
-      return true;
-    } else {
-      return false;
-    }
+    ++this.newEncomendasCounter;
   }
 
 }

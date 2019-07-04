@@ -206,14 +206,14 @@
 
   <div class="separate">
 
-    <div *ngIf="assistencia.estado === 'recebido'
+    <div *ngIf="(assistencia.estado === 'recebido'
           || assistencia.estado === 'em análise'
           || assistencia.estado === 'contactado'
           || assistencia.estado === 'incontactável'
           || assistencia.estado === 'orçamento aprovado'
           || assistencia.estado === 'orçamento recusado'
-          || assistencia.estado === 'material recebido'
-          && hasEncomendas() === false">
+          || assistencia.estado === 'material recebido')
+          && newEncomendasCounter === 0">
       <button class="btn btn-primary btn-icon" (click)="saveAssistencia('em análise', assistencia)">
         <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
         Guardar
@@ -229,6 +229,12 @@
           <button clrDropdownItem (click)="saveAssistencia('concluído', assistencia)">Concluir</button>
         </clr-dropdown-menu>
       </clr-dropdown>
+    </div>
+
+    <div *ngIf="newEncomendasCounter > 0">
+      <button class="btn btn-warning" (click)="saveAssistencia('em análise', assistencia)">
+        Aguardar Material
+      </button>
     </div>
 
     <div *ngIf="assistencia.estado === 'orçamento pendente'
@@ -322,7 +328,8 @@
   </div>
 </clr-modal>
 
-<clr-wizard #wizard [(clrWizardOpen)]="encomendaWizard" clrWizardSize="lg" (clrWizardOnFinish)="addEncomenda(wizardEncomendaForm.value)">
+<clr-wizard #wizard [(clrWizardOpen)]="encomendaWizard" clrWizardSize="lg"
+  (clrWizardOnFinish)="addEncomenda(wizardEncomendaForm.value)">
   <clr-wizard-title>Encomendar Artigo (👷 Em construção...)</clr-wizard-title>
 
   <clr-wizard-button [type]="'cancel'">Cancelar</clr-wizard-button>
