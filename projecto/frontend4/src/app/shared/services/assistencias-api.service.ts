@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable, concat } from 'rxjs';
-import { map, concatMap, toArray, mergeMap } from 'rxjs/operators';
+import { Observable, concat, of } from 'rxjs';
+import { map, concatMap, toArray, mergeMap, tap } from 'rxjs/operators';
 
 import { EntitiesApiAbstrationService } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
-import { Assistencia, EventoCronologico, User } from 'src/app/shared/models';
+import { Assistencia, EventoCronologico, User, Artigo } from 'src/app/shared/models';
 import { UsersService } from '../state/users.service';
+import { ArtigosService } from '../state/artigos.service';
+import { lensProp, view, set } from 'ramda';
 
 @Injectable({
   providedIn: 'root'
@@ -41,10 +43,13 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
         cliente_user_contacto: cliente.contacto
       })
 
-  private assistenciaWithParsedRegistoCronologico = (assistencia: Assistencia): Assistencia =>
-    typeof assistencia.registo_cronologico === 'string'
-      ? { ...assistencia, registo_cronologico: JSON.parse(assistencia.registo_cronologico) }
-      : assistencia
+  private deserialize(obj: {}, objPropName: string): {} {
+    const lens = lensProp(objPropName);
+    if (typeof view(lens, obj) === 'string') {
+      return set(lens, JSON.parse(view(lens, obj)), obj);
+    }
+    return obj;
+  }
 
   private fullyDetailedAssistencia$ = (assistenciaFromApi: Assistencia) =>
     this.usersAPI.get(assistenciaFromApi.cliente_user_id)
@@ -52,7 +57,9 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
         map(cliente => cliente[0]),
         map(this.acceptClienteDetails),
         map(curryAssistenciaWithClientDetails => curryAssistenciaWithClientDetails(assistenciaFromApi)),
-        map(this.assistenciaWithParsedRegistoCronologico),
+        map(assistencia => this.deserialize(assistencia, 'registo_cronologico')),
+        map(assistencia => this.deserialize(assistencia, 'material')),
+        map(assistencia => this.deserialize(assistencia, 'encomendas')),
         concatMap(this.assistenciaWithDetailedRegistoCronologico$)
       )
 
@@ -66,7 +73,15 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
         toArray()
       )
 
-  constructor(protected feathersService: FeathersService, private usersService: UsersService) {
+  private sanitize(arr: any[] | null): any[] | null {
+    if (!arr) { return arr; }
+    return arr.map(item => ({ id: item.id, qty: item.qty }));
+  }
+
+  constructor(
+    protected feathersService: FeathersService,
+    private usersService: UsersService,
+    private artigosService: ArtigosService) {
     super(feathersService, 'assistencias');
   }
 
@@ -77,16 +92,26 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
   }
 
   get(id: number) {
-    const assistencia$ = super.get(id);
+    const assistencia$ = super.get(id) ;
     return this.fullyDetailedAssistencias$(assistencia$);
   }
 
-  create(data: object, actionType?: string) {
+  create(data: Assistencia, actionType?: string) {
+    data = {
+      ...data,
+      material: this.sanitize(data.material),
+      encomendas: this.sanitize(data.encomendas)
+    };
     const assistencia$ = super.create(data);
     return this.fullyDetailedAssistencias$(assistencia$);
   }
 
-  patch(id: number, data: object, actionType?: string) {
+  patch(id: number, data: Assistencia, actionType?: string) {
+    data = {
+      ...data,
+      material: this.sanitize(data.material),
+      encomendas: this.sanitize(data.encomendas)
+    };
     const assistencia$ = super.patch(id, data);
     return this.fullyDetailedAssistencias$(assistencia$);
   }
