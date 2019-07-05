@@ -64,30 +64,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     this.route.paramMap
       .pipe(
         concatMap((params: ParamMap) => this.assistencias.getAndWatch(+params.get('id'))),
-        map((res: Assistencia[]) => res[0]),
-        concatMap(
-          assistencia => {
-            if (assistencia.material) {
-              if (typeof assistencia.material === 'string') {
-                assistencia.material = JSON.parse(assistencia.material);
-              }
-              return concat(assistencia.material
-                .map(
-                  (artigo: Partial<Artigo>) => this.artigos.get(artigo.id)
-                    .pipe(
-                      map((dbArtigo: Artigo[]) => dbArtigo[0]),
-                      map(dbArtigo => dbArtigo = { ...dbArtigo, qty: artigo.qty })
-                    )
-                ))
-                .pipe(
-                  concatMap(concats => concats),
-                  toArray(),
-                  map((material: Artigo[]) => ({ ...assistencia, material }) as Assistencia));
-            } else {
-              return of(assistencia);
-            }
-          }
-        ),
+        map(res => res[0]),
         tap(assistencia => this.assistenciaOnInit = clone(assistencia))
       )
       .subscribe(assistencia => {
@@ -119,36 +96,40 @@ ${this.assistencia.relatorio_cliente}`
       return concat(material.map(
         (artigo: Artigo) => this.artigos.get(artigo.id)
           .pipe(
-            map((res: Artigo[]) => res[0]),
+            map((res) => res[0]),
+            map( artigoDB => {
+              const {
+                createdAt,
+                updatedAt,
+                ...artigoMod
+              } = artigoDB;
+              return artigoMod;
+            }),
             concatMap(
               dbArtigo => {
-                let id: number;
                 if (!this.assistenciaOnInit.material) {
                   return this.artigos.patch(
                     dbArtigo.id,
                     { ...dbArtigo, qty: dbArtigo.qty - artigo.qty }
                   );
-                } else {
-                  id = this.assistenciaOnInit.material.findIndex(obj => obj.id === artigo.id);
-                  if (id < 0) {
-                    return this.artigos.patch(
-                      dbArtigo.id,
-                      { ...dbArtigo, qty: dbArtigo.qty - artigo.qty }
-                    );
-                  } else {
-                    return this.artigos.patch(
-                      dbArtigo.id,
-                      { ...dbArtigo, qty: dbArtigo.qty - (artigo.qty - this.assistenciaOnInit.material[id].qty) }
-                    );
-                  }
                 }
+                const id = this.assistenciaOnInit.material.findIndex(obj => obj.id === artigo.id);
+                if (id < 0) {
+                  return this.artigos.patch(
+                    dbArtigo.id,
+                    { ...dbArtigo, qty: dbArtigo.qty - artigo.qty }
+                  );
+                }
+                return this.artigos.patch(
+                  dbArtigo.id,
+                  { ...dbArtigo, qty: dbArtigo.qty - (artigo.qty - this.assistenciaOnInit.material[id].qty) }
+                );
               }
             )
           )
       )).pipe(concatMap(a => a), toArray());
-    } else {
-      return of(null);
     }
+    return of(null);
   }
 
   createEncomendasOnApi(args: Partial<Encomenda>[]) {
@@ -157,7 +138,20 @@ ${this.assistencia.relatorio_cliente}`
       return concat(encomendas
         .map(encomenda => this.encomendas.create(encomenda)
           .pipe(
-            map((encomendaDB: Encomenda[]) => encomendaDB[0])
+            map((encomendaDB: Encomenda[]) => encomendaDB[0]),
+            map(encomendaDB => {
+              const {
+                cliente_user_name,
+                cliente_user_contacto,
+                artigo_marca,
+                artigo_modelo,
+                artigo_descricao,
+                createdAt,
+                updatedAt,
+                registo_cronologico,
+                ...encomendaMod } = encomendaDB;
+              return encomendaMod;
+            })
           )
         )).pipe(concatMap(a => a), toArray());
     } else {
@@ -303,7 +297,7 @@ ${this.assistencia.relatorio_cliente}`
   }
 
   addEncomenda(arg: Encomenda) {
-    const encomenda = { ...arg, assistencia_id: this.assistencia.id };
+    const encomenda = { ...arg, assistencia_id: this.assistencia.id, cliente_user_id: this.assistencia.cliente_user_id };
     this.assistencia.encomendas
       ? this.assistencia.encomendas = [...this.assistencia.encomendas, encomenda]
       : this.assistencia.encomendas = [encomenda];
