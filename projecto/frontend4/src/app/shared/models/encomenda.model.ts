@@ -17,4 +17,6 @@ export interface Encomenda {
     orcamento: number;
     fornecedor: string;
     qty: number;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
