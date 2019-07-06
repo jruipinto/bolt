@@ -50,22 +50,20 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
             )
           )
           .subscribe();
-      } else {
-        return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
-          .pipe(
-            tap(
-              () => this.router.navigate(['/dashboard/artigo', encomenda.artigo_id])
-            )
-          )
-          .subscribe();
       }
-    } else {
       return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
         .pipe(
-          tap(() => window.history.back())
+          tap(
+            () => this.router.navigate(['/dashboard/artigo', encomenda.artigo_id])
+          )
         )
         .subscribe();
     }
+    return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
+      .pipe(
+        tap(() => window.history.back())
+      )
+      .subscribe();
   }
 
   navigateBack() {
