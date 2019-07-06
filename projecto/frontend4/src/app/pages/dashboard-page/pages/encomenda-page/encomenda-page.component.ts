@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { concatMap, tap } from 'rxjs/operators';
+import { concatMap, tap, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Encomenda } from 'src/app/shared/models';
-import { EncomendasService } from 'src/app/shared/state';
+import { Encomenda, Assistencia } from 'src/app/shared/models';
+import { EncomendasService, AssistenciasService } from 'src/app/shared/state';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { of } from 'rxjs';
 @AutoUnsubscribe()
 @Component({
   selector: 'app-encomenda-page',
@@ -15,6 +16,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private encomendas: EncomendasService,
+    private assistencias: AssistenciasService,
     private route: ActivatedRoute,
     private router: Router) {
   }
@@ -39,10 +41,28 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
         .subscribe();
     }
     */
+  notifyAssistencia(encomenda: Encomenda) {
+    if (encomenda.assistencia_id) {
+      this.assistencias.get(encomenda.assistencia_id)
+        .pipe(
+          map(res => res[0]),
+          concatMap((assistencia: Assistencia) => {
+            if (assistencia.encomendas.filter((e: Encomenda) => e.estado !== 'recebida').length === 0) {
+              return this.assistencias.patch(encomenda.assistencia_id, { estado: 'material recebido' })
+                .pipe(
+                  concatMap(() => of([encomenda]))
+                );
+            }
+            return of([encomenda]);
+          })
+        );
+    }
+    return of([encomenda]);
+  }
 
   saveEncomenda(newEstado: string, encomenda: Encomenda) {
     if (newEstado === 'recebida' || newEstado === 'entregue') {
-      if (encomenda.cliente_user_contacto === 918867376) {
+      if (encomenda.cliente_user_contacto === 918867376) { // if encomenda for Stock of NReparações
         return this.encomendas.patch(encomenda.id, { ...encomenda, estado: 'entregue' })
           .pipe(
             tap(
@@ -53,6 +73,8 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
       }
       return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
         .pipe(
+          map(res => res[0]),
+          concatMap(this.notifyAssistencia),
           tap(
             () => this.router.navigate(['/dashboard/artigo', encomenda.artigo_id])
           )
