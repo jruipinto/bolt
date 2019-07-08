@@ -48,7 +48,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
           map(res => res[0]),
           concatMap((assistencia: Assistencia) => {
             if (assistencia.encomendas.filter((e: Encomenda) => e.estado !== 'recebida').length === 0) {
-              return this.assistencias.patch(encomenda.assistencia_id, { estado: 'material recebido' })
+              return this.assistencias.patch(encomenda.assistencia_id, { ...assistencia, estado: 'material recebido' })
                 .pipe(
                   concatMap(() => of([encomenda]))
                 );
