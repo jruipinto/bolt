@@ -41,9 +41,9 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
         .subscribe();
     }
     */
-  notifyAssistencia(encomenda: Encomenda) {
+  notifyAssistencia = (encomenda: Encomenda) => {
     if (encomenda.assistencia_id) {
-      this.assistencias.get(encomenda.assistencia_id)
+      return this.assistencias.get(encomenda.assistencia_id)
         .pipe(
           map(res => res[0]),
           concatMap((assistencia: Assistencia) => {
