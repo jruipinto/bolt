@@ -38,7 +38,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     artigo_descricao: [null],
     assistencia_id: [null],
     observacao: [null],
-    estado: ['registada'],
+    estado: ['nova'],
     previsao_entrega: [null, [Validators.required]],
     orcamento: [null],
     fornecedor: [null],
@@ -133,10 +133,11 @@ ${this.assistencia.relatorio_cliente}`
   }
 
   createEncomendasOnApi(args: Partial<Encomenda>[]) {
-    if (args) {
+    if (args && args) {
       const encomendas = clone(args);
       return concat(encomendas
-        .map(encomenda => this.encomendas.create(encomenda)
+        .filter(encomenda => encomenda.estado === 'nova')
+        .map(encomenda => this.encomendas.create({...encomenda, estado: 'registada'})
           .pipe(
             map((encomendaDB: Encomenda[]) => encomendaDB[0]),
             map(encomendaDB => {
