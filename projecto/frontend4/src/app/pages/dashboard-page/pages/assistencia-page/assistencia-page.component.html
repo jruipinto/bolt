@@ -139,6 +139,22 @@
               </div>
             </clr-accordion-content>
           </clr-accordion-panel>
+          <clr-accordion-panel>
+            <clr-accordion-title>Registo Cronológico</clr-accordion-title>
+            <clr-accordion-content *clrIfExpanded>
+              <clr-datagrid>
+                <clr-dg-column>Técnico</clr-dg-column>
+                <clr-dg-column>Estado</clr-dg-column>
+                <clr-dg-column>Data</clr-dg-column>
+                <clr-dg-row *ngFor="let evento of assistencia.registo_cronologico">
+                  <clr-dg-cell>{{evento.tecnico_user_id}} {{evento.tecnico}}</clr-dg-cell>
+                  <clr-dg-cell>{{evento.estado}}</clr-dg-cell>
+                  <clr-dg-cell>{{evento.updatedAt | date}}</clr-dg-cell>
+                </clr-dg-row>
+                <clr-dg-footer>{{assistencia.registo_cronologico.length}} eventos registados</clr-dg-footer>
+              </clr-datagrid>
+            </clr-accordion-content>
+          </clr-accordion-panel>
         </clr-accordion>
       </div>
     </div>
