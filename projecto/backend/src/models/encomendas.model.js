@@ -34,6 +34,7 @@ module.exports = function (app) {
       allowNull: false
       /*
       estados possiveis:
+      nova (quando criada numa assistencia mas nao guardada. este estado so existe no frontend. volátil)
       registada
       marcada para ir ao fornecedor
       adquirida (quando se vai ao fornecedor buscar / = "recebido" mas mais especifico)
