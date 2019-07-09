@@ -16,7 +16,7 @@ export class EncomendaPromptModalComponent implements OnInit {
         (ui: UI) => ui.encomendaPromptModalArtigo
       )
     );
-  public artigo: {} | Artigo;
+  public artigo: Artigo;
 
   constructor(
     private uiService: UIService,
@@ -26,7 +26,7 @@ export class EncomendaPromptModalComponent implements OnInit {
   ngOnInit() {
     this.artigo$
       .subscribe(
-        artigo => this.artigo = artigo
+        (artigo: Artigo) => this.artigo = artigo
       );
   }
 
