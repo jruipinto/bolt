@@ -82,25 +82,20 @@
               </div>
               <div class="clr-row" *ngIf="assistencia.material">
                 <div class="clr-col">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th class="left">Qty</th>
-                        <th>Descrição</th>
-                        <th>Local</th>
-                        <th class="left">Custo p/ unidade</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let artigo of assistencia.material">
-                        <td class="left"><input class="clr-input small-input" type="number" name="newQty" id="newQty"
-                            [(ngModel)]="artigo.qty" [max]=openDBArtigo?.qty></td>
-                        <td>{{artigo.descricao}} {{artigo.marca}} {{artigo.modelo}}</td>
-                        <td>{{artigo.localizacao}}</td>
-                        <td class="left">{{artigo.preco | currency: 'EUR'}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <clr-datagrid>
+                    <clr-dg-column>Qty</clr-dg-column>
+                    <clr-dg-column>Descrição</clr-dg-column>
+                    <clr-dg-column>Local</clr-dg-column>
+                    <clr-dg-column>Custo p/ unidade</clr-dg-column>
+                    <clr-dg-row *ngFor="let artigo of assistencia.material">
+                      <clr-dg-cell><input class="clr-input small-input" type="number" name="newQty" id="newQty"
+                          [(ngModel)]="artigo.qty" [max]=openDBArtigo?.qty></clr-dg-cell>
+                      <clr-dg-cell>{{artigo.descricao}} {{artigo.marca}} {{artigo.modelo}}</clr-dg-cell>
+                      <clr-dg-cell>{{artigo.localizacao}}</clr-dg-cell>
+                      <clr-dg-cell>{{artigo.preco | currency: 'EUR'}}</clr-dg-cell>
+                    </clr-dg-row>
+                    <clr-dg-footer>{{assistencia.material.length}} artigos adicionados</clr-dg-footer>
+                  </clr-datagrid>
                 </div>
               </div>
             </clr-accordion-content>
@@ -306,7 +301,7 @@
 </div>
 
 <clr-modal [(clrModalOpen)]="artigoSearchModal" [clrModalSize]="'lg'">
-  <h3 class="modal-title">Adicionar Material (👷 Em construção...)</h3>
+  <h3 class="modal-title">Adicionar Material</h3>
   <div class="modal-body">
     <form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
       <div class="clr-row">
@@ -342,7 +337,7 @@
 
 <clr-wizard #wizard [(clrWizardOpen)]="encomendaWizard" clrWizardSize="lg"
   (clrWizardOnFinish)="addEncomenda(wizardEncomendaForm.value)">
-  <clr-wizard-title>Encomendar Artigo (👷 Em construção...)</clr-wizard-title>
+  <clr-wizard-title>Encomendar Artigo</clr-wizard-title>
 
   <clr-wizard-button [type]="'cancel'">Cancelar</clr-wizard-button>
   <clr-wizard-button [type]="'previous'">Voltar</clr-wizard-button>

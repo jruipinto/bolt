@@ -47,7 +47,7 @@
       <p>{{print?.categoria}} > {{print?.marca}} > {{print?.modelo}}</p>
       <p>{{print?.cor}}</p>
       <p>{{print?.serial}}</p>
-      <p>{{print?.problema}}</p>
+      <p>{{print?.problema}}<span *ngIf="print.orcamento"> - Valor: {{print?.orcamento | currency: 'EUR'}}</span></p>
       <!-- <p>dummy -> codigo: 1798 - tem de ficar pronto até dia 12/02/2019</p> -->
     </div>
   </div>
