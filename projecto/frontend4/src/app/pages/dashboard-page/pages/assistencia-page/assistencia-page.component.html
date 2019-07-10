@@ -116,25 +116,21 @@
               </div>
               <div class="clr-row" *ngIf="assistencia.encomendas">
                 <div class="clr-col">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th class="left">Qty</th>
-                        <th>Descrição</th>
-                        <th>Prazo</th>
-                        <th class="left">Estado</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let encomenda of assistencia.encomendas">
-                        <td class="left"><input class="clr-input small-input" type="number" name="newQty" id="newQty"
-                            [(ngModel)]="encomenda.qty" [max]=openDBArtigo?.qty></td>
-                        <td>{{encomenda.artigo_descricao}} {{encomenda.artigo_marca}} {{encomenda.artigo_modelo}}</td>
-                        <td>{{encomenda.previsao_entrega}}</td>
-                        <td class="left">{{encomenda.estado}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <clr-datagrid>
+                    <clr-dg-column>Qty</clr-dg-column>
+                    <clr-dg-column>Descrição</clr-dg-column>
+                    <clr-dg-column>Prazo</clr-dg-column>
+                    <clr-dg-column>Estado</clr-dg-column>
+                    <clr-dg-row *ngFor="let encomenda of assistencia.encomendas">
+                      <clr-dg-cell><input class="clr-input small-input" type="number" name="newQty" id="newQty"
+                          [(ngModel)]="encomenda.qty" [max]=openDBArtigo?.qty></clr-dg-cell>
+                      <clr-dg-cell>{{encomenda.artigo_descricao}} {{encomenda.artigo_marca}} {{encomenda.artigo_modelo}}
+                      </clr-dg-cell>
+                      <clr-dg-cell>{{encomenda.previsao_entrega}}</clr-dg-cell>
+                      <clr-dg-cell>{{encomenda.estado}}</clr-dg-cell>
+                    </clr-dg-row>
+                    <clr-dg-footer>{{assistencia.encomendas.length}} encomendas</clr-dg-footer>
+                  </clr-datagrid>
                 </div>
               </div>
             </clr-accordion-content>
