@@ -1,0 +1,37 @@
+<h2>Concluídas</h2>
+<div *ngIf="(assistencias$ | async) as assistencias">
+  <div *ngIf="assistencias.length>0">
+    <r-data-row class="clr-row overflow-hidden" *ngFor="let assistencia of assistencias; let listaIndex=index"
+    (click)="openAssistencia(assistencia.id)">
+      <div class="clr-col-lg-2">
+        <div class="clr-row">
+          <div class="clr-col-lg-4 fontheavy">
+            {{assistencia.id}}
+          </div>
+          <div class="clr-col-lg-6">
+            {{assistencia.categoria}}:
+          </div>
+        </div>
+      </div>
+      <div class="clr-col-lg-2">
+        <span class="fontheavy">{{assistencia.marca}}</span>
+        {{assistencia.modelo}}
+      </div>
+      <div class="clr-col-lg-1">
+        {{assistencia.cor}}
+      </div>
+      <div class="clr-col-lg-2 lessimportant">
+        {{assistencia.problema}}
+      </div>
+      <div class="clr-col-lg-2 lessimportant">
+        Cliente:{{assistencia.cliente_user_name}}
+      </div>
+      <div class="clr-col-lg-2 lessimportant">
+        Técnico:{{assistencia.registo_cronologico[assistencia.registo_cronologico.length-1].tecnico}}
+      </div>
+      <div class="clr-col-lg-1 lessimportant">
+        {{assistencia.estado}}
+      </div>
+    </r-data-row>
+  </div>
+</div>

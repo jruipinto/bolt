@@ -1,5 +1,6 @@
 export * from './assistencia-page';
 export * from './assistencias-page';
+export * from './assistencias-concluidas-page';
 export * from './assistencias-criar-nova-page';
 export * from './assistencias-pesquisar-page';
 export * from './artigo-page';

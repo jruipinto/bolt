@@ -24,6 +24,7 @@ import {
 } from './pages';
 import { EncomendasPesquisarPageComponent } from './pages/encomendas-pesquisar-page/encomendas-pesquisar-page.component';
 import { EncomendaPromptModalComponent } from './modals/encomenda-prompt-modal/encomenda-prompt-modal.component';
+import { AssistenciasConcluidasPageComponent } from './pages/assistencias-concluidas-page/assistencias-concluidas-page.component';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { EncomendaPromptModalComponent } from './modals/encomenda-prompt-modal/e
     ArtigoPageComponent,
     EncomendaPageComponent,
     EncomendasPesquisarPageComponent,
-    EncomendaPromptModalComponent
+    EncomendaPromptModalComponent,
+    AssistenciasConcluidasPageComponent
   ]
 })
 export class DashboardPageModule { }
