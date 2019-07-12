@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './assistencias-concluidas-page.component.html',
   styleUrls: ['./assistencias-concluidas-page.component.scss']
 })
-export class AssistenciasConcluidasPageComponent implements OnInit {
+export class AssistenciasConcluidasPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private assistencias: AssistenciasService,
@@ -18,24 +18,26 @@ export class AssistenciasConcluidasPageComponent implements OnInit {
   ) { }
 
   public assistencias$ = this.assistencias.state$
-  .pipe(
-    map(state =>
-      state
-        ? state.filter(assistencia =>
-          assistencia.estado === 'concluído')
-        : null
-    )
-  );
+    .pipe(
+      map(state =>
+        state
+          ? state.filter(assistencia =>
+            assistencia.estado === 'concluído')
+          : null
+      )
+    );
 
-ngOnInit() {
-  this.assistencias
-    .findAndWatch({ query: { $limit: 200, estado: { $ne: 'entregue' } } })
-    .subscribe();
-}
+  ngOnInit() {
+    this.assistencias
+      .findAndWatch({ query: { $limit: 200, estado: { $ne: 'entregue' } } })
+      .subscribe();
+  }
 
-openAssistencia(assistenciaID: number) {
-  return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
-}
+  ngOnDestroy() { }
+
+  openAssistencia(assistenciaID: number) {
+    return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
+  }
 
 
 }
