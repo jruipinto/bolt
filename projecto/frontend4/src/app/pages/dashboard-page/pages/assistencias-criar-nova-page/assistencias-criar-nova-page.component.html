@@ -1,3 +1,33 @@
+<button type="button" class="btn btn-link" (click)="userSearchModal = true">Pesquisar cliente</button>
+
+<clr-modal [(clrModalOpen)]="userSearchModal" [clrModalSize]="'lg'">
+  <h3 class="modal-title">Pesquisar Cliente</h3>
+  <div class="modal-body">
+    <form [formGroup]="userSearchForm" (ngSubmit)="searchUser(userSearchForm.value.input)">
+      <div class="clr-row">
+        <div class="clr-col-12 padding-bottom-05">
+          <input type="text" class="clr-input wd-100" placeholder="Digita nome..." name="input"
+            formControlName="input" />
+        </div>
+      </div>
+    </form>
+    <h4>Resultados:</h4>
+    <div *ngIf="userSearchResults as users">
+      <div *ngIf="users.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
+      <div *ngIf="users.length>0">
+        <r-data-row class="clr-row" *ngFor="let user of users; let listaIndex=index" (click)="addUser(user)">
+          <div class="clr-col-lg-9">
+            {{user.nome}}
+          </div>
+          <div class="clr-col-lg-3 lessimportant">
+            {{user.contacto}}
+          </div>
+        </r-data-row>
+      </div>
+    </div>
+  </div>
+</clr-modal>
+
 <form class="separate clr-form" [formGroup]="contactoClienteForm">
   <div class="clr-row">
     <div class="clr-col-md-2">

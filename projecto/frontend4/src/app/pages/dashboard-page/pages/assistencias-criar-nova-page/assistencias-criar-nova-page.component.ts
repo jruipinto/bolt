@@ -8,6 +8,7 @@ import { AssistenciasService, UsersService, UIService, UI } from 'src/app/shared
 import { PrintService } from 'src/app/pages/dashboard-page/prints';
 import { User, Assistencia } from 'src/app/shared/models';
 import { capitalize } from 'src/app/shared/utilities';
+import clone from 'ramda/es/clone';
 
 
 
@@ -20,9 +21,14 @@ import { capitalize } from 'src/app/shared/utilities';
 })
 export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
 
+  public userSearchModal = false;
+  public userSearchResults: User[];
   public oldAssists: Assistencia[] = [];
 
-  /* Declaration of the 3 Forms on the UI */
+  /* Declaration of the 3+1 Forms on the UI */
+  public userSearchForm = this.fb.group({
+    input: [null]
+  });
   public contactoClienteForm = this.fb.group({
     contacto: [null, Validators.min(200000000)] // por exemplo, contacto: 255486001
   });
@@ -160,5 +166,15 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
       problema: `(Ficha anterior: ${assistencia.id}) `,
       orcamento: null
     });
+  }
+
+  searchUser(userName: string) {
+    const condition = JSON.parse('"%' + userName + '%"');
+    this.usersService.find({ query: { $limit: 200, nome: { $like: condition } } })
+      .subscribe((results: User[]) => this.userSearchResults = clone(results));
+  }
+
+  addUser(user: User) {
+    this.contactoClienteForm.patchValue({contacto: clone(user.contacto)});
   }
 }
