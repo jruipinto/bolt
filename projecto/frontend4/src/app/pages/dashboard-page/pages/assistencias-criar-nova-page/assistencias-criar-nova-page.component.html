@@ -12,7 +12,7 @@
       </div>
     </form>
     <h4>Resultados:</h4>
-    <div *ngIf="userSearchResults as users">
+    <div *ngIf="userSearchResults$ | async as users">
       <div *ngIf="users.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
       <div *ngIf="users.length>0">
         <r-data-row class="clr-row" *ngFor="let user of users; let listaIndex=index" (click)="addUser(user)">

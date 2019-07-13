@@ -22,7 +22,7 @@ import clone from 'ramda/es/clone';
 export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
 
   public userSearchModal = false;
-  public userSearchResults: User[];
+  public userSearchResults$: Observable<User[]>;
   public oldAssists: Assistencia[] = [];
 
   /* Declaration of the 3+1 Forms on the UI */
@@ -170,11 +170,11 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
 
   searchUser(userName: string) {
     const condition = JSON.parse('"%' + userName + '%"');
-    this.usersService.find({ query: { $limit: 200, nome: { $like: condition } } })
-      .subscribe((results: User[]) => this.userSearchResults = clone(results));
+    this.userSearchResults$ = this.usersService.find({ query: { $limit: 200, nome: { $like: condition } } });
   }
 
   addUser(user: User) {
-    this.contactoClienteForm.patchValue({contacto: clone(user.contacto)});
+    this.contactoClienteForm.patchValue({ contacto: clone(user.contacto) });
+    this.userSearchModal = false;
   }
 }
