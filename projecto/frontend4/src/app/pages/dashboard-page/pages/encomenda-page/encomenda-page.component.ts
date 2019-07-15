@@ -62,7 +62,8 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
 
   saveEncomenda(newEstado: string, encomenda: Encomenda) {
     if (newEstado === 'recebida' || newEstado === 'entregue') {
-      if (encomenda.cliente_user_contacto === 918867376) { // if encomenda for Stock of NReparações
+      if (encomenda.cliente_user_contacto === 918867376 || encomenda.assistencia_id) { // if encomenda for Stock of NReparações
+        // or for any assistencia
         return this.encomendas.patch(encomenda.id, { ...encomenda, estado: 'entregue' })
           .pipe(
             tap(
