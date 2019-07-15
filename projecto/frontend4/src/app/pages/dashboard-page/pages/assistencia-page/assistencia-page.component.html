@@ -125,8 +125,8 @@
                     <clr-dg-column>Prazo</clr-dg-column>
                     <clr-dg-column>Estado</clr-dg-column>
                     <clr-dg-row *ngFor="let encomenda of assistencia.encomendas">
-                      <clr-dg-cell><input class="clr-input small-input" type="number" name="newQty" id="newQty"
-                          [(ngModel)]="encomenda.qty" [max]=openDBArtigo?.qty></clr-dg-cell>
+                      <clr-dg-cell><input *ngIf="encomenda.estado === 'nova'" class="clr-input small-input" type="number" name="newQty" id="newQty"
+                          [(ngModel)]="encomenda.qty" [max]=openDBArtigo?.qty><span *ngIf="encomenda.estado !== 'nova'">{{encomenda.qty}}</span></clr-dg-cell>
                       <clr-dg-cell>{{encomenda.artigo_descricao}} {{encomenda.artigo_marca}} {{encomenda.artigo_modelo}}
                       </clr-dg-cell>
                       <clr-dg-cell>{{encomenda.previsao_entrega}}</clr-dg-cell>

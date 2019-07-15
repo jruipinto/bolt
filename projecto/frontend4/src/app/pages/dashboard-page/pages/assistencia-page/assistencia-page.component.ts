@@ -97,7 +97,7 @@ ${this.assistencia.relatorio_cliente}`
         (artigo: Artigo) => this.artigos.get(artigo.id)
           .pipe(
             map((res) => res[0]),
-            map( artigoDB => {
+            map(artigoDB => {
               const {
                 createdAt,
                 updatedAt,
@@ -137,7 +137,7 @@ ${this.assistencia.relatorio_cliente}`
       const encomendas = clone(args);
       return concat(encomendas
         .filter(encomenda => encomenda.estado === 'nova')
-        .map(encomenda => this.encomendas.create({...encomenda, estado: 'registada'})
+        .map(encomenda => this.encomendas.create({ ...encomenda, estado: 'registada' })
           .pipe(
             map((encomendaDB: Encomenda[]) => encomendaDB[0]),
             map(encomendaDB => {
@@ -160,13 +160,28 @@ ${this.assistencia.relatorio_cliente}`
     }
   }
 
-  saveAssistencia(newEstado: string, assistencia: Assistencia) {
+  cleanEmptyMaterialAndEncomendas(arg: Assistencia) {
+    const assistencia = clone(arg);
+    let material;
+    let encomendas;
+    material
+    ? material = assistencia.material
+      .filter(artigo => artigo.qty > 0)
+    :  null;
+
+    let encomendas = assistencia.encomendas
+      .filter(artigo => artigo.qty > 0);
+    return { ...assistencia, material, encomendas };
+  }
+
+  saveAssistencia(newEstado: string, arg: Assistencia) {
+    const assistencia = this.cleanEmptyMaterialAndEncomendas(arg);
     if (newEstado !== 'em análise' && !assistencia.relatorio_cliente) {
       return alert('Preenche o relatório para o cliente!');
     }
-    return this.saveChangesOnStock(this.assistencia.material)
+    return this.saveChangesOnStock(assistencia.material)
       .pipe(
-        concatMap(() => this.createEncomendasOnApi(this.assistencia.encomendas)),
+        concatMap(() => this.createEncomendasOnApi(assistencia.encomendas)),
         concatMap(
           (encomendas) => this.assistencias
             .patch(
@@ -174,7 +189,7 @@ ${this.assistencia.relatorio_cliente}`
               {
                 ...assistencia,
                 estado: newEstado,
-                material: this.assistencia.material,
+                material: assistencia.material,
                 encomendas
               })
             .pipe(
