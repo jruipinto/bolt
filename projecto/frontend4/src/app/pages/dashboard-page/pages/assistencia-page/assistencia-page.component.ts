@@ -162,20 +162,20 @@ ${this.assistencia.relatorio_cliente}`
 
   cleanEmptyMaterialAndEncomendas(arg: Assistencia) {
     const assistencia = clone(arg);
-    let material;
-    let encomendas;
-    material
-    ? material = assistencia.material
-      .filter(artigo => artigo.qty > 0)
-    :  null;
+    const material = assistencia.material
+      ? assistencia.material
+        .filter(artigo => artigo.qty > 0)
+      : null;
 
-    let encomendas = assistencia.encomendas
-      .filter(artigo => artigo.qty > 0);
+    const encomendas = assistencia.encomendas
+      ? assistencia.encomendas
+        .filter(artigo => artigo.qty > 0)
+      : null;
     return { ...assistencia, material, encomendas };
   }
 
   saveAssistencia(newEstado: string, arg: Assistencia) {
-    const assistencia = this.cleanEmptyMaterialAndEncomendas(arg);
+    const assistencia = clone(arg);
     if (newEstado !== 'em análise' && !assistencia.relatorio_cliente) {
       return alert('Preenche o relatório para o cliente!');
     }
@@ -319,6 +319,17 @@ ${this.assistencia.relatorio_cliente}`
       : this.assistencia.encomendas = [encomenda];
     this.wizard.reset();
     ++this.newEncomendasCounter;
+  }
+
+  encomendasChanged(arg: Encomenda) {
+    this.assistencia.encomendas = this.assistencia.encomendas
+      .filter(({ id }) => id !== arg.id);
+    this.newEncomendasCounter = this.assistencia.encomendas.filter(({ estado }) => estado === 'nova').length;
+  }
+
+  materialChanged(arg: Artigo) {
+    this.assistencia.material = this.assistencia.material
+      .filter(({ id }) => id !== arg.id);
   }
 
 }
