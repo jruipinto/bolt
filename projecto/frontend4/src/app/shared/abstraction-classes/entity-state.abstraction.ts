@@ -122,6 +122,11 @@ export abstract class EntityStateAbstraction {
       this.get(id),
       this.onCreated(),
       this.onPatched()
+    ).pipe(
+      concatMap(() => this.state$.pipe(
+        first(),
+        map(state => state.filter(s => s.id === id))
+      ))
     );
 
   }
