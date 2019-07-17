@@ -67,25 +67,31 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
         map(res => res[0]),
         tap(assistencia => this.assistenciaOnInit = clone(assistencia))
       )
-      .subscribe(assistencia => {
+      .subscribe(assistencia => {/*
         if (this.assistencia) {
           const receivedAssistencia = clone(assistencia);
-          this.assistencia = {
-            ...receivedAssistencia,
-            relatorio_interno: `alterado por outro utilizador ${receivedAssistencia.updatedAt}:
+          if (receivedAssistencia.relatorio_interno !== this.assistencia.relatorio_interno
+            || receivedAssistencia.relatorio_cliente !== this.assistencia.relatorio_cliente) {
+            this.assistencia = {
+              ...receivedAssistencia,
+              relatorio_interno: `alterado por outro utilizador ${receivedAssistencia.updatedAt}:
 ${receivedAssistencia.relatorio_interno}
 -------------------------------------
 tuas alterações:
 ${this.assistencia.relatorio_interno}`,
-            relatorio_cliente: `alterado por outro utilizador ${receivedAssistencia.updatedAt}:
+              relatorio_cliente: `alterado por outro utilizador ${receivedAssistencia.updatedAt}:
 ${receivedAssistencia.relatorio_cliente}
 -------------------------------------
 tuas alterações:
 ${this.assistencia.relatorio_cliente}`
-          };
+            };
+          } else {
+            this.assistencia = clone(assistencia);
+          }
         } else {
           this.assistencia = clone(assistencia);
-        }
+        }*/
+        if (!this.assistencia) { this.assistencia = clone(assistencia); }
       });
   }
 
