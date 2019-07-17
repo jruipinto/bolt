@@ -254,19 +254,20 @@ ${this.assistencia.relatorio_cliente}`
                 artigo => {
                   const id = this.assistencia.material.findIndex(item => item.id === artigo.id);
                   if (id > -1) {
-                    if (!this.assistenciaOnInit.material || !this.assistenciaOnInit.material[id].qty) {
+                    if (!this.assistenciaOnInit.material.length || !this.assistenciaOnInit.material[id].qty) {
                       return { ...artigo, qty: artigo.qty - this.assistencia.material[id].qty };
-                    } else {
-                      return { ...artigo, qty: artigo.qty - (this.assistencia.material[id].qty - this.assistenciaOnInit.material[id].qty) };
                     }
-                  } else {
-                    return artigo;
+                    if (!this.assistencia.material[id].qty && this.assistenciaOnInit.material[id].qty) {
+                      return { ...artigo, qty: artigo.qty - (0 - this.assistenciaOnInit.material[id].qty) };
+                    }
+                    return { ...artigo, qty: artigo.qty - (this.assistencia.material[id].qty - this.assistenciaOnInit.material[id].qty) };
+
                   }
+                  return artigo;
                 }
               );
-            } else {
-              return artigos;
             }
+            return artigos;
           })
         )
         .subscribe((res: Artigo[]) => this.artigoSearchResults = clone(res));
@@ -322,14 +323,21 @@ ${this.assistencia.relatorio_cliente}`
   }
 
   encomendasChanged(arg: Encomenda) {
-    this.assistencia.encomendas = this.assistencia.encomendas
-      .filter(({ id }) => id !== arg.id);
+    if (arg.qty < 1) {
+      this.assistencia.encomendas = this.assistencia.encomendas
+        .filter(({ estado }) => estado === 'nova') // only let to clean 'nova' encomendas
+        .filter(({ id }) => id !== arg.id);
+    }
     this.newEncomendasCounter = this.assistencia.encomendas.filter(({ estado }) => estado === 'nova').length;
+    this.artigoSearchResults = []; // reset this variable to enforce new search if needed
   }
 
   materialChanged(arg: Artigo) {
-    this.assistencia.material = this.assistencia.material
-      .filter(({ id }) => id !== arg.id);
+    if (arg.qty < 1) {
+      this.assistencia.material = this.assistencia.material
+        .filter(({ id }) => id !== arg.id);
+    }
+    this.artigoSearchResults = []; // reset this variable to enforce new search if needed
   }
 
 }

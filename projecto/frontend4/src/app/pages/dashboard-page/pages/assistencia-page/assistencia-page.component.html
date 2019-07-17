@@ -88,7 +88,7 @@
                   <button class="btn btn-link" (click)="artigoSearchModal = true">Adicionar material</button>
                 </div>
               </div>
-              <div class="clr-row" *ngIf="assistencia.material">
+              <div class="clr-row" *ngIf="assistencia.material.length">
                 <div class="clr-col">
                   <clr-datagrid>
                     <clr-dg-column>Qty</clr-dg-column>
@@ -117,7 +117,7 @@
                   <button class="btn btn-link" (click)="encomendaWizard = true">Adicionar encomenda</button>
                 </div>
               </div>
-              <div class="clr-row" *ngIf="assistencia.encomendas">
+              <div class="clr-row" *ngIf="assistencia.encomendas.length">
                 <div class="clr-col">
                   <clr-datagrid>
                     <clr-dg-column>Qty</clr-dg-column>
