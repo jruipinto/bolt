@@ -90,73 +90,52 @@ ${this.assistencia.relatorio_cliente}`
   }
 
   ngOnDestroy() { }
+
   saveChangesOnStock(arg: Partial<Artigo>[]): Observable<any> {
     const currentMaterial = clone(arg);
     const materialOnInit = clone(this.assistenciaOnInit.material);
-    if (!currentMaterial && !materialOnInit) { return of(null); }
-    if (!currentMaterial && materialOnInit) {
-      return concat(materialOnInit.forEach(
-        (artigoOnInit: Artigo) => this.artigos.get(artigoOnInit.id)
-        .pipe(
-          map(res => res[0]),
-          map( artigoOnDB => {
-            const {
-              createdAt,
-              updatedAt,
-              ...artigoMod
-            } = artigoDB;
-            return artigoMod;
-          }),
-          concatMap(
-            artigoOnDB => { // continue development here}
-          )
-        )
-      )).pipe(concatMap(a => a), toArray());
-    }
-    if (currentMaterial && !materialOnInit) {}
-  }
-
-  /*saveChangesOnStock(material: Partial<Artigo>[]) {
-    if (material) {
-      return concat(material.map(
-        (artigo: Artigo) => this.artigos.get(artigo.id)
+    const newMaterial = materialOnInit && materialOnInit.length
+      ? materialOnInit.map(
+        artigoOnInit => {
+          const currentArtigo = currentMaterial.find(a => a.id === artigoOnInit.id);
+          if (!currentArtigo) {
+            return { ...artigoOnInit, qty: 0 };
+          }
+          return currentArtigo;
+        }
+      )
+      : currentMaterial;
+    return concat(
+      newMaterial.map(
+        (currentArtigo: Artigo) => this.artigos.get(currentArtigo.id)
           .pipe(
             map((res) => res[0]),
-            map(artigoDB => {
+            map(artigoOnDB => {
               const {
                 createdAt,
                 updatedAt,
-                ...artigoMod
-              } = artigoDB;
-              return artigoMod;
+                ...artigoOnDBMod
+              } = artigoOnDB;
+              return artigoOnDBMod;
             }),
-            concatMap(
-              dbArtigo => {
-                if (!this.assistenciaOnInit.material) {
-                  return this.artigos.patch(
-                    dbArtigo.id,
-                    { ...dbArtigo, qty: dbArtigo.qty - artigo.qty }
-                  );
-                }
-                const id = this.assistenciaOnInit.material.findIndex(obj => obj.id === artigo.id);
-                if (id < 0) {
-                  return this.artigos.patch(
-                    dbArtigo.id,
-                    { ...dbArtigo, qty: dbArtigo.qty - artigo.qty }
-                  );
-                }
+            concatMap(artigoOnDB => {
+              const artigoOnInit = materialOnInit.find(a => a.id === artigoOnDB.id);
+              if (!artigoOnInit) {
                 return this.artigos.patch(
-                  dbArtigo.id,
-                  { ...dbArtigo, qty: dbArtigo.qty - (artigo.qty - this.assistenciaOnInit.material[id].qty) }
+                  artigoOnDB.id,
+                  { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty }
                 );
               }
+              return this.artigos.patch(
+                artigoOnDB.id,
+                { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty + artigoOnInit.qty }
+              );
+            }
             )
           )
-      )).pipe(concatMap(a => a), toArray());
-    }
-    return of(null);
+      )
+    ).pipe(concatMap(a => a), toArray());
   }
-  */
 
   createEncomendasOnApi(args: Partial<Encomenda>[]) {
     if (args && args) {
@@ -184,20 +163,6 @@ ${this.assistencia.relatorio_cliente}`
     } else {
       return of(null);
     }
-  }
-
-  cleanEmptyMaterialAndEncomendas(arg: Assistencia) {
-    const assistencia = clone(arg);
-    const material = assistencia.material
-      ? assistencia.material
-        .filter(artigo => artigo.qty > 0)
-      : null;
-
-    const encomendas = assistencia.encomendas
-      ? assistencia.encomendas
-        .filter(artigo => artigo.qty > 0)
-      : null;
-    return { ...assistencia, material, encomendas };
   }
 
   saveAssistencia(newEstado: string, arg: Assistencia) {
@@ -275,25 +240,6 @@ ${this.assistencia.relatorio_cliente}`
         .find(JSON.parse(dbQuery))
         .pipe(
           map((artigos: Artigo[]) => {
-            /*if (this.assistencia.material) {
-              return artigos.map(
-                artigo => {
-                  const id = this.assistencia.material.findIndex(item => item.id === artigo.id);
-                  if (id > -1) {
-                    if (!this.assistenciaOnInit.material.length || !this.assistenciaOnInit.material[id].qty) {
-                      return { ...artigo, qty: artigo.qty - this.assistencia.material[id].qty };
-                    }
-                    if (!this.assistencia.material[id].qty && this.assistenciaOnInit.material[id].qty) {
-                      return { ...artigo, qty: artigo.qty - (0 - this.assistenciaOnInit.material[id].qty) };
-                    }
-                    return { ...artigo, qty: artigo.qty - (this.assistencia.material[id].qty - this.assistenciaOnInit.material[id].qty) };
-
-                  }
-                  return artigo;
-                }
-              );
-            }
-            return artigos;*/
             return artigos.map(
               artigoOnDB => {
                 const currentArtigo = this.assistencia.material.find(a => a.id === artigoOnDB.id);
