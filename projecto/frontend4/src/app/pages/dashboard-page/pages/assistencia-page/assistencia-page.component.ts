@@ -90,8 +90,33 @@ ${this.assistencia.relatorio_cliente}`
   }
 
   ngOnDestroy() { }
+  saveChangesOnStock(arg: Partial<Artigo>[]): Observable<any> {
+    const currentMaterial = clone(arg);
+    const materialOnInit = clone(this.assistenciaOnInit.material);
+    if (!currentMaterial && !materialOnInit) { return of(null); }
+    if (!currentMaterial && materialOnInit) {
+      return concat(materialOnInit.forEach(
+        (artigoOnInit: Artigo) => this.artigos.get(artigoOnInit.id)
+        .pipe(
+          map(res => res[0]),
+          map( artigoOnDB => {
+            const {
+              createdAt,
+              updatedAt,
+              ...artigoMod
+            } = artigoDB;
+            return artigoMod;
+          }),
+          concatMap(
+            artigoOnDB => { // continue development here}
+          )
+        )
+      )).pipe(concatMap(a => a), toArray());
+    }
+    if (currentMaterial && !materialOnInit) {}
+  }
 
-  saveChangesOnStock(material: Partial<Artigo>[]) {
+  /*saveChangesOnStock(material: Partial<Artigo>[]) {
     if (material) {
       return concat(material.map(
         (artigo: Artigo) => this.artigos.get(artigo.id)
@@ -131,6 +156,7 @@ ${this.assistencia.relatorio_cliente}`
     }
     return of(null);
   }
+  */
 
   createEncomendasOnApi(args: Partial<Encomenda>[]) {
     if (args && args) {
@@ -249,7 +275,7 @@ ${this.assistencia.relatorio_cliente}`
         .find(JSON.parse(dbQuery))
         .pipe(
           map((artigos: Artigo[]) => {
-            if (this.assistencia.material) {
+            /*if (this.assistencia.material) {
               return artigos.map(
                 artigo => {
                   const id = this.assistencia.material.findIndex(item => item.id === artigo.id);
@@ -267,7 +293,23 @@ ${this.assistencia.relatorio_cliente}`
                 }
               );
             }
-            return artigos;
+            return artigos;*/
+            return artigos.map(
+              artigoOnDB => {
+                const currentArtigo = this.assistencia.material.find(a => a.id === artigoOnDB.id);
+                const artigoOnInit = this.assistenciaOnInit.material.find(a => a.id === artigoOnDB.id);
+                if (!currentArtigo && !artigoOnInit) {
+                  return artigoOnDB;
+                }
+                if (!currentArtigo && artigoOnInit) {
+                  return { ...artigoOnDB, qty: artigoOnDB.qty + artigoOnInit.qty };
+                }
+                if (currentArtigo && !artigoOnInit) {
+                  return { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty };
+                }
+                return { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty + artigoOnInit.qty };
+              }
+            );
           })
         )
         .subscribe((res: Artigo[]) => this.artigoSearchResults = clone(res));
@@ -329,7 +371,7 @@ ${this.assistencia.relatorio_cliente}`
         .filter(({ id }) => id !== arg.id);
     }
     this.newEncomendasCounter = this.assistencia.encomendas.filter(({ estado }) => estado === 'nova').length;
-    this.artigoSearchResults = []; // reset this variable to enforce new search if needed
+    this.artigoSearchResults = null; // reset this variable to enforce new search if needed
   }
 
   materialChanged(arg: Artigo) {
@@ -337,7 +379,7 @@ ${this.assistencia.relatorio_cliente}`
       this.assistencia.material = this.assistencia.material
         .filter(({ id }) => id !== arg.id);
     }
-    this.artigoSearchResults = []; // reset this variable to enforce new search if needed
+    this.artigoSearchResults = null; // reset this variable to enforce new search if needed
   }
 
 }
