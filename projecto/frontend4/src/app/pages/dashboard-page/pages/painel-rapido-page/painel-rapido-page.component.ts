@@ -12,7 +12,7 @@ import { AssistenciasService, EncomendasService } from 'src/app/shared/state';
   selector: 'app-painel-rapido-page',
   templateUrl: './painel-rapido-page.component.html',
   styleUrls: ['./painel-rapido-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PainelRapidoPageComponent implements OnInit, OnDestroy {
 
