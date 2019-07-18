@@ -98,49 +98,52 @@ ${this.assistencia.relatorio_cliente}`
   ngOnDestroy() { }
 
   saveChangesOnStock(arg: Partial<Artigo>[]): Observable<any> {
-    const currentMaterial = clone(arg);
-    const materialOnInit = clone(this.assistenciaOnInit.material);
-    const newMaterial = materialOnInit && materialOnInit.length
-      ? materialOnInit.map(
-        artigoOnInit => {
-          const currentArtigo = currentMaterial.find(a => a.id === artigoOnInit.id);
-          if (!currentArtigo) {
-            return { ...artigoOnInit, qty: 0 };
+    if (arg && arg.length) {
+      const currentMaterial = clone(arg);
+      const materialOnInit = clone(this.assistenciaOnInit.material);
+      const newMaterial = materialOnInit && materialOnInit.length
+        ? materialOnInit.map(
+          artigoOnInit => {
+            const currentArtigo = currentMaterial.find(a => a.id === artigoOnInit.id);
+            if (!currentArtigo) {
+              return { ...artigoOnInit, qty: 0 };
+            }
+            return currentArtigo;
           }
-          return currentArtigo;
-        }
-      )
-      : currentMaterial;
-    return concat(
-      newMaterial.map(
-        (currentArtigo: Artigo) => this.artigos.get(currentArtigo.id)
-          .pipe(
-            map((res) => res[0]),
-            map(artigoOnDB => {
-              const {
-                createdAt,
-                updatedAt,
-                ...artigoOnDBMod
-              } = artigoOnDB;
-              return artigoOnDBMod;
-            }),
-            concatMap(artigoOnDB => {
-              const artigoOnInit = materialOnInit.find(a => a.id === artigoOnDB.id);
-              if (!artigoOnInit) {
+        )
+        : currentMaterial;
+      return concat(
+        newMaterial.map(
+          (currentArtigo: Artigo) => this.artigos.get(currentArtigo.id)
+            .pipe(
+              map((res) => res[0]),
+              map(artigoOnDB => {
+                const {
+                  createdAt,
+                  updatedAt,
+                  ...artigoOnDBMod
+                } = artigoOnDB;
+                return artigoOnDBMod;
+              }),
+              concatMap(artigoOnDB => {
+                const artigoOnInit = materialOnInit.find(a => a.id === artigoOnDB.id);
+                if (!artigoOnInit) {
+                  return this.artigos.patch(
+                    artigoOnDB.id,
+                    { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty }
+                  );
+                }
                 return this.artigos.patch(
                   artigoOnDB.id,
-                  { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty }
+                  { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty + artigoOnInit.qty }
                 );
               }
-              return this.artigos.patch(
-                artigoOnDB.id,
-                { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty + artigoOnInit.qty }
-              );
-            }
+              )
             )
-          )
-      )
-    ).pipe(concatMap(a => a), toArray());
+        )
+      ).pipe(concatMap(a => a), toArray());
+    }
+    return of(null);
   }
 
   createEncomendasOnApi(args: Partial<Encomenda>[]) {
