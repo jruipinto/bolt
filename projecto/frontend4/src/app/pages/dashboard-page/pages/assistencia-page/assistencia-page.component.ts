@@ -251,8 +251,12 @@ ${this.assistencia.relatorio_cliente}`
           map((artigos: Artigo[]) => {
             return artigos.map(
               artigoOnDB => {
-                const currentArtigo = this.assistencia.material.find(a => a.id === artigoOnDB.id);
-                const artigoOnInit = this.assistenciaOnInit.material.find(a => a.id === artigoOnDB.id);
+                const currentArtigo = this.assistencia.material
+                  ? this.assistencia.material.find(a => a.id === artigoOnDB.id)
+                  : null;
+                const artigoOnInit = this.assistenciaOnInit.material
+                  ? this.assistenciaOnInit.material.find(a => a.id === artigoOnDB.id)
+                  : null;
                 if (!currentArtigo && !artigoOnInit) {
                   return artigoOnDB;
                 }
