@@ -59,10 +59,34 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.assistencias
-      .findAndWatch()
+      .findAndWatch({
+        query: {
+          $limit: 200, estado: {
+            $in: [
+              'orçamento pendente',
+              'não atendeu p/ orç.',
+              'cliente adiou orç.',
+              'contacto pendente',
+              'não atendeu p/ cont.',
+              'cliente adiou resp.'
+            ]
+          }
+        }
+      })
       .subscribe();
     this.encomendas
-      .findAndWatch()
+      .findAndWatch({
+        query: {
+          $limit: 200, estado: {
+            $in: [
+              'registada',
+              'esgotada',
+              'detectado defeito',
+              'aguarda reposta de fornecedor'
+            ]
+          }
+        }
+      })
       .subscribe();
   }
 

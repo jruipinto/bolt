@@ -37,7 +37,15 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.assistencias
-      .findAndWatch({ query: { $limit: 200, estado: { $ne: 'entregue' } } })
+      .findAndWatch({ query: { $limit: 200, estado: { $in: [
+        'recebido',
+        'em análise',
+        'contactado',
+        'incontactável',
+        'orçamento aprovado',
+        'orçamento recusado',
+        'material recebido'
+      ] } } })
       .subscribe();
   }
 

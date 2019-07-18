@@ -17,10 +17,10 @@ import { of } from 'rxjs';
 export class ArtigoPageComponent implements OnInit, OnDestroy {
   public artigoForm = this.fb.group({
     id: [null],
-    marca: [null],
-    modelo: [null],
-    descricao: [null, [Validators.required]],
-    localizacao: [null],
+    marca: [null, [Validators.maxLength(45)]],
+    modelo: [null, [Validators.maxLength(45)]],
+    descricao: [null, [Validators.required, Validators.maxLength(255)]],
+    localizacao: [null, [Validators.maxLength(5)]],
     qty: [null],
     preco: [null],
     pvp: [null]
@@ -45,10 +45,21 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
             return of();
           }
         })
+      ).subscribe();
+    this.route.paramMap
+      .pipe(
+        map((params: ParamMap) => +params.get('id')),
+        concatMap((id: number) => this.artigos.state$
+          .pipe(map((state: Artigo[]) => {
+            return state && state.length
+            ? state.filter(a => a.id === id)
+            : null;
+          }))
+        )
       )
       .subscribe(
         (artigo: Artigo[]) => {
-          if (artigo[0]) {
+          if (artigo && artigo.length) {
             this.artigoForm.patchValue(artigo[0]);
           }
         }
