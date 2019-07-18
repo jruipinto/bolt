@@ -7,7 +7,7 @@ import { sortByID } from '../utilities';
 export abstract class EntityStateAbstraction {
   private defaults = [];
   private source = new BehaviorSubject<any[]>(this.defaults);
-  public state$ = this.source.asObservable();
+  public state$ = this.source;
   private lostConnection = false;
 
   private windowOffline$ = fromEvent(window, 'offline');
