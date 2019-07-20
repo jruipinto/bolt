@@ -126,7 +126,7 @@ ${this.assistencia.relatorio_cliente}`
                 return artigoOnDBMod;
               }),
               concatMap(artigoOnDB => {
-                const artigoOnInit = materialOnInit.find(a => a.id === artigoOnDB.id);
+                const artigoOnInit = materialOnInit ? materialOnInit.find(a => a.id === artigoOnDB.id) : null;
                 if (!artigoOnInit) {
                   return this.artigos.patch(
                     artigoOnDB.id,
