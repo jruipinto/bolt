@@ -60,6 +60,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
     return of([encomenda]);
   }
 
+  /*
   saveEncomenda(newEstado: string, encomenda: Encomenda) {
     if (newEstado === 'recebida' || newEstado === 'entregue') {
       if (encomenda.cliente_user_contacto === 918867376 || encomenda.assistencia_id) { // if encomenda for Stock of NReparações
@@ -82,6 +83,36 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
         )
         .subscribe();
     }
+    return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
+      .pipe(
+        tap(() => window.history.back())
+      )
+      .subscribe();
+  }
+  */
+
+  saveEncomenda(newEstado: string, encomenda: Encomenda) {
+    if ((newEstado === 'recebida' || newEstado === 'entregue') && encomenda.cliente_user_contacto === 918867376) {
+      return this.encomendas.patch(encomenda.id, { ...encomenda, estado: 'entregue' })
+        .pipe(
+          tap(
+            () => this.router.navigate(['/dashboard/artigo', encomenda.artigo_id])
+          )
+        )
+        .subscribe();
+    }
+    if ((newEstado === 'recebida' || newEstado === 'entregue') && encomenda.assistencia_id) {
+      return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
+        .pipe(
+          map(res => res[0]),
+          concatMap(this.notifyAssistencia),
+          tap(
+            () => this.router.navigate(['/dashboard/artigo', encomenda.artigo_id])
+          )
+        )
+        .subscribe(() => alert(`👍 Assistência ${encomenda.assistencia_id} foi notificada da chegada de material!`));
+    }
+
     return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
       .pipe(
         tap(() => window.history.back())
