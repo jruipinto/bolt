@@ -64,6 +64,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     const assistenciaID = +arg;
     console.log('valor:', typeof assistenciaID, assistenciaID, arg);
     if (assistenciaID && typeof assistenciaID === 'number' && assistenciaID > 0) {
+      this.router.navigate(['/dashboard']);
       return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
     }
     return alert('valor incorrecto para pesquisa');
