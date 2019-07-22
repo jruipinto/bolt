@@ -27,11 +27,13 @@ export class AssistenciasConcluidasPageComponent implements OnInit, OnDestroy {
       )
     );
 
-  ngOnInit() {
-    this.assistencias
-      .findAndWatch({ query: { $limit: 200, estado: { $ne: 'entregue' } } })
-      .subscribe();
-  }
+    ngOnInit() {
+      this.assistencias
+        .findAndWatch({ query: { $limit: 200, estado: { $in: [
+          'concluído'
+        ] } } })
+        .subscribe();
+    }
 
   ngOnDestroy() { }
 
