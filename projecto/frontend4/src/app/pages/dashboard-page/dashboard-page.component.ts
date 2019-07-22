@@ -4,6 +4,8 @@ import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { AuthService } from 'src/app/shared';
 import { UI, UIService } from 'src/app/shared/state';
+import { Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
 
 @AutoUnsubscribe()
 @Component({
@@ -14,8 +16,17 @@ import { UI, UIService } from 'src/app/shared/state';
 export class DashboardPageComponent implements OnInit, OnDestroy {
   public userName: string;
   public sidebarVisible = false;
+  // public assistenciaID: string;
+  public dashboardSearchBarForm = this.fb.group({
+    assistenciaID: [null]
+  });
 
-  constructor(private authService: AuthService, private uiService: UIService) { }
+
+  constructor(
+    private authService: AuthService,
+    private uiService: UIService,
+    private router: Router,
+    private fb: FormBuilder) { }
 
   public assistenciaModalVisible$: Observable<boolean> = this.uiService.state$
     .pipe(
@@ -47,6 +58,15 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     } else {
       this.sidebarVisible = false;
     }
+  }
+
+  openAssistencia(arg: number) {
+    const assistenciaID = +arg;
+    console.log('valor:', typeof assistenciaID, assistenciaID, arg);
+    if (assistenciaID && typeof assistenciaID === 'number' && assistenciaID > 0) {
+      return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
+    }
+    return alert('valor incorrecto para pesquisa');
   }
 
 }

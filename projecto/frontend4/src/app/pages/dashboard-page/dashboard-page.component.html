@@ -7,6 +7,11 @@
         <span class="title">N Reparações</span>
       </a>
     </div>
+    <form class="search" [formGroup]="dashboardSearchBarForm" (ngSubmit)="openAssistencia(dashboardSearchBarForm.value.assistenciaID)">
+      <label for="search_input">
+        <input id="search_input" type="text" placeholder="Ficha..." formControlName="assistenciaID">
+      </label>
+    </form>
     <div class="header-actions">
       <clr-dropdown>
         <button class="nav-text" clrDropdownTrigger>
