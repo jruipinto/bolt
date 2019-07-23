@@ -1,39 +1,17 @@
 <clr-radio-container clrInline>
   <label>Encomendas</label>
   <clr-radio-wrapper>
-    <input type="radio" clrRadio name="radioOption" required value="todas" [(ngModel)]="radioOption" />
+    <input type="radio" clrRadio name="radioOption" required value="todas" (click)="filterEncomendas('todas')" checked />
     <label>Todas</label>
   </clr-radio-wrapper>
   <clr-radio-wrapper>
-    <input type="radio" clrRadio name="radioOption" required value="marcadas" [(ngModel)]="radioOption" />
+    <input type="radio" clrRadio name="radioOption" required value="marcadas" (click)="filterEncomendas('marcadas')" />
     <label>Marcadas para ir ao fornecedor</label>
   </clr-radio-wrapper>
 </clr-radio-container>
 
-<div  class="separate" *ngIf="radioOption === 'todas'">
-  <r-data-row class="clr-row" *ngFor="let encomenda of encomendasActivas$ | async; let listaIndex=index"
-    (click)="openEncomenda(encomenda.id)">
-    <div class="clr-col-lg-1 fontheavy">
-      {{encomenda.id}}
-    </div>
-    <div class="clr-col-lg-2">
-      Prazo: {{encomenda.previsao_entrega}}
-    </div>
-    <div class="clr-col-lg-5">
-      {{encomenda.qty}} x {{encomenda.artigo_descricao}} {{encomenda.artigo_marca}}
-      {{encomenda.artigo_modelo}}
-    </div>
-    <div class="clr-col-lg-2">
-      Orç: {{encomenda.orcamento | currency: 'EUR'}}
-    </div>
-    <div class="clr-col-lg-2">
-      {{encomenda.estado}}
-    </div>
-  </r-data-row>
-</div>
-
-<div  class="separate" *ngIf="radioOption === 'marcadas'">
-  <r-data-row class="clr-row" *ngFor="let encomenda of encomendasMarcadas$ | async; let listaIndex=index"
+<div  class="separate">
+  <r-data-row class="clr-row" *ngFor="let encomenda of encomendas$ | async; let listaIndex=index"
     (click)="openEncomenda(encomenda.id)">
     <div class="clr-col-lg-1 fontheavy">
       {{encomenda.id}}

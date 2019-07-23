@@ -1,7 +1,21 @@
-<div *ngIf="(assistencias$ | async) as assistencias">
+<clr-radio-container clrInline>
+  <label>Assistências</label>
+  <clr-radio-wrapper>
+    <input type="radio" clrRadio name="radioOption" required value="todas" (click)="filterAssistencias('todas')"
+      checked />
+    <label>Todas</label>
+  </clr-radio-wrapper>
+  <clr-radio-wrapper>
+    <input type="radio" clrRadio name="radioOption" required value="a fechar"
+      (click)="filterAssistencias('a fechar')" />
+    <label>A fechar</label>
+  </clr-radio-wrapper>
+</clr-radio-container>
+
+<div *ngIf="(assistencias$ | async) as assistencias" class="separate">
   <div *ngIf="assistencias.length>0">
     <r-data-row class="clr-row overflow-hidden" *ngFor="let assistencia of assistencias; let listaIndex=index"
-    (click)="openAssistencia(assistencia.id)">
+      (click)="openAssistencia(assistencia.id)">
       <div class="clr-col-lg-2">
         <div class="clr-row">
           <div class="clr-col-lg-4 fontheavy">

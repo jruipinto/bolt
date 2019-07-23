@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { EncomendasService, UIService } from 'src/app/shared/state';
+import { Observable } from 'rxjs';
+import { Encomenda } from 'src/app/shared';
 
 @AutoUnsubscribe()
 @Component({
@@ -11,11 +13,10 @@ import { EncomendasService, UIService } from 'src/app/shared/state';
   styleUrls: ['./encomendas-page.component.scss']
 })
 export class EncomendasPageComponent implements OnInit, OnDestroy {
-  public radioOption: 'todas' | 'marcadas' = 'todas';
+  public encomendas$: Observable<Encomenda[]>;
 
   constructor(
     private encomendas: EncomendasService,
-    private uiService: UIService,
     private router: Router) {
   }
 
@@ -33,39 +34,11 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
     entregue
   */
 
-  public encomendasActivas$ = this.encomendas.state$
-    .pipe(
-      map(state =>
-        state
-          ? state.filter(encomenda =>
-            encomenda.estado === 'registada'
-            || encomenda.estado === 'marcada para ir ao fornecedor'
-            || encomenda.estado === 'adquirida'
-            || encomenda.estado === 'esgotada'
-            || encomenda.estado === 'sem fornecedor'
-            || encomenda.estado === 'aguarda reposta de fornecedor'
-            || encomenda.estado === 'aguarda entrega'
-            || encomenda.estado === 'recebida'
-            || encomenda.estado === 'detectado defeito')
-          : null
-      )
-    );
-
-  public encomendasMarcadas$ = this.encomendas.state$
-    .pipe(
-      map(state =>
-        state
-          ? state.filter(encomenda =>
-            encomenda.estado === 'marcada para ir ao fornecedor'
-          )
-          : null
-      )
-    );
-
   ngOnInit() {
     this.encomendas
       .findAndWatch({ query: { $limit: 200, estado: { $ne: 'entregue' } } })
       .subscribe();
+    this.filterEncomendas('todas');
   }
 
   ngOnDestroy() { }
@@ -73,6 +46,40 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
 
   openEncomenda(encomendaID: number) {
     return this.router.navigate(['/dashboard/encomenda', encomendaID]);
+  }
+
+  filterEncomendas(arg: 'todas' | 'marcadas') {
+    if (arg === 'todas') {
+      return this.encomendas$ = this.encomendas.state$
+        .pipe(
+          map(state =>
+            state
+              ? state.filter(encomenda =>
+                encomenda.estado === 'registada'
+                || encomenda.estado === 'marcada para ir ao fornecedor'
+                || encomenda.estado === 'adquirida'
+                || encomenda.estado === 'esgotada'
+                || encomenda.estado === 'sem fornecedor'
+                || encomenda.estado === 'aguarda reposta de fornecedor'
+                || encomenda.estado === 'aguarda entrega'
+                || encomenda.estado === 'recebida'
+                || encomenda.estado === 'detectado defeito')
+              : null
+          )
+        );
+    }
+    if (arg === 'marcadas') {
+      return this.encomendas$ = this.encomendas.state$
+        .pipe(
+          map(state =>
+            state
+              ? state.filter(encomenda =>
+                encomenda.estado === 'marcada para ir ao fornecedor'
+              )
+              : null
+          )
+        );
+    }
   }
 
 }

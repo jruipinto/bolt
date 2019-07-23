@@ -3,6 +3,8 @@ import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { UIService, AssistenciasService } from 'src/app/shared/state';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { Assistencia } from 'src/app/shared';
 
 @AutoUnsubscribe()
 @Component({
@@ -12,41 +14,32 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssistenciasPageComponent implements OnInit, OnDestroy {
+  public assistencias$: Observable<Assistencia[]>;
 
   constructor(
     private assistencias: AssistenciasService,
-    private uiService: UIService,
     private router: Router) {
   }
 
-  public assistencias$ = this.assistencias.state$
-    .pipe(
-      map(state =>
-        state
-          ? state.filter(assistencia =>
-            assistencia.estado === 'recebido'
-            || assistencia.estado === 'em análise'
-            || assistencia.estado === 'contactado'
-            || assistencia.estado === 'incontactável'
-            || assistencia.estado === 'orçamento aprovado'
-            || assistencia.estado === 'orçamento recusado'
-            || assistencia.estado === 'material recebido')
-          : null
-      )
-    );
-
   ngOnInit() {
     this.assistencias
-      .findAndWatch({ query: { $limit: 200, estado: { $in: [
-        'recebido',
-        'em análise',
-        'contactado',
-        'incontactável',
-        'orçamento aprovado',
-        'orçamento recusado',
-        'material recebido'
-      ] } } })
+      .findAndWatch({
+        query: {
+          $limit: 200, estado: {
+            $in: [
+              'recebido',
+              'em análise',
+              'contactado',
+              'incontactável',
+              'orçamento aprovado',
+              'orçamento recusado',
+              'material recebido'
+            ]
+          }
+        }
+      })
       .subscribe();
+    this.filterAssistencias('todas');
   }
 
   ngOnDestroy() { }
@@ -60,6 +53,41 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
 
   openAssistencia(assistenciaID: number) {
     return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
+  }
+
+  filterAssistencias(arg: 'todas' | 'a fechar') {
+    if (arg === 'todas') {
+      return this.assistencias$ = this.assistencias.state$
+        .pipe(
+          map(state =>
+            state
+              ? state.filter(assistencia =>
+                assistencia.estado === 'recebido'
+                || assistencia.estado === 'em análise'
+                || assistencia.estado === 'contactado'
+                || assistencia.estado === 'incontactável'
+                || assistencia.estado === 'orçamento aprovado'
+                || assistencia.estado === 'orçamento recusado'
+                || assistencia.estado === 'material recebido')
+              : null
+          )
+        );
+    }
+    if (arg === 'a fechar') {
+      return this.assistencias$ = this.assistencias.state$
+        .pipe(
+          map(state =>
+            state
+              ? state.filter(assistencia =>
+                assistencia.estado === 'contactado'
+                || assistencia.estado === 'incontactável'
+                || assistencia.estado === 'orçamento aprovado'
+                || assistencia.estado === 'orçamento recusado'
+                || assistencia.estado === 'material recebido')
+              : null
+          )
+        );
+    }
   }
 
 }
