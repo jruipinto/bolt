@@ -55,8 +55,8 @@ export class StockPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  openArtigoModal(artigoID?: number) {
-    if (!artigoID) { artigoID = null; }
+  openArtigoModal(arg?: number) {
+    const artigoID = arg ? arg : null;
     return this.uiService.patchState({ artigoModalID: artigoID, artigoModalVisible: true })
       .subscribe();
   }
