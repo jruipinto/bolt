@@ -4,10 +4,24 @@
       <input type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input" formControlName="input" />
     </div>
     <div class="clr-col-xl-3 clr-col-lg-12 padding-bottom-05">
+      <!--
       <div class="btn-group btn-primary">
         <input type="submit" class="btn" value="🔎 Pesquisar" />
-        <button type="button" class="btn" (click)="newArtigo()">+ Novo</button>
-      </div>
+        <div class="btn-group-overflow open">
+          <button class="btn dropdown-toggle">
+            <clr-icon shape="ellipsis-horizontal"></clr-icon>
+          </button>
+          <div class="dropdown-menu">
+            <button class="btn">Ver caixa</button>
+            <button type="button" class="btn" (click)="newArtigo()">+ Novo</button>
+          </div>
+        </div>
+      </div>-->
+      <clr-button-group class="btn-primary" [clrMenuPosition]="'bottom-right'">
+        <clr-button type="button" (click)="searchArtigo(artigoSearchForm.value.input)">🔎 Pesquisar</clr-button>
+        <clr-button type="button" [clrInMenu]="true" (click)="newArtigo()">Novo artigo</clr-button>
+        <clr-button type="button" [clrInMenu]="true" (click)="searchArtigoByLocal(artigoSearchForm.value.input)">Pesquisar por local</clr-button>
+      </clr-button-group>
     </div>
   </div>
 </form>

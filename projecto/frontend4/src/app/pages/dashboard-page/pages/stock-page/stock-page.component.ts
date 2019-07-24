@@ -55,6 +55,29 @@ export class StockPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  searchArtigoByLocal(input?: string) {
+    if (input) {
+      const inputSplited = input.split(' ');
+      const inputMapped = inputSplited.map(word =>
+        '{"$or": [' +
+        '{ "localizacao": { "$like": "%' + word + '%" }}' +
+        ' ]}'
+      );
+      const dbQuery =
+        '{' +
+        '"query": {' +
+        '"$limit": "200",' +
+        '"$and": [' +
+        inputMapped +
+        ']' +
+        '}' +
+        '}';
+
+      this.results$ = this.artigos
+        .find(JSON.parse(dbQuery));
+    }
+  }
+
   openArtigoModal(arg?: number) {
     const artigoID = arg ? arg : null;
     return this.uiService.patchState({ artigoModalID: artigoID, artigoModalVisible: true })
