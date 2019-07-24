@@ -168,9 +168,27 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  searchUser(userName: string) {
-    const condition = JSON.parse('"%' + userName + '%"');
-    this.userSearchResults$ = this.usersService.find({ query: { $limit: 200, nome: { $like: condition } } });
+  searchUser(input: string) {
+    if (input) {
+      const inputSplited = input.split(' ');
+      const inputMapped = inputSplited.map(word =>
+        '{"$or": [' +
+        '{ "nome": { "$like": "%' + word + '%" }}' +
+        ' ]}'
+      );
+      const dbQuery =
+        '{' +
+        '"query": {' +
+        '"$limit": "200",' +
+        '"$and": [' +
+        inputMapped +
+        ']' +
+        '}' +
+        '}';
+
+      this.userSearchResults$ = this.usersService
+        .find(JSON.parse(dbQuery));
+    }
   }
 
   addUser(user: User) {
