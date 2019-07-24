@@ -1,7 +1,11 @@
 <clr-radio-container clrInline>
-  <label>Encomendas</label>
+  <label>Encomendas <span class="badge badge-light-blue" *ngIf="(encomendas$ | async) as encomendas">
+      <span *ngIf="encomendas.length < 99">{{encomendas.length}}</span>
+      <span *ngIf="encomendas.length > 99">99+</span>
+    </span></label>
   <clr-radio-wrapper>
-    <input type="radio" clrRadio name="radioOption" required value="todas" (click)="filterEncomendas('todas')" checked />
+    <input type="radio" clrRadio name="radioOption" required value="todas" (click)="filterEncomendas('todas')"
+      checked />
     <label>Todas</label>
   </clr-radio-wrapper>
   <clr-radio-wrapper>
@@ -10,7 +14,7 @@
   </clr-radio-wrapper>
 </clr-radio-container>
 
-<div  class="separate">
+<div class="separate">
   <r-data-row class="clr-row" *ngFor="let encomenda of encomendas$ | async; let listaIndex=index"
     (click)="openEncomenda(encomenda.id)">
     <div class="clr-col-lg-1 fontheavy">

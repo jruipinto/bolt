@@ -1,5 +1,8 @@
 <clr-radio-container clrInline>
-  <label>Assistências</label>
+  <label>Assistências <span class="badge badge-light-blue" *ngIf="(assistencias$ | async) as assistencias">
+      <span *ngIf="assistencias.length < 99">{{assistencias.length}}</span>
+      <span *ngIf="assistencias.length > 99">99+</span>
+    </span></label>
   <clr-radio-wrapper>
     <input type="radio" clrRadio name="radioOption" required value="todas" (click)="filterAssistencias('todas')"
       checked />
