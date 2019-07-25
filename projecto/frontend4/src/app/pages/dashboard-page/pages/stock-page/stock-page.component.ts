@@ -13,6 +13,7 @@ import { ArtigosService, UIService } from 'src/app/shared/state';
   styleUrls: ['./stock-page.component.scss']
 })
 export class StockPageComponent implements OnInit, OnDestroy {
+  public dropdown = false;
   public results$: Observable<Artigo[]>;
   public artigoSearchForm = this.fb.group({
     input: [null]
@@ -90,6 +91,10 @@ export class StockPageComponent implements OnInit, OnDestroy {
 
   newArtigo() {
     return this.router.navigate(['/dashboard/artigo']);
+  }
+
+  toogleDropdown() {
+    this.dropdown = !this.dropdown;
   }
 
 }
