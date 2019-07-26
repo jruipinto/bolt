@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { UIService, AssistenciasService } from 'src/app/shared/state';
+import { AssistenciasService } from 'src/app/shared/state';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Assistencia } from 'src/app/shared';
@@ -14,6 +14,7 @@ import { Assistencia } from 'src/app/shared';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssistenciasPageComponent implements OnInit, OnDestroy {
+  public loading = true;
   public assistencias$: Observable<Assistencia[]>;
 
   constructor(
@@ -38,7 +39,7 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
           }
         }
       })
-      .subscribe();
+      .subscribe(() => this.loading = false);
     this.filterAssistencias('todas');
   }
 

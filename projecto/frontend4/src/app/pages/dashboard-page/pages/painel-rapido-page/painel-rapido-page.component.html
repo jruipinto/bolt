@@ -6,9 +6,16 @@
         <span class="badge badge-light-blue" *ngIf="encomendas.length > 0">{{encomendas.length}}</span>
       </span>
     </h5>
-    <div *ngIf="encomendas$ | async as encomendas">
-        <div *ngIf="encomendas.length === 0">😎 Não há mais encomendas!</div>
-      </div>
+    <div *ngIf="!loadingEncomendas && encomendas$ | async as encomendas">
+      <div *ngIf="encomendas.length === 0">😎 Não há mais encomendas!</div>
+    </div>
+    <div *ngIf="loadingEncomendas">
+      <span class="spinner spinner-inline">
+      </span>
+      <span>
+        A carregar dados...
+      </span>
+    </div>
     <div class="card" *ngFor="let encomenda of encomendas$ | async">
       <div class="card-block">
         <!--
@@ -57,8 +64,15 @@
         <span class="badge badge-light-blue" *ngIf="orcamentos.length > 0">{{orcamentos.length}}</span>
       </span>
     </h5>
-    <div *ngIf="orcamentos$ | async as orcamentos">
+    <div *ngIf="!loadingAssistencias && orcamentos$ | async as orcamentos">
       <div *ngIf="orcamentos.length === 0">😎 Não há mais orçamentos!</div>
+    </div>
+    <div *ngIf="loadingAssistencias">
+      <span class="spinner spinner-inline">
+      </span>
+      <span>
+        A carregar dados...
+      </span>
     </div>
     <div class="card" *ngFor="let orcamento of orcamentos$ | async">
       <div class="card-block">
@@ -100,8 +114,15 @@
           *ngIf="pedidosContactoCliente.length > 0">{{pedidosContactoCliente.length}}</span>
       </span>
     </h5>
-    <div *ngIf="pedidosContactoCliente$ | async as pedidosContactoCliente">
+    <div *ngIf="!loadingAssistencias && pedidosContactoCliente$ | async as pedidosContactoCliente">
       <div *ngIf="pedidosContactoCliente.length === 0">😎 Não há mais pedidos de contacto!</div>
+    </div>
+    <div *ngIf="loadingAssistencias">
+      <span class="spinner spinner-inline">
+      </span>
+      <span>
+        A carregar dados...
+      </span>
     </div>
     <div class="card" *ngFor="let pedidoContactoCliente of pedidosContactoCliente$ | async">
       <div class="card-block">

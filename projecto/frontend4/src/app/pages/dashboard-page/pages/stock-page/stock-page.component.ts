@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Artigo } from 'src/app/shared';
-import { Observable } from 'rxjs';
 import { ArtigosService, UIService } from 'src/app/shared/state';
 
 @AutoUnsubscribe()
@@ -13,7 +12,8 @@ import { ArtigosService, UIService } from 'src/app/shared/state';
   styleUrls: ['./stock-page.component.scss']
 })
 export class StockPageComponent implements OnInit, OnDestroy {
-  public results$: Observable<Artigo[]>;
+  public loading = false;
+  public results: Artigo[];
   public artigoSearchForm = this.fb.group({
     input: [null]
   });
@@ -32,6 +32,7 @@ export class StockPageComponent implements OnInit, OnDestroy {
 
   searchArtigo(input?: string) {
     if (input) {
+      this.loading = true;
       const inputSplited = input.split(' ');
       const inputMapped = inputSplited.map(word =>
         '{"$or": [' +
@@ -50,13 +51,18 @@ export class StockPageComponent implements OnInit, OnDestroy {
         '}' +
         '}';
 
-      this.results$ = this.artigos
-        .findAndWatch(JSON.parse(dbQuery));
+      return this.artigos
+        .findAndWatch(JSON.parse(dbQuery))
+        .subscribe(artigos => {
+          this.loading = false;
+          this.results = artigos;
+        });
     }
   }
 
   searchArtigoByLocal(input?: string) {
     if (input) {
+      this.loading = true;
       const inputSplited = input.split(' ');
       const inputMapped = inputSplited.map(word =>
         '{"$or": [' +
@@ -73,8 +79,12 @@ export class StockPageComponent implements OnInit, OnDestroy {
         '}' +
         '}';
 
-      this.results$ = this.artigos
-        .find(JSON.parse(dbQuery));
+      return this.artigos
+        .find(JSON.parse(dbQuery))
+        .subscribe(artigos => {
+          this.loading = false;
+          this.results = artigos;
+        });
     }
   }
 

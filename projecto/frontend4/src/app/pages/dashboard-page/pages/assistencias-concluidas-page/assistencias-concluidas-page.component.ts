@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./assistencias-concluidas-page.component.scss']
 })
 export class AssistenciasConcluidasPageComponent implements OnInit, OnDestroy {
+  public loading = true;
 
   constructor(
     private assistencias: AssistenciasService,
@@ -27,13 +28,19 @@ export class AssistenciasConcluidasPageComponent implements OnInit, OnDestroy {
       )
     );
 
-    ngOnInit() {
-      this.assistencias
-        .findAndWatch({ query: { $limit: 200, estado: { $in: [
-          'concluído'
-        ] } } })
-        .subscribe();
-    }
+  ngOnInit() {
+    this.assistencias
+      .findAndWatch({
+        query: {
+          $limit: 200, estado: {
+            $in: [
+              'concluído'
+            ]
+          }
+        }
+      })
+      .subscribe(() => this.loading = false);
+  }
 
   ngOnDestroy() { }
 

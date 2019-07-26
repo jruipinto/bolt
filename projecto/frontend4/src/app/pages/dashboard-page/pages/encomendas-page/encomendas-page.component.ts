@@ -13,6 +13,7 @@ import { Encomenda } from 'src/app/shared';
   styleUrls: ['./encomendas-page.component.scss']
 })
 export class EncomendasPageComponent implements OnInit, OnDestroy {
+  public loading = true;
   public encomendas$: Observable<Encomenda[]>;
 
   constructor(
@@ -37,7 +38,7 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.encomendas
       .findAndWatch({ query: { $limit: 200, estado: { $ne: 'entregue' } } })
-      .subscribe();
+      .subscribe(() => this.loading = false);
     this.filterEncomendas('todas');
   }
 

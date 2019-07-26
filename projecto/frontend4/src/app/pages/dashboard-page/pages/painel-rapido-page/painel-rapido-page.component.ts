@@ -15,6 +15,8 @@ import { AssistenciasService, EncomendasService } from 'src/app/shared/state';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PainelRapidoPageComponent implements OnInit, OnDestroy {
+  public loadingEncomendas = true;
+  public loadingAssistencias = true;
 
   constructor(
     private assistencias: AssistenciasService,
@@ -73,7 +75,7 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
           }
         }
       })
-      .subscribe();
+      .subscribe(() => this.loadingAssistencias = false);
     this.encomendas
       .findAndWatch({
         query: {
@@ -87,7 +89,7 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
           }
         }
       })
-      .subscribe();
+      .subscribe(() => this.loadingEncomendas = false);
   }
 
   ngOnDestroy() { }

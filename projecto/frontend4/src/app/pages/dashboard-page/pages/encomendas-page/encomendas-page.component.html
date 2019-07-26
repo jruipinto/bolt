@@ -1,3 +1,11 @@
+<div *ngIf="loading">
+  <span class="spinner spinner-inline">
+  </span>
+  <span>
+    A carregar dados...
+  </span>
+</div>
+
 <clr-radio-container clrInline>
   <label>Encomendas <span class="badge badge-light-blue" *ngIf="(encomendas$ | async) as encomendas">
       <span *ngIf="encomendas.length < 99">{{encomendas.length}}</span>
