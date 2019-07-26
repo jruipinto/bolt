@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { map, concatMap, tap, toArray, first } from 'rxjs/operators';
+import { map, concatMap, tap, toArray } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 import { Assistencia, Artigo, Encomenda } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
-import { UIService, UI } from 'src/app/shared/state/ui.service';
+import { UIService } from 'src/app/shared/state/ui.service';
 import { AssistenciasService, ArtigosService, EncomendasService } from 'src/app/shared/state';
-import { Observable, concat, of, BehaviorSubject } from 'rxjs';
+import { Observable, concat, of } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ArtigosApiService } from 'src/app/shared';
 import { clone } from 'ramda';
 
 @AutoUnsubscribe()
@@ -339,6 +338,14 @@ ${this.assistencia.relatorio_cliente}`
         .filter(({ id }) => id !== arg.id);
     }
     this.artigoSearchResults = null; // reset this variable to enforce new search if needed
+  }
+
+  print(arg: Assistencia) {
+    const assistencia = clone(arg);
+    if (assistencia.estado === 'entregue') {
+      return this.printService.printAssistenciaSaida(assistencia);
+    }
+    return this.printService.printAssistenciaEntrada(assistencia);
   }
 
 }

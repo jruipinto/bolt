@@ -97,7 +97,8 @@
                     <clr-dg-column>Custo p/ unidade</clr-dg-column>
                     <clr-dg-row *ngFor="let artigo of assistencia.material">
                       <clr-dg-cell><input class="clr-input small-input" type="number" name="newQty" id="newQty"
-                          [(ngModel)]="artigo.qty" [max]=openDBArtigo?.qty (change)="materialChanged(artigo)"></clr-dg-cell>
+                          [(ngModel)]="artigo.qty" [max]=openDBArtigo?.qty (change)="materialChanged(artigo)">
+                      </clr-dg-cell>
                       <clr-dg-cell>{{artigo.descricao}} {{artigo.marca}} {{artigo.modelo}}</clr-dg-cell>
                       <clr-dg-cell>{{artigo.localizacao}}</clr-dg-cell>
                       <clr-dg-cell>{{artigo.preco | currency: 'EUR'}}</clr-dg-cell>
@@ -125,8 +126,10 @@
                     <clr-dg-column>Prazo</clr-dg-column>
                     <clr-dg-column>Estado</clr-dg-column>
                     <clr-dg-row *ngFor="let encomenda of assistencia.encomendas">
-                      <clr-dg-cell><input *ngIf="encomenda.estado === 'nova'" class="clr-input small-input" type="number" name="newQty" id="newQty"
-                          [(ngModel)]="encomenda.qty" [max]=openDBArtigo?.qty (change)="encomendasChanged(encomenda)"><span *ngIf="encomenda.estado !== 'nova'">{{encomenda.qty}}</span></clr-dg-cell>
+                      <clr-dg-cell><input *ngIf="encomenda.estado === 'nova'" class="clr-input small-input"
+                          type="number" name="newQty" id="newQty" [(ngModel)]="encomenda.qty" [max]=openDBArtigo?.qty
+                          (change)="encomendasChanged(encomenda)"><span
+                          *ngIf="encomenda.estado !== 'nova'">{{encomenda.qty}}</span></clr-dg-cell>
                       <clr-dg-cell>{{encomenda.artigo_descricao}} {{encomenda.artigo_marca}} {{encomenda.artigo_modelo}}
                       </clr-dg-cell>
                       <clr-dg-cell>{{encomenda.previsao_entrega}}</clr-dg-cell>
@@ -220,8 +223,9 @@
   </div>
 
   <div class="separate">
+    <div class="clr-row">
 
-    <div *ngIf="(assistencia.estado === 'recebido'
+      <div *ngIf="(assistencia.estado === 'recebido'
           || assistencia.estado === 'em análise'
           || assistencia.estado === 'contactado'
           || assistencia.estado === 'incontactável'
@@ -229,83 +233,88 @@
           || assistencia.estado === 'orçamento recusado'
           || assistencia.estado === 'material recebido')
           && newEncomendasCounter === 0">
-      <button class="btn btn-primary btn-icon" (click)="saveAssistencia('em análise', assistencia)">
-        <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
-        Guardar
-      </button>
-      <clr-dropdown>
-        <button clrDropdownTrigger class="btn btn-outline-primary">+ Opções <clr-icon shape="caret down"></clr-icon>
+        <button class="btn btn-primary btn-icon" (click)="saveAssistencia('em análise', assistencia)">
+          <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
+          Guardar
         </button>
-        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-          <button clrDropdownItem (click)="saveAssistencia('orçamento pendente', assistencia)">Orçamentar
+        <clr-dropdown>
+          <button clrDropdownTrigger class="btn btn-outline-primary">+ Opções <clr-icon shape="caret down"></clr-icon>
           </button>
-          <button clrDropdownItem (click)="saveAssistencia('contacto pendente', assistencia)">Contactar
-          </button>
-          <button clrDropdownItem (click)="saveAssistencia('concluído', assistencia)">Concluir</button>
-        </clr-dropdown-menu>
-      </clr-dropdown>
-    </div>
+          <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+            <button clrDropdownItem (click)="saveAssistencia('orçamento pendente', assistencia)">Orçamentar
+            </button>
+            <button clrDropdownItem (click)="saveAssistencia('contacto pendente', assistencia)">Contactar
+            </button>
+            <button clrDropdownItem (click)="saveAssistencia('concluído', assistencia)">Concluir</button>
+          </clr-dropdown-menu>
+        </clr-dropdown>
+      </div>
 
-    <div *ngIf="newEncomendasCounter > 0">
-      <button class="btn btn-warning" (click)="saveAssistencia('aguarda material', assistencia)">
-        Aguardar Material
-      </button>
-    </div>
+      <div *ngIf="newEncomendasCounter > 0">
+        <button class="btn btn-warning" (click)="saveAssistencia('aguarda material', assistencia)">
+          Aguardar Material
+        </button>
+      </div>
 
-    <div *ngIf="assistencia.estado === 'orçamento pendente'
+      <div *ngIf="assistencia.estado === 'orçamento pendente'
           || assistencia.estado === 'não atendeu p/ orç.'
           || assistencia.estado === 'cliente adiou orç.'">
-      <button class="btn btn-success" (click)="saveAssistencia('orçamento aprovado', assistencia)">Aceite</button>
-      <clr-dropdown>
-        <button clrDropdownTrigger class="btn btn-outline-primary">+ Opções <clr-icon shape="caret down"></clr-icon>
-        </button>
-        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-          <button clrDropdownItem (click)="saveAssistencia('orçamento recusado', assistencia)">Recusado
+        <button class="btn btn-success" (click)="saveAssistencia('orçamento aprovado', assistencia)">Aceite</button>
+        <clr-dropdown>
+          <button clrDropdownTrigger class="btn btn-outline-primary">+ Opções <clr-icon shape="caret down"></clr-icon>
           </button>
-          <button clrDropdownItem (click)="saveAssistencia('cliente adiou orç.', assistencia)">Cliente adiou
-            resposta</button>
-          <button clrDropdownItem (click)="saveAssistencia('não atendeu p/ orç.', assistencia)">Não atendeu
-          </button>
-          <button clrDropdownItem (click)="saveAssistencia('incontactável', assistencia)">Incontactável
-          </button>
-        </clr-dropdown-menu>
-      </clr-dropdown>
-    </div>
+          <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+            <button clrDropdownItem (click)="saveAssistencia('orçamento recusado', assistencia)">Recusado
+            </button>
+            <button clrDropdownItem (click)="saveAssistencia('cliente adiou orç.', assistencia)">Cliente adiou
+              resposta</button>
+            <button clrDropdownItem (click)="saveAssistencia('não atendeu p/ orç.', assistencia)">Não atendeu
+            </button>
+            <button clrDropdownItem (click)="saveAssistencia('incontactável', assistencia)">Incontactável
+            </button>
+          </clr-dropdown-menu>
+        </clr-dropdown>
+      </div>
 
-    <div *ngIf="assistencia.estado === 'contacto pendente'
+      <div *ngIf="assistencia.estado === 'contacto pendente'
           || assistencia.estado === 'não atendeu p/ cont.'
           || assistencia.estado === 'cliente adiou resp.'">
-      <button type="button" class="btn btn-success" (click)="saveAssistencia('contactado', assistencia)">
-        Sucesso
-        <clr-icon shape="caret down"></clr-icon>
-      </button>
-      <clr-dropdown>
-        <button clrDropdownTrigger class="btn btn-outline-primary">+ Opções <clr-icon shape="caret down"></clr-icon>
+        <button type="button" class="btn btn-success" (click)="saveAssistencia('contactado', assistencia)">
+          Sucesso
+          <clr-icon shape="caret down"></clr-icon>
         </button>
-        <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-          <button type="button" (click)="saveAssistencia('contactado', assistencia)" clrDropdownItem>Cliente adiou
-            resposta</button>
-          <button type="button" (click)="saveAssistencia('não atendeu p/ cont.', assistencia)" clrDropdownItem>Não
-            atendeu</button>
-          <button type="button" (click)="saveAssistencia('incontactável', assistencia)"
-            clrDropdownItem>Incontactável</button>
-        </clr-dropdown-menu>
-      </clr-dropdown>
-    </div>
+        <clr-dropdown>
+          <button clrDropdownTrigger class="btn btn-outline-primary">+ Opções <clr-icon shape="caret down"></clr-icon>
+          </button>
+          <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+            <button type="button" (click)="saveAssistencia('contactado', assistencia)" clrDropdownItem>Cliente adiou
+              resposta</button>
+            <button type="button" (click)="saveAssistencia('não atendeu p/ cont.', assistencia)" clrDropdownItem>Não
+              atendeu</button>
+            <button type="button" (click)="saveAssistencia('incontactável', assistencia)"
+              clrDropdownItem>Incontactável</button>
+          </clr-dropdown-menu>
+        </clr-dropdown>
+      </div>
 
-    <div *ngIf="assistencia.estado === 'concluído'">
-      <button class="btn btn-warning" (click)="saveAssistencia('entregue', assistencia)">
-        Entregar
+      <div *ngIf="assistencia.estado === 'concluído'">
+        <button class="btn btn-warning" (click)="saveAssistencia('entregue', assistencia)">
+          Entregar
+        </button>
+      </div>
+
+      <div *ngIf="assistencia.estado === 'entregue'">
+        <button class="btn" (click)="openNewAssistenciaWithThisData(assistencia)">
+          Receber Novamente
+        </button>
+      </div>
+
+      <button class="btn btn-link" (click)="print(assistencia)">
+        Reimprimir
       </button>
     </div>
 
-    <div *ngIf="assistencia.estado === 'entregue'">
-      <button class="btn" (click)="openNewAssistenciaWithThisData(assistencia)">
-        Receber Novamente
-      </button>
-    </div>
   </div>
-
 </div>
 
 <clr-modal [(clrModalOpen)]="artigoSearchModal" [clrModalSize]="'lg'">
