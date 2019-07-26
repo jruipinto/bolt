@@ -5,26 +5,12 @@
         (keydown.enter)="searchArtigo(artigoSearchForm.value.input)" formControlName="input" />
     </div>
     <div class="clr-col-xl-3 clr-col-lg-12 padding-bottom-05">
-
-      <div class="btn-group btn-primary">
-        <input type="submit" class="btn" value="🔎 Pesquisar" (click)="searchArtigo(artigoSearchForm.value.input)" />
-        <div class="btn-group-overflow bottom-right" [ngClass]="{'open': dropdown}">
-          <button class="btn dropdown-toggle" (click)="toogleDropdown()">
-            <clr-icon shape="ellipsis-horizontal"></clr-icon>
-          </button>
-          <div class="dropdown-menu">
-            <input type="button" class="btn" (click)="newArtigo()" value="Novo artigo" />
-            <input type="button" class="btn" (click)="searchArtigoByLocal(artigoSearchForm.value.input)" value="Pesquisar por
-            local" />
-          </div>
-        </div>
-      </div>
-      <!--
       <clr-button-group class="btn-primary" [clrMenuPosition]="'bottom-right'">
-        <clr-button type="button" (click)="searchArtigo(artigoSearchForm.value.input)">🔎 Pesquisar</clr-button>
-        <clr-button type="button" [clrInMenu]="true" (click)="newArtigo()">Novo artigo</clr-button>
-        <clr-button type="button" [clrInMenu]="true" (click)="searchArtigoByLocal(artigoSearchForm.value.input)">Pesquisar por local</clr-button>
-      </clr-button-group>-->
+        <clr-button (click)="searchArtigo(artigoSearchForm.value.input)">🔎 Pesquisar</clr-button>
+        <clr-button [clrInMenu]="true" (click)="newArtigo()">Novo artigo</clr-button>
+        <clr-button [clrInMenu]="true" (click)="searchArtigoByLocal(artigoSearchForm.value.input)">
+          Pesquisar por local</clr-button>
+      </clr-button-group>
     </div>
   </div>
 </form>
