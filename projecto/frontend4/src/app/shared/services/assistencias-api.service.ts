@@ -4,9 +4,8 @@ import { map, concatMap, toArray, mergeMap, tap } from 'rxjs/operators';
 
 import { EntitiesApiAbstrationService } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
-import { Assistencia, EventoCronologico, User, Artigo } from 'src/app/shared/models';
 import { UsersService } from '../state/users.service';
-import { ArtigosService } from '../state/artigos.service';
+import { Assistencia, EventoCronologico, User } from 'src/app/shared/models';
 import { lensProp, view, set } from 'ramda';
 
 @Injectable({
@@ -80,8 +79,7 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
 
   constructor(
     protected feathersService: FeathersService,
-    private usersService: UsersService,
-    private artigosService: ArtigosService) {
+    private usersService: UsersService) {
     super(feathersService, 'assistencias');
   }
 
@@ -92,27 +90,25 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
   }
 
   get(id: number) {
-    const assistencia$ = super.get(id) ;
+    const assistencia$ = super.get(id);
     return this.fullyDetailedAssistencias$(assistencia$);
   }
 
   create(data: Assistencia, actionType?: string) {
-    data = {
+    const assistencia$ = super.create({
       ...data,
       material: this.sanitize(data.material),
       encomendas: this.sanitize(data.encomendas)
-    };
-    const assistencia$ = super.create(data);
+    });
     return this.fullyDetailedAssistencias$(assistencia$);
   }
 
   patch(id: number, data: Assistencia, actionType?: string) {
-    data = {
+    const assistencia$ = super.patch(id, {
       ...data,
       material: this.sanitize(data.material),
       encomendas: this.sanitize(data.encomendas)
-    };
-    const assistencia$ = super.patch(id, data);
+    });
     return this.fullyDetailedAssistencias$(assistencia$);
   }
 

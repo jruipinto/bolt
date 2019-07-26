@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { EncomendasApiService, AuthService } from 'src/app/shared/services';
-import { EntityStateAbstraction } from 'src/app/shared/abstraction-classes';
-import { Artigo, Encomenda, EventoCronologico } from '..';
 import { map, concatMap, mergeMap } from 'rxjs/operators';
-import { concat } from 'rxjs';
+import { EntityStateAbstraction } from 'src/app/shared/abstraction-classes';
+import { EncomendasApiService, AuthService } from 'src/app/shared/services';
 import { ArtigosService } from './artigos.service';
 import { UsersService } from './users.service';
-import { User } from '../models';
+import { Artigo, Encomenda, EventoCronologico, User } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class EncomendasService extends EntityStateAbstraction {

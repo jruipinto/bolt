@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AssistenciasApiService, AuthService } from 'src/app/shared/services';
-import { EntityStateAbstraction } from 'src/app/shared/abstraction-classes';
-import { Assistencia, EventoCronologico, Artigo, Encomenda } from '../models';
-import { map, concatMap, toArray, mergeMap } from 'rxjs/operators';
 import { concat, of, merge } from 'rxjs';
+import { map, concatMap, toArray, mergeMap } from 'rxjs/operators';
+import { EntityStateAbstraction } from 'src/app/shared/abstraction-classes';
+import { AssistenciasApiService, AuthService } from 'src/app/shared/services';
 import { ArtigosService } from './artigos.service';
 import { EncomendasService } from './encomendas.service';
+import { Assistencia, EventoCronologico, Artigo, Encomenda } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class AssistenciasService extends EntityStateAbstraction {
@@ -30,7 +30,7 @@ export class AssistenciasService extends EntityStateAbstraction {
                   (artigo: Partial<Artigo>) => this.artigosService.get(artigo.id)
                     .pipe(
                       map((dbArtigo: Artigo[]) => dbArtigo[0]),
-                      map(dbArtigo => dbArtigo = { ...dbArtigo, qty: artigo.qty })
+                      map(dbArtigo => ({ ...dbArtigo, qty: artigo.qty }))
                     )
                 ))
                 .pipe(
@@ -49,7 +49,7 @@ export class AssistenciasService extends EntityStateAbstraction {
                   (encomenda: Partial<Encomenda>) => this.encomendasService.get(encomenda.id)
                     .pipe(
                       map((dbEncomenda: Encomenda[]) => dbEncomenda[0]),
-                      map(dbEncomenda => dbEncomenda = { ...dbEncomenda, qty: encomenda.qty })
+                      map(dbEncomenda => ({ ...dbEncomenda, qty: encomenda.qty }))
                     )
                 ))
                 .pipe(
@@ -76,7 +76,7 @@ export class AssistenciasService extends EntityStateAbstraction {
                   (artigo: Partial<Artigo>) => this.artigosService.get(artigo.id)
                     .pipe(
                       map((dbArtigo: Artigo[]) => dbArtigo[0]),
-                      map(dbArtigo => dbArtigo = { ...dbArtigo, qty: artigo.qty })
+                      map(dbArtigo => ({ ...dbArtigo, qty: artigo.qty }))
                     )
                 ))
                 .pipe(
@@ -95,7 +95,7 @@ export class AssistenciasService extends EntityStateAbstraction {
                   (encomenda: Partial<Encomenda>) => this.encomendasService.get(encomenda.id)
                     .pipe(
                       map((dbEncomenda: Encomenda[]) => dbEncomenda[0]),
-                      map(dbEncomenda => dbEncomenda = { ...dbEncomenda, qty: encomenda.qty })
+                      map(dbEncomenda => ({ ...dbEncomenda, qty: encomenda.qty }))
                     )
                 ))
                 .pipe(
