@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable, merge, of, iif, defer } from 'rxjs';
-import { tap, concatMap, map, first, switchMap, mergeMap } from 'rxjs/operators';
+import { Observable, merge, of } from 'rxjs';
+import { tap, concatMap, map, first, mergeMap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 import { AssistenciasService, UsersService, UIService, UI } from 'src/app/shared/state';
@@ -146,18 +146,16 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
         return usersService.patch$(cliente.id, cliente)
           .pipe(concatMap(() => assistenciasService.create$(assistencia)))
           .subscribe(success, error);
-      } else {
-        return usersService.create$({ ...cliente, contacto, ...{ tipo: 'cliente' } })
-          .pipe(
-            // refresh contacto form to fix bug when creating new user
-            tap((newUserArr: User[]) => this.contactoClienteForm.patchValue({ contacto: newUserArr[0].contacto })),
-            concatMap((newUserArr: User[]) => assistenciasService.create$({ ...assistencia, ...{ cliente_user_id: newUserArr[0].id } })))
-          .subscribe(success, error);
       }
-    } else {
-      return assistenciasService.create$(assistencia)
+      return usersService.create$({ ...cliente, contacto, ...{ tipo: 'cliente' } })
+        .pipe(
+          // refresh contacto form to fix bug when creating new user
+          tap((newUserArr: User[]) => this.contactoClienteForm.patchValue({ contacto: newUserArr[0].contacto })),
+          concatMap((newUserArr: User[]) => assistenciasService.create$({ ...assistencia, ...{ cliente_user_id: newUserArr[0].id } })))
         .subscribe(success, error);
     }
+    return assistenciasService.create$(assistencia)
+      .subscribe(success, error);
   }
 
   copyToCriarNovaForm(assistencia: Assistencia) {
