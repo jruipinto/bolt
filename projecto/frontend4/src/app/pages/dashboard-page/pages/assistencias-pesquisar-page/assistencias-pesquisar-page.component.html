@@ -1,3 +1,4 @@
+<!--
 <div>
   <div>
     <form (ngSubmit)="search()">
@@ -38,12 +39,39 @@
     </div>
   </div>
 </div>
+-->
+
+<div class="clr-row">
+  <input placeholder="digita algo...">
+  <clr-select-container>
+    <label>Estado</label>
+    <select clrSelect name="estado">
+      <option value="recebido">recebido</option>
+      <option value="em análise">em análise</option>
+      <option value="contacto pendente">contacto pendente</option>
+      <option value="não atendeu p/ cont.">não atendeu p/ cont.</option>
+      <option value="cliente adiou resp.">cliente adiou resp.</option>
+      <option value="contactado">contactado</option>
+      <option value="incontactável">incontactável</option>
+      <option value="orçamento pendente">orçamento pendente</option>
+      <option value="não atendeu p/ orç.">não atendeu p/ orç.</option>
+      <option value="cliente adiou orç.">cliente adiou orç.</option>
+      <option value="orçamento aprovado">orçamento aprovado</option>
+      <option value="orçamento recusado">orçamento recusado</option>
+      <option value="aguarda material">aguarda material</option>
+      <option value="material recebido">material recebido</option>
+      <option value="concluído">concluído</option>
+      <option value="entregue">entregue</option>
+    </select>
+  </clr-select-container>
+</div>
 
 <h4>Resultados:</h4>
 <div *ngIf="(results$ | async) as results">
   <div *ngIf="results.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
   <div *ngIf="results.length>0">
-    <r-data-row class="clr-row" *ngFor="let result of results; let listaIndex=index" (click)="openAssistencia(result.id)">
+    <r-data-row class="clr-row" *ngFor="let result of results; let listaIndex=index"
+      (click)="openAssistencia(result.id)">
       <div class="clr-col-lg-1 fontheavy">
         {{result.id}}
       </div>
