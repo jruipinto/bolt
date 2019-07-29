@@ -41,29 +41,48 @@
 </div>
 -->
 
-<div class="clr-row">
-  <input placeholder="digita algo...">
-  <clr-select-container>
-    <label>Estado</label>
-    <select clrSelect name="estado">
-      <option value="recebido">recebido</option>
-      <option value="em análise">em análise</option>
-      <option value="contacto pendente">contacto pendente</option>
-      <option value="não atendeu p/ cont.">não atendeu p/ cont.</option>
-      <option value="cliente adiou resp.">cliente adiou resp.</option>
-      <option value="contactado">contactado</option>
-      <option value="incontactável">incontactável</option>
-      <option value="orçamento pendente">orçamento pendente</option>
-      <option value="não atendeu p/ orç.">não atendeu p/ orç.</option>
-      <option value="cliente adiou orç.">cliente adiou orç.</option>
-      <option value="orçamento aprovado">orçamento aprovado</option>
-      <option value="orçamento recusado">orçamento recusado</option>
-      <option value="aguarda material">aguarda material</option>
-      <option value="material recebido">material recebido</option>
-      <option value="concluído">concluído</option>
-      <option value="entregue">entregue</option>
-    </select>
-  </clr-select-container>
+<div>
+  <form clrForm clrLayout="vertical" class="clr-row">
+    <div class="clr-col-sm-3">
+      <clr-input-container>
+        <label>Pesquisar</label>
+        <input clrInput placeholder="digita algo..." />
+      </clr-input-container>
+    </div>
+    <div class="clr-col-sm-3">
+      <clr-select-container>
+        <label>Estado</label>
+        <select clrSelect name="estado">
+          <option value="todos">todos estados</option>
+          <option value="recebido">recebido</option>
+          <option value="em análise">em análise</option>
+          <option value="contacto pendente">contacto pendente</option>
+          <option value="não atendeu p/ cont.">não atendeu p/ cont.</option>
+          <option value="cliente adiou resp.">cliente adiou resp.</option>
+          <option value="contactado">contactado</option>
+          <option value="incontactável">incontactável</option>
+          <option value="orçamento pendente">orçamento pendente</option>
+          <option value="não atendeu p/ orç.">não atendeu p/ orç.</option>
+          <option value="cliente adiou orç.">cliente adiou orç.</option>
+          <option value="orçamento aprovado">orçamento aprovado</option>
+          <option value="orçamento recusado">orçamento recusado</option>
+          <option value="aguarda material">aguarda material</option>
+          <option value="material recebido">material recebido</option>
+          <option value="concluído">concluído</option>
+          <option value="entregue">entregue</option>
+        </select>
+      </clr-select-container>
+    </div>
+    <div class="clr-col-sm-3">
+      <clr-input-container>
+        <label>Cliente</label>
+        <input clrInput placeholder="" value="todos clientes" />
+      </clr-input-container>
+    </div>
+    <div class="clr-col-sm-3">
+      <input type="submit" class="btn btn-primary" value="🔎 Pesquisar">
+    </div>
+  </form>
 </div>
 
 <h4>Resultados:</h4>
