@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { AssistenciasService, UIService, UsersService } from 'src/app/shared/state';
 import { Assistencia, User } from 'src/app/shared';
@@ -25,7 +24,7 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
   public results$: Observable<Assistencia[]>;
   public assistenciasSearchForm = this.fb.group({
     input: [''],
-    estado: [''],
+    estado: ['qualquer'],
     cliente: ['']
   });
 
@@ -36,7 +35,6 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
   constructor(
     private assistencias: AssistenciasService,
     private users: UsersService,
-    private uiService: UIService,
     private router: Router,
     private fb: FormBuilder) { }
 
@@ -80,35 +78,34 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
   }
 
   searchAssistencia(input: string, estado?: string, cliente?: number) {
-    if (input) {
-      const inputSplited = input.split(' ');
-      const inputMapped = inputSplited.map(word =>
-        '{"$or": [' +
-        '{ "categoria": { "$like": "%' + word + '%" }},' +
-        '{ "marca": { "$like": "%' + word + '%" }},' +
-        '{ "modelo": { "$like": "%' + word + '%" }},' +
-        '{ "cor": { "$like": "%' + word + '%" }},' +
-        '{ "serial": { "$like": "%' + word + '%" }},' +
-        '{ "problema": { "$like": "%' + word + '%" }}' +
-        ' ]}'
-      );
+    const inputSplited = input.split(' ');
+    const inputMapped = inputSplited.map(word =>
+      '{"$or": [' +
+      '{ "categoria": { "$like": "%' + word + '%" }},' +
+      '{ "marca": { "$like": "%' + word + '%" }},' +
+      '{ "modelo": { "$like": "%' + word + '%" }},' +
+      '{ "cor": { "$like": "%' + word + '%" }},' +
+      '{ "serial": { "$like": "%' + word + '%" }},' +
+      '{ "problema": { "$like": "%' + word + '%" }}' +
+      ' ]}'
+    );
 
-      const clienteVerified = typeof cliente === 'number' ? cliente : '';
-      const dbQuery =
-        '{' +
-        '"query": {' +
-        '"$limit": "200",' +
-        '"$and": [' +
-        inputMapped +
-        ']' +
-        '"estado":' + estado +
-        '"cliente_user_id":' + clienteVerified +
-        '}' +
-        '}';
+    const clienteStatement = cliente && typeof cliente === 'number' ? ',"cliente_user_id":' + cliente : '';
+    const estadoStatement = estado && estado !== 'qualquer' ? ',"estado": "' + estado + '"' : '';
+    const dbQuery =
+      '{' +
+      '"query": {' +
+      '"$limit": "200",' +
+      '"$and": [' +
+      inputMapped +
+      ']' +
+      estadoStatement +
+      clienteStatement +
+      '}' +
+      '}';
 
-      this.results$ = this.assistencias
-        .find(JSON.parse(dbQuery));
-    }
+    this.results$ = this.assistencias
+      .find(JSON.parse(dbQuery));
   }
 
 
