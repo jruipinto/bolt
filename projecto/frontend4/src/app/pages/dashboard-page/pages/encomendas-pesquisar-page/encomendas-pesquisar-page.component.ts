@@ -28,6 +28,20 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
     input: ['']
   });
 
+  public estados = [
+    'qualquer',
+    'registada',
+    'marcada para ir ao fornecedor',
+    'adquirida',
+    'esgotada',
+    'sem fornecedor',
+    'aguarda reposta de fornecedor',
+    'aguarda entrega',
+    'recebida',
+    'detectado defeito',
+    'entregue'
+  ];
+
   constructor(
     private encomendas: EncomendasService,
     private artigos: ArtigosService,
@@ -125,7 +139,14 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
       '}' +
       '}';
 
-    this.results$ = this.artigos
+    if ((!input || input === ' ' || input === '  ') && estado === 'qualquer' && !cliente) {
+      return (this.results$ = this.encomendas.find({ query: { $limit: 200 } }));
+    }
+    if ((!input || input === ' ' || input === '  ') && estado === 'qualquer' && cliente) {
+      return (this.results$ = this.encomendas.find({ query: { cliente_user_id: cliente, $limit: 200 } }));
+    }
+
+    return (this.results$ = this.artigos
       .find(JSON.parse(dbQuery))
       .pipe(
         concatMap(
@@ -134,8 +155,8 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
               .pipe(map(res => res[0]))
           )).pipe(concatMap(concats => concats), toArray())
         )
-      );
-
+      )
+    );
     // this.results$ = this.encomendas.find(JSON.parse(dbQuery));
   }
 
