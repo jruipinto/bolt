@@ -32,6 +32,28 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
     input: ['']
   });
 
+  public estados = [
+    'qualquer',
+    'registado',
+    'em transito',
+    'recebido',
+    'em análise',
+    'contacto pendente',
+    'não atendeu p/ cont.',
+    'cliente adiou resp.',
+    'contactado',
+    'incontactável',
+    'orçamento pendente',
+    'não atendeu p/ orç.',
+    'cliente adiou orç.',
+    'orçamento aprovado',
+    'orçamento recusado',
+    'aguarda material',
+    'material recebido',
+    'concluído',
+    'entregue'
+  ];
+
   constructor(
     private assistencias: AssistenciasService,
     private users: UsersService,
