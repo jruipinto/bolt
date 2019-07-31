@@ -102,7 +102,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
         .subscribe();
     }
     if ((newEstado === 'recebida' || newEstado === 'entregue') && encomenda.assistencia_id) {
-      return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
+      return this.encomendas.patch(encomenda.id, { ...encomenda, estado: 'entregue' })
         .pipe(
           map(res => res[0]),
           concatMap(this.notifyAssistencia),
