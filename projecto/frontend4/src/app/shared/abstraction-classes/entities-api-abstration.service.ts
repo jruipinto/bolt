@@ -6,6 +6,7 @@ import { FeathersService } from 'src/app/shared/services/feathers.service';
 
 export abstract class EntitiesApiAbstrationService {
   private entityAPI = this.feathersService.service(this.entity);
+  public entityName = this.entity;
 
   constructor(protected feathersService: FeathersService, private entity: string) {
   }

@@ -24,7 +24,7 @@ export class AssistenciasService extends EntityStateAbstraction {
         map((res: Assistencia[]) => res[0]),
         concatMap(
           assistencia => {
-            if (assistencia.material) {
+            if (assistencia && assistencia.material) {
               return concat(assistencia.material
                 .map(
                   (artigo: Partial<Artigo>) => this.artigosService.get(artigo.id)
@@ -43,7 +43,7 @@ export class AssistenciasService extends EntityStateAbstraction {
         ),
         concatMap(
           assistencia => {
-            if (assistencia.encomendas) {
+            if (assistencia && assistencia.encomendas) {
               return concat(assistencia.encomendas
                 .map(
                   (encomenda: Partial<Encomenda>) => this.encomendasService.get(encomenda.id)
@@ -70,7 +70,7 @@ export class AssistenciasService extends EntityStateAbstraction {
         map((res: Assistencia[]) => res[0]),
         mergeMap(
           assistencia => {
-            if (assistencia.material) {
+            if (assistencia && assistencia.material) {
               return merge(assistencia.material
                 .map(
                   (artigo: Partial<Artigo>) => this.artigosService.get(artigo.id)
@@ -89,7 +89,7 @@ export class AssistenciasService extends EntityStateAbstraction {
         ),
         mergeMap(
           assistencia => {
-            if (assistencia.encomendas) {
+            if (assistencia && assistencia.encomendas) {
               return merge(assistencia.encomendas
                 .map(
                   (encomenda: Partial<Encomenda>) => this.encomendasService.get(encomenda.id)

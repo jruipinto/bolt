@@ -4,7 +4,8 @@ import { unionBy } from 'lodash';
 import { EntitiesApiAbstrationService } from './entities-api-abstration.service';
 import { sortByID } from '../utilities';
 import uniqBy from 'ramda/es/uniqBy';
-import { sort } from 'ramda';
+import { sort, clone } from 'ramda';
+import pipe from 'ramda/es/pipe';
 
 export abstract class EntityStateAbstraction {
   private defaults = [];
@@ -19,98 +20,64 @@ export abstract class EntityStateAbstraction {
     console.log('state mutation:', value);
   }
 
-  private patchState(value: any) {
-    this.state$
+  private patchState = (value: any[]) => {
+    return this.state$
       .pipe(
         first(),
-        tap(state => {
+        map(state => {
+          const mutation = clone(value);
+          const oldState = clone(state);
           const objID = obj => obj.id;
           const diff = (objA, objB) => objA - objB;
-          const newState = sort(diff, uniqBy(objID, [...value, ...state]));
+          const patch = pipe(uniqBy(objID), sort(diff));
+          const newState = patch([...mutation, ...oldState]);
           this.source.next(newState);
-          console.log('state mutation:', value);
+          console.log(`Old ${this.xAPIservice.entityName}State:`, oldState);
+          console.log(`${this.xAPIservice.entityName}State mutation:`, mutation);
+          console.log(`New ${this.xAPIservice.entityName}State:`, newState);
+          return value;
         })
       );
   }
 
   public find(query?: object) {
-    return this.state$
+    return this.xAPIservice.find(query)
       .pipe(
-        first(),
-        concatMap(state =>
-          this.xAPIservice.find(query)
-            .pipe(
-              first(),
-              tap(response => {
-                // const newState = [...new Set([...state, ...response])]; in ES6 syntax
-                const newState = unionBy(state, response, 'id');
-                this.setState(sortByID(newState));
-                // this.setState(newState);
-              })
-            )
-        ));
+        concatMap(this.patchState)
+      );
   }
   public get(id: number) {
-    const dbGetAndSave$ = state => this.xAPIservice.get(id)
+    return this.xAPIservice.get(id)
       .pipe(
-        tap(e => this.setState(sortByID([...state, ...e]))));
-
-    return this.state$.pipe(
-      first(),
-      map(state => [...state.filter(item => item.id === id)]),
-      switchMap(state => {
-        if (state[0]) {
-          return of(state);
-        } else {
-          return dbGetAndSave$(state);
-        }
-      })
-    );
+        concatMap(this.patchState)
+      );
   }
   public create(data: object) {
-    // get state => create new item in api => set state + newItem
-    return this.state$.pipe(
-      first(),
-      concatMap(state => this.xAPIservice.create(data)
-        .pipe(
-          tap(newItem => this.setState(sortByID([...state, newItem[0]])))
-        ))
-    );
+    return this.xAPIservice.create(data)
+      .pipe(
+        concatMap(this.patchState)
+      );
   }
   // public update() {}
   public patch(id: number, data: object) {
-    // get state => set state + data => send patch data to api
-    return this.state$.pipe(
-      first(),
-      tap(state => this.setState(sortByID(unionBy([data], state, 'id')))),
-      concatMap(() => this.xAPIservice.patch(id, data))
-    );
-  }
-  // public delete() { }
-  public onCreated() {
-    // receive item from api => get state => set state + receivedItem
-    return this.xAPIservice.onCreated()
+    return this.xAPIservice.patch(id, data)
       .pipe(
-        map(res => res[0]),
-        concatMap(receivedItem => this.state$
-          .pipe(
-            first(),
-            tap(state => this.setState(sortByID([...state, receivedItem[0]]))),
-            map(() => receivedItem)
-          ))
+        concatMap(this.patchState)
       );
   }
-  public onPatched() {
-    // receive item from api => get state => set state + receivedItem
+  // public delete() { }
+  public onCreated(id?: number) {
+    return this.xAPIservice.onCreated()
+      .pipe(
+        concatMap(this.patchState),
+        map(res => res.filter(e => e.id === id))
+      );
+  }
+  public onPatched(id?: number) {
     return this.xAPIservice.onPatched()
       .pipe(
-        concatMap(receivedItem => this.state$
-          .pipe(
-            first(),
-            tap(state => this.setState(sortByID(unionBy(receivedItem[0], state, 'id')))),
-            map(() => receivedItem)
-          )
-        )
+        concatMap(this.patchState),
+        map(res => res.filter(e => e.id === id))
       );
   }
 
@@ -125,13 +92,8 @@ export abstract class EntityStateAbstraction {
   public getAndWatch(id: number) {
     return merge(
       this.get(id),
-      this.onCreated(),
-      this.onPatched()
-    ).pipe(
-      concatMap(() => this.state$.pipe(
-        first(),
-        map(state => state.filter(s => s.id === id))
-      ))
+      this.onCreated(id),
+      this.onPatched(id)
     );
 
   }
