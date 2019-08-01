@@ -3,32 +3,34 @@ import { map, tap, concatMap, switchMap, first } from 'rxjs/operators';
 import { unionBy } from 'lodash';
 import { EntitiesApiAbstrationService } from './entities-api-abstration.service';
 import { sortByID } from '../utilities';
+import uniqBy from 'ramda/es/uniqBy';
+import { sort } from 'ramda';
 
 export abstract class EntityStateAbstraction {
   private defaults = [];
   private source = new BehaviorSubject<any[]>(this.defaults);
   public state$ = this.source;
-  private lostConnection = false;
-
-  private windowOffline$ = fromEvent(window, 'offline');
-  private windowOnline$ = fromEvent(window, 'online');
-
 
   constructor(
     private xAPIservice: EntitiesApiAbstrationService) {
-    this.windowOffline$
-      .subscribe(() => this.lostConnection = true);
-    this.windowOnline$
-      .subscribe(
-        () => {
-          // reset state + reset lostConnection flag
-          this.setState(this.defaults);
-          this.lostConnection = false;
-        });
   }
   private setState(value: any) {
     this.source.next(value);
     console.log('state mutation:', value);
+  }
+
+  private patchState(value: any) {
+    this.state$
+      .pipe(
+        first(),
+        tap(state => {
+          const objID = obj => obj.id;
+          const diff = (objA, objB) => objA - objB;
+          const newState = sort(diff, uniqBy(objID, [...value, ...state]));
+          this.source.next(newState);
+          console.log('state mutation:', value);
+        })
+      );
   }
 
   public find(query?: object) {
@@ -89,6 +91,7 @@ export abstract class EntityStateAbstraction {
     // receive item from api => get state => set state + receivedItem
     return this.xAPIservice.onCreated()
       .pipe(
+        map(res => res[0]),
         concatMap(receivedItem => this.state$
           .pipe(
             first(),
@@ -101,11 +104,13 @@ export abstract class EntityStateAbstraction {
     // receive item from api => get state => set state + receivedItem
     return this.xAPIservice.onPatched()
       .pipe(
-        concatMap(receivedItem => this.state$.pipe(
-          first(),
-          tap(state => this.setState(sortByID(unionBy(receivedItem[0], state, 'id')))),
-          map(() => receivedItem)
-        ))
+        concatMap(receivedItem => this.state$
+          .pipe(
+            first(),
+            tap(state => this.setState(sortByID(unionBy(receivedItem[0], state, 'id')))),
+            map(() => receivedItem)
+          )
+        )
       );
   }
 
