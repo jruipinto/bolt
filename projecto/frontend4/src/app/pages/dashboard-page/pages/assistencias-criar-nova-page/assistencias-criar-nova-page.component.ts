@@ -115,7 +115,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
   ngOnDestroy() { }
 
   onSubmit() {
-    if (!this.contactoClienteForm.valid || !this.clienteForm.valid || !this.criarNovaForm.valid) {
+    if (this.contactoClienteForm.invalid || this.clienteForm.invalid || this.criarNovaForm.invalid) {
       return alert('Alguns dados obrigatórios em falta!');
     }
     const estado = 'recebido';
