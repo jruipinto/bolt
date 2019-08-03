@@ -19,9 +19,10 @@ export interface Query {
   styleUrls: ['./assistencias-pesquisar-page.component.scss']
 })
 export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
+  public loading = false;
   public userSearchModal = false;
   public userSearchResults$: Observable<User[]>;
-  public results$: Observable<Assistencia[]>;
+  public results: Assistencia[];
   public assistenciasSearchForm = this.fb.group({
     input: [''],
     estado: ['qualquer'],
@@ -100,6 +101,7 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
   }
 
   searchAssistencia(input: string, estado?: string, cliente?: number) {
+    this.loading = true;
     const inputSplited = input.split(' ');
     const inputMapped = inputSplited.map(word =>
       '{"$or": [' +
@@ -126,8 +128,12 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
       '}' +
       '}';
 
-    this.results$ = this.assistencias
-      .find(JSON.parse(dbQuery));
+    return this.assistencias
+      .find(JSON.parse(dbQuery))
+      .subscribe(assistencias => {
+        this.loading = false;
+        this.results = assistencias;
+      });
   }
 
 

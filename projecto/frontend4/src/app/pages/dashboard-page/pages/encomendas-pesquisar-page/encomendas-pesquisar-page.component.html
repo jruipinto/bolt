@@ -74,7 +74,15 @@
 </div>
 
 <h4>Resultados:</h4>
-<div *ngIf="(results$ | async) as results">
+<div *ngIf="loading">
+  <span class="spinner spinner-inline">
+  </span>
+  <span>
+    A carregar dados...
+  </span>
+</div>
+
+<div *ngIf="results">
   <div *ngIf="results.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
   <div *ngIf="results.length>0">
     <r-data-row class="clr-row" *ngFor="let result of results; let listaIndex=index" (click)="openEncomenda(result.id)">
@@ -89,7 +97,7 @@
         {{result.artigo_modelo}}
       </div>
       <div class="clr-col-lg-2">
-        Orç: {{result.orcamento | currency: 'EUR'}}
+        Orç: {{result.orcamento | currency: 'EUR'}} <span *ngIf="!result.orcamento">não tem</span>
       </div>
       <div class="clr-col-lg-2">
         {{result.estado}}

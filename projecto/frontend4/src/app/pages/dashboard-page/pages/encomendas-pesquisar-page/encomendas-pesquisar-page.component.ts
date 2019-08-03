@@ -15,9 +15,10 @@ import { clone } from 'ramda';
   styleUrls: ['./encomendas-pesquisar-page.component.scss']
 })
 export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
+  public loading = false;
   public userSearchModal = false;
   public userSearchResults$: Observable<User[]>;
-  public results$: Observable<Encomenda[]>;
+  public results: Encomenda[];
   public encomendasSearchForm = this.fb.group({
     input: [''],
     estado: ['qualquer'],
@@ -120,6 +121,7 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
   }*/
 
   searchEncomenda(input: string, estado?: string, cliente?: number) {
+    this.loading = true;
     const inputSplited = input.split(' ');
     const inputMapped = inputSplited.map(word =>
       '{"$or": [' +
@@ -140,13 +142,21 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
       '}';
 
     if ((!input || input === ' ' || input === '  ') && estado === 'qualquer' && !cliente) {
-      return (this.results$ = this.encomendas.find({ query: { $limit: 200 } }));
+      return this.encomendas.find({ query: { $limit: 200 } })
+        .subscribe(encomendas => {
+          this.loading = false;
+          this.results = encomendas;
+        });
     }
     if ((!input || input === ' ' || input === '  ') && estado === 'qualquer' && cliente) {
-      return (this.results$ = this.encomendas.find({ query: { cliente_user_id: cliente, $limit: 200 } }));
+      return this.encomendas.find({ query: { cliente_user_id: cliente, $limit: 200 } })
+        .subscribe(encomendas => {
+          this.loading = false;
+          this.results = encomendas;
+        });
     }
 
-    return (this.results$ = this.artigos
+    return this.artigos
       .find(JSON.parse(dbQuery))
       .pipe(
         concatMap(
@@ -156,7 +166,10 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
           )).pipe(concatMap(concats => concats), toArray())
         )
       )
-    );
+      .subscribe(encomendas => {
+        this.loading = false;
+        this.results = encomendas;
+      });
     // this.results$ = this.encomendas.find(JSON.parse(dbQuery));
   }
 
