@@ -49,7 +49,7 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
     return this.router.navigate(['/dashboard/encomenda', encomendaID]);
   }
 
-  filterEncomendas(arg: 'todas' | 'marcadas') {
+  filterEncomendas(arg: 'todas' | 'marcadas' | 'aguarda entrega' | 'recebida') {
     if (arg === 'todas') {
       return this.encomendas$ = this.encomendas.state$
         .pipe(
@@ -76,6 +76,30 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
             state
               ? state.filter(encomenda =>
                 encomenda.estado === 'marcada para ir ao fornecedor'
+              )
+              : null
+          )
+        );
+    }
+    if (arg === 'aguarda entrega') {
+      return this.encomendas$ = this.encomendas.state$
+        .pipe(
+          map(state =>
+            state
+              ? state.filter(encomenda =>
+                encomenda.estado === 'aguarda entrega'
+              )
+              : null
+          )
+        );
+    }
+    if (arg === 'recebida') {
+      return this.encomendas$ = this.encomendas.state$
+        .pipe(
+          map(state =>
+            state
+              ? state.filter(encomenda =>
+                encomenda.estado === 'recebida'
               )
               : null
           )

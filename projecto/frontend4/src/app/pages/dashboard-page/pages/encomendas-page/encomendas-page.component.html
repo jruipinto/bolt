@@ -7,18 +7,28 @@
 </div>
 
 <clr-radio-container clrInline>
-  <label>Encomendas <span class="badge badge-light-blue" *ngIf="(encomendas$ | async) as encomendas">
+  <label>Encomendas
+    <span class="badge badge-light-blue" *ngIf="(encomendas$ | async) as encomendas">
       <span *ngIf="encomendas.length < 99">{{encomendas.length}}</span>
       <span *ngIf="encomendas.length > 99">99+</span>
-    </span></label>
+    </span>
+  </label>
   <clr-radio-wrapper>
-    <input type="radio" clrRadio name="radioOption" required value="todas" (click)="filterEncomendas('todas')"
-      checked />
-    <label>Todas</label>
+    <input type="radio" clrRadio name="radioOption" required value="aguarda entrega"
+      (click)="filterEncomendas('aguarda entrega')" checked />
+    <label>Aguardam entrega</label>
+  </clr-radio-wrapper>
+  <clr-radio-wrapper>
+    <input type="radio" clrRadio name="radioOption" required value="recebida" (click)="filterEncomendas('recebida')" />
+    <label>Recebidas</label>
   </clr-radio-wrapper>
   <clr-radio-wrapper>
     <input type="radio" clrRadio name="radioOption" required value="marcadas" (click)="filterEncomendas('marcadas')" />
     <label>Marcadas para ir ao fornecedor</label>
+  </clr-radio-wrapper>
+  <clr-radio-wrapper>
+    <input type="radio" clrRadio name="radioOption" required value="todas" (click)="filterEncomendas('todas')" />
+    <label>Todas</label>
   </clr-radio-wrapper>
 </clr-radio-container>
 
@@ -36,7 +46,7 @@
       {{encomenda.artigo_modelo}}
     </div>
     <div class="clr-col-lg-2">
-      Orç: {{encomenda.orcamento | currency: 'EUR'}}
+      Orç: {{encomenda.orcamento | currency: 'EUR'}} <span *ngIf="!encomenda.orcamento">não tem</span>
     </div>
     <div class="clr-col-lg-2">
       {{encomenda.estado}}
