@@ -85,10 +85,11 @@ export abstract class EntityStateAbstraction {
   }
 
   public findAndWatch(query?: object) {
+    // needs to be fixed later
     return merge(
       this.find(query),
-      this.onCreated(),
-      this.onPatched()
+      // this.onCreated(),
+      // this.onPatched()
     );
   }
 
