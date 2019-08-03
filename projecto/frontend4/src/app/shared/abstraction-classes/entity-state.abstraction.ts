@@ -95,7 +95,6 @@ export abstract class EntityStateAbstraction {
   public getAndWatch(id: number) {
     return merge(
       this.get(id),
-      this.onCreated(id),
       this.onPatched(id)
     );
 
