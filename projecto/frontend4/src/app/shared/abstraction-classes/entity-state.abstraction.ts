@@ -28,13 +28,16 @@ export abstract class EntityStateAbstraction {
           const mutation = clone(value);
           const oldState = clone(state);
           const objID = obj => obj.id;
-          const diff = (objA, objB) => objA - objB;
-          const patch = pipe(uniqBy(objID), sort(diff));
+          const diff = (objA, objB) => objA.id - objB.id;
+          const patch = pipe(
+            uniqBy(objID),
+            sort(diff)
+            );
           const newState = patch([...mutation, ...oldState]);
           this.source.next(newState);
-          console.log(`Old ${this.xAPIservice.entityName}State:`, oldState);
-          console.log(`${this.xAPIservice.entityName}State mutation:`, mutation);
-          console.log(`New ${this.xAPIservice.entityName}State:`, newState);
+          console.log(`${this.xAPIservice.entityName} State - old:`, oldState);
+          console.log(`${this.xAPIservice.entityName} State - mutation:`, mutation);
+          console.log(`${this.xAPIservice.entityName} State - new:`, newState);
           return value;
         })
       );
