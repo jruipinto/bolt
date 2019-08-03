@@ -119,8 +119,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
       return alert('Alguns dados obrigatórios em falta!');
     }
     const estado = 'recebido';
-    const cliente = this.clienteForm.value;
-    const contacto = this.contactoClienteForm.value.contacto;
+    const cliente = clone(this.clienteForm.value);
+    const contacto = clone(this.contactoClienteForm.value.contacto);
     const assistencia: Assistencia = {
       estado,
       cliente_user_id: cliente.id,
