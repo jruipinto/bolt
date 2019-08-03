@@ -6,6 +6,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { User, Encomenda } from 'src/app/shared/models';
 import { UsersService, UI, UIService, EncomendasService } from 'src/app/shared/state';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import clone from 'ramda/es/clone';
 
 @AutoUnsubscribe()
 @Component({
@@ -113,8 +114,11 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-  createEncomenda(encomenda: Encomenda) {
-    encomenda = { ...encomenda, estado: 'registada' };
+  createEncomenda(arg: Encomenda) {
+    if (this.encomendaForm.invalid || this.contactoClienteForm.invalid || this.clienteForm.invalid) {
+      return alert('Alguns dados obrigatórios em falta!');
+    }
+    const encomenda = { ...clone(arg), estado: 'registada' };
     const success = () => {
       this.artigoForm.reset();
       this.encomendaForm.reset();
