@@ -18,7 +18,7 @@ export abstract class EntitiesApiAbstrationService {
   }
 
   public find(query?: object) {
-    console.log(this.entityName, 'Api -> find -> query:', query);
+    console.log(`[${this.entityName}Api] find query:`, query);
     const apiResponse$ = from(
       this.entityAPI.find(query)
         .then(
@@ -30,7 +30,7 @@ export abstract class EntitiesApiAbstrationService {
   }
 
   public get(id: number) {
-    console.log(this.entityName, 'Api -> get -> id:', id);
+    console.log(`[${this.entityName}Api] get id:`, id);
     const apiResponse$ = from(this.entityAPI.get(id)
       .then(
         apiResponse => [apiResponse],
@@ -41,7 +41,7 @@ export abstract class EntitiesApiAbstrationService {
   }
 
   public create(data: object, actionType?: string) {
-    console.log(this.entityName, 'Api -> create -> data:', data);
+    console.log(`[${this.entityName}Api] create data:`, data);
     const apiResponse$ = from(this.entityAPI.create(data)
       .then(
         apiResponse => [apiResponse],
@@ -52,7 +52,7 @@ export abstract class EntitiesApiAbstrationService {
   }
 
   public patch(id: number, data: object, actionType?: string) {
-    console.log(this.entityName, 'Api -> patch -> id:', id, ', data:', data);
+    console.log(`[${this.entityName}Api] patch id: ${id}, data:`, data);
     const apiResponse$ = from(this.entityAPI.patch(id, data)
       .then(
         apiResponse => [apiResponse],
@@ -66,7 +66,7 @@ export abstract class EntitiesApiAbstrationService {
     const apiResponse$ = fromEvent(this.entityAPI, 'created');
     return apiResponse$.pipe(
       map(apiResponse => [apiResponse as any]),
-      tap(receivedData => console.log(this.entityName, 'Api -> onCreated -> receivedData:', receivedData))
+      tap(receivedData => console.log(`[${this.entityName}Api] onCreated receivedData:`, receivedData))
     );
   }
 
@@ -74,7 +74,7 @@ export abstract class EntitiesApiAbstrationService {
     const apiResponse$ = fromEvent(this.entityAPI, 'patched');
     return apiResponse$.pipe(
       map(apiResponse => [apiResponse as any]),
-      tap(receivedData => console.log(this.entityName, 'Api -> onPatched -> receivedData:', receivedData))
+      tap(receivedData => console.log(`[${this.entityName}Api] onPatched receivedData:`, receivedData))
     );
   }
 
