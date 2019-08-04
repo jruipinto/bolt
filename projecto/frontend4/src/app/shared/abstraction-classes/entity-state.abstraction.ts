@@ -32,7 +32,7 @@ export abstract class EntityStateAbstraction {
           const patch = pipe(
             uniqBy(objID),
             sort(diff)
-            );
+          );
           const newState = patch([...mutation, ...oldState]);
           this.source.next(newState);
           console.log(`${this.xAPIservice.entityName} State - old:`, oldState);
@@ -50,10 +50,25 @@ export abstract class EntityStateAbstraction {
       );
   }
   public get(id: number) {
-    return this.xAPIservice.get(id)
+    return this.state$
       .pipe(
-        concatMap(this.patchState)
+        first(),
+        concatMap(state => {
+          const item = state.find(i => i.id === id);
+          if (item) {
+            return of([item]);
+          }
+          return this.xAPIservice.get(id)
+            .pipe(
+              concatMap(this.patchState)
+            );
+        })
       );
+    /*
+  return this.xAPIservice.get(id)
+    .pipe(
+      concatMap(this.patchState)
+    );*/
   }
   public create(data: object) {
     return this.xAPIservice.create(data)
