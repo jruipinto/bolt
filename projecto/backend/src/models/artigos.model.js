@@ -25,15 +25,15 @@ module.exports = function (app) {
     },
     //int
     qty: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER.UNSIGNED
     },
     //decimal(6,2) example: 9999,99€
     preco: {
-      type: Sequelize.DECIMAL(6, 2)
+      type: Sequelize.DECIMAL(6, 2).UNSIGNED
     },
     //decimal(6,2) example: 9999,99€
     pvp: {
-      type: Sequelize.DECIMAL(6, 2)
+      type: Sequelize.DECIMAL(6, 2).UNSIGNED
     }
   },
     {

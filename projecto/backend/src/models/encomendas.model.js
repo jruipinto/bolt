@@ -54,7 +54,7 @@ module.exports = function (app) {
     },
     //int
     orcamento: {
-      type: Sequelize.INTEGER
+      type: Sequelize.DECIMAL(6, 2).UNSIGNED
     },
     //varchar(200)
     fornecedor: {
@@ -62,7 +62,7 @@ module.exports = function (app) {
     },
     //int
     qty: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.INTEGER.UNSIGNED,
       allowNull: false
     }
 

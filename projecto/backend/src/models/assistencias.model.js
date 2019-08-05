@@ -43,7 +43,7 @@ module.exports = function (app) {
     },
     //bigint(8)
     orcamento: {
-      type: Sequelize.BIGINT(8)
+      type: Sequelize.DECIMAL(6, 2).UNSIGNED
     },
     //text(5000)
     relatorio_interno: {
@@ -62,7 +62,7 @@ module.exports = function (app) {
     },
     //varchar(8)
     preco: {
-      type: Sequelize.STRING(8)
+      type: Sequelize.DECIMAL(6, 2).UNSIGNED
     },
     //varchar(20)
     estado: {
