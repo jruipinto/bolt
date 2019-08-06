@@ -7,6 +7,7 @@ export interface Assistencia {
     cliente_user_name?: string;
     cliente_user_contacto?: number;
     registo_cronologico: EventoCronologico[]; // JSON.stringify(data: EventoCronologico[])
+    tecnico?: string; // tecnico is extrated & filtered from registo_cronologico
     categoria: string;
     marca: string;
     modelo: string;

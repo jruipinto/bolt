@@ -6,7 +6,7 @@ import { EntitiesApiAbstrationService } from 'src/app/shared/abstraction-classes
 import { FeathersService } from './feathers.service';
 import { UsersService } from '../state/users.service';
 import { Assistencia, EventoCronologico, User } from 'src/app/shared/models';
-import { lensProp, view, set } from 'ramda';
+import { lensProp, view, set, clone } from 'ramda';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +50,21 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
     return obj;
   }
 
+  private setTecnico = (arg: Assistencia) => {
+    const registo = clone(arg.registo_cronologico);
+    const registoFiltered = registo.filter(
+      evento =>
+        evento.estado === 'em análise' ||
+        evento.estado === 'contacto pendente' ||
+        evento.estado === 'orçamento pendente' ||
+        evento.estado === 'aguarda material' ||
+        evento.estado === 'concluído'
+    );
+    const lastEvento = registoFiltered ? registoFiltered[registoFiltered.length - 1] : null;
+    const tecnico = lastEvento.tecnico;
+    return ({ ...arg, tecnico });
+  }
+
   private fullyDetailedAssistencia$ = (assistenciaFromApi: Assistencia) =>
     this.usersAPI.get(assistenciaFromApi.cliente_user_id)
       .pipe(
@@ -57,6 +72,7 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
         map(this.acceptClienteDetails),
         map(curryAssistenciaWithClientDetails => curryAssistenciaWithClientDetails(assistenciaFromApi)),
         map(assistencia => this.deserialize(assistencia, 'registo_cronologico')),
+        map(this.setTecnico),
         map(assistencia => this.deserialize(assistencia, 'material')),
         map(assistencia => this.deserialize(assistencia, 'encomendas')),
         concatMap(this.assistenciaWithDetailedRegistoCronologico$)
