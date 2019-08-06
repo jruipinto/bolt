@@ -132,7 +132,9 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
       modelo: equipment.modelo,
       cor: equipment.cor,
       serial: equipment.serial,
-      problema: `${equipment.problema} -- Acessórios: ${equipment.acessorios} -- Código: ${equipment.codigo}`,
+      problema: equipment.problema +
+        (equipment.acessorios ? ` - Acessórios: ${equipment.acessorios}` : '') +
+        (equipment.codigo ? ` - Código: ${equipment.codigo}` : ''),
       orcamento: equipment.orcamento
     };
     const assistenciasService = {
