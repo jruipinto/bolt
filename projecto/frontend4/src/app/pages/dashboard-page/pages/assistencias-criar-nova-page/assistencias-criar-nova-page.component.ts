@@ -45,6 +45,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
     modelo: [''],
     cor: ['', Validators.required],
     serial: [''],
+    codigo: [''],
+    acessorios: [''],
     problema: ['', Validators.required],
     orcamento: [null]
   });
@@ -121,10 +123,17 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
     const estado = 'recebido';
     const cliente = clone(this.clienteForm.value);
     const contacto = clone(this.contactoClienteForm.value.contacto);
-    const assistencia: Assistencia = {
+    const equipment = capitalize(clone(this.criarNovaForm.value));
+    const assistencia: Partial<Assistencia> = {
       estado,
       cliente_user_id: cliente.id,
-      ...capitalize(this.criarNovaForm.value)
+      categoria: equipment.categoria,
+      marca: equipment.marca,
+      modelo: equipment.modelo,
+      cor: equipment.cor,
+      serial: equipment.serial,
+      problema: `${equipment.problema} -- Acessórios: ${equipment.acessorios} -- Código: ${equipment.codigo}`,
+      orcamento: equipment.orcamento
     };
     const assistenciasService = {
       create$: (data: Partial<Assistencia>) =>

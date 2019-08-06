@@ -15,7 +15,8 @@
     <div *ngIf="userSearchResults$ | async as users">
       <div *ngIf="users.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
       <div *ngIf="users.length>0">
-        <r-data-row class="clr-row" style="margin-bottom: 0" *ngFor="let user of users; let listaIndex=index" (click)="addUser(user)">
+        <r-data-row class="clr-row" style="margin-bottom: 0" *ngFor="let user of users; let listaIndex=index"
+          (click)="addUser(user)">
           <div class="clr-col-lg-9">
             {{user.nome}}
           </div>
@@ -147,10 +148,29 @@
     </div>
     <div class="clr-row">
       <div class="clr-col-md-2">
+        <label for="serial">Código:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="clr-input wd-100" type="text" name="codigo" id="codigo" placeholder="(recomendado)"
+          formControlName="codigo">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="serial">Acessórios:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="clr-input wd-100" type="text" name="acessorios" id="acessorios" placeholder="(recomendado)"
+          formControlName="acessorios">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
         <label for="problema">Problema:*</label>
       </div>
       <div class="clr-col-md-9 clr-col-lg-6">
-        <textarea class="clr-textarea wd-100" name="problema" id="problema" required formControlName="problema"></textarea>
+        <textarea class="clr-textarea wd-100" name="problema" id="problema" required
+          formControlName="problema"></textarea>
       </div>
     </div>
     <div class="clr-row">
@@ -163,7 +183,8 @@
     </div>
     <div class="clr-row no-gutters">
       <div class="clr-col-md-12 clr-col-lg-2">
-        <input class="btn btn-primary wd-100" type="submit" [disabled]="!contactoClienteForm.valid || !clienteForm.valid || !criarNovaForm.valid">
+        <input class="btn btn-primary wd-100" type="submit"
+          [disabled]="!contactoClienteForm.valid || !clienteForm.valid || !criarNovaForm.valid">
       </div>
     </div>
   </form>
