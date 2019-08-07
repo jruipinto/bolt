@@ -101,7 +101,14 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
           map(state =>
             state
               ? state.filter(assistencia =>
-                assistencia.tecnico === this.loggedInUserName)
+                assistencia.tecnico === this.loggedInUserName
+                && (assistencia.estado === 'recebido'
+                  || assistencia.estado === 'em análise'
+                  || assistencia.estado === 'contactado'
+                  || assistencia.estado === 'incontactável'
+                  || assistencia.estado === 'orçamento aprovado'
+                  || assistencia.estado === 'orçamento recusado'
+                  || assistencia.estado === 'material recebido'))
               : null
           )
         );
