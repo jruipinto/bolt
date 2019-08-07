@@ -45,7 +45,8 @@
         Técnico:
       </div>
       <div class="clr-col">
-        {{assistencia.registo_cronologico[assistencia.registo_cronologico.length-1].tecnico}}
+        {{assistencia.tecnico}}
+        <span *ngIf="!assistencia.tecnico">(aguarda técnico)</span>
       </div>
     </div>
     <div class="clr-row">

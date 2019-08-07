@@ -12,14 +12,18 @@
       <span *ngIf="assistencias.length > 99">99+</span>
     </span></label>
   <clr-radio-wrapper>
-    <input type="radio" clrRadio name="radioOption" required value="todas" (click)="filterAssistencias('todas')"
+    <input type="radio" clrRadio name="radioOption" required value="minhas" (click)="filterAssistencias('minhas')"
       checked />
-    <label>Todas</label>
+    <label>Minhas</label>
   </clr-radio-wrapper>
   <clr-radio-wrapper>
     <input type="radio" clrRadio name="radioOption" required value="a fechar"
       (click)="filterAssistencias('a fechar')" />
     <label>A fechar</label>
+  </clr-radio-wrapper>
+  <clr-radio-wrapper>
+    <input type="radio" clrRadio name="radioOption" required value="todas" (click)="filterAssistencias('todas')" />
+    <label>Todas</label>
   </clr-radio-wrapper>
 </clr-radio-container>
 
@@ -51,7 +55,8 @@
         Cliente:{{assistencia.cliente_user_name}}
       </div>
       <div class="clr-col-lg-2 lessimportant">
-        Técnico:{{assistencia.tecnico}}
+        <span *ngIf="assistencia.tecnico">Técnico:{{assistencia.tecnico}}</span>
+        <span *ngIf="!assistencia.tecnico">(aguarda técnico)</span>
       </div>
       <div class="clr-col-lg-1 lessimportant">
         {{assistencia.estado}}

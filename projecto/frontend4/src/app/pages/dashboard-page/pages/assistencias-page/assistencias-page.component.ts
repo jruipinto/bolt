@@ -40,7 +40,7 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
         }
       })
       .subscribe(() => this.loading = false);
-    this.filterAssistencias('todas');
+    this.filterAssistencias('minhas');
   }
 
   ngOnDestroy() { }
@@ -56,7 +56,7 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
     return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
   }
 
-  filterAssistencias(arg: 'todas' | 'a fechar') {
+  filterAssistencias(arg: 'todas' | 'a fechar' | 'minhas') {
     if (arg === 'todas') {
       return this.assistencias$ = this.assistencias.state$
         .pipe(
@@ -85,6 +85,17 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
                 || assistencia.estado === 'orçamento aprovado'
                 || assistencia.estado === 'orçamento recusado'
                 || assistencia.estado === 'material recebido')
+              : null
+          )
+        );
+    }
+    if (arg === 'minhas') {
+      return this.assistencias$ = this.assistencias.state$
+        .pipe(
+          map(state =>
+            state
+              ? state.filter(assistencia =>
+                assistencia.tecnico === 'your name')
               : null
           )
         );
