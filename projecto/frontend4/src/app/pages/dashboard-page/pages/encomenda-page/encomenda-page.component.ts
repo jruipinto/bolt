@@ -42,12 +42,16 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
     }
     */
   notifyAssistencia = (encomenda: Encomenda) => {
+    console.log(encomenda);
+    if (!encomenda) { return of(alert('erro de comunicação com api')); }
     if (encomenda.assistencia_id) {
       return this.assistencias.get(encomenda.assistencia_id)
         .pipe(
           map(res => res[0]),
           concatMap((assistencia: Assistencia) => {
-            if (assistencia.encomendas.filter((e: Encomenda) => e.estado !== 'recebida').length === 0) {
+            const encomendasLeft = assistencia.encomendas.filter((e: Encomenda) => e.estado !== 'recebida' && e.estado !== 'entregue');
+            console.log(encomendasLeft, encomendasLeft.length);
+            if (encomendasLeft.length === 0) {
               return this.assistencias.patch(encomenda.assistencia_id, { ...assistencia, estado: 'material recebido' })
                 .pipe(
                   concatMap(() => of([encomenda]))
@@ -110,7 +114,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
             () => this.router.navigate(['/dashboard/artigo', encomenda.artigo_id])
           )
         )
-        .subscribe(() => alert(`👍 Assistência ${encomenda.assistencia_id} foi notificada da chegada de material!`));
+        .subscribe(/*() => alert(`👍 Assistência ${encomenda.assistencia_id} foi notificada da chegada de material!`)*/);
     }
 
     return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })

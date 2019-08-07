@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, concatMap, mergeMap } from 'rxjs/operators';
+import { map, concatMap, mergeMap, tap } from 'rxjs/operators';
 import { EntityStateAbstraction } from 'src/app/shared/abstraction-classes';
 import { EncomendasApiService, AuthService } from 'src/app/shared/services';
 import { ArtigosService } from './artigos.service';
@@ -50,6 +50,7 @@ export class EncomendasService extends EntityStateAbstraction {
     return super.getAndWatch(id)
       .pipe(
         map((res: Encomenda[]) => res[0]),
+        tap(console.log),
         mergeMap(encomenda => this.artigosService.get(encomenda.artigo_id)
           .pipe(
             map((dbArtigo: Artigo[]) => dbArtigo[0]),
