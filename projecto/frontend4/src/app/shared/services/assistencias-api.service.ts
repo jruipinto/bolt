@@ -61,7 +61,7 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
         evento.estado === 'concluído'
     );
     const lastEvento = registoFiltered ? registoFiltered[registoFiltered.length - 1] : null;
-    const tecnico = lastEvento.tecnico;
+    const tecnico = lastEvento ? lastEvento.tecnico : null;
     return ({ ...arg, tecnico });
   }
 
@@ -72,10 +72,10 @@ export class AssistenciasApiService extends EntitiesApiAbstrationService {
         map(this.acceptClienteDetails),
         map(curryAssistenciaWithClientDetails => curryAssistenciaWithClientDetails(assistenciaFromApi)),
         map(assistencia => this.deserialize(assistencia, 'registo_cronologico')),
-        map(this.setTecnico),
         map(assistencia => this.deserialize(assistencia, 'material')),
         map(assistencia => this.deserialize(assistencia, 'encomendas')),
-        concatMap(this.assistenciaWithDetailedRegistoCronologico$)
+        concatMap(this.assistenciaWithDetailedRegistoCronologico$),
+        map(this.setTecnico)
       )
 
   private fullyDetailedAssistenciasStream$ = (assistencias: Assistencia[]) =>
