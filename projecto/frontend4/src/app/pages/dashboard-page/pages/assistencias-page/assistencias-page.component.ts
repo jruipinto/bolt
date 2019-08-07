@@ -1,10 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { map, concatMap, tap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { AssistenciasService } from 'src/app/shared/state';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Assistencia } from 'src/app/shared';
+import { Assistencia, AuthService } from 'src/app/shared';
 
 @AutoUnsubscribe()
 @Component({
@@ -15,30 +15,36 @@ import { Assistencia } from 'src/app/shared';
 })
 export class AssistenciasPageComponent implements OnInit, OnDestroy {
   public loading = true;
+  public loggedInUserName: string;
   public assistencias$: Observable<Assistencia[]>;
 
   constructor(
     private assistencias: AssistenciasService,
+    private authService: AuthService,
     private router: Router) {
   }
 
   ngOnInit() {
-    this.assistencias
-      .findAndWatch({
-        query: {
-          $limit: 200, estado: {
-            $in: [
-              'recebido',
-              'em análise',
-              'contactado',
-              'incontactável',
-              'orçamento aprovado',
-              'orçamento recusado',
-              'material recebido'
-            ]
-          }
-        }
-      })
+    this.authService.getUserName$()
+      .pipe(
+        tap(res => this.loggedInUserName = res[0].nome),
+        concatMap(() => this.assistencias
+          .findAndWatch({
+            query: {
+              $limit: 200, estado: {
+                $in: [
+                  'recebido',
+                  'em análise',
+                  'contactado',
+                  'incontactável',
+                  'orçamento aprovado',
+                  'orçamento recusado',
+                  'material recebido'
+                ]
+              }
+            }
+          }))
+      )
       .subscribe(() => this.loading = false);
     this.filterAssistencias('minhas');
   }
@@ -95,7 +101,7 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
           map(state =>
             state
               ? state.filter(assistencia =>
-                assistencia.tecnico === 'your name')
+                assistencia.tecnico === this.loggedInUserName)
               : null
           )
         );
