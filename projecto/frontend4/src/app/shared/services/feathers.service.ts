@@ -24,20 +24,35 @@ export class FeathersService {
       .configure(feathersRx({                           // add feathers-reactive plugin
         idField: '_id'
       }));
-   }
+  }
 
-     // expose services
+  // expose services
   public service(name: string) {
     return this._feathers.service(name);
   }
 
   // expose authentication
   public authenticate(credentials?): Promise<any> {
+    this._socket.on('disconnect', (reason) => {
+      window.location.reload();
+    });
+    this._socket.on('connect', (reason) => {
+      window.location.reload();
+    });
+    this._socket.on('error', (reason) => {
+      window.location.reload();
+    });
     return this._feathers.authenticate(credentials);
   }
 
   // expose logout
   public logout() {
     return this._feathers.logout();
+  }
+
+  public onError() {
+    return (this._socket.on('disconnect', (error) => {
+      alert(error);
+    }));
   }
 }
