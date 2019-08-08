@@ -36,7 +36,7 @@ export class FeathersService {
     this._socket.on('disconnect', (reason) => {
       window.location.reload();
     });
-    this._socket.on('connect', (reason) => {
+    this._socket.on('reconnect', (reason) => {
       window.location.reload();
     });
     this._socket.on('error', (reason) => {
@@ -48,11 +48,5 @@ export class FeathersService {
   // expose logout
   public logout() {
     return this._feathers.logout();
-  }
-
-  public onError() {
-    return (this._socket.on('disconnect', (error) => {
-      alert(error);
-    }));
   }
 }

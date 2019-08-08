@@ -44,7 +44,8 @@ export class LoginPageComponent implements OnInit {
       })
       .catch(err => {
         console.log('Erro:', err);
-        alert('As credenciais estão erradas ou falta internet. Corrija ou contacte o administrador.');
+        if (err.message && err.message === 'Invalid login') { return alert('As credenciais estão erradas'); }
+        alert('Problema na conexão. Contacte o administrador.');
       });
 
   }
