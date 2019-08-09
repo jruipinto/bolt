@@ -4,15 +4,17 @@ import { map, tap } from 'rxjs/operators';
 import { FeathersService } from 'src/app/shared/services/feathers.service';
 
 
-export abstract class EntitiesApiAbstrationService {
+export abstract class EntityApiAbstration {
   private entityAPI = this.feathersService.service(this.entity);
   public entityName = this.entity;
 
-  constructor(protected feathersService: FeathersService, private entity: string) {
+  constructor(
+    protected feathersService: FeathersService,
+    private entity: string) {
   }
 
   private handleError(error) {
-    console.log(error);
+    console.log(`${this.entityName}Api -> handleError -> error`, error);
     alert('Algo correu mal! Chama o Admin ou CTRL + SHIFT + I');
     return error;
   }
@@ -24,8 +26,9 @@ export abstract class EntitiesApiAbstrationService {
         .then(
           apiResponse => apiResponse.data,
           this.handleError
-        ));
-    // console.log(`[${this.entity} API] find ${this.entity}`);
+        )
+        .catch(this.handleError)
+    );
     return apiResponse$ as Observable<any[]>;
   }
 
@@ -35,8 +38,9 @@ export abstract class EntitiesApiAbstrationService {
       .then(
         apiResponse => [apiResponse],
         this.handleError
-      ));
-    // console.log(`[${this.entity} API] get ${this.entity} (id:${id})`);
+      )
+      .catch(this.handleError)
+    );
     return apiResponse$ as Observable<any[]>;
   }
 
@@ -46,8 +50,9 @@ export abstract class EntitiesApiAbstrationService {
       .then(
         apiResponse => [apiResponse],
         this.handleError
-      ));
-    // console.log(actionType);
+      )
+      .catch(this.handleError)
+    );
     return apiResponse$ as Observable<any[]>;
   }
 
@@ -57,25 +62,28 @@ export abstract class EntitiesApiAbstrationService {
       .then(
         apiResponse => [apiResponse],
         this.handleError
-      ));
-    // console.log(actionType);
+      )
+      .catch(this.handleError)
+    );
     return apiResponse$ as Observable<any[]>;
   }
 
   public onCreated() {
     const apiResponse$ = fromEvent(this.entityAPI, 'created');
-    return apiResponse$.pipe(
-      map(apiResponse => [apiResponse as any]),
-      tap(receivedData => console.log(`[${this.entityName}Api] onCreated receivedData:`, receivedData))
-    );
+    return apiResponse$
+      .pipe(
+        map(apiResponse => [apiResponse as any]),
+        tap(receivedData => console.log(`[${this.entityName}Api] onCreated receivedData:`, receivedData))
+      );
   }
 
   public onPatched() {
     const apiResponse$ = fromEvent(this.entityAPI, 'patched');
-    return apiResponse$.pipe(
-      map(apiResponse => [apiResponse as any]),
-      tap(receivedData => console.log(`[${this.entityName}Api] onPatched receivedData:`, receivedData))
-    );
+    return apiResponse$
+      .pipe(
+        map(apiResponse => [apiResponse as any]),
+        tap(receivedData => console.log(`[${this.entityName}Api] onPatched receivedData:`, receivedData))
+      );
   }
 
   /*

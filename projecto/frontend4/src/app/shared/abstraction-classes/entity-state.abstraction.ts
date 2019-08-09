@@ -1,23 +1,17 @@
-import { of, BehaviorSubject, merge, fromEvent } from 'rxjs';
-import { map, tap, concatMap, switchMap, first } from 'rxjs/operators';
-import { unionBy } from 'lodash';
-import { EntitiesApiAbstrationService } from './entities-api-abstration.service';
-import { sortByID } from '../utilities';
+import { of, BehaviorSubject, merge } from 'rxjs';
+import { map, concatMap, first } from 'rxjs/operators';
+import { EntityApiAbstration } from './entity-api-abstration';
 import uniqBy from 'ramda/es/uniqBy';
-import { sort, clone } from 'ramda';
 import pipe from 'ramda/es/pipe';
+import { sort, clone } from 'ramda';
 
 export abstract class EntityStateAbstraction {
   private defaults = [];
-  private source = new BehaviorSubject<any[]>(this.defaults);
-  public state$ = this.source;
+  private queryHistory = [];
+  public state$ = new BehaviorSubject<any[]>(this.defaults);
 
   constructor(
-    private xAPIservice: EntitiesApiAbstrationService) {
-  }
-  private setState(value: any) {
-    this.source.next(value);
-    console.log('state mutation:', value);
+    private xAPIservice: EntityApiAbstration) {
   }
 
   private patchState = (value: any[]) => {
@@ -34,7 +28,7 @@ export abstract class EntityStateAbstraction {
             sort(diff)
           );
           const newState = patch([...mutation, ...oldState]);
-          this.source.next(newState);
+          this.state$.next(newState);
           console.log(`${this.xAPIservice.entityName} State - old:`, oldState);
           console.log(`${this.xAPIservice.entityName} State - mutation:`, mutation);
           console.log(`${this.xAPIservice.entityName} State - new:`, newState);
@@ -44,11 +38,19 @@ export abstract class EntityStateAbstraction {
   }
 
   public find(query?: object) {
+    const stringyfiedQuery = JSON.stringify(query);
+    const previousQuery = this.queryHistory
+      .filter(q => JSON.stringify(q) === stringyfiedQuery);
+    if (previousQuery.length > 0) {
+      return;
+    }
+    this.queryHistory = [...clone(this.queryHistory), query];
     return this.xAPIservice.find(query)
       .pipe(
         concatMap(this.patchState)
       );
   }
+
   public get(id: number) {
     return this.state$
       .pipe(
@@ -64,26 +66,26 @@ export abstract class EntityStateAbstraction {
             );
         })
       );
-    /*
-  return this.xAPIservice.get(id)
-    .pipe(
-      concatMap(this.patchState)
-    );*/
   }
+
   public create(data: object) {
     return this.xAPIservice.create(data)
       .pipe(
         concatMap(this.patchState)
       );
   }
+
   // public update() {}
+
   public patch(id: number, data: object) {
     return this.xAPIservice.patch(id, data)
       .pipe(
         concatMap(this.patchState)
       );
   }
+
   // public delete() { }
+
   public onCreated(id?: number) {
     return this.xAPIservice.onCreated()
       .pipe(

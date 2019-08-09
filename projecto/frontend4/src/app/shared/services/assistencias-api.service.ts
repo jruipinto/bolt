@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, concat, of } from 'rxjs';
 import { map, concatMap, toArray, mergeMap, tap } from 'rxjs/operators';
 
-import { EntitiesApiAbstrationService } from 'src/app/shared/abstraction-classes';
+import { EntityApiAbstration } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
 import { UsersService } from '../state/users.service';
 import { Assistencia, EventoCronologico, User } from 'src/app/shared/models';
@@ -11,7 +11,7 @@ import { lensProp, view, set, clone } from 'ramda';
 @Injectable({
   providedIn: 'root'
 })
-export class AssistenciasApiService extends EntitiesApiAbstrationService {
+export class AssistenciasApiService extends EntityApiAbstration {
   private usersAPI = this.usersService;
 
   private detailedEventoCronologico$ = (evento: EventoCronologico): Observable<EventoCronologico> =>
