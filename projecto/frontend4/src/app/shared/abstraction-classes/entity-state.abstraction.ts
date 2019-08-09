@@ -37,14 +37,14 @@ export abstract class EntityStateAbstraction {
       );
   }
 
-  public find(query?: object) {
-    const stringyfiedQuery = JSON.stringify(query);
+  public find(query?: any) {/*
+    const stringyfiedQuery = JSON.stringify(query.query);
     const previousQuery = this.queryHistory
       .filter(q => JSON.stringify(q) === stringyfiedQuery);
     if (previousQuery.length > 0) {
-      return;
+      return of([]).pipe(map(() => []));
     }
-    this.queryHistory = [...clone(this.queryHistory), query];
+    this.queryHistory = [...clone(this.queryHistory), clone(query.query)];*/
     return this.xAPIservice.find(query)
       .pipe(
         concatMap(this.patchState)
