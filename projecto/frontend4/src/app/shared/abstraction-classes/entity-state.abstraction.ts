@@ -7,7 +7,6 @@ import { sort, clone } from 'ramda';
 
 export abstract class EntityStateAbstraction {
   private defaults = [];
-  private queryHistory = [];
   public state$ = new BehaviorSubject<any[]>(this.defaults);
 
   constructor(
@@ -37,14 +36,7 @@ export abstract class EntityStateAbstraction {
       );
   }
 
-  public find(query?: any) {/*
-    const stringyfiedQuery = JSON.stringify(query.query);
-    const previousQuery = this.queryHistory
-      .filter(q => JSON.stringify(q) === stringyfiedQuery);
-    if (previousQuery.length > 0) {
-      return of([]).pipe(map(() => []));
-    }
-    this.queryHistory = [...clone(this.queryHistory), clone(query.query)];*/
+  public find(query?: any) {
     return this.xAPIservice.find(query)
       .pipe(
         concatMap(this.patchState)

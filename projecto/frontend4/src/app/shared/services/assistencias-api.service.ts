@@ -34,13 +34,12 @@ export class AssistenciasApiService extends EntityApiAbstration {
           ({ ...assistencia, registo_cronologico: detailedRegistoCronologico$ }))
       )
 
-  private acceptClienteDetails = (cliente: User) =>
-    (assistencia: Assistencia): Assistencia =>
-      ({
-        ...assistencia,
-        cliente_user_name: cliente.nome,
-        cliente_user_contacto: cliente.contacto
-      })
+  private acceptClienteDetails = (cliente: User, assistencia: Assistencia): Assistencia =>
+    ({
+      ...assistencia,
+      cliente_user_name: cliente.nome,
+      cliente_user_contacto: cliente.contacto
+    })
 
   private deserialize(obj: {}, objPropName: string): {} {
     const lens = lensProp(objPropName);
@@ -69,8 +68,7 @@ export class AssistenciasApiService extends EntityApiAbstration {
     this.usersAPI.get(assistenciaFromApi.cliente_user_id)
       .pipe(
         map(cliente => cliente[0]),
-        map(this.acceptClienteDetails),
-        map(curryAssistenciaWithClientDetails => curryAssistenciaWithClientDetails(assistenciaFromApi)),
+        map(cliente => this.acceptClienteDetails(cliente, assistenciaFromApi)),
         map(assistencia => this.deserialize(assistencia, 'registo_cronologico')),
         map(assistencia => this.deserialize(assistencia, 'material')),
         map(assistencia => this.deserialize(assistencia, 'encomendas')),
