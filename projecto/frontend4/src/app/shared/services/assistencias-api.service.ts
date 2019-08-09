@@ -14,24 +14,20 @@ import { lensProp, view, set, clone } from 'ramda';
 export class AssistenciasApiService extends EntityApiAbstration {
   private usersAPI = this.usersService;
 
-  private detailedEventoCronologico$ = (evento: EventoCronologico): Observable<EventoCronologico> =>
-    this.usersAPI.get(evento.tecnico_user_id)
-      .pipe(
-        map((user: User[]) => ({ ...evento, tecnico: user[0].nome }))
-      )
-
-  private detailedRegistoCronologico$ = (registoCronologico: EventoCronologico[]) =>
-    concat([...registoCronologico.map(this.detailedEventoCronologico$)])
-      .pipe(
-        concatMap(concats => concats),
-        toArray()
-      )
-
   private assistenciaWithDetailedRegistoCronologico$ = (assistencia: Assistencia): Observable<Assistencia> =>
-    this.detailedRegistoCronologico$(assistencia.registo_cronologico)
+    concat(
+      assistencia.registo_cronologico
+        .map(evento =>
+          this.usersAPI.get(evento.tecnico_user_id)
+            .pipe(
+              map((user: User[]) => ({ ...evento, tecnico: user[0].nome }) as EventoCronologico)
+            ))
+    )
       .pipe(
-        map((detailedRegistoCronologico$) =>
-          ({ ...assistencia, registo_cronologico: detailedRegistoCronologico$ }))
+        concatMap(stream => stream),
+        toArray(),
+        map(detailedRegistoCronologico =>
+          ({ ...assistencia, registo_cronologico: detailedRegistoCronologico }) as Assistencia)
       )
 
   private acceptClienteDetails = (cliente: User, assistencia: Assistencia): Assistencia =>
