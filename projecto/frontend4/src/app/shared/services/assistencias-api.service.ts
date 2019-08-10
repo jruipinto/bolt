@@ -14,22 +14,6 @@ import { lensProp, view, set, clone } from 'ramda';
 export class AssistenciasApiService extends EntityApiAbstration {
   private usersAPI = this.usersService;
 
-  private assistenciaWithDetailedRegistoCronologico$ = (assistencia: Assistencia): Observable<Assistencia> =>
-    concat(
-      assistencia.registo_cronologico
-        .map(evento =>
-          this.usersAPI.get(evento.tecnico_user_id)
-            .pipe(
-              map((user: User[]) => ({ ...evento, tecnico: user[0].nome }) as EventoCronologico)
-            ))
-    )
-      .pipe(
-        concatMap(stream => stream),
-        toArray(),
-        map(detailedRegistoCronologico =>
-          ({ ...assistencia, registo_cronologico: detailedRegistoCronologico }) as Assistencia)
-      )
-
   private acceptClienteDetails = (cliente: User, assistencia: Assistencia): Assistencia =>
     ({
       ...assistencia,
@@ -37,7 +21,7 @@ export class AssistenciasApiService extends EntityApiAbstration {
       cliente_user_contacto: cliente.contacto
     })
 
-  private deserialize(obj: {}, objPropName: string): {} {
+  private deserialize<T>(obj: T, objPropName: string) {
     const lens = lensProp(objPropName);
     if (typeof view(lens, obj) === 'string') {
       return set(lens, JSON.parse(view(lens, obj)), obj);
@@ -57,7 +41,7 @@ export class AssistenciasApiService extends EntityApiAbstration {
     );
     const lastEvento = registoFiltered ? registoFiltered[registoFiltered.length - 1] : null;
     const tecnico = lastEvento ? lastEvento.tecnico : null;
-    return ({ ...arg, tecnico });
+    return ({ ...arg, tecnico } as Assistencia);
   }
 
   private fullyDetailedAssistencia$ = (assistenciaFromApi: Assistencia) =>
@@ -68,17 +52,29 @@ export class AssistenciasApiService extends EntityApiAbstration {
         map(assistencia => this.deserialize(assistencia, 'registo_cronologico')),
         map(assistencia => this.deserialize(assistencia, 'material')),
         map(assistencia => this.deserialize(assistencia, 'encomendas')),
-        concatMap(this.assistenciaWithDetailedRegistoCronologico$),
+        concatMap(assistencia =>
+          concat(
+            assistencia.registo_cronologico
+              .map(evento =>
+                this.usersAPI.get(evento.tecnico_user_id)
+                  .pipe(
+                    map((user: User[]) => ({ ...evento, tecnico: user[0].nome }) as EventoCronologico)
+                  ))
+          )
+            .pipe(
+              concatMap(stream => stream),
+              toArray(),
+              map(detailedRegistoCronologico =>
+                ({ ...assistencia, registo_cronologico: detailedRegistoCronologico }) as Assistencia)
+            )),
         map(this.setTecnico)
       )
-
-  private fullyDetailedAssistenciasStream$ = (assistencias: Assistencia[]) =>
-    concat(...assistencias.map(this.fullyDetailedAssistencia$))
 
   private fullyDetailedAssistencias$ = (assistencias$: Observable<Assistencia[]>) =>
     assistencias$
       .pipe(
-        concatMap(this.fullyDetailedAssistenciasStream$),
+        concatMap((assistencias: Assistencia[]) =>
+          concat(...assistencias.map(this.fullyDetailedAssistencia$))),
         toArray()
       )
 
