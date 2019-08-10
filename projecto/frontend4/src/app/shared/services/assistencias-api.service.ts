@@ -25,7 +25,7 @@ export class AssistenciasApiService extends EntityApiAbstration {
   private fullyDetailedAssistencia$ = (assistenciaFromApi: Assistencia) =>
     this.usersAPI.get(assistenciaFromApi.cliente_user_id)
       .pipe(
-        map(cliente => cliente[0]),
+        map((res: User[]) => res[0]),
         map(cliente => (
           {
             ...assistenciaFromApi,
