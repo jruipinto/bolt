@@ -14,13 +14,6 @@ import { lensProp, view, set, clone } from 'ramda';
 export class AssistenciasApiService extends EntityApiAbstration {
   private usersAPI = this.usersService;
 
-  private acceptClienteDetails = (cliente: User, assistencia: Assistencia): Assistencia =>
-    ({
-      ...assistencia,
-      cliente_user_name: cliente.nome,
-      cliente_user_contacto: cliente.contacto
-    })
-
   private deserialize<T>(obj: T, objPropName: string) {
     const lens = lensProp(objPropName);
     if (typeof view(lens, obj) === 'string') {
@@ -29,29 +22,22 @@ export class AssistenciasApiService extends EntityApiAbstration {
     return obj;
   }
 
-  private setTecnico = (arg: Assistencia) => {
-    const registo = clone(arg.registo_cronologico);
-    const registoFiltered = registo.filter(
-      evento =>
-        evento.estado === 'em análise' ||
-        evento.estado === 'contacto pendente' ||
-        evento.estado === 'orçamento pendente' ||
-        evento.estado === 'aguarda material' ||
-        evento.estado === 'concluído'
-    );
-    const lastEvento = registoFiltered ? registoFiltered[registoFiltered.length - 1] : null;
-    const tecnico = lastEvento ? lastEvento.tecnico : null;
-    return ({ ...arg, tecnico } as Assistencia);
-  }
-
   private fullyDetailedAssistencia$ = (assistenciaFromApi: Assistencia) =>
     this.usersAPI.get(assistenciaFromApi.cliente_user_id)
       .pipe(
         map(cliente => cliente[0]),
-        map(cliente => this.acceptClienteDetails(cliente, assistenciaFromApi)),
+        map(cliente => (
+          {
+            ...assistenciaFromApi,
+            cliente_user_name: cliente.nome,
+            cliente_user_contacto: cliente.contacto
+          } as Assistencia)
+        ),
+
         map(assistencia => this.deserialize(assistencia, 'registo_cronologico')),
         map(assistencia => this.deserialize(assistencia, 'material')),
         map(assistencia => this.deserialize(assistencia, 'encomendas')),
+
         concatMap(assistencia =>
           concat(
             assistencia.registo_cronologico
@@ -62,12 +48,26 @@ export class AssistenciasApiService extends EntityApiAbstration {
                   ))
           )
             .pipe(
-              concatMap(stream => stream),
+              concatMap(streams => streams),
               toArray(),
               map(detailedRegistoCronologico =>
                 ({ ...assistencia, registo_cronologico: detailedRegistoCronologico }) as Assistencia)
             )),
-        map(this.setTecnico)
+
+        map(assistencia => {
+          const registo = clone(assistencia.registo_cronologico);
+          const registoFiltered = registo.filter(
+            evento =>
+              evento.estado === 'em análise' ||
+              evento.estado === 'contacto pendente' ||
+              evento.estado === 'orçamento pendente' ||
+              evento.estado === 'aguarda material' ||
+              evento.estado === 'concluído'
+          );
+          const lastEvento = registoFiltered ? registoFiltered[registoFiltered.length - 1] : null;
+          const tecnico = lastEvento ? lastEvento.tecnico : null;
+          return ({ ...assistencia, tecnico } as Assistencia);
+        })
       )
 
   private fullyDetailedAssistencias$ = (assistencias$: Observable<Assistencia[]>) =>
