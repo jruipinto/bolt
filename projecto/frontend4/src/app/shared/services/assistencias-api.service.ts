@@ -40,19 +40,17 @@ export class AssistenciasApiService extends EntityApiAbstration {
 
         concatMap(assistencia =>
           concat(
-            assistencia.registo_cronologico
+            ...assistencia.registo_cronologico
               .map(evento =>
                 this.usersAPI.get(evento.tecnico_user_id)
                   .pipe(
                     map((user: User[]) => ({ ...evento, tecnico: user[0].nome }) as EventoCronologico)
                   ))
-          )
-            .pipe(
-              concatMap(streams => streams),
-              toArray(),
-              map(detailedRegistoCronologico =>
-                ({ ...assistencia, registo_cronologico: detailedRegistoCronologico }) as Assistencia)
-            )),
+          )),
+        toArray(),
+
+        map(detailedRegistoCronologico =>
+          ({ ...assistenciaFromApi, registo_cronologico: detailedRegistoCronologico }) as Assistencia),
 
         map(assistencia => {
           const registo = clone(assistencia.registo_cronologico);
