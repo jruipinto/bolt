@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, concatMap, mergeMap, tap } from 'rxjs/operators';
+import { map, concatMap } from 'rxjs/operators';
 import { EntityStateAbstraction } from 'src/app/shared/abstraction-classes';
 import { EncomendasApiService, AuthService } from 'src/app/shared/services';
 import { ArtigosService } from './artigos.service';

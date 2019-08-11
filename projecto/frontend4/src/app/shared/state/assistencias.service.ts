@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { concat, of, merge } from 'rxjs';
-import { map, concatMap, toArray, mergeMap } from 'rxjs/operators';
+import { concat, of } from 'rxjs';
+import { map, concatMap, toArray } from 'rxjs/operators';
 import { EntityStateAbstraction } from 'src/app/shared/abstraction-classes';
 import { AssistenciasApiService, AuthService } from 'src/app/shared/services';
 import { ArtigosService } from './artigos.service';

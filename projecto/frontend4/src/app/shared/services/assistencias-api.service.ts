@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { concat } from 'rxjs';
-import { map, concatMap, toArray, tap } from 'rxjs/operators';
+import { map, concatMap, toArray } from 'rxjs/operators';
 
 import { EntityApiAbstration } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
