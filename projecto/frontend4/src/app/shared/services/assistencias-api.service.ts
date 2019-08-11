@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, concat, of } from 'rxjs';
-import { map, concatMap, toArray, mergeMap, tap } from 'rxjs/operators';
+import { concat } from 'rxjs';
+import { map, concatMap, toArray } from 'rxjs/operators';
 
 import { EntityApiAbstration } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
@@ -94,7 +94,7 @@ export class AssistenciasApiService extends EntityApiAbstration {
     const assistencia$ = super.get(id)
       .pipe(
         map(assistencias => assistencias[0]),
-        mergeMap(this.fullyDetailedAssistencia$),
+        concatMap(this.fullyDetailedAssistencia$),
         map(assistencia => [assistencia])
       );
     return assistencia$;
@@ -108,7 +108,7 @@ export class AssistenciasApiService extends EntityApiAbstration {
     })
       .pipe(
         map(assistencias => assistencias[0]),
-        mergeMap(this.fullyDetailedAssistencia$),
+        concatMap(this.fullyDetailedAssistencia$),
         map(assistencia => [assistencia])
       );
     return assistencia$;
@@ -122,7 +122,7 @@ export class AssistenciasApiService extends EntityApiAbstration {
     })
       .pipe(
         map(assistencias => assistencias[0]),
-        mergeMap(this.fullyDetailedAssistencia$),
+        concatMap(this.fullyDetailedAssistencia$),
         map(assistencia => [assistencia])
       );
     return assistencia$;
@@ -132,7 +132,7 @@ export class AssistenciasApiService extends EntityApiAbstration {
     const assistencia$ = super.onCreated()
       .pipe(
         map(assistencias => assistencias[0]),
-        mergeMap(this.fullyDetailedAssistencia$),
+        concatMap(this.fullyDetailedAssistencia$),
         map(assistencia => [assistencia])
       );
     return assistencia$;
@@ -142,7 +142,7 @@ export class AssistenciasApiService extends EntityApiAbstration {
     const assistencia$ = super.onPatched()
       .pipe(
         map(assistencias => assistencias[0]),
-        mergeMap(this.fullyDetailedAssistencia$),
+        concatMap(this.fullyDetailedAssistencia$),
         map(assistencia => [assistencia])
       );
     return assistencia$;
