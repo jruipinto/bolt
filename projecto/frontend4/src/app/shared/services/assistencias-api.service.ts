@@ -14,6 +14,11 @@ import { lensProp, view, set, clone } from 'ramda';
 export class AssistenciasApiService extends EntityApiAbstration {
   private usersAPI = this.usersService;
 
+  private sanitize(arr: any[] | null): any[] | null {
+    if (!arr) { return arr; }
+    return arr.map(item => ({ id: item.id, qty: item.qty }));
+  }
+
   private deserialize<T>(obj: T, objPropName: string) {
     const lens = lensProp(objPropName);
     if (typeof view(lens, obj) === 'string') {
@@ -68,19 +73,6 @@ export class AssistenciasApiService extends EntityApiAbstration {
         })
       )
 
-  private fullyDetailedAssistencias$ = (assistencias$: Observable<Assistencia[]>) =>
-    assistencias$
-      .pipe(
-        concatMap((assistencias: Assistencia[]) =>
-          concat(...assistencias.map(this.fullyDetailedAssistencia$))),
-        toArray()
-      )
-
-  private sanitize(arr: any[] | null): any[] | null {
-    if (!arr) { return arr; }
-    return arr.map(item => ({ id: item.id, qty: item.qty }));
-  }
-
   constructor(
     protected feathersService: FeathersService,
     private usersService: UsersService) {
@@ -89,13 +81,23 @@ export class AssistenciasApiService extends EntityApiAbstration {
 
 
   find(query?: object) {
-    const assistencias$ = super.find(query);
-    return this.fullyDetailedAssistencias$(assistencias$);
+    const assistencias$ = super.find(query)
+      .pipe(
+        concatMap(assistencias =>
+          concat(...assistencias.map(this.fullyDetailedAssistencia$))),
+        toArray()
+      );
+    return assistencias$;
   }
 
   get(id: number) {
-    const assistencia$ = super.get(id);
-    return this.fullyDetailedAssistencias$(assistencia$);
+    const assistencia$ = super.get(id)
+      .pipe(
+        map(assistencias => assistencias[0]),
+        mergeMap(this.fullyDetailedAssistencia$),
+        map(assistencia => [assistencia])
+      );
+    return assistencia$;
   }
 
   create(data: Assistencia, actionType?: string) {
@@ -103,8 +105,13 @@ export class AssistenciasApiService extends EntityApiAbstration {
       ...data,
       material: this.sanitize(data.material),
       encomendas: this.sanitize(data.encomendas)
-    });
-    return this.fullyDetailedAssistencias$(assistencia$);
+    })
+      .pipe(
+        map(assistencias => assistencias[0]),
+        mergeMap(this.fullyDetailedAssistencia$),
+        map(assistencia => [assistencia])
+      );
+    return assistencia$;
   }
 
   patch(id: number, data: Assistencia, actionType?: string) {
@@ -112,8 +119,13 @@ export class AssistenciasApiService extends EntityApiAbstration {
       ...data,
       material: this.sanitize(data.material),
       encomendas: this.sanitize(data.encomendas)
-    });
-    return this.fullyDetailedAssistencias$(assistencia$);
+    })
+      .pipe(
+        map(assistencias => assistencias[0]),
+        mergeMap(this.fullyDetailedAssistencia$),
+        map(assistencia => [assistencia])
+      );
+    return assistencia$;
   }
 
   onCreated() {
