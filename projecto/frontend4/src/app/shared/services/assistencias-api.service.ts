@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { concat } from 'rxjs';
-import { map, concatMap, toArray } from 'rxjs/operators';
+import { map, concatMap, toArray, tap } from 'rxjs/operators';
 
 import { EntityApiAbstration } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from './feathers.service';
@@ -42,7 +42,6 @@ export class AssistenciasApiService extends EntityApiAbstration {
         map(assistencia => this.deserialize(assistencia, 'registo_cronologico')),
         map(assistencia => this.deserialize(assistencia, 'material')),
         map(assistencia => this.deserialize(assistencia, 'encomendas')),
-
         concatMap(assistencia =>
           concat(
             ...assistencia.registo_cronologico
@@ -51,11 +50,12 @@ export class AssistenciasApiService extends EntityApiAbstration {
                   .pipe(
                     map((user: User[]) => ({ ...evento, tecnico: user[0].nome }) as EventoCronologico)
                   ))
-          )),
-        toArray(),
-
-        map(detailedRegistoCronologico =>
-          ({ ...assistenciaFromApi, registo_cronologico: detailedRegistoCronologico }) as Assistencia),
+          )
+            .pipe(
+              toArray(),
+              map(registo_cronologico => ({ ...assistencia, registo_cronologico }) as Assistencia)
+            )
+        ),
 
         map(assistencia => {
           const registo = clone(assistencia.registo_cronologico);
@@ -84,8 +84,9 @@ export class AssistenciasApiService extends EntityApiAbstration {
     const assistencias$ = super.find(query)
       .pipe(
         concatMap(assistencias =>
-          concat(...assistencias.map(this.fullyDetailedAssistencia$))),
-        toArray()
+          concat(...assistencias.map(this.fullyDetailedAssistencia$))
+            .pipe(toArray())
+        ),
       );
     return assistencias$;
   }
