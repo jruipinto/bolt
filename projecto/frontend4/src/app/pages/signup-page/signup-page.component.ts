@@ -31,6 +31,9 @@ export class SignupPageComponent implements OnInit {
   onSubmit() {
     // this.dataService.create$('users', {nome, contacto, email, password, endereço, nif, tipo});
     // this.dataService.create$('users', this.signupForm.value);
+    if (this.signupForm.invalid) {
+      return alert('Preenche correctamente todos os campos obrigatórios!');
+    }
     this.users.create(this.signupForm.value)
       .subscribe(() => this.router.navigate(['/']));
   }
