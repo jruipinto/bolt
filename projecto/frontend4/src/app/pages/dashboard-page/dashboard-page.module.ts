@@ -9,21 +9,18 @@ import { DashboardPageRoutingModule } from './dashboard-page-routing.module';
 /* directives */
 import { AutofocusDirective } from 'src/app/shared';
 /* shared components */
-import { RCardComponent, RModalComponent, RDataRowComponent } from 'src/app/shared/components';
+import { RCardComponent, RDataRowComponent } from 'src/app/shared/components';
 /* components */
 import { DashboardPageComponent } from './dashboard-page.component';
-import { AssistenciaModalComponent, ArtigoModalComponent } from './modals';
 import { AssistenciaEntradaPrintComponent, AssistenciaSaidaPrintComponent } from './prints';
 import {
   AssistenciasPageComponent, AssistenciasPesquisarPageComponent,
   AssistenciasCriarNovaPageComponent, EncomendaPageComponent,
-  EncomendasCriarNovaPageComponent,
-  EncomendasHistoricoPageComponent, EncomendasPageComponent,
+  EncomendasCriarNovaPageComponent, EncomendasPageComponent,
   StockPageComponent, PainelRapidoPageComponent,
   AssistenciaPageComponent, ArtigoPageComponent
 } from './pages';
 import { EncomendasPesquisarPageComponent } from './pages/encomendas-pesquisar-page/encomendas-pesquisar-page.component';
-import { EncomendaPromptModalComponent } from './modals/encomenda-prompt-modal/encomenda-prompt-modal.component';
 import { AssistenciasConcluidasPageComponent } from './pages/assistencias-concluidas-page/assistencias-concluidas-page.component';
 
 
@@ -38,26 +35,21 @@ import { AssistenciasConcluidasPageComponent } from './pages/assistencias-conclu
   declarations: [
     AutofocusDirective,
     RCardComponent,
-    RModalComponent,
     RDataRowComponent,
     DashboardPageComponent,
     AssistenciasPageComponent,
     AssistenciasCriarNovaPageComponent,
-    EncomendasHistoricoPageComponent,
     StockPageComponent,
     EncomendasPageComponent,
     PainelRapidoPageComponent,
-    AssistenciaModalComponent,
     EncomendasCriarNovaPageComponent,
     AssistenciaEntradaPrintComponent,
     AssistenciaSaidaPrintComponent,
     AssistenciasPesquisarPageComponent,
-    ArtigoModalComponent,
     AssistenciaPageComponent,
     ArtigoPageComponent,
     EncomendaPageComponent,
     EncomendasPesquisarPageComponent,
-    EncomendaPromptModalComponent,
     AssistenciasConcluidasPageComponent
   ]
 })
