@@ -17,7 +17,8 @@
       Modelo:
     </div>
     <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="text" name="modelo" id="modelo" formControlName="modelo" placeholder="Iphone 6">
+      <input class="clr-input wd-100" type="text" name="modelo" id="modelo" formControlName="modelo"
+        placeholder="Iphone 6">
     </div>
   </div>
   <div class="clr-row">
@@ -66,12 +67,14 @@
 
 <div class="clr-row separate" *ngIf="artigoForm.value.id">
   <div class="clr-col">
-    <button class="btn btn-primary" (click)="saveArtigo(artigoForm.value)">Guardar</button>
-    <button class="btn" (click)="orderArtigo(artigoForm.value)">Encomendar</button>
+    <button class="btn btn-primary" (click)="saveArtigo(artigoForm.value)"
+      [disabled]="artigoForm.invalid">Guardar</button>
+    <button class="btn" (click)="orderArtigo(artigoForm.value)" [disabled]="artigoForm.invalid">Encomendar</button>
   </div>
 </div>
 <div class="clr-row separate" *ngIf="!artigoForm.value.id">
   <div class="clr-col">
-    <button class="btn btn-primary" (click)="createArtigo(artigoForm.value)">Criar</button>
+    <button class="btn btn-primary" (click)="createArtigo(artigoForm.value)"
+      [disabled]="artigoForm.invalid">Criar</button>
   </div>
 </div>

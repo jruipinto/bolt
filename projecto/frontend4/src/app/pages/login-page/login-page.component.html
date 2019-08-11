@@ -53,7 +53,7 @@
             <div class="error active" *ngIf=!loginForm.valid>
                 Utilizador ou password inválido
             </div>
-            <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">ENTRAR</button>
+            <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">ENTRAR</button>
         </div>
         <small>Desenvolvido por JRui Pinto &copy; 2018-2019</small>
     </form>

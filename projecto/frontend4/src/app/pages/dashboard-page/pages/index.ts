@@ -8,6 +8,5 @@ export * from './encomenda-page';
 export * from './encomendas-page';
 export * from './encomendas-criar-nova-page';
 export * from './encomendas-pesquisar-page';
-export * from './encomendas-historico-page';
 export * from './stock-page';
 export * from './painel-rapido-page';
