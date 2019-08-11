@@ -52,7 +52,7 @@ export class StockPageComponent implements OnInit, OnDestroy {
         '}';
 
       return this.artigos
-        .findAndWatch(JSON.parse(dbQuery))
+        .find(JSON.parse(dbQuery))
         .subscribe(artigos => {
           this.loading = false;
           this.results = artigos;

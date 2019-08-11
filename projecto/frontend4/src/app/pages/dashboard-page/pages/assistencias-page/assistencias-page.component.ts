@@ -29,7 +29,7 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
       .pipe(
         tap(res => this.loggedInUserName = res[0].nome),
         concatMap(() => this.assistencias
-          .findAndWatch({
+          .find({
             query: {
               $limit: 200, estado: {
                 $in: [

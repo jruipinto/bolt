@@ -24,7 +24,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.paramMap
       .pipe(
-        concatMap((params: ParamMap) => this.encomendas.getAndWatch(+params.get('id')))
+        concatMap((params: ParamMap) => this.encomendas.get(+params.get('id')))
       )
       .subscribe(
         (encomendas: Encomenda[]) => this.encomenda = encomendas[0]

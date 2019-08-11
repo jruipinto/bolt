@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { AuthService } from 'src/app/shared';
-import { UI, UIService } from 'src/app/shared/state';
+import { UI, UIService, AssistenciasService, ArtigosService, EncomendasService, UsersService } from 'src/app/shared/state';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 
@@ -25,6 +25,10 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private uiService: UIService,
+    private assistencias: AssistenciasService,
+    private artigos: ArtigosService,
+    private encomendas: EncomendasService,
+    private users: UsersService,
     private router: Router,
     private fb: FormBuilder) { }
 
@@ -44,6 +48,12 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authService.getUserName$().subscribe(res => this.userName = res[0].nome);
+    merge(
+      this.assistencias.watch(),
+      this.artigos.watch(),
+      this.encomendas.watch(),
+      this.users.watch()
+    ).subscribe();
   }
 
   ngOnDestroy() { }

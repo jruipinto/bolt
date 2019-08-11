@@ -30,7 +30,7 @@ export class AssistenciasConcluidasPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.assistencias
-      .findAndWatch({
+      .find({
         query: {
           $limit: 200, estado: {
             $in: [

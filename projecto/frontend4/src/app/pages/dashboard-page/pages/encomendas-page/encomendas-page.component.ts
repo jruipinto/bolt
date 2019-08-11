@@ -37,7 +37,7 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.encomendas
-      .findAndWatch({ query: { $limit: 200, estado: { $ne: 'entregue' } } })
+      .find({ query: { $limit: 200, estado: { $ne: 'entregue' } } })
       .subscribe(() => this.loading = false);
     this.filterEncomendas('aguarda entrega');
   }

@@ -78,11 +78,10 @@ export abstract class EntityStateAbstraction {
 
   // public delete() { }
 
-  public onCreated(id?: number) {
+  public onCreated() {
     return this.xAPIservice.onCreated()
       .pipe(
-        concatMap(this.patchState),
-        map(res => res.filter(e => e.id === id))
+        concatMap(this.patchState)
       );
   }
   public onPatched(id?: number) {
@@ -93,21 +92,11 @@ export abstract class EntityStateAbstraction {
       );
   }
 
-  public findAndWatch(query?: object) {
-    // needs to be fixed later
+  public watch() {
     return merge(
-      this.find(query),
-      // this.onCreated(),
-      // this.onPatched()
+      this.onCreated(),
+      this.onPatched()
     );
-  }
-
-  public getAndWatch(id: number) {
-    return merge(
-      this.get(id),
-      this.onPatched(id)
-    );
-
   }
 
 }

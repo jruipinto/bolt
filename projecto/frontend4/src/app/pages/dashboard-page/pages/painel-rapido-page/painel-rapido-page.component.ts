@@ -61,7 +61,7 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.assistencias
-      .findAndWatch({
+      .find({
         query: {
           $limit: 200, estado: {
             $in: [
@@ -77,7 +77,7 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
       })
       .subscribe(() => this.loadingAssistencias = false);
     this.encomendas
-      .findAndWatch({
+      .find({
         query: {
           $limit: 200, estado: {
             $in: [

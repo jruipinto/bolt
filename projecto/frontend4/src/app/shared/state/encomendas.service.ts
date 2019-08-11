@@ -46,36 +46,6 @@ export class EncomendasService extends EntityStateAbstraction {
       );
   }
 
-  public getAndWatch(id: number) {
-    return super.getAndWatch(id)
-      .pipe(
-        map((res: Encomenda[]) => res[0]),
-        tap(console.log),
-        mergeMap(encomenda => this.artigosService.get(encomenda.artigo_id)
-          .pipe(
-            map((dbArtigo: Artigo[]) => dbArtigo[0]),
-            map(dbArtigo => ({
-              ...encomenda,
-              artigo_marca: dbArtigo.marca,
-              artigo_modelo: dbArtigo.modelo,
-              artigo_descricao: dbArtigo.descricao,
-            }))
-          )
-        ),
-        mergeMap(encomenda => this.usersService.get(encomenda.cliente_user_id)
-          .pipe(
-            map((dbUser: User[]) => dbUser[0]),
-            map(dbUser => ({
-              ...encomenda,
-              cliente_user_name: dbUser.nome,
-              cliente_user_contacto: dbUser.contacto
-            }))
-          )
-        ),
-        map(res => [res])
-      );
-  }
-
   public create(encomenda: Partial<Encomenda>) {
     const registo_cronologico: EventoCronologico[] = [{
       tecnico_user_id: this.authService.getUserId(),

@@ -25,7 +25,7 @@ export class AssistenciasService extends EntityStateAbstraction {
         concatMap(
           assistencia => {
             if (assistencia && assistencia.material) {
-              return concat(assistencia.material
+              return concat(...assistencia.material
                 .map(
                   (artigo: Partial<Artigo>) => this.artigosService.get(artigo.id)
                     .pipe(
@@ -34,7 +34,6 @@ export class AssistenciasService extends EntityStateAbstraction {
                     )
                 ))
                 .pipe(
-                  concatMap(concats => concats),
                   toArray(),
                   map((material: Artigo[]) => ({ ...assistencia, material }) as Assistencia));
             }
@@ -44,7 +43,7 @@ export class AssistenciasService extends EntityStateAbstraction {
         concatMap(
           assistencia => {
             if (assistencia && assistencia.encomendas) {
-              return concat(assistencia.encomendas
+              return concat(...assistencia.encomendas
                 .map(
                   (encomenda: Partial<Encomenda>) => this.encomendasService.get(encomenda.id)
                     .pipe(
@@ -53,53 +52,6 @@ export class AssistenciasService extends EntityStateAbstraction {
                     )
                 ))
                 .pipe(
-                  concatMap(concats => concats),
-                  toArray(),
-                  map((encomendas: Encomenda[]) => ({ ...assistencia, encomendas }) as Assistencia));
-            }
-            return of(assistencia);
-          }
-        ),
-        map(res => [res])
-      );
-  }
-
-  public getAndWatch(id: number) {
-    return super.getAndWatch(id)
-      .pipe(
-        map((res: Assistencia[]) => res[0]),
-        mergeMap(
-          assistencia => {
-            if (assistencia && assistencia.material) {
-              return merge(assistencia.material
-                .map(
-                  (artigo: Partial<Artigo>) => this.artigosService.get(artigo.id)
-                    .pipe(
-                      map((dbArtigo: Artigo[]) => dbArtigo[0]),
-                      map(dbArtigo => ({ ...dbArtigo, qty: artigo.qty }))
-                    )
-                ))
-                .pipe(
-                  mergeMap(merges => merges),
-                  toArray(),
-                  map((material: Artigo[]) => ({ ...assistencia, material }) as Assistencia));
-            }
-            return of(assistencia);
-          }
-        ),
-        mergeMap(
-          assistencia => {
-            if (assistencia && assistencia.encomendas) {
-              return merge(assistencia.encomendas
-                .map(
-                  (encomenda: Partial<Encomenda>) => this.encomendasService.get(encomenda.id)
-                    .pipe(
-                      map((dbEncomenda: Encomenda[]) => dbEncomenda[0]),
-                      map(dbEncomenda => ({ ...dbEncomenda, qty: encomenda.qty }))
-                    )
-                ))
-                .pipe(
-                  mergeMap(merges => merges),
                   toArray(),
                   map((encomendas: Encomenda[]) => ({ ...assistencia, encomendas }) as Assistencia));
             }
@@ -134,4 +86,5 @@ export class AssistenciasService extends EntityStateAbstraction {
       { ...assistencia, registo_cronologico: updatedRegistoCronologico } as Assistencia
     );
   }
+
 }

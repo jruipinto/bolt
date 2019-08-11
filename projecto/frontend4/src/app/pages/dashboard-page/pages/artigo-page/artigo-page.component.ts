@@ -40,7 +40,7 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
         map((params: ParamMap) => +params.get('id')),
         concatMap((id: number) => {
           if (id > 0) {
-            return this.artigos.getAndWatch(id);
+            return this.artigos.get(id);
           } else {
             return of();
           }

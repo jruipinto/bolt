@@ -62,7 +62,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.paramMap
       .pipe(
-        concatMap((params: ParamMap) => this.assistencias.getAndWatch(+params.get('id'))),
+        concatMap((params: ParamMap) => this.assistencias.get(+params.get('id'))),
         map(res => res[0]),
         tap(assistencia => this.assistenciaOnInit = clone(assistencia))
       )
