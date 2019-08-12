@@ -18,6 +18,7 @@ import { clone } from 'ramda';
   styleUrls: ['./assistencia-page.component.scss']
 })
 export class AssistenciaPageComponent implements OnInit, OnDestroy {
+  public loading = true;
   public assistencia: Assistencia;
   public artigoSearchModal = false;
   public artigoSearchForm = this.fb.group({
@@ -62,6 +63,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.paramMap
       .pipe(
+        tap(() => this.loading = true),
         concatMap((params: ParamMap) => this.assistencias.get(+params.get('id'))),
         map(res => res[0]),
         tap(assistencia => this.assistenciaOnInit = clone(assistencia))
@@ -90,7 +92,10 @@ ${this.assistencia.relatorio_cliente}`
         } else {
           this.assistencia = clone(assistencia);
         }*/
-        if (!this.assistencia) { this.assistencia = clone(assistencia); }
+        if (!this.assistencia || this.loading) {
+          this.assistencia = clone(assistencia);
+          this.loading = false;
+        }
       });
   }
 
