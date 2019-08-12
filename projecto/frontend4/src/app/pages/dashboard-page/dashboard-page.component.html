@@ -7,7 +7,8 @@
         <span class="title">N Reparações</span>
       </a>
     </div>
-    <form class="search" [formGroup]="dashboardSearchBarForm" (ngSubmit)="openAssistencia(dashboardSearchBarForm.value.assistenciaID)">
+    <form class="search" [formGroup]="dashboardSearchBarForm"
+      (ngSubmit)="openAssistencia(dashboardSearchBarForm.value.assistenciaID)">
       <label for="search_input">
         <input id="search_input" type="text" placeholder="Ficha..." formControlName="assistenciaID">
       </label>
@@ -29,6 +30,7 @@
   <div class="content-container">
     <main class="content-area">
       <router-outlet></router-outlet>
+      <app-encomenda-prompt-modal *ngIf="encomendaPromptModalVisible$ | async"></app-encomenda-prompt-modal>
     </main>
     <nav class="sidenav" [clr-nav-level]="1">
       <section class="sidenav-content">
