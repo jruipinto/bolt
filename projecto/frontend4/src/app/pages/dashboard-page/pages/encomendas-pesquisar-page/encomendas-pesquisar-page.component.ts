@@ -192,6 +192,40 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
         });
     }
 
+    if (estado === 'qualquer' && !cliente_user_id) {
+      return this.artigos
+        .find(dbQuery)
+        .pipe(
+          concatMap(
+            (artigosDB: Artigo[]) => concat(...artigosDB.map(
+              ({ id }) => this.encomendas.find({ query: { artigo_id: id, $limit: 200 } })
+            ))
+              .pipe(reduce((acc, val) => ([...acc, ...val])))
+          )
+        )
+        .subscribe(encomendas => {
+          this.loading = false;
+          this.results = clone(encomendas);
+        });
+    }
+
+    if (estado === 'qualquer' && cliente_user_id) {
+      return this.artigos
+        .find(dbQuery)
+        .pipe(
+          concatMap(
+            (artigosDB: Artigo[]) => concat(...artigosDB.map(
+              ({ id }) => this.encomendas.find({ query: { artigo_id: id, cliente_user_id, $limit: 200 } })
+            ))
+              .pipe(reduce((acc, val) => ([...acc, ...val])))
+          )
+        )
+        .subscribe(encomendas => {
+          this.loading = false;
+          this.results = clone(encomendas);
+        });
+    }
+
     // this.results$ = this.encomendas.find(JSON.parse(dbQuery));
   }
 
