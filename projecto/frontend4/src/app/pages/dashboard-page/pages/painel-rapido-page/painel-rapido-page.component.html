@@ -33,7 +33,7 @@
               {{encomenda.observacao | slice:0:29}}
               <span *ngIf="encomenda?.observacao.length > 30">...</span></span>
           </p>
-          <button class="btn btn-sm btn-link" (click)="openEncomenda(encomenda.id)">abrir</button>
+          <button class="btn btn-sm btn-link" (click)="openEncomenda(encomenda.id)">Abrir (#{{encomenda.id}})</button>
         </div>
       </div>
       <div class="card-footer">
@@ -82,7 +82,7 @@
           <p>{{orcamento.preco}}€ | {{orcamento.relatorio_cliente | slice:0:29}}
             <span *ngIf="orcamento.relatorio_cliente.length > 30">...</span>
           </p>
-          <button class="btn btn-sm btn-link" (click)="openAssistencia(orcamento.id)">abrir</button>
+          <button class="btn btn-sm btn-link" (click)="openAssistencia(orcamento.id)">Abrir (#{{orcamento.id}})</button>
         </div>
       </div>
       <div class="card-footer">
@@ -133,7 +133,7 @@
           <p>{{pedidoContactoCliente.relatorio_cliente | slice:0:29}}
             <span *ngIf="pedidoContactoCliente.relatorio_cliente.length > 30">...</span>
           </p>
-          <button class="btn btn-sm btn-link" (click)="openAssistencia(pedidoContactoCliente.id)">abrir</button>
+          <button class="btn btn-sm btn-link" (click)="openAssistencia(pedidoContactoCliente.id)">Abrir (#{{pedidoContactoCliente.id}})</button>
         </div>
       </div>
       <div class="card-footer">
