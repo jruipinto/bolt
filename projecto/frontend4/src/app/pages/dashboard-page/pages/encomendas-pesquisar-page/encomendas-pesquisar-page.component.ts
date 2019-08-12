@@ -5,7 +5,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable, concat } from 'rxjs';
 import { Encomenda, Query, User, Artigo } from 'src/app/shared';
 import { EncomendasService, UsersService, UIService, ArtigosService } from 'src/app/shared/state';
-import { map, tap, concatMap, toArray } from 'rxjs/operators';
+import { map, tap, concatMap, toArray, reduce } from 'rxjs/operators';
 import { clone } from 'ramda';
 
 @AutoUnsubscribe()
@@ -120,7 +120,7 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
       .find(JSON.parse(dbQuery));
   }*/
 
-  searchEncomenda(input: string, estado?: string, cliente?: number) {
+  searchEncomenda(input: string, estado?: string, cliente_user_id?: number) {
     this.loading = true;
     const inputSplited = input.split(' ');
     const inputMapped = inputSplited.map(word =>
@@ -132,44 +132,66 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
     );
 
     const dbQuery =
-      '{' +
-      '"query": {' +
-      '"$limit": "200",' +
-      '"$and": [' +
-      inputMapped +
-      ']' +
-      '}' +
-      '}';
+      JSON.parse(
+        '{' +
+        '"query": {' +
+        '"$limit": "200",' +
+        '"$and": [' +
+        inputMapped +
+        ']' +
+        '}' +
+        '}'
+      );
 
-    if ((!input || input === ' ' || input === '  ') && estado === 'qualquer' && !cliente) {
+    if ((!input || input === ' ' || input === '  ') && estado === 'qualquer' && !cliente_user_id) {
       return this.encomendas.find({ query: { $limit: 200 } })
         .subscribe(encomendas => {
           this.loading = false;
           this.results = encomendas;
         });
     }
-    if ((!input || input === ' ' || input === '  ') && estado === 'qualquer' && cliente) {
-      return this.encomendas.find({ query: { cliente_user_id: cliente, $limit: 200 } })
+    if ((!input || input === ' ' || input === '  ') && estado === 'qualquer' && cliente_user_id) {
+      return this.encomendas.find({ query: { cliente_user_id, $limit: 200 } })
         .subscribe(encomendas => {
           this.loading = false;
           this.results = encomendas;
         });
     }
 
-    return this.artigos
-      .find(JSON.parse(dbQuery))
-      .pipe(
-        concatMap(
-          (artigosDB: Artigo[]) => concat(artigosDB.map(
-            ({ id }) => this.encomendas.find({ query: { artigo_id: id } })
-              .pipe(map(res => res[0]))
-          )).pipe(concatMap(concats => concats), toArray())
+    if (estado !== 'qualquer' && !cliente_user_id) {
+      return this.artigos
+        .find(dbQuery)
+        .pipe(
+          concatMap(
+            (artigosDB: Artigo[]) => concat(...artigosDB.map(
+              ({ id }) => this.encomendas.find({ query: { artigo_id: id, estado, $limit: 200 } })
+            ))
+              .pipe(reduce((acc, val) => ([...acc, ...val])))
+          )
         )
-      )
-      .subscribe(encomendas => {
-        this.loading = false;
-        this.results = encomendas;
-      });
+        .subscribe(encomendas => {
+          this.loading = false;
+          this.results = clone(encomendas);
+        });
+    }
+
+    if (estado !== 'qualquer' && cliente_user_id) {
+      return this.artigos
+        .find(dbQuery)
+        .pipe(
+          concatMap(
+            (artigosDB: Artigo[]) => concat(...artigosDB.map(
+              ({ id }) => this.encomendas.find({ query: { artigo_id: id, estado, cliente_user_id, $limit: 200 } })
+            ))
+              .pipe(reduce((acc, val) => ([...acc, ...val])))
+          )
+        )
+        .subscribe(encomendas => {
+          this.loading = false;
+          this.results = clone(encomendas);
+        });
+    }
+
     // this.results$ = this.encomendas.find(JSON.parse(dbQuery));
   }
 
