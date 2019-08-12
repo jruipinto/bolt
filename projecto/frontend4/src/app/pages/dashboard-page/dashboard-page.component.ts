@@ -72,7 +72,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
 
   openAssistencia(arg: number) {
     const assistenciaID = +arg;
-    console.log('valor:', typeof assistenciaID, assistenciaID, arg);
     if (assistenciaID && typeof assistenciaID === 'number' && assistenciaID > 0) {
       this.dashboardSearchBarForm.reset();
       return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
