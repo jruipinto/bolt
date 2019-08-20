@@ -33,7 +33,8 @@
               {{encomenda.observacao | slice:0:29}}
               <span *ngIf="encomenda?.observacao.length > 30">...</span></span>
           </p>
-          <button class="btn btn-sm btn-link" (click)="openEncomenda(encomenda.id)">Abrir (#{{encomenda.id}})</button>
+          <button class="btn btn-sm btn-link" (click)="openEncomenda(encomenda.id)">Abrir (Enc. {{encomenda.id}})</button>
+          <button *ngIf="encomenda.assistencia_id" class="btn btn-sm btn-link" (click)="openAssistencia(encomenda.assistencia_id)">Abrir (#{{encomenda.assistencia_id}})</button>
         </div>
       </div>
       <div class="card-footer">
