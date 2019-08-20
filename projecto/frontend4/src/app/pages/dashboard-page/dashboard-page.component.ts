@@ -47,7 +47,12 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.authService.getUserName$().subscribe(res => this.userName = res[0].nome);
+    this.authService.getUserName$()
+    .subscribe(res => {
+      const nomeCompleto: string = res[0].nome;
+      const nomeArr = nomeCompleto.split(' ');
+      this.userName = nomeArr[0];
+    });
     merge(
       this.assistencias.watch(),
       this.artigos.watch(),
