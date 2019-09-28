@@ -1,4 +1,4 @@
-import { from, Observable, fromEvent } from 'rxjs';
+import { from, Observable, fromEvent, throwError } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { FeathersService } from 'src/app/shared/services/feathers.service';
@@ -13,10 +13,14 @@ export abstract class EntityApiAbstration {
     private entity: string) {
   }
 
-  private handleError(error) {
-    console.log(`${this.entityName}Api -> handleError -> error`, error);
-    alert('Algo correu mal! Chama o Admin ou CTRL + SHIFT + I');
-    return error;
+  private handleError = (entityName: String) => (error) => {
+    console.log(`${entityName}Api -> handleError -> error`, error);
+    if (error.code === 401) {
+      alert('Não está autorizado!');
+    } else {
+      alert('Algo correu mal! Chama o Admin ou CTRL + SHIFT + I');
+    }
+    throw error;
   }
 
   public find(query?: object) {
@@ -25,9 +29,9 @@ export abstract class EntityApiAbstration {
       this.entityAPI.find(query)
         .then(
           apiResponse => apiResponse.data,
-          this.handleError
+          this.handleError(this.entityName)
         )
-        .catch(this.handleError)
+        .catch(this.handleError(this.entityName))
     );
     return apiResponse$ as Observable<any[]>;
   }
@@ -37,9 +41,9 @@ export abstract class EntityApiAbstration {
     const apiResponse$ = from(this.entityAPI.get(id)
       .then(
         apiResponse => [apiResponse],
-        this.handleError
+        this.handleError(this.entityName)
       )
-      .catch(this.handleError)
+      .catch(this.handleError(this.entityName))
     );
     return apiResponse$ as Observable<any[]>;
   }
@@ -49,9 +53,9 @@ export abstract class EntityApiAbstration {
     const apiResponse$ = from(this.entityAPI.create(data)
       .then(
         apiResponse => [apiResponse],
-        this.handleError
+        this.handleError(this.entityName)
       )
-      .catch(this.handleError)
+      .catch(this.handleError(this.entityName))
     );
     return apiResponse$ as Observable<any[]>;
   }
@@ -61,9 +65,9 @@ export abstract class EntityApiAbstration {
     const apiResponse$ = from(this.entityAPI.patch(id, data)
       .then(
         apiResponse => [apiResponse],
-        this.handleError
+        this.handleError(this.entityName)
       )
-      .catch(this.handleError)
+      .catch(this.handleError(this.entityName))
     );
     return apiResponse$ as Observable<any[]>;
   }
