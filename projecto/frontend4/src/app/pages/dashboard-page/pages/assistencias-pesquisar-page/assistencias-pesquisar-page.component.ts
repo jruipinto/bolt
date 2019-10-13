@@ -1,16 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { AssistenciasService, UIService, UsersService } from 'src/app/shared/state';
-import { Assistencia, User } from 'src/app/shared';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { clone } from 'ramda';
+import { AssistenciasService } from 'src/app/shared/state';
+import { Assistencia, User } from 'src/app/shared';
+import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/modals';
 
-export interface Query {
-  column: string;
-  condition: string | number;
-}
 
 @AutoUnsubscribe()
 @Component({
@@ -18,19 +14,16 @@ export interface Query {
   templateUrl: './assistencias-pesquisar-page.component.html',
   styleUrls: ['./assistencias-pesquisar-page.component.scss']
 })
-export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
+export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild(ClientesPesquisarModalComponent, { static: false }) clientesSearchModal: ClientesPesquisarModalComponent;
   public loading = false;
-  public userSearchModal = false;
-  public userSearchResults$: Observable<User[]>;
   public results: Assistencia[];
+
   public assistenciasSearchForm = this.fb.group({
     input: [''],
     estado: ['qualquer'],
     cliente: ['']
-  });
-
-  public userSearchForm = this.fb.group({
-    input: ['']
   });
 
   public estados = [
@@ -57,11 +50,17 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private assistencias: AssistenciasService,
-    private users: UsersService,
     private router: Router,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder) {}
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+    this.clientesSearchModal.selectedCliente
+      .subscribe(
+        (user: User) => this.assistenciasSearchForm.patchValue({ cliente: clone(user.id) })
+      );
   }
 
   ngOnDestroy() {
@@ -69,35 +68,6 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
 
   openAssistencia(assistenciaID: number) {
     return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
-  }
-
-  searchUser(input: string) {
-    if (input) {
-      const inputSplited = input.split(' ');
-      const inputMapped = inputSplited.map(word =>
-        '{"$or": [' +
-        '{ "nome": { "$like": "%' + word + '%" }},' +
-        '{ "contacto": { "$like": "%' + word + '%" }}' +
-        ' ]}'
-      );
-      const dbQuery =
-        '{' +
-        '"query": {' +
-        '"$limit": "200",' +
-        '"$and": [' +
-        inputMapped +
-        ']' +
-        '}' +
-        '}';
-
-      this.userSearchResults$ = this.users
-        .find(JSON.parse(dbQuery));
-    }
-  }
-
-  addUser(user: User) {
-    this.assistenciasSearchForm.patchValue({ cliente: clone(user.id) });
-    this.userSearchModal = false;
   }
 
   searchAssistencia(input: string, estado?: string, cliente?: number) {
@@ -135,6 +105,5 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy {
         this.results = assistencias;
       });
   }
-
 
 }

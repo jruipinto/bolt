@@ -1,52 +1,9 @@
-<!--
-<div>
-  <div>
-    <form (ngSubmit)="search()">
-      <div class="clr-row">
-        <div class="clr-col-xl-2 clr-col-lg-2 padding-bottom-05">
-          <label>Escolhe filtro:*</label>
-        </div>
-        <div class="clr-col-xl-3 clr-col-lg-5 padding-bottom-05">
-          <div class="clr-select-wrapper wd-100">
-            <select class="clr-select wd-100" name="options" [(ngModel)]="selectedOption" required>
-              <option *ngFor="let filterOption of filterOptions" [value]=filterOption>{{filterOption | uppercase}}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="clr-col-xl-4 clr-col-lg-5 padding-bottom-05">
-          <input class="clr-input wd-100" type="text" placeholder="✏️ Digita {{selectedOption}}..." name="input"
-            [(ngModel)]="input" />
-        </div>
-        <div class="clr-col-xl-3 clr-col-lg-12 padding-bottom-05">
-          <div class="btn-group btn-primary">
-            <input type="submit" class="btn" value="🔎 Pesquisar">
-            <button type="button" class="btn" (click)="addFilter({column: selectedOption, condition: input})">
-              + Filtro</button>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  <div class="clr-row">
-    <div class="clr-col">
-      <div *ngFor="let searchFilter of searchFilters; index as i;  trackById">
-        <a href="javascript:void(0)" class="label clickable" (click)="removeSearchFilter(i)">
-          {{searchFilter.column | titlecase}}: "{{searchFilter.condition}}" X
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
--->
-
 <div>
   <form clrForm clrLayout="vertical" class="clr-row" [formGroup]="assistenciasSearchForm">
     <div class="clr-col-lg-3">
       <clr-input-container>
         <label>Cliente</label>
-        <input clrInput placeholder="cliente..." (click)="userSearchModal=true" formControlName="cliente" />
+        <input clrInput placeholder="cliente..." (click)="clientesSearchModal.open()" formControlName="cliente" />
       </clr-input-container>
     </div>
     <div class="clr-col-lg-3">
@@ -113,31 +70,4 @@
   </div>
 </div>
 
-<clr-modal [(clrModalOpen)]="userSearchModal" [clrModalSize]="'lg'">
-  <h3 class="modal-title">Pesquisar Cliente</h3>
-  <div class="modal-body">
-    <form [formGroup]="userSearchForm" (ngSubmit)="searchUser(userSearchForm.value.input)">
-      <div class="clr-row">
-        <div class="clr-col-12 padding-bottom-05">
-          <input type="text" class="clr-input wd-100" placeholder="Digita nome..." name="input"
-            formControlName="input" />
-        </div>
-      </div>
-    </form>
-    <h4>Resultados:</h4>
-    <div *ngIf="userSearchResults$ | async as users">
-      <div *ngIf="users.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
-      <div *ngIf="users.length>0">
-        <r-data-row class="clr-row" style="margin-bottom: 0" *ngFor="let user of users; let listaIndex=index"
-          (click)="addUser(user)">
-          <div class="clr-col-lg-9">
-            {{user.nome}}
-          </div>
-          <div class="clr-col-lg-3 lessimportant">
-            {{user.contacto}}
-          </div>
-        </r-data-row>
-      </div>
-    </div>
-  </div>
-</clr-modal>
+<app-clientes-pesquisar-modal></app-clientes-pesquisar-modal>
