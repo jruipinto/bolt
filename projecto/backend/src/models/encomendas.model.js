@@ -40,7 +40,7 @@ module.exports = function (app) {
       adquirida (quando se vai ao fornecedor buscar / = "recebido" mas mais especifico)
       esgotada (quando não há mas se adivinha que vai haver e fica pendente)
       sem fornecedor (quando nao se arranja material em lado nenhum)
-      aguarda reposta de fornecedor (quando fornecedor fica de dar uma resposta)
+      aguarda resposta de fornecedor (quando fornecedor fica de dar uma resposta)
       aguarda entrega (quando está comprado)
       recebida
       detectado defeito (igual a "registada", reinicia o processo + contacto pendente de assistencias + criar nota no todo do card)

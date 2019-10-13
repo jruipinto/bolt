@@ -136,7 +136,7 @@
 
         <div *ngIf="encomenda.estado === 'registada'
         || encomenda.estado === 'esgotada'
-        || encomenda.estado === 'aguarda reposta de fornecedor'
+        || encomenda.estado === 'aguarda resposta de fornecedor'
         || encomenda.estado === 'detectado defeito'">
             <button class="btn btn-success" (click)="saveEncomenda('aguarda entrega', encomenda)">Encomendado</button>
             <clr-dropdown>
@@ -144,9 +144,9 @@
                     </clr-icon></button>
                 <clr-dropdown-menu clrPosition="top-left">
                     <button clrDropdownItem type="button"
-                        (click)="saveEncomenda('aguarda reposta de fornecedor', encomenda)">
+                        (click)="saveEncomenda('aguarda resposta de fornecedor', encomenda)">
                         Aguarda
-                        reposta de fornecedor</button>
+                        resposta de fornecedor</button>
                     <button clrDropdownItem type="button"
                         (click)="saveEncomenda('marcada para ir ao fornecedor', encomenda)">
                         Marcar

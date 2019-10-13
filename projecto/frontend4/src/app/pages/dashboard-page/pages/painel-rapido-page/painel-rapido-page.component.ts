@@ -32,7 +32,7 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
               encomenda.estado === 'registada'
               || encomenda.estado === 'esgotada'
               || encomenda.estado === 'detectado defeito'
-              || encomenda.estado === 'aguarda reposta de fornecedor')
+              || encomenda.estado === 'aguarda resposta de fornecedor')
             : null
       )
     );
@@ -84,7 +84,7 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
               'registada',
               'esgotada',
               'detectado defeito',
-              'aguarda reposta de fornecedor'
+              'aguarda resposta de fornecedor'
             ]
           }
         }

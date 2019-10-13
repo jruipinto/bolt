@@ -34,7 +34,7 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy, Afte
     'adquirida',
     'esgotada',
     'sem fornecedor',
-    'aguarda reposta de fornecedor',
+    'aguarda resposta de fornecedor',
     'aguarda entrega',
     'recebida',
     'detectado defeito',
