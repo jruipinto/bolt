@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable, merge, of } from 'rxjs';
 import { tap, concatMap, map, first, mergeMap } from 'rxjs/operators';
@@ -8,7 +8,8 @@ import { AssistenciasService, UsersService, UIService, UI } from 'src/app/shared
 import { PrintService } from 'src/app/pages/dashboard-page/prints';
 import { User, Assistencia } from 'src/app/shared/models';
 import { capitalize } from 'src/app/shared/utilities';
-import clone from 'ramda/es/clone';
+import { clone } from 'ramda';
+import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/modals';
 
 
 
@@ -19,16 +20,14 @@ import clone from 'ramda/es/clone';
   styleUrls: ['./assistencias-criar-nova-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
+export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  public userSearchModal = false;
-  public userSearchResults$: Observable<User[]>;
+  @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild(ClientesPesquisarModalComponent, { static: false }) clientesSearchModal: ClientesPesquisarModalComponent;
+
   public oldAssists: Assistencia[] = [];
 
-  /* Declaration of the 3+1 Forms on the UI */
-  public userSearchForm = this.fb.group({
-    input: [null]
-  });
+  /* Declaration of the 3 Forms on the UI */
   public contactoClienteForm = this.fb.group({
     contacto: [null, Validators.min(200000000)] // por exemplo, contacto: 255486001
   });
@@ -114,6 +113,13 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
+  ngAfterViewInit() {
+    this.clientesSearchModal.selectedCliente
+      .subscribe(
+        (user: User) => this.contactoClienteForm.patchValue({ contacto: clone(user.contacto) })
+      );
+  }
+
   ngOnDestroy() { }
 
   onSubmit() {
@@ -180,31 +186,4 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  searchUser(input: string) {
-    if (input) {
-      const inputSplited = input.split(' ');
-      const inputMapped = inputSplited.map(word =>
-        '{"$or": [' +
-        '{ "nome": { "$like": "%' + word + '%" }}' +
-        ' ]}'
-      );
-      const dbQuery =
-        '{' +
-        '"query": {' +
-        '"$limit": "200",' +
-        '"$and": [' +
-        inputMapped +
-        ']' +
-        '}' +
-        '}';
-
-      this.userSearchResults$ = this.usersService
-        .find(JSON.parse(dbQuery));
-    }
-  }
-
-  addUser(user: User) {
-    this.contactoClienteForm.patchValue({ contacto: clone(user.contacto) });
-    this.userSearchModal = false;
-  }
 }
