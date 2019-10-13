@@ -1,12 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Observable, concat } from 'rxjs';
-import { Encomenda, Query, User, Artigo } from 'src/app/shared';
-import { EncomendasService, UsersService, UIService, ArtigosService } from 'src/app/shared/state';
-import { map, tap, concatMap, toArray, reduce } from 'rxjs/operators';
+import { concat } from 'rxjs';
+import { concatMap, reduce } from 'rxjs/operators';
+import { Encomenda, User, Artigo } from 'src/app/shared';
+import { EncomendasService, ArtigosService } from 'src/app/shared/state';
 import { clone } from 'ramda';
+import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/modals';
 
 @AutoUnsubscribe()
 @Component({
@@ -14,19 +15,16 @@ import { clone } from 'ramda';
   templateUrl: './encomendas-pesquisar-page.component.html',
   styleUrls: ['./encomendas-pesquisar-page.component.scss']
 })
-export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
+export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild(ClientesPesquisarModalComponent, { static: false }) clientesSearchModal: ClientesPesquisarModalComponent;
+
   public loading = false;
-  public userSearchModal = false;
-  public userSearchResults$: Observable<User[]>;
   public results: Encomenda[];
   public encomendasSearchForm = this.fb.group({
     input: [''],
     estado: ['qualquer'],
     cliente: ['']
-  });
-
-  public userSearchForm = this.fb.group({
-    input: ['']
   });
 
   public estados = [
@@ -46,11 +44,17 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
   constructor(
     private encomendas: EncomendasService,
     private artigos: ArtigosService,
-    private users: UsersService,
     private router: Router,
     private fb: FormBuilder) { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+    this.clientesSearchModal.selectedCliente
+      .subscribe(
+        (user: User) => this.encomendasSearchForm.patchValue({ cliente: clone(user.id) })
+      );
   }
 
   ngOnDestroy() {
@@ -59,66 +63,6 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy {
   openEncomenda(encomendaID: number) {
     return this.router.navigate(['/dashboard/encomenda', encomendaID]);
   }
-
-  searchUser(input: string) {
-    if (input) {
-      const inputSplited = input.split(' ');
-      const inputMapped = inputSplited.map(word =>
-        '{"$or": [' +
-        '{ "nome": { "$like": "%' + word + '%" }},' +
-        '{ "contacto": { "$like": "%' + word + '%" }}' +
-        ' ]}'
-      );
-      const dbQuery =
-        '{' +
-        '"query": {' +
-        '"$limit": "200",' +
-        '"$and": [' +
-        inputMapped +
-        ']' +
-        '}' +
-        '}';
-
-      this.userSearchResults$ = this.users
-        .find(JSON.parse(dbQuery));
-    }
-  }
-
-  addUser(user: User) {
-    this.encomendasSearchForm.patchValue({ cliente: clone(user.id) });
-    this.userSearchModal = false;
-  }
-
-  /*searchEncomenda(input: string, estado?: string, cliente?: number) {
-    const inputSplited = input.split(' ');
-    const inputMapped = inputSplited.map(word =>
-      '{"$or": [' +
-      '{ "categoria": { "$like": "%' + word + '%" }},' +
-      '{ "marca": { "$like": "%' + word + '%" }},' +
-      '{ "modelo": { "$like": "%' + word + '%" }},' +
-      '{ "cor": { "$like": "%' + word + '%" }},' +
-      '{ "serial": { "$like": "%' + word + '%" }},' +
-      '{ "problema": { "$like": "%' + word + '%" }}' +
-      ' ]}'
-    );
-
-    const clienteStatement = cliente && typeof cliente === 'number' ? ',"cliente_user_id":' + cliente : '';
-    const estadoStatement = estado && estado !== 'qualquer' ? ',"estado": "' + estado + '"' : '';
-    const dbQuery =
-      '{' +
-      '"query": {' +
-      '"$limit": "200",' +
-      '"$and": [' +
-      inputMapped +
-      ']' +
-      estadoStatement +
-      clienteStatement +
-      '}' +
-      '}';
-
-    this.results$ = this.encomendas
-      .find(JSON.parse(dbQuery));
-  }*/
 
   searchEncomenda(input: string, estado?: string, cliente_user_id?: number) {
     this.loading = true;
