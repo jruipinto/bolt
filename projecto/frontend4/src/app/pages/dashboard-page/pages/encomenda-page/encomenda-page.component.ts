@@ -128,4 +128,8 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
     window.history.back();
   }
 
+  openAssistencia(assistenciaID: number) {
+    return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
+  }
+
 }

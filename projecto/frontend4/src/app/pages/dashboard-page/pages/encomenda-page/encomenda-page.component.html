@@ -75,7 +75,7 @@
                 Assistencia:
             </div>
             <div class="clr-col">
-                {{encomenda.assistencia_id}}
+                <a (click)="openAssistencia(encomenda.assistencia_id)">{{encomenda.assistencia_id}}</a>
             </div>
         </div>
         <div class="clr-row" *ngIf="encomenda.cliente_user_id">
