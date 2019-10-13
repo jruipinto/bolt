@@ -6,7 +6,7 @@
     </div>
     <div class="clr-col-xl-3 clr-col-lg-12 padding-bottom-05">
       <clr-button-group class="btn-primary" [clrMenuPosition]="'bottom-right'">
-        <clr-button (click)="searchArtigo(artigoSearchForm.value.input)">🔎 Pesquisar</clr-button>
+        <clr-button (click)="searchArtigo(artigoSearchForm.value.input)"><clr-icon shape="search"></clr-icon> Pesquisar</clr-button>
         <clr-button [clrInMenu]="true" (click)="newArtigo()">Novo artigo</clr-button>
         <clr-button [clrInMenu]="true" (click)="searchArtigoByLocal(artigoSearchForm.value.input)">
           Pesquisar por local</clr-button>

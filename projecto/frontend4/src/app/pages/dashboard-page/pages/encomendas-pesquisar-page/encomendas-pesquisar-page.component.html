@@ -23,9 +23,9 @@
       </clr-input-container>
     </div>
     <div class="clr-col-lg-3">
-      <input type="submit" class="btn btn-primary" value="🔎 Pesquisar" (click)="searchEncomenda(encomendasSearchForm.value.input,
+      <button type="submit" class="btn btn-primary" (click)="searchEncomenda(encomendasSearchForm.value.input,
               encomendasSearchForm.value.estado,
-              encomendasSearchForm.value.cliente)">
+              encomendasSearchForm.value.cliente)"><clr-icon shape="search"></clr-icon> Pesquisar</button>
     </div>
   </form>
 </div>
