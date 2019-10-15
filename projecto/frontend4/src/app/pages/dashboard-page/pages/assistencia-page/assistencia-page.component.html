@@ -96,6 +96,7 @@
                     <clr-dg-column>Descrição</clr-dg-column>
                     <clr-dg-column>Local</clr-dg-column>
                     <clr-dg-column>Custo p/ unidade</clr-dg-column>
+                    <clr-dg-column>PVP</clr-dg-column>
                     <clr-dg-row *ngFor="let artigo of assistencia.material">
                       <clr-dg-cell><input class="clr-input small-input" type="number" name="newQty" id="newQty"
                           [(ngModel)]="artigo.qty" (change)="materialChanged(artigo)">
@@ -103,6 +104,7 @@
                       <clr-dg-cell>{{artigo.descricao}} {{artigo.marca}} {{artigo.modelo}}</clr-dg-cell>
                       <clr-dg-cell>{{artigo.localizacao}}</clr-dg-cell>
                       <clr-dg-cell>{{artigo.preco | currency: 'EUR'}}</clr-dg-cell>
+                      <clr-dg-cell>{{artigo.pvp | currency: 'EUR'}}</clr-dg-cell>
                     </clr-dg-row>
                     <clr-dg-footer>{{assistencia.material.length}} artigos adicionados</clr-dg-footer>
                   </clr-datagrid>
