@@ -7,7 +7,7 @@
       </span>
     </h5>
     <div *ngIf="!loadingEncomendas && encomendas$ | async as encomendas">
-      <div *ngIf="encomendas.length === 0">😎 Não há mais encomendas!</div>
+      <div *ngIf="encomendas.length === 0"><clr-icon shape="check"></clr-icon> Não há mais encomendas!</div>
     </div>
     <div *ngIf="loadingEncomendas">
       <span class="spinner spinner-inline">
@@ -66,7 +66,7 @@
       </span>
     </h5>
     <div *ngIf="!loadingAssistencias && orcamentos$ | async as orcamentos">
-      <div *ngIf="orcamentos.length === 0">😎 Não há mais orçamentos!</div>
+      <div *ngIf="orcamentos.length === 0"><clr-icon shape="check"></clr-icon> Não há mais orçamentos!</div>
     </div>
     <div *ngIf="loadingAssistencias">
       <span class="spinner spinner-inline">
@@ -116,7 +116,7 @@
       </span>
     </h5>
     <div *ngIf="!loadingAssistencias && pedidosContactoCliente$ | async as pedidosContactoCliente">
-      <div *ngIf="pedidosContactoCliente.length === 0">😎 Não há mais pedidos de contacto!</div>
+      <div *ngIf="pedidosContactoCliente.length === 0"><clr-icon shape="check"></clr-icon> Não há mais pedidos de contacto!</div>
     </div>
     <div *ngIf="loadingAssistencias">
       <span class="spinner spinner-inline">

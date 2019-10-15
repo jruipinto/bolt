@@ -336,7 +336,7 @@
     </form>
     <h4>Resultados:</h4>
     <div *ngIf="artigoSearchResults as artigos">
-      <div *ngIf="artigos.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
+      <div *ngIf="artigos.length===0">Nenhum resultado encontrado para esses parametros...</div>
       <div *ngIf="artigos.length>0">
         <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index" (click)="addArtigo(artigo)">
           <div class="clr-col-lg-3">
@@ -379,7 +379,7 @@
     </form>
     <h4>Resultados:</h4>
     <div *ngIf="artigoSearchResults as artigos">
-      <div *ngIf="artigos.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
+      <div *ngIf="artigos.length===0">Nenhum resultado encontrado para esses parametros...</div>
       <div *ngIf="artigos.length>0">
         <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index"
           (click)="pushToWizardEncomendaForm(artigo)">

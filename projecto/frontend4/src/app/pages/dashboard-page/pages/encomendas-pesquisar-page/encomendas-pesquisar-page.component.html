@@ -40,7 +40,7 @@
 </div>
 
 <div *ngIf="results">
-  <div *ngIf="results.length===0">🤷 Não encontrei nada... Tenta novamente com atenção.</div>
+  <div *ngIf="results.length===0">Nenhum resultado encontrado para esses parametros...</div>
   <div *ngIf="results.length>0">
     <r-data-row class="clr-row" *ngFor="let result of results; let listaIndex=index" (click)="openEncomenda(result.id)">
       <div class="clr-col-lg-1 fontheavy">
