@@ -194,6 +194,9 @@
         <div class="clr-row">
           <div class="clr-col fontheavy">
             Informação para o cliente:
+            <span style="font-weight: lighter; cursor: pointer" (click)="cloneRelatorioInterno()">
+              <clr-icon shape="clone"></clr-icon>Copiar
+            </span>
           </div>
         </div>
         <div class="clr-row">
@@ -237,7 +240,7 @@
           || assistencia.estado === 'material recebido')
           && newEncomendasCounter === 0">
         <button class="btn btn-primary btn-icon" (click)="saveAssistencia('em análise', assistencia)">
-          <clr-icon class="is-solid" shape="floppy" flip="vertical"></clr-icon>
+          <clr-icon shape="floppy" flip="vertical"></clr-icon>
           Guardar
         </button>
         <clr-dropdown>

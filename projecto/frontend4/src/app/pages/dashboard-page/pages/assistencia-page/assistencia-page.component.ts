@@ -353,4 +353,8 @@ ${this.assistencia.relatorio_cliente}`
     return this.printService.printAssistenciaEntrada(assistencia);
   }
 
+  cloneRelatorioInterno() {
+    this.assistencia.relatorio_cliente = clone(this.assistencia.relatorio_interno);
+  }
+
 }
