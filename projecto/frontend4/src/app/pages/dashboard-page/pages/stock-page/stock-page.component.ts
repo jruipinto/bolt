@@ -73,7 +73,7 @@ export class StockPageComponent implements OnInit, OnDestroy {
       const dbQuery =
         '{' +
         '"query": {' +
-        '"$sort": { "marca": "1", "modelo": "1",  "descricao": "1"},' +
+        '"$sort": { "localizacao": "1", "marca": "1", "modelo": "1",  "descricao": "1"},' +
         '"$limit": "200",' +
         '"$and": [' +
         inputMapped +
