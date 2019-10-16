@@ -1,4 +1,7 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component, OnInit, ChangeDetectionStrategy, OnDestroy,
+  ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef
+} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable, merge, of } from 'rxjs';
 import { tap, concatMap, map, first, mergeMap } from 'rxjs/operators';
@@ -25,7 +28,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
   @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
   @ViewChild(ClientesPesquisarModalComponent, { static: false }) clientesSearchModal: ClientesPesquisarModalComponent;
 
-  public oldAssists: Assistencia[] = [];
+  public oldAssists$: Observable<Assistencia[]>;
 
   /* Declaration of the 3 Forms on the UI */
   public contactoClienteForm = this.fb.group({
@@ -54,22 +57,18 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
     .pipe(
       tap(() => {
         this.clienteForm.reset();
-        this.oldAssists = [];
+        this.oldAssists$ = of();
       }),
       concatMap(({ contacto }) => this.user$(contacto).pipe(
         map((users: User[]) => users.filter((user: User) => user.contacto === +contacto)),
         map((users: User[]) => users[0]),
-        mergeMap((cliente: User) => {
+        tap((cliente: User) => {
           if (cliente) {
-            return this.assistenciasService.find({ query: { cliente_user_id: cliente.id, estado: 'entregue' } })
-              .pipe(
-                tap((oldAssists: Assistencia[]) => {
-                  this.clienteForm.patchValue(cliente);
-                  this.oldAssists = oldAssists;
-                })
-              );
-          } else {
-            return of();
+            this.clienteForm.patchValue(cliente);
+            this.oldAssists$ = this.assistenciasService.find({ query: { cliente_user_id: cliente.id, estado: 'entregue' } });
+            setTimeout(() => {
+              this.cdr.detectChanges();
+            }, 200);
           }
         })
       ))
@@ -83,7 +82,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
     private uiService: UIService,
     private usersService: UsersService,
     private assistenciasService: AssistenciasService,
-    private printService: PrintService) { }
+    private printService: PrintService,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     merge(

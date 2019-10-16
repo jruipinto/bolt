@@ -1,4 +1,6 @@
-<button type="button" class="btn" (click)="clientesSearchModal.open()"><clr-icon shape="search"></clr-icon> Pesquisar cliente</button>
+<button type="button" class="btn" (click)="clientesSearchModal.open()">
+  <clr-icon shape="search"></clr-icon> Pesquisar cliente
+</button>
 
 <app-clientes-pesquisar-modal></app-clientes-pesquisar-modal>
 
@@ -49,8 +51,11 @@
   </div>
 </form>
 
-<div *ngIf="oldAssists.length > 0">
-  <clr-signpost>
+<div *ngIf="oldAssists$ | async as oldAssists">
+  <clr-signpost *ngIf="oldAssists.length && oldAssists.length > 0">
+    <button class="btn btn-link" clrSignpostTrigger>
+      Últimas fichas <clr-icon shape="help-info"></clr-icon>
+    </button>
     <clr-signpost-content *clrIfOpen>
       <h5>Últimas fichas</h5>
       <p class="p7">(marca modelo cor serial)</p>
