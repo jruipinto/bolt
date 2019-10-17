@@ -50,7 +50,7 @@
             <clr-password-container>
                 <input clrPassword type="password" name="password" placeholder="Password" formControlName="password" required>
             </clr-password-container>
-            <div class="error active" *ngIf=!loginForm.valid>
+            <div class="error active" *ngIf="loginForm.invalid">
                 Utilizador ou password inválido
             </div>
             <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">ENTRAR</button>
