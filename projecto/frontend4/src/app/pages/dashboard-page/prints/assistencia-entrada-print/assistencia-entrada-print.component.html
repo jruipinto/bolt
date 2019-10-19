@@ -46,7 +46,7 @@
     <div class="clr-col-9">
       <p>{{print?.categoria}} > {{print?.marca}} > {{print?.modelo}}</p>
       <p>{{print?.cor}}</p>
-      <p>{{print?.serial}}</p>
+      <p>{{print?.serial}}<span *ngIf="print && !print.serial">(não visível)</span></p>
       <p>{{print?.problema}}<span *ngIf="print.orcamento"> - Valor: {{print?.orcamento | currency: 'EUR'}}</span></p>
       <!-- <p>dummy -> codigo: 1798 - tem de ficar pronto até dia 12/02/2019</p> -->
     </div>
@@ -58,11 +58,12 @@
       <ul class="disclaimer">
         <li>Prazo para levantar 90 dias</li>
         <li>Garantia 90 dias</li>
-        <li>Os dados no equipamento, cartões de memoria/SIM e acessórios, não mencionados neste documento, são responsabilidade do cliente. <strong>Retire-os e guarde</strong></li>
+        <li>Os dados no equipamento, cartões de memória ou SIM e acessórios, não mencionados neste documento, são
+          responsabilidade do cliente. <strong>Retire-os e guarde</strong></li>
         <li>Esta assistência só é entregue a quem apresentar este documento</li>
         <li>O preço acresce 10% a cada 30 dias após fim do prazo de levantamento (taxa de conservação)</li>
-        <li>Os dados do cliente (nome, contacto, etc...), acima mencionados, ficam registados na N Reparações apenas para efeitos de comunicação
-          em relação às suas assistências e facturação
+        <li>Os dados do cliente (nome, contacto, etc...), acima mencionados, ficam registados na N Reparações apenas
+          para efeitos de comunicação em relação às suas assistências e facturação
         </li>
       </ul>
     </div>
@@ -70,7 +71,8 @@
 
   <div class="clr-row">
     <div class="clr-col">
-      <p class="disclaimer signature-field">Declaro que li e concordo com o disposto neste documento em {{print.createdAt}}</p>
+      <p class="disclaimer signature-field">Declaro que li e concordo com o disposto neste documento em
+        {{print.createdAt}}</p>
     </div>
   </div>
 </div>
