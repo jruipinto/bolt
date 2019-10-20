@@ -15,6 +15,7 @@ import { Assistencia, AuthService } from 'src/app/shared';
 })
 export class AssistenciasPageComponent implements OnInit, OnDestroy {
   public loading = true;
+  public inOverflow = null;
   public loggedInUserName: string;
   public assistencias$: Observable<Assistencia[]>;
   public assistenciasTodas$ = this.assistencias.state$
@@ -116,6 +117,11 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
     if (arg === 'minhas') {
       return this.assistencias$ = this.assistenciasMinhas$;
     }
+  }
+
+  onResize(event) {
+    const width = event.target.innerWidth;
+    width < 890 ? this.inOverflow = 'inOverflow' : this.inOverflow = null;
   }
 
 }

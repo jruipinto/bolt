@@ -6,72 +6,43 @@
   </span>
 </h2>
 
-<div class="btn-group btn-sm">
-  <div class="radio btn">
-    <input type="radio" name="btn-group-demo-radios" id="btn-demo-radio-1" (click)="filterAssistencias('minhas')"
-      checked>
-    <label for="btn-demo-radio-1">
+<clr-tabs (window:resize)="onResize($event)">
+  <clr-tab>
+    <button clrTabLink (click)="filterAssistencias('minhas')">
       Minhas
       <span *ngIf="(assistenciasMinhas$ | async) as assistencias">
         <span *ngIf="assistencias.length < 99"> ({{assistencias.length}})</span>
         <span *ngIf="assistencias.length > 99"> (99+)</span>
       </span>
-    </label>
-  </div>
-  <div class="radio btn">
-    <input type="radio" name="btn-group-demo-radios" id="btn-demo-radio-2" (click)="filterAssistencias('a fechar')">
-    <label for="btn-demo-radio-2">
+    </button>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink (click)="filterAssistencias('a fechar')" [clrTabLinkInOverflow]="inOverflow">
       A fechar
       <span *ngIf="(assistenciasAFechar$ | async) as assistencias">
         <span *ngIf="assistencias.length < 99"> ({{assistencias.length}})</span>
         <span *ngIf="assistencias.length > 99"> (99+)</span>
       </span>
-    </label>
-  </div>
-  <div class="radio btn">
-    <input type="radio" name="btn-group-demo-radios" id="btn-demo-radio-3" (click)="filterAssistencias('todas')">
-    <label for="btn-demo-radio-3">
+    </button>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink (click)="filterAssistencias('todas')" [clrTabLinkInOverflow]="inOverflow">
       Todas
       <span *ngIf="(assistenciasTodas$ | async) as assistencias">
         <span *ngIf="assistencias.length < 99"> ({{assistencias.length}})</span>
         <span *ngIf="assistencias.length > 99"> (99+)</span>
       </span>
-    </label>
-  </div>
-</div>
+    </button>
+  </clr-tab>
+</clr-tabs>
 
 <div *ngIf="loading">
-    <span class="spinner spinner-inline">
-    </span>
-    <span>
-      A carregar dados...
-    </span>
-  </div>
-
-<!--
-<clr-radio-container clrInline>
-  <label>Assistências
-    <span class="badge badge-light-blue" *ngIf="(assistencias$ | async) as assistencias">
-      <span *ngIf="assistencias.length < 99">{{assistencias.length}}</span>
-      <span *ngIf="assistencias.length > 99">99+</span>
-    </span>
-  </label>
-  <clr-radio-wrapper>
-    <input type="radio" clrRadio name="radioOption" required value="minhas" (click)="filterAssistencias('minhas')"
-      checked />
-    <label>Minhas</label>
-  </clr-radio-wrapper>
-  <clr-radio-wrapper>
-    <input type="radio" clrRadio name="radioOption" required value="a fechar"
-      (click)="filterAssistencias('a fechar')" />
-    <label>A fechar</label>
-  </clr-radio-wrapper>
-  <clr-radio-wrapper>
-    <input type="radio" clrRadio name="radioOption" required value="todas" (click)="filterAssistencias('todas')" />
-    <label>Todas</label>
-  </clr-radio-wrapper>
-</clr-radio-container>
--->
+  <span class="spinner spinner-inline">
+  </span>
+  <span>
+    A carregar dados...
+  </span>
+</div>
 
 <div *ngIf="(assistencias$ | async) as assistencias" class="separate">
   <div *ngIf="assistencias.length>0">
