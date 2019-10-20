@@ -1,11 +1,11 @@
 <div class="clr-row">
   <div class="clr-col-lg-4">
-    <h5>
+    <h2>
       Encomendas
       <span *ngIf="encomendas$ | async as encomendas">
         <span class="badge badge-light-blue" *ngIf="encomendas.length > 0">{{encomendas.length}}</span>
       </span>
-    </h5>
+    </h2>
     <div *ngIf="!loadingEncomendas && encomendas$ | async as encomendas">
       <div *ngIf="encomendas.length === 0"><clr-icon shape="check"></clr-icon> Não há mais encomendas!</div>
     </div>
@@ -59,12 +59,12 @@
     </div>
   </div>
   <div class="clr-col-lg-4">
-    <h5>
+    <h2>
       Orçamentos
       <span *ngIf="orcamentos$ | async as orcamentos">
         <span class="badge badge-light-blue" *ngIf="orcamentos.length > 0">{{orcamentos.length}}</span>
       </span>
-    </h5>
+    </h2>
     <div *ngIf="!loadingAssistencias && orcamentos$ | async as orcamentos">
       <div *ngIf="orcamentos.length === 0"><clr-icon shape="check"></clr-icon> Não há mais orçamentos!</div>
     </div>
@@ -108,13 +108,13 @@
     </div>
   </div>
   <div class="clr-col-lg-4">
-    <h5>
+    <h2>
       P. Contact. Cliente
       <span *ngIf="pedidosContactoCliente$ | async as pedidosContactoCliente">
         <span class="badge badge-light-blue"
           *ngIf="pedidosContactoCliente.length > 0">{{pedidosContactoCliente.length}}</span>
       </span>
-    </h5>
+    </h2>
     <div *ngIf="!loadingAssistencias && pedidosContactoCliente$ | async as pedidosContactoCliente">
       <div *ngIf="pedidosContactoCliente.length === 0"><clr-icon shape="check"></clr-icon> Não há mais pedidos de contacto!</div>
     </div>

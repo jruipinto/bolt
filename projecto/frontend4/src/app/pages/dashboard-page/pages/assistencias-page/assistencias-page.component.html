@@ -6,13 +6,13 @@
   </span>
 </div>
 
-<h5>
+<h2>
   Assistências activas
   <span class="badge badge-light-blue" *ngIf="(assistenciasTodas$ | async) as assistencias">
       <span *ngIf="assistencias.length < 99"> {{assistencias.length}}</span>
       <span *ngIf="assistencias.length > 99"> 99+</span>
     </span>
-</h5>
+</h2>
 
 <div class="btn-group btn-sm">
   <div class="radio btn">
