@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { EncomendasService, UIService } from 'src/app/shared/state';
+import { EncomendasService } from 'src/app/shared/state';
 import { Observable } from 'rxjs';
 import { Encomenda } from 'src/app/shared';
 
@@ -15,6 +15,62 @@ import { Encomenda } from 'src/app/shared';
 export class EncomendasPageComponent implements OnInit, OnDestroy {
   public loading = true;
   public encomendas$: Observable<Encomenda[]>;
+  public encomendasTodas$ = this.encomendas.state$
+    .pipe(
+      map(state => (
+        state
+          ? state.filter(encomenda => (
+            encomenda.estado === 'registada'
+            || encomenda.estado === 'marcada para ir ao fornecedor'
+            || encomenda.estado === 'adquirida'
+            || encomenda.estado === 'esgotada'
+            || encomenda.estado === 'sem fornecedor'
+            || encomenda.estado === 'aguarda resposta de fornecedor'
+            || encomenda.estado === 'aguarda entrega'
+            || encomenda.estado === 'recebida'
+            || encomenda.estado === 'detectado defeito'
+          ))
+          : null
+      ))
+    );
+  public encomendasMarcadas$ = this.encomendas.state$
+    .pipe(
+      map(state => (
+        state
+          ? state.filter(encomenda => (
+            encomenda.estado === 'marcada para ir ao fornecedor'
+          ))
+          : null
+      ))
+    );
+  public encomendasAguardaEntrega$ = this.encomendas.state$
+    .pipe(
+      map(state => (
+        state
+          ? state.filter(encomenda => (
+            encomenda.estado === 'registada'
+            || encomenda.estado === 'marcada para ir ao fornecedor'
+            || encomenda.estado === 'adquirida'
+            || encomenda.estado === 'esgotada'
+            || encomenda.estado === 'sem fornecedor'
+            || encomenda.estado === 'aguarda resposta de fornecedor'
+            || encomenda.estado === 'aguarda entrega'
+            || encomenda.estado === 'recebida'
+            || encomenda.estado === 'detectado defeito'
+          ))
+          : null
+      ))
+    );
+  public encomendasRecebidas$ = this.encomendas.state$
+    .pipe(
+      map(state => (
+        state
+          ? state.filter(encomenda => (
+            encomenda.estado === 'recebida'
+          ))
+          : null
+      ))
+    );
 
   constructor(
     private encomendas: EncomendasService,
@@ -51,59 +107,16 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
 
   filterEncomendas(arg: 'todas' | 'marcadas' | 'aguarda entrega' | 'recebida') {
     if (arg === 'todas') {
-      return this.encomendas$ = this.encomendas.state$
-        .pipe(
-          map(state =>
-            state
-              ? state.filter(encomenda =>
-                encomenda.estado === 'registada'
-                || encomenda.estado === 'marcada para ir ao fornecedor'
-                || encomenda.estado === 'adquirida'
-                || encomenda.estado === 'esgotada'
-                || encomenda.estado === 'sem fornecedor'
-                || encomenda.estado === 'aguarda resposta de fornecedor'
-                || encomenda.estado === 'aguarda entrega'
-                || encomenda.estado === 'recebida'
-                || encomenda.estado === 'detectado defeito')
-              : null
-          )
-        );
+      return this.encomendas$ = this.encomendasTodas$;
     }
     if (arg === 'marcadas') {
-      return this.encomendas$ = this.encomendas.state$
-        .pipe(
-          map(state =>
-            state
-              ? state.filter(encomenda =>
-                encomenda.estado === 'marcada para ir ao fornecedor'
-              )
-              : null
-          )
-        );
+      return this.encomendas$ = this.encomendasMarcadas$;
     }
     if (arg === 'aguarda entrega') {
-      return this.encomendas$ = this.encomendas.state$
-        .pipe(
-          map(state =>
-            state
-              ? state.filter(encomenda =>
-                encomenda.estado === 'aguarda entrega'
-              )
-              : null
-          )
-        );
+      return this.encomendas$ = this.encomendasAguardaEntrega$;
     }
     if (arg === 'recebida') {
-      return this.encomendas$ = this.encomendas.state$
-        .pipe(
-          map(state =>
-            state
-              ? state.filter(encomenda =>
-                encomenda.estado === 'recebida'
-              )
-              : null
-          )
-        );
+      return this.encomendas$ = this.encomendasRecebidas$;
     }
   }
 
