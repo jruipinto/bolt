@@ -29,7 +29,7 @@
 
 <div *ngIf="(assistencias$ | async) as assistencias" class="separate">
   <div *ngIf="assistencias.length>0">
-    <r-data-row class="clr-row overflow-hidden" *ngFor="let assistencia of assistencias; let listaIndex=index"
+    <r-data-row class="clr-row" *ngFor="let assistencia of assistencias; let listaIndex=index"
       (click)="openAssistencia(assistencia.id)">
       <div class="clr-col-lg-2">
         <div class="clr-row">

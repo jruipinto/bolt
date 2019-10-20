@@ -8,22 +8,7 @@ Clarity design fixes
 
 /* ################# */
 
-r-card { min-height: 4em; }
-
-r-data-row {
-  min-height: 3em;
-  border-bottom: 1px solid #EEEEEE;
-}
-
-r-data-row:nth-child(even){background-color: #E1F1F6;}
-
-r-data-row:hover {background-color: #EEEEEE;}
-
 textarea {
   width: 90%;
   min-height: 5em;
-}
-.overflow-hidden {
-  overflow-y: hidden;
-  overflow-x: hidden;
 }
