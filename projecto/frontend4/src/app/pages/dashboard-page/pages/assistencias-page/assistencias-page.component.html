@@ -49,7 +49,8 @@
         {{assistencia.cor}}
       </div>
       <div class="clr-col-lg-2 lessimportant">
-        {{assistencia.problema}}
+        {{assistencia.problema | slice:0:29}}
+        <span *ngIf="assistencia.problema.length > 30">...</span>
       </div>
       <div class="clr-col-lg-2 lessimportant">
         Cliente:{{assistencia.cliente_user_name}}
