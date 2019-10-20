@@ -1,3 +1,11 @@
+<h2>
+  Encomendas
+  <span class="badge badge-light-blue" *ngIf="(encomendas$ | async) as encomendas">
+    <span *ngIf="encomendas && encomendas.length < 99">{{encomendas.length}}</span>
+    <span *ngIf="encomendas && encomendas.length > 99">99+</span>
+  </span>
+</h2>
+
 <div *ngIf="loading">
   <span class="spinner spinner-inline">
   </span>

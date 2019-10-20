@@ -1,3 +1,11 @@
+<h2>
+  Assistências concluídas
+  <span class="badge badge-light-blue" *ngIf="(assistencias$ | async) as assistencias">
+    <span *ngIf="assistencias && assistencias.length < 99"> {{assistencias.length}}</span>
+    <span *ngIf="assistencias && assistencias.length > 99"> 99+</span>
+  </span>
+</h2>
+
 <div *ngIf="loading">
   <span class="spinner spinner-inline">
   </span>
@@ -5,14 +13,6 @@
     A carregar dados...
   </span>
 </div>
-
-<h2>
-  Assistências concluídas
-  <span class="badge badge-light-blue" *ngIf="(assistencias$ | async) as assistencias">
-    <span *ngIf="assistencias.length < 99"> {{assistencias.length}}</span>
-    <span *ngIf="assistencias.length > 99"> 99+</span>
-  </span>
-</h2>
 
 <div *ngIf="(assistencias$ | async) as assistencias">
   <div *ngIf="assistencias.length>0">
