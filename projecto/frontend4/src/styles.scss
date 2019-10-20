@@ -37,6 +37,10 @@ r-data-row {
   border-bottom: 1px solid #EEEEEE !important;
 }
 
+r-data-row:first-child {
+  margin-top: 1rem;
+}
+
 r-data-row:nth-child(even){background-color: #E1F1F6 !important;}
 
 r-data-row:hover {background-color: #EEEEEE !important;}

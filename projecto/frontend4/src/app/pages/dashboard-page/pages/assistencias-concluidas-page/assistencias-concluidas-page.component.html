@@ -6,12 +6,14 @@
   </span>
 </div>
 
-<clr-radio-container clrInline>
-  <label>Assistências <span class="badge badge-light-blue" *ngIf="(assistencias$ | async) as assistencias">
-      <span *ngIf="assistencias.length < 99">{{assistencias.length}}</span>
-      <span *ngIf="assistencias.length > 99">99+</span>
-    </span></label>
-</clr-radio-container>
+<h5>
+    Assistências concluídas
+    <span class="badge badge-light-blue" *ngIf="(assistencias$ | async) as assistencias">
+        <span *ngIf="assistencias.length < 99"> {{assistencias.length}}</span>
+        <span *ngIf="assistencias.length > 99"> 99+</span>
+      </span>
+  </h5>
+
 <div *ngIf="(assistencias$ | async) as assistencias">
   <div *ngIf="assistencias.length>0">
     <r-data-row class="clr-row overflow-hidden" *ngFor="let assistencia of assistencias; let listaIndex=index"
