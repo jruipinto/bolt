@@ -17,6 +17,50 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
   public loading = true;
   public loggedInUserName: string;
   public assistencias$: Observable<Assistencia[]>;
+  public assistenciasTodas$ = this.assistencias.state$
+    .pipe(
+      map(state => (
+        state
+          ? state.filter(assistencia =>
+            assistencia.estado === 'recebido'
+            || assistencia.estado === 'em análise'
+            || assistencia.estado === 'contactado'
+            || assistencia.estado === 'incontactável'
+            || assistencia.estado === 'orçamento aprovado'
+            || assistencia.estado === 'orçamento recusado'
+            || assistencia.estado === 'material recebido')
+          : null
+      ))
+    );
+  public assistenciasAFechar$ = this.assistencias.state$
+    .pipe(
+      map(state => (
+        state
+          ? state.filter(assistencia =>
+            assistencia.estado === 'contactado'
+            || assistencia.estado === 'incontactável'
+            || assistencia.estado === 'orçamento aprovado'
+            || assistencia.estado === 'orçamento recusado'
+            || assistencia.estado === 'material recebido')
+          : null
+      ))
+    );
+  public assistenciasMinhas$ = this.assistencias.state$
+    .pipe(
+      map(state => (
+        state
+          ? state.filter(assistencia =>
+            assistencia.tecnico === this.loggedInUserName
+            && (assistencia.estado === 'recebido'
+              || assistencia.estado === 'em análise'
+              || assistencia.estado === 'contactado'
+              || assistencia.estado === 'incontactável'
+              || assistencia.estado === 'orçamento aprovado'
+              || assistencia.estado === 'orçamento recusado'
+              || assistencia.estado === 'material recebido'))
+          : null
+      ))
+    );
 
   constructor(
     private assistencias: AssistenciasService,
@@ -64,54 +108,13 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
 
   filterAssistencias(arg: 'todas' | 'a fechar' | 'minhas') {
     if (arg === 'todas') {
-      return this.assistencias$ = this.assistencias.state$
-        .pipe(
-          map(state =>
-            state
-              ? state.filter(assistencia =>
-                assistencia.estado === 'recebido'
-                || assistencia.estado === 'em análise'
-                || assistencia.estado === 'contactado'
-                || assistencia.estado === 'incontactável'
-                || assistencia.estado === 'orçamento aprovado'
-                || assistencia.estado === 'orçamento recusado'
-                || assistencia.estado === 'material recebido')
-              : null
-          )
-        );
+      return this.assistencias$ = this.assistenciasTodas$;
     }
     if (arg === 'a fechar') {
-      return this.assistencias$ = this.assistencias.state$
-        .pipe(
-          map(state =>
-            state
-              ? state.filter(assistencia =>
-                assistencia.estado === 'contactado'
-                || assistencia.estado === 'incontactável'
-                || assistencia.estado === 'orçamento aprovado'
-                || assistencia.estado === 'orçamento recusado'
-                || assistencia.estado === 'material recebido')
-              : null
-          )
-        );
+      return this.assistencias$ = this.assistenciasAFechar$;
     }
     if (arg === 'minhas') {
-      return this.assistencias$ = this.assistencias.state$
-        .pipe(
-          map(state =>
-            state
-              ? state.filter(assistencia =>
-                assistencia.tecnico === this.loggedInUserName
-                && (assistencia.estado === 'recebido'
-                  || assistencia.estado === 'em análise'
-                  || assistencia.estado === 'contactado'
-                  || assistencia.estado === 'incontactável'
-                  || assistencia.estado === 'orçamento aprovado'
-                  || assistencia.estado === 'orçamento recusado'
-                  || assistencia.estado === 'material recebido'))
-              : null
-          )
-        );
+      return this.assistencias$ = this.assistenciasMinhas$;
     }
   }
 

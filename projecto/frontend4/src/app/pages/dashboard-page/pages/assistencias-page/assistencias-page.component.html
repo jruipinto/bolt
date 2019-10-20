@@ -6,11 +6,50 @@
   </span>
 </div>
 
+<h5>Assistências</h5>
+
+<div class="btn-group btn-sm">
+  <div class="radio btn">
+    <input type="radio" name="btn-group-demo-radios" id="btn-demo-radio-1" (click)="filterAssistencias('minhas')"
+      checked>
+    <label for="btn-demo-radio-1">
+      Minhas
+      <span *ngIf="(assistenciasMinhas$ | async) as assistencias">
+        <span *ngIf="assistencias.length < 99"> ({{assistencias.length}})</span>
+        <span *ngIf="assistencias.length > 99"> (99+)</span>
+      </span>
+    </label>
+  </div>
+  <div class="radio btn">
+    <input type="radio" name="btn-group-demo-radios" id="btn-demo-radio-2" (click)="filterAssistencias('a fechar')">
+    <label for="btn-demo-radio-2">
+      A fechar
+      <span *ngIf="(assistenciasAFechar$ | async) as assistencias">
+        <span *ngIf="assistencias.length < 99"> ({{assistencias.length}})</span>
+        <span *ngIf="assistencias.length > 99"> (99+)</span>
+      </span>
+    </label>
+  </div>
+  <div class="radio btn">
+    <input type="radio" name="btn-group-demo-radios" id="btn-demo-radio-3" (click)="filterAssistencias('todas')">
+    <label for="btn-demo-radio-3">
+      Todas
+      <span *ngIf="(assistenciasTodas$ | async) as assistencias">
+        <span *ngIf="assistencias.length < 99"> ({{assistencias.length}})</span>
+        <span *ngIf="assistencias.length > 99"> (99+)</span>
+      </span>
+    </label>
+  </div>
+</div>
+
+<!--
 <clr-radio-container clrInline>
-  <label>Assistências <span class="badge badge-light-blue" *ngIf="(assistencias$ | async) as assistencias">
+  <label>Assistências
+    <span class="badge badge-light-blue" *ngIf="(assistencias$ | async) as assistencias">
       <span *ngIf="assistencias.length < 99">{{assistencias.length}}</span>
       <span *ngIf="assistencias.length > 99">99+</span>
-    </span></label>
+    </span>
+  </label>
   <clr-radio-wrapper>
     <input type="radio" clrRadio name="radioOption" required value="minhas" (click)="filterAssistencias('minhas')"
       checked />
@@ -26,6 +65,7 @@
     <label>Todas</label>
   </clr-radio-wrapper>
 </clr-radio-container>
+-->
 
 <div *ngIf="(assistencias$ | async) as assistencias" class="separate">
   <div *ngIf="assistencias.length>0">
