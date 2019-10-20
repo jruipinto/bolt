@@ -31,6 +31,7 @@
     "@types/feathersjs__socketio-client": "^1.0.3",
     "@types/ramda": "^0.26.12",
     "@webcomponents/custom-elements": "^1.2.4",
+    "ajv": "^6.9.1",
     "core-js": "^2.6.9",
     "feathers-reactive": "^0.7.2",
     "jwt-decode": "^2.2.0",
