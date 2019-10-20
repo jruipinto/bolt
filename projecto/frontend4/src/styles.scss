@@ -37,10 +37,6 @@ r-data-row {
   border-bottom: 1px solid #EEEEEE !important;
 }
 
-r-data-row:first-child {
-  margin-top: 1rem;
-}
-
 r-data-row:nth-child(even){background-color: #E1F1F6 !important;}
 
 r-data-row:hover {background-color: #EEEEEE !important;}
@@ -51,6 +47,9 @@ r-data-row:hover {background-color: #EEEEEE !important;}
 */
 main.content-area {
   padding-top: 0 !important;
+}
+h5 {
+  margin-bottom: 1rem;
 }
 /*
 // this fix breaks the screen below 380px which is actually iphone 6 and 5 resolutions
