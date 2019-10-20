@@ -6,14 +6,6 @@
   </span>
 </h2>
 
-<div *ngIf="loading">
-  <span class="spinner spinner-inline">
-  </span>
-  <span>
-    A carregar dados...
-  </span>
-</div>
-
 <div class="btn-group btn-sm">
   <div class="radio btn">
     <input type="radio" name="btn-group-demo-radios" id="btn-demo-radio-1" (click)="filterAssistencias('minhas')"
@@ -47,6 +39,14 @@
     </label>
   </div>
 </div>
+
+<div *ngIf="loading">
+    <span class="spinner spinner-inline">
+    </span>
+    <span>
+      A carregar dados...
+    </span>
+  </div>
 
 <!--
 <clr-radio-container clrInline>

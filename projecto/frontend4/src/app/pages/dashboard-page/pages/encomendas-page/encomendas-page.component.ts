@@ -14,6 +14,7 @@ import { Encomenda } from 'src/app/shared';
 })
 export class EncomendasPageComponent implements OnInit, OnDestroy {
   public loading = true;
+  public inOverflow = null;
   public encomendas$: Observable<Encomenda[]>;
   public encomendasTodas$ = this.encomendas.state$
     .pipe(
@@ -118,6 +119,11 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
     if (arg === 'recebida') {
       return this.encomendas$ = this.encomendasRecebidas$;
     }
+  }
+
+  onResize(event) {
+    const width = event.target.innerWidth;
+    width < 890 ? this.inOverflow = 'inOverflow' : this.inOverflow = null;
   }
 
 }

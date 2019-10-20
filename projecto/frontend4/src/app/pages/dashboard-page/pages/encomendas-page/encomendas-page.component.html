@@ -6,6 +6,45 @@
   </span>
 </h2>
 
+<clr-tabs (window:resize)="onResize($event)">
+  <clr-tab>
+    <button clrTabLink (click)="filterEncomendas('aguarda entrega')">
+      Aguardam entrega
+      <span *ngIf="(encomendasAguardaEntrega$ | async) as encomendas">
+        <span *ngIf="encomendas.length < 99"> ({{encomendas.length}})</span>
+        <span *ngIf="encomendas.length > 99"> (99+)</span>
+      </span>
+    </button>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink (click)="filterEncomendas('recebida')" [clrTabLinkInOverflow]="inOverflow">
+      Recebidas
+      <span *ngIf="(encomendasRecebidas$ | async) as encomendas">
+        <span *ngIf="encomendas.length < 99"> ({{encomendas.length}})</span>
+        <span *ngIf="encomendas.length > 99"> (99+)</span>
+      </span>
+    </button>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink (click)="filterEncomendas('marcadas')" [clrTabLinkInOverflow]="inOverflow">
+      Marc. p/ ir a fornecedor
+      <span *ngIf="(encomendasMarcadas$ | async) as encomendas">
+        <span *ngIf="encomendas.length < 99"> ({{encomendas.length}})</span>
+        <span *ngIf="encomendas.length > 99"> (99+)</span>
+      </span>
+    </button>
+  </clr-tab>
+  <clr-tab>
+    <button clrTabLink (click)="filterEncomendas('todas')" [clrTabLinkInOverflow]="inOverflow">
+      Todas
+      <span *ngIf="(encomendasTodas$ | async) as encomendas">
+        <span *ngIf="encomendas.length < 99"> ({{encomendas.length}})</span>
+        <span *ngIf="encomendas.length > 99"> (99+)</span>
+      </span>
+    </button>
+  </clr-tab>
+</clr-tabs>
+
 <div *ngIf="loading">
   <span class="spinner spinner-inline">
   </span>
@@ -13,32 +52,6 @@
     A carregar dados...
   </span>
 </div>
-
-<clr-radio-container clrInline>
-  <label>Encomendas
-    <span class="badge badge-light-blue" *ngIf="(encomendas$ | async) as encomendas">
-      <span *ngIf="encomendas.length < 99">{{encomendas.length}}</span>
-      <span *ngIf="encomendas.length > 99">99+</span>
-    </span>
-  </label>
-  <clr-radio-wrapper>
-    <input type="radio" clrRadio name="radioOption" required value="aguarda entrega"
-      (click)="filterEncomendas('aguarda entrega')" checked />
-    <label>Aguardam entrega</label>
-  </clr-radio-wrapper>
-  <clr-radio-wrapper>
-    <input type="radio" clrRadio name="radioOption" required value="recebida" (click)="filterEncomendas('recebida')" />
-    <label>Recebidas</label>
-  </clr-radio-wrapper>
-  <clr-radio-wrapper>
-    <input type="radio" clrRadio name="radioOption" required value="marcadas" (click)="filterEncomendas('marcadas')" />
-    <label>Marcadas para ir ao fornecedor</label>
-  </clr-radio-wrapper>
-  <clr-radio-wrapper>
-    <input type="radio" clrRadio name="radioOption" required value="todas" (click)="filterEncomendas('todas')" />
-    <label>Todas</label>
-  </clr-radio-wrapper>
-</clr-radio-container>
 
 <div class="separate">
   <r-data-row class="clr-row" *ngFor="let encomenda of encomendas$ | async; let listaIndex=index"
