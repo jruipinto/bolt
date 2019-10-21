@@ -70,6 +70,7 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    window.innerWidth < 890 ? this.inOverflow = 'inOverflow' : this.inOverflow = null;
     this.authService.getUserName$()
       .pipe(
         tap(res => this.loggedInUserName = res[0].nome),

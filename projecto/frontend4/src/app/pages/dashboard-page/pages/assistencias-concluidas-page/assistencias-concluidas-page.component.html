@@ -1,10 +1,10 @@
-<h2>
+<h3>
   Assistências concluídas
   <span class="badge badge-light-blue" *ngIf="(assistencias$ | async) as assistencias">
     <span *ngIf="assistencias && assistencias.length < 99"> {{assistencias.length}}</span>
     <span *ngIf="assistencias && assistencias.length > 99"> 99+</span>
   </span>
-</h2>
+</h3>
 
 <div *ngIf="loading">
   <span class="spinner spinner-inline">
@@ -14,7 +14,7 @@
   </span>
 </div>
 
-<div *ngIf="(assistencias$ | async) as assistencias">
+<div class="separate" *ngIf="(assistencias$ | async) as assistencias">
   <div *ngIf="assistencias.length>0">
     <r-data-row class="clr-row overflow-hidden" *ngFor="let assistencia of assistencias; let listaIndex=index"
       (click)="openAssistencia(assistencia.id)">

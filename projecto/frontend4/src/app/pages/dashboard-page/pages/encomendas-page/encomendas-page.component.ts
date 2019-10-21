@@ -93,6 +93,7 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
   */
 
   ngOnInit() {
+    window.innerWidth < 890 ? this.inOverflow = 'inOverflow' : this.inOverflow = null;
     this.encomendas
       .find({ query: { $limit: 200, estado: { $ne: 'entregue' } } })
       .subscribe(() => this.loading = false);
