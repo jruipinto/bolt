@@ -1,5 +1,6 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { FocusMonitor } from '@angular/cdk/a11y';
 import { map, concatMap, tap, toArray } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -20,7 +21,7 @@ import { clone } from 'ramda';
 export class AssistenciaPageComponent implements OnInit, OnDestroy {
   public loading = true;
   public assistencia: Assistencia;
-  public artigoSearchModal = false;
+  public artigoSearchModalOpened = false;
   public artigoSearchForm = this.fb.group({
     input: [null]
   });
@@ -28,7 +29,9 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     input: [null]
   });
   public artigoSearchResults: Artigo[];
-  public encomendaWizard = false;
+  public encomendaWizardOpened = false;
+  @ViewChild('artigoSearchModalInput', { static: false }) artigoSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild('encomendaWizardInput', { static: false }) encomendaWizardInputEl: ElementRef<HTMLElement>;
   @ViewChild('wizard', { static: false }) wizard;
   @ViewChild('wizardPageTwo', { static: false }) wizardPageTwo;
   public wizardEncomendaForm = this.fb.group({
@@ -57,7 +60,8 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     // private artigosApi: ArtigosApiService,
     private router: Router,
     private route: ActivatedRoute,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private focusMonitor: FocusMonitor) {
   }
 
   ngOnInit() {
@@ -303,7 +307,7 @@ ${this.assistencia.relatorio_cliente}`
       const resultIndex = this.artigoSearchResults.findIndex(result => result.id === artigo.id);
       this.artigoSearchResults[resultIndex].qty = this.artigoSearchResults[resultIndex].qty - artigo.qty;
       this.assistencia.material = clone(material);
-      this.artigoSearchModal = false;
+      this.artigoSearchModalOpened = false;
     }
   }
 
@@ -355,6 +359,16 @@ ${this.assistencia.relatorio_cliente}`
 
   cloneRelatorioInterno() {
     this.assistencia.relatorio_cliente = clone(this.assistencia.relatorio_interno);
+  }
+
+  openArtigoSearchModal() {
+    this.artigoSearchModalOpened = true;
+    setTimeout(() => this.focusMonitor.focusVia(this.artigoSearchModalInputEl, 'program'), 0.1);
+  }
+
+  openEncomendaWizard() {
+    this.encomendaWizardOpened = true;
+    setTimeout(() => this.focusMonitor.focusVia(this.encomendaWizardInputEl, 'program'), 0.1);
   }
 
 }

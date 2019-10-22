@@ -86,7 +86,7 @@
             <clr-accordion-content *clrIfExpanded>
               <div class="clr-row">
                 <div class="clr-col">
-                  <button class="btn btn-link" (click)="artigoSearchModal = true">Adicionar material</button>
+                  <button class="btn btn-link" (click)="openArtigoSearchModal()">Adicionar material</button>
                 </div>
               </div>
               <div class="clr-row" *ngIf="assistencia.material && assistencia.material.length">
@@ -118,7 +118,7 @@
             <clr-accordion-content *clrIfExpanded>
               <div class="clr-row">
                 <div class="clr-col">
-                  <button class="btn btn-link" (click)="encomendaWizard = true">Adicionar encomenda</button>
+                  <button class="btn btn-link" (click)="openEncomendaWizard()">Adicionar encomenda</button>
                 </div>
               </div>
               <div class="clr-row" *ngIf="assistencia.encomendas && assistencia.encomendas.length">
@@ -323,13 +323,13 @@
   </div>
 </div>
 
-<clr-modal [(clrModalOpen)]="artigoSearchModal" [clrModalSize]="'lg'">
+<clr-modal [(clrModalOpen)]="artigoSearchModalOpened" [clrModalSize]="'lg'">
   <h3 class="modal-title">Adicionar Material</h3>
   <div class="modal-body">
     <form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
       <div class="clr-row">
         <div class="clr-col-12 padding-bottom-05">
-          <input type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input"
+          <input #artigoSearchModalInput type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input"
             formControlName="input" />
         </div>
       </div>
@@ -358,7 +358,7 @@
   </div>
 </clr-modal>
 
-<clr-wizard #wizard [(clrWizardOpen)]="encomendaWizard" clrWizardSize="lg"
+<clr-wizard #wizard [(clrWizardOpen)]="encomendaWizardOpened" clrWizardSize="lg"
   (clrWizardOnFinish)="addEncomenda(wizardEncomendaForm.value)">
   <clr-wizard-title>Encomendar Artigo</clr-wizard-title>
 
@@ -372,7 +372,7 @@
     <form [formGroup]="wizardArtigoSearchForm" (ngSubmit)="searchArtigo(wizardArtigoSearchForm.value.input)">
       <div class="clr-row">
         <div class="clr-col-12 padding-bottom-05">
-          <input type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input"
+          <input #encomendaWizardInput type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input"
             formControlName="input" />
         </div>
       </div>
