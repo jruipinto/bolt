@@ -1,12 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { tap, concatMap, map, first } from 'rxjs/operators';
 import { Observable, merge } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { User, Encomenda } from 'src/app/shared/models';
 import { UsersService, UI, UIService, EncomendasService } from 'src/app/shared/state';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 import clone from 'ramda/es/clone';
+import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/modals';
 
 @AutoUnsubscribe()
 @Component({
@@ -15,6 +16,9 @@ import clone from 'ramda/es/clone';
   styleUrls: ['./encomendas-criar-nova-page.component.scss']
 })
 export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
+  @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild(ClientesPesquisarModalComponent, { static: false }) clientesSearchModal: ClientesPesquisarModalComponent;
+
   public contactoClienteForm = this.fb.group({
     contacto: [null, Validators.min(200000000)] // por exemplo, contacto: 255486001
   });
