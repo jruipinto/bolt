@@ -49,15 +49,7 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
       map(state => (
         state
           ? state.filter(encomenda => (
-            encomenda.estado === 'registada'
-            || encomenda.estado === 'marcada para ir ao fornecedor'
-            || encomenda.estado === 'adquirida'
-            || encomenda.estado === 'esgotada'
-            || encomenda.estado === 'sem fornecedor'
-            || encomenda.estado === 'aguarda resposta de fornecedor'
-            || encomenda.estado === 'aguarda entrega'
-            || encomenda.estado === 'recebida'
-            || encomenda.estado === 'detectado defeito'
+            encomenda.estado === 'aguarda entrega'
           ))
           : null
       ))
