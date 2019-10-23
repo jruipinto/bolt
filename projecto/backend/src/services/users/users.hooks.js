@@ -10,14 +10,14 @@ module.exports = {
     all: [],
     find: [ authenticate('jwt') ],
     get: [ authenticate('jwt') ],
-    /*create: [ hashPassword(), authenticateAfterFirstUse('jwt', 'tecnico', 'users') ],
+    create: [ hashPassword(), authenticateAfterFirstUse('jwt', 'tecnico', 'users') ],
     update: [ hashPassword(),  authenticateAfterFirstUse('jwt', 'tecnico', 'users') ],
     patch: [ hashPassword(),  authenticateAfterFirstUse('jwt', 'tecnico', 'users') ],
-    remove: [ authenticateAfterFirstUse('jwt', 'tecnico', 'users') ]*/
-    create: [ hashPassword(), authenticate('jwt') ],
+    remove: [ authenticateAfterFirstUse('jwt', 'tecnico', 'users') ]
+    /*create: [ hashPassword(), authenticate('jwt') ],
     update: [ hashPassword(),  authenticate('jwt') ],
     patch: [ hashPassword(),  authenticate('jwt') ],
-    remove: [ authenticate('jwt') ]
+    remove: [ authenticate('jwt') ]*/
 
   },
 
