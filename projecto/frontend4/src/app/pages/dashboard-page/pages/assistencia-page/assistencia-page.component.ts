@@ -246,6 +246,7 @@ ${this.assistencia.relatorio_cliente}`
       const dbQuery =
         '{' +
         '"query": {' +
+        '"$sort": { "marca": "1", "modelo": "1",  "descricao": "1"},' +
         '"$limit": "200",' +
         '"$and": [' +
         inputMapped +

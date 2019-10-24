@@ -89,6 +89,7 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy, Af
     const dbQuery =
       '{' +
       '"query": {' +
+      '"$sort": { "marca": "1", "modelo": "1"},' +
       '"$limit": "200",' +
       '"$and": [' +
       inputMapped +

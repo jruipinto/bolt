@@ -81,6 +81,7 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy, Afte
       JSON.parse(
         '{' +
         '"query": {' +
+        '"$sort": { "marca": "1", "modelo": "1",  "descricao": "1"},' +
         '"$limit": "200",' +
         '"$and": [' +
         inputMapped +
