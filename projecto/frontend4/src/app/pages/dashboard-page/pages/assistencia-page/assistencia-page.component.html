@@ -244,7 +244,8 @@
           Guardar
         </button>
         <clr-dropdown>
-          <button clrDropdownTrigger class="btn btn-outline-primary"><clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
+          <button clrDropdownTrigger class="btn btn-outline-primary">
+            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
             <button clrDropdownItem (click)="saveAssistencia('orçamento pendente', assistencia)">Orçamentar
@@ -267,7 +268,8 @@
           || assistencia.estado === 'cliente adiou orç.'">
         <button class="btn btn-success" (click)="saveAssistencia('orçamento aprovado', assistencia)">Aceite</button>
         <clr-dropdown>
-          <button clrDropdownTrigger class="btn btn-outline-primary"><clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
+          <button clrDropdownTrigger class="btn btn-outline-primary">
+            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
             <button clrDropdownItem (click)="saveAssistencia('orçamento recusado', assistencia)">Recusado
@@ -290,7 +292,8 @@
           <clr-icon shape="caret down"></clr-icon>
         </button>
         <clr-dropdown>
-          <button clrDropdownTrigger class="btn btn-outline-primary"><clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
+          <button clrDropdownTrigger class="btn btn-outline-primary">
+            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
             <button type="button" (click)="saveAssistencia('contactado', assistencia)" clrDropdownItem>Cliente adiou
@@ -336,7 +339,7 @@
     </form>
     <h4>Resultados:</h4>
     <div *ngIf="artigoSearchResults as artigos">
-      <div *ngIf="artigos.length===0">Nenhum resultado encontrado para esses parametros...</div>
+      <p *ngIf="artigos.length===0">Nenhum resultado encontrado para esses parametros...</p>
       <div *ngIf="artigos.length>0">
         <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index" (click)="addArtigo(artigo)">
           <div class="clr-col-lg-3">
@@ -379,7 +382,7 @@
     </form>
     <h4>Resultados:</h4>
     <div *ngIf="artigoSearchResults as artigos">
-      <div *ngIf="artigos.length===0">Nenhum resultado encontrado para esses parametros...</div>
+      <p *ngIf="artigos.length===0">Nenhum resultado encontrado para esses parametros...</p>
       <div *ngIf="artigos.length>0">
         <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index"
           (click)="pushToWizardEncomendaForm(artigo)">

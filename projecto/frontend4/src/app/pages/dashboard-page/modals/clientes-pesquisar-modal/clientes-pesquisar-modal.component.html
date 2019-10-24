@@ -11,7 +11,7 @@
     </form>
     <h4>Resultados:</h4>
     <div *ngIf="userSearchResults$ | async as users">
-      <div *ngIf="users.length===0">Nenhum resultado encontrado para esses parametros...</div>
+      <p *ngIf="users.length===0">Nenhum resultado encontrado para esses parametros...</p>
       <div *ngIf="users.length>0">
         <r-data-row class="clr-row" style="margin-bottom: 0" *ngFor="let user of users; let listaIndex=index"
           (click)="selectUser(user)">
