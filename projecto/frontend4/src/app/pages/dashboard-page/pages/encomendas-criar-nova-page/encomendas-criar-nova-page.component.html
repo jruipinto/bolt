@@ -1,5 +1,44 @@
 <h3>Nova encomenda</h3>
 
+<button class="btn" (click)="openArtigoSearchModal()">
+  <clr-icon shape="search"></clr-icon>Pesquisar material
+</button>
+
+<clr-modal [(clrModalOpen)]="artigoSearchModalOpened" [clrModalSize]="'lg'">
+  <h3 class="modal-title">Adicionar Material</h3>
+  <div class="modal-body">
+    <form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
+      <div class="clr-row">
+        <div class="clr-col-12 padding-bottom-05">
+          <input #artigoSearchModalInput type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input"
+            formControlName="input" />
+        </div>
+      </div>
+    </form>
+    <h4>Resultados:</h4>
+    <div *ngIf="artigoSearchResults as artigos">
+      <p *ngIf="artigos.length===0">Nenhum resultado encontrado para esses parametros...</p>
+      <div *ngIf="artigos.length>0">
+        <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index" (click)="addArtigo(artigo)">
+          <div class="clr-col-lg-3">
+            <span class="fontheavy">{{artigo.marca}}</span>
+            {{artigo.modelo}}
+          </div>
+          <div class="clr-col-lg-6 lessimportant">
+            {{artigo.descricao}}
+          </div>
+          <div class="clr-col-lg-1 lessimportant">
+            Qty: {{artigo.qty}}
+          </div>
+          <div class="clr-col-lg-2 lessimportant">
+            Local: {{artigo.localizacao}}
+          </div>
+        </r-data-row>
+      </div>
+    </div>
+  </div>
+</clr-modal>
+
 <div class="separate clr-form clr-row">
   <div class="clr-col-lg-2">
     <label for="">Artigo:*</label>

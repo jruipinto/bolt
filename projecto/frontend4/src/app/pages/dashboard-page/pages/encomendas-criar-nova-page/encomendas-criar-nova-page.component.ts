@@ -4,10 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { tap, concatMap, map, first } from 'rxjs/operators';
 import { Observable, merge } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { User, Encomenda } from 'src/app/shared/models';
-import { UsersService, UI, UIService, EncomendasService } from 'src/app/shared/state';
+import { User, Encomenda, Artigo } from 'src/app/shared/models';
+import { UsersService, UI, UIService, EncomendasService, ArtigosService } from 'src/app/shared/state';
 import clone from 'ramda/es/clone';
 import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/modals';
+import { FocusMonitor } from '@angular/cdk/a11y';
 
 @AutoUnsubscribe()
 @Component({
@@ -16,9 +17,16 @@ import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/mo
   styleUrls: ['./encomendas-criar-nova-page.component.scss']
 })
 export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
+  @ViewChild('artigoSearchModalInput', { static: false }) artigoSearchModalInputEl: ElementRef<HTMLElement>;
   @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
   @ViewChild(ClientesPesquisarModalComponent, { static: false }) clientesSearchModal: ClientesPesquisarModalComponent;
 
+  public artigoSearchModalOpened = false;
+  public artigoSearchResults: Artigo[];
+
+  public artigoSearchForm = this.fb.group({
+    input: [null]
+  });
   public contactoClienteForm = this.fb.group({
     contacto: [null, Validators.min(200000000)] // por exemplo, contacto: 255486001
   });
@@ -77,8 +85,10 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private users: UsersService,
     private encomendas: EncomendasService,
+    private artigos: ArtigosService,
     private uiService: UIService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private focusMonitor: FocusMonitor
   ) { }
 
   ngOnInit() {
@@ -170,5 +180,42 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
       );
     }
   */
+
+  searchArtigo(input?: string) {
+    if (input) {
+      const inputSplited = input.split(' ');
+      const inputMapped = inputSplited.map(word =>
+        '{"$or": [' +
+        '{ "marca": { "$like": "%' + word + '%" }},' +
+        '{ "modelo": { "$like": "%' + word + '%" }},' +
+        '{ "descricao": { "$like": "%' + word + '%" }}' +
+        ' ]}'
+      );
+      const dbQuery =
+        '{' +
+        '"query": {' +
+        '"$limit": "200",' +
+        '"$and": [' +
+        inputMapped +
+        ']' +
+        '}' +
+        '}';
+
+      this.artigos
+        .find(JSON.parse(dbQuery))
+        .subscribe((res: Artigo[]) => this.artigoSearchResults = clone(res));
+    }
+  }
+
+  addArtigo(artigoInStock: Artigo) {
+    this.encomendaForm.patchValue({artigo_id: artigoInStock.id});
+    this.artigoForm.patchValue(artigoInStock);
+    this.artigoSearchModalOpened = false;
+  }
+
+  openArtigoSearchModal() {
+    this.artigoSearchModalOpened = true;
+    setTimeout(() => this.focusMonitor.focusVia(this.artigoSearchModalInputEl, 'program'), 0.1);
+  }
 
 }
