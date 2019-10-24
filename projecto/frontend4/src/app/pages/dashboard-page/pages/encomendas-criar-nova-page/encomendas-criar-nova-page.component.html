@@ -1,11 +1,11 @@
 <h3>Nova encomenda</h3>
 
 <button class="btn" (click)="openArtigoSearchModal()">
-  <clr-icon shape="search"></clr-icon>Pesquisar material
+  <clr-icon shape="search"></clr-icon> Pesquisar material
 </button>
 
 <clr-modal [(clrModalOpen)]="artigoSearchModalOpened" [clrModalSize]="'lg'">
-  <h3 class="modal-title">Adicionar Material</h3>
+  <h3 class="modal-title">Pesquisar material</h3>
   <div class="modal-body">
     <form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
       <div class="clr-row">
@@ -48,9 +48,7 @@
       {{artigoForm.value.descricao}} {{artigoForm.value.marca}} {{artigoForm.value.modelo}}
     </span>
     <span *ngIf="!encomendaForm.value.artigo_id">
-      <a [routerLink]="['/dashboard/stock']" routerLinkActive="active">Dirije-te, em primeiro lugar, à pesquisa do
-        Stock,
-        para escolher o artigo que vais encomendar</a>
+      (Seleccione um artigo, com a ajuda do botão acima)
     </span>
   </div>
 </div>
