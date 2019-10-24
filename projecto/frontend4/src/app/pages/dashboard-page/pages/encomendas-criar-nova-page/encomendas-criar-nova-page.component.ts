@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { tap, concatMap, map, first } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { FocusMonitor } from '@angular/cdk/a11y';
   templateUrl: './encomendas-criar-nova-page.component.html',
   styleUrls: ['./encomendas-criar-nova-page.component.scss']
 })
-export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
+export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('artigoSearchModalInput', { static: false }) artigoSearchModalInputEl: ElementRef<HTMLElement>;
   @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
   @ViewChild(ClientesPesquisarModalComponent, { static: false }) clientesSearchModal: ClientesPesquisarModalComponent;
@@ -125,6 +125,13 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
     this.encomendaForm.patchValue({ artigo_id: this.artigoForm.value.id });
   }
 
+  ngAfterViewInit() {
+    this.clientesSearchModal.selectedCliente
+      .subscribe(
+        (user: User) => this.contactoClienteForm.patchValue({ contacto: clone(user.contacto) })
+      );
+  }
+
   ngOnDestroy() {
   }
 
@@ -209,7 +216,7 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy {
   }
 
   addArtigo(artigoInStock: Artigo) {
-    this.encomendaForm.patchValue({artigo_id: artigoInStock.id});
+    this.encomendaForm.patchValue({ artigo_id: artigoInStock.id });
     this.artigoForm.patchValue(artigoInStock);
     this.artigoSearchModalOpened = false;
   }
