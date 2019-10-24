@@ -47,7 +47,7 @@ export class ClientesPesquisarModalComponent implements OnInit {
       const dbQuery =
         '{' +
         '"query": {' +
-        '"$sort": { "nome": "1", "contecto": "1"},' +
+        '"$sort": { "nome": "1", "contacto": "1"},' +
         '"$limit": "200",' +
         '"$and": [' +
         inputMapped +
