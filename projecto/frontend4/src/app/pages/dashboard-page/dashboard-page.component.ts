@@ -21,17 +21,6 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     assistenciaID: [null]
   });
 
-
-  constructor(
-    private authService: AuthService,
-    private uiService: UIService,
-    private assistencias: AssistenciasService,
-    private artigos: ArtigosService,
-    private encomendas: EncomendasService,
-    private users: UsersService,
-    private router: Router,
-    private fb: FormBuilder) { }
-
   public assistenciaModalVisible$: Observable<boolean> = this.uiService.state$
     .pipe(
       map((uiState: UI) => uiState.assistenciaModalVisible)
@@ -46,18 +35,29 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     );
 
 
+  constructor(
+    private authService: AuthService,
+    private uiService: UIService,
+    private assistencias: AssistenciasService,
+    private artigos: ArtigosService,
+    private encomendas: EncomendasService,
+    private users: UsersService,
+    private router: Router,
+    private fb: FormBuilder) { }
+
   ngOnInit() {
     this.authService.getUserName$()
-    .subscribe(res => {
-      const nomeCompleto: string = res[0].nome;
-      const nomeArr = nomeCompleto.split(' ');
-      this.userName = nomeArr[0];
-    });
+      .subscribe(res => {
+        const nomeCompleto: string = res[0].nome;
+        const nomeArr = nomeCompleto.split(' ');
+        this.userName = nomeArr[0];
+      });
     merge(
       this.assistencias.watch(),
       this.artigos.watch(),
       this.encomendas.watch(),
-      this.users.watch()
+      this.users.watch(),
+      this.encomendaPromptModalVisible$
     ).subscribe();
   }
 

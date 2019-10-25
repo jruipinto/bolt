@@ -52,8 +52,8 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
         concatMap((id: number) => this.artigos.state$
           .pipe(map((state: Artigo[]) => {
             return state && state.length
-            ? state.filter(a => a.id === id)
-            : null;
+              ? state.filter(a => a.id === id)
+              : null;
           }))
         )
       )
@@ -72,13 +72,14 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
     return this.artigos.patch(artigo.id, capitalize(artigo))
       .pipe(
         concatMap(
-          () => artigo.qty === 0
-            ? this.uiService.patchState({
-              encomendaPromptModalVisible: true,
-              encomendaPromptModalArtigo: artigo,
-            })
-            : of(true)
-        ),
+          () => (
+            !artigo.qty || artigo.qty < 2
+              ? this.uiService.patchState({
+                encomendaPromptModalVisible: true,
+                encomendaPromptModalArtigo: artigo,
+              })
+              : of(true)
+          )),
         tap(() => window.history.back())
       )
       .subscribe();
@@ -89,12 +90,14 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
       .pipe(
         map((res: Artigo[]) => res[0]),
         concatMap(
-          (newArtigo: Artigo) => artigo.qty === 0
-            ? this.uiService.patchState({
-              encomendaPromptModalVisible: true,
-              encomendaPromptModalArtigo: newArtigo,
-            })
-            : of(true)
+          (newArtigo: Artigo) => (
+            !artigo.qty || artigo.qty < 2
+              ? this.uiService.patchState({
+                encomendaPromptModalVisible: true,
+                encomendaPromptModalArtigo: newArtigo,
+              })
+              : of(true)
+          )
         ),
         tap(() => window.history.back())
       )
