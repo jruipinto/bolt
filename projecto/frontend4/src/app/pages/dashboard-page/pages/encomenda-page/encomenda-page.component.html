@@ -46,26 +46,36 @@
     <div class="separate">
         <div class="clr-row">
             <div class="clr-col-md-2 fontheavy">
-                Criada:
+                Artigo:
             </div>
             <div class="clr-col">
-                {{encomenda.createdAt | date: 'EEE, d MMM y, HH:mm'}}
+                {{encomenda.qty}} x {{encomenda.artigo_descricao}} {{encomenda.artigo_marca}}
+                {{encomenda.artigo_modelo}}
             </div>
         </div>
         <div class="clr-row">
             <div class="clr-col-md-2 fontheavy">
-                Modificada:
+                Orçamento:
             </div>
             <div class="clr-col">
-                {{encomenda.updatedAt | date: 'EEE, d MMM y, HH:mm'}}
+                <span *ngIf="!encomenda.orcamento">-</span>
+                {{encomenda?.orcamento | currency: 'EUR'}}
             </div>
         </div>
         <div class="clr-row">
             <div class="clr-col-md-2 fontheavy">
-                Prazo de entrega:
+                Fornecedor:
             </div>
             <div class="clr-col">
-                {{encomenda.previsao_entrega | date: 'EEE, d MMM y'}}
+                {{encomenda?.fornecedor}} <span *ngIf="!encomenda.fornecedor">-</span>
+            </div>
+        </div>
+        <div class="clr-row">
+            <div class="clr-col-md-2 fontheavy">
+                Observação:
+            </div>
+            <div class="clr-col">
+                {{encomenda?.observacao}} <span *ngIf="!encomenda.observacao">-</span>
             </div>
         </div>
     </div>
@@ -98,36 +108,36 @@
     <div class="separate">
         <div class="clr-row">
             <div class="clr-col-md-2 fontheavy">
-                Artigo:
+                Prazo de entrega:
             </div>
             <div class="clr-col">
-                {{encomenda.qty}} x {{encomenda.artigo_descricao}} {{encomenda.artigo_marca}}
-                {{encomenda.artigo_modelo}}
+                {{encomenda.previsao_entrega | date: 'EEE, d MMM y'}}
             </div>
         </div>
+    </div>
+
+    <div class="separate">
         <div class="clr-row">
-            <div class="clr-col-md-2 fontheavy">
-                Orçamento:
-            </div>
             <div class="clr-col">
-                <span *ngIf="!encomenda.orcamento">Nenhum orçamento</span>
-                {{encomenda?.orcamento | currency: 'EUR'}}
-            </div>
-        </div>
-        <div class="clr-row">
-            <div class="clr-col-md-2 fontheavy">
-                Fornecedor:
-            </div>
-            <div class="clr-col">
-                {{encomenda?.fornecedor}} <span *ngIf="!encomenda.fornecedor">Nenhuma sugestão</span>
-            </div>
-        </div>
-        <div class="clr-row">
-            <div class="clr-col-md-2 fontheavy">
-                Observação:
-            </div>
-            <div class="clr-col">
-                {{encomenda?.observacao}} <span *ngIf="!encomenda.observacao">Nenhuma observação</span>
+                <clr-accordion>
+                    <clr-accordion-panel>
+                        <clr-accordion-title>Registo Cronológico</clr-accordion-title>
+                        <clr-accordion-content *clrIfExpanded>
+                            <clr-datagrid>
+                                <clr-dg-column>Técnico</clr-dg-column>
+                                <clr-dg-column>Estado</clr-dg-column>
+                                <clr-dg-column>Data</clr-dg-column>
+                                <clr-dg-row *ngFor="let evento of encomenda.registo_cronologico">
+                                    <clr-dg-cell>{{evento.tecnico_user_id}} {{evento.tecnico}}</clr-dg-cell>
+                                    <clr-dg-cell>{{evento.estado}}</clr-dg-cell>
+                                    <clr-dg-cell>{{evento.updatedAt | slice:0:10}}</clr-dg-cell>
+                                </clr-dg-row>
+                                <clr-dg-footer>{{encomenda.registo_cronologico.length}} eventos registados
+                                </clr-dg-footer>
+                            </clr-datagrid>
+                        </clr-accordion-content>
+                    </clr-accordion-panel>
+                </clr-accordion>
             </div>
         </div>
     </div>
