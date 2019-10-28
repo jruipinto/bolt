@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 /* components */
 import { AppComponent } from './app.component';
 import { LoginPageComponent, SignupPageComponent } from './pages';
+import { FormStateDirective } from './shared/directives/form-state.directive';
 
 
 // the second parameter 'pt' is optional
@@ -22,7 +23,8 @@ registerLocaleData(localePT, 'pt');
   declarations: [
     AppComponent,
     LoginPageComponent,
-    SignupPageComponent
+    SignupPageComponent,
+    FormStateDirective
   ],
   imports: [
     BrowserModule,
