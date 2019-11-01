@@ -1,7 +1,8 @@
 <h3>Pesquisar encomendas</h3>
 
 <div>
-  <form clrForm clrLayout="vertical" class="clr-row" [formGroup]="encomendasSearchForm">
+  <form clrForm clrLayout="vertical" class="clr-row" [formGroup]="encomendasSearchForm"
+    formState="encomendasPesquisarPageEncomendasSearchForm">
     <div class="clr-col-lg-3">
       <clr-input-container>
         <label>Cliente</label>
@@ -27,7 +28,9 @@
     <div class="clr-col-lg-3">
       <button type="submit" class="btn btn-primary" (click)="searchEncomenda(encomendasSearchForm.value.input,
               encomendasSearchForm.value.estado,
-              encomendasSearchForm.value.cliente)"><clr-icon shape="search"></clr-icon> Pesquisar</button>
+              encomendasSearchForm.value.cliente)">
+        <clr-icon shape="search"></clr-icon> Pesquisar
+      </button>
     </div>
   </form>
 </div>

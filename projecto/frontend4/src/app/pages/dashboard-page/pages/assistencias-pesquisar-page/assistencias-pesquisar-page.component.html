@@ -1,6 +1,7 @@
 <h3>Pesquisar Assistências</h3>
 <div>
-  <form clrForm clrLayout="vertical" class="clr-row" [formGroup]="assistenciasSearchForm">
+  <form clrForm clrLayout="vertical" class="clr-row" [formGroup]="assistenciasSearchForm"
+    formState="assistenciasPesquisarPageAssistenciasSearchForm">
     <div class="clr-col-lg-3">
       <clr-input-container>
         <label>Cliente</label>
@@ -26,7 +27,9 @@
     <div class="clr-col-lg-3">
       <button type="submit" class="btn btn-primary" (click)="searchAssistencia(assistenciasSearchForm.value.input,
           assistenciasSearchForm.value.estado,
-          assistenciasSearchForm.value.cliente)"><clr-icon shape="search"></clr-icon> Pesquisar</button>
+          assistenciasSearchForm.value.cliente)">
+        <clr-icon shape="search"></clr-icon> Pesquisar
+      </button>
     </div>
   </form>
 </div>

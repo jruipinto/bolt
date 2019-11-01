@@ -14,10 +14,12 @@ export interface UI {
   assistenciasCriarNovaPageContactoClienteForm: {};
   assistenciasCriarNovaPageClienteForm: {};
   assistenciasCriarNovaPageCriarNovaForm: {};
+  assistenciasPesquisarPageAssistenciasSearchForm: {};
   encomendaPageContactoClienteForm: {};
   encomendaPageClienteForm: {};
   encomendaPageArtigoForm: {};
   encomendaPageEncomendaForm: {};
+  encomendasPesquisarPageEncomendasSearchForm: {};
   stockPageArtigoSearchForm: {};
 
   // prints
@@ -35,10 +37,12 @@ const defaults: UI = {
   assistenciasCriarNovaPageContactoClienteForm: {},
   assistenciasCriarNovaPageClienteForm: {},
   assistenciasCriarNovaPageCriarNovaForm: {},
+  assistenciasPesquisarPageAssistenciasSearchForm: {},
   encomendaPageContactoClienteForm: {},
   encomendaPageClienteForm: {},
   encomendaPageArtigoForm: {},
   encomendaPageEncomendaForm: {},
+  encomendasPesquisarPageEncomendasSearchForm: {},
   stockPageArtigoSearchForm: {}
   // prints
 };
