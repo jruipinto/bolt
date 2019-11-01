@@ -18,6 +18,7 @@ export interface UI {
   encomendaPageClienteForm: {};
   encomendaPageArtigoForm: {};
   encomendaPageEncomendaForm: {};
+  stockPageArtigoSearchForm: {};
 
   // prints
 }
@@ -38,6 +39,7 @@ const defaults: UI = {
   encomendaPageClienteForm: {},
   encomendaPageArtigoForm: {},
   encomendaPageEncomendaForm: {},
+  stockPageArtigoSearchForm: {}
   // prints
 };
 
