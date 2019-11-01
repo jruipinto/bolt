@@ -6,7 +6,8 @@
 
 <app-clientes-pesquisar-modal></app-clientes-pesquisar-modal>
 
-<form class="separate clr-form" [formGroup]="contactoClienteForm">
+<form class="separate clr-form" [formGroup]="contactoClienteForm"
+  formState="assistenciasCriarNovaPageContactoClienteForm">
   <div class="clr-row">
     <div class="clr-col-md-2">
       <label for="contacto">Contacto:*</label>
@@ -18,7 +19,7 @@
   </div>
 </form>
 
-<form class="separate clr-form" [formGroup]="clienteForm">
+<form class="separate clr-form" [formGroup]="clienteForm" formState="assistenciasCriarNovaPageClienteForm">
   <div class="clr-row">
     <div class="clr-col-md-2">
       <label for="nome">Nome:*</label>
@@ -70,7 +71,8 @@
 </div>
 
 <div class="separate">
-  <form class="clr-form" [formGroup]="criarNovaForm" (ngSubmit)="onSubmit()">
+  <form class="clr-form" [formGroup]="criarNovaForm" formState="assistenciasCriarNovaPageCriarNovaForm"
+    (ngSubmit)="onSubmit()">
     <div class="clr-row">
       <div class="clr-col-md-2">
         <label for="categoria">Categoria:*</label>

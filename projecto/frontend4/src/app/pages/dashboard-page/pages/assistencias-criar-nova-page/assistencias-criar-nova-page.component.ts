@@ -3,11 +3,11 @@ import {
   ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable, merge, of } from 'rxjs';
-import { tap, concatMap, map, first, mergeMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { tap, concatMap, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
-import { AssistenciasService, UsersService, UIService, UI } from 'src/app/shared/state';
+import { AssistenciasService, UsersService } from 'src/app/shared/state';
 import { PrintService } from 'src/app/pages/dashboard-page/prints';
 import { User, Assistencia } from 'src/app/shared/models';
 import { capitalize } from 'src/app/shared/utilities';
@@ -79,38 +79,13 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
 
   constructor(
     private fb: FormBuilder,
-    private uiService: UIService,
     private usersService: UsersService,
     private assistenciasService: AssistenciasService,
     private printService: PrintService,
     private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    merge(
-      this.clienteChange$,
-      this.uiService.state$
-        .pipe(
-          first(),
-          tap((state: UI) => {
-            this.contactoClienteForm.patchValue(state.assistenciasCriarNovaPageContactoClienteForm);
-            this.clienteForm.patchValue(state.assistenciasCriarNovaPageClienteForm);
-            this.criarNovaForm.patchValue(state.assistenciasCriarNovaPageCriarNovaForm);
-          })
-        ),
-      this.contactoClienteForm.valueChanges
-        .pipe(
-          concatMap(value => this.uiService.patchState({ assistenciasCriarNovaPageContactoClienteForm: value }))
-        ),
-      this.clienteForm.valueChanges
-        .pipe(
-          concatMap(value => this.uiService.patchState({ assistenciasCriarNovaPageClienteForm: value }))
-        ),
-      this.criarNovaForm.valueChanges
-        .pipe(
-          concatMap(value => this.uiService.patchState({ assistenciasCriarNovaPageCriarNovaForm: value }))
-        ),
-    )
-      .subscribe();
+    this.clienteChange$.subscribe();
   }
 
   ngAfterViewInit() {
