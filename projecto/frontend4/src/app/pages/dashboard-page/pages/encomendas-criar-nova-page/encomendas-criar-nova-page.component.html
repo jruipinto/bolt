@@ -40,6 +40,7 @@
 </clr-modal>
 
 <div class="separate clr-form clr-row">
+  <form style="display: none" [formGroup]="artigoForm" formState="encomendaPageArtigoForm"></form>
   <div class="clr-col-lg-2">
     <label for="">Artigo:*</label>
   </div>
@@ -59,7 +60,7 @@
 
 <app-clientes-pesquisar-modal></app-clientes-pesquisar-modal>
 
-<form class="separate clr-form" [formGroup]="contactoClienteForm">
+<form class="separate clr-form" [formGroup]="contactoClienteForm" formState="encomendaPageContactoClienteForm">
   <div class="clr-row">
     <div class="clr-col-lg-2">
       <label for="contacto">Contacto:*</label>
@@ -71,7 +72,7 @@
   </div>
 </form>
 
-<form class="separate clr-form" [formGroup]="clienteForm">
+<form class="separate clr-form" [formGroup]="clienteForm" formState="encomendaPageClienteForm">
   <div class="clr-row">
     <div class="clr-col-lg-2">
       <label for="nome">Nome:*</label>
@@ -106,7 +107,7 @@
   </div>
 </form>
 
-<form class="separate clr-form" [formGroup]="encomendaForm">
+<form class="separate clr-form" [formGroup]="encomendaForm" formState="encomendaPageEncomendaForm">
   <div class="clr-row">
     <div class="clr-col-lg-2">
       <label for="observacao">Observação:</label>

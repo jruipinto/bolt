@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { tap, concatMap, map, first } from 'rxjs/operators';
-import { Observable, merge } from 'rxjs';
+import { tap, concatMap, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { User, Encomenda, Artigo } from 'src/app/shared/models';
-import { UsersService, UI, UIService, EncomendasService, ArtigosService } from 'src/app/shared/state';
+import { UsersService, EncomendasService, ArtigosService } from 'src/app/shared/state';
 import clone from 'ramda/es/clone';
 import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/modals';
 import { FocusMonitor } from '@angular/cdk/a11y';
@@ -86,42 +85,11 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
     private users: UsersService,
     private encomendas: EncomendasService,
     private artigos: ArtigosService,
-    private uiService: UIService,
-    private route: ActivatedRoute,
     private focusMonitor: FocusMonitor
   ) { }
 
   ngOnInit() {
-    merge(
-      this.clienteChange$,
-      this.uiService.state$
-        .pipe(
-          first(),
-          tap((state: UI) => {
-            this.contactoClienteForm.patchValue(state.encomendaPageContactoClienteForm);
-            this.clienteForm.patchValue(state.encomendaPageClienteForm);
-            this.artigoForm.patchValue(state.encomendaPageArtigoForm);
-            this.encomendaForm.patchValue(state.encomendaPageEncomendaForm);
-          })
-        ),
-      this.contactoClienteForm.valueChanges
-        .pipe(
-          concatMap(value => this.uiService.patchState({ encomendaPageContactoClienteForm: value }))
-        ),
-      this.clienteForm.valueChanges
-        .pipe(
-          concatMap(value => this.uiService.patchState({ encomendaPageClienteForm: value }))
-        ),
-      this.artigoForm.valueChanges
-        .pipe(
-          concatMap(value => this.uiService.patchState({ encomendaPageArtigoForm: value }))
-        ),
-      this.encomendaForm.valueChanges
-        .pipe(
-          concatMap(value => this.uiService.patchState({ encomendaPageEncomendaForm: value }))
-        )
-    )
-      .subscribe();
+    this.clienteChange$.subscribe();
     this.encomendaForm.patchValue({ artigo_id: this.artigoForm.value.id });
   }
 
