@@ -9,10 +9,10 @@ import localePT from '@angular/common/locales/pt';
 import { ClarityModule } from '@clr/angular';
 /* routing & custom modules */
 import { AppRoutingModule } from './app-routing.module';
+import { AutofocusModule ,FormStateModule } from './shared';
 /* components */
 import { AppComponent } from './app.component';
 import { LoginPageComponent, SignupPageComponent } from './pages';
-import { FormStateDirective } from './shared/directives/form-state.directive';
 
 
 // the second parameter 'pt' is optional
@@ -23,8 +23,7 @@ registerLocaleData(localePT, 'pt');
   declarations: [
     AppComponent,
     LoginPageComponent,
-    SignupPageComponent,
-    FormStateDirective
+    SignupPageComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +31,9 @@ registerLocaleData(localePT, 'pt');
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    ClarityModule
+    ClarityModule,
+    FormStateModule,
+    AutofocusModule
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'pt' } ],
   bootstrap: [AppComponent]

@@ -7,7 +7,7 @@ import { ClarityModule } from '@clr/angular';
 /* routing & custom modules */
 import { DashboardPageRoutingModule } from './dashboard-page-routing.module';
 /* directives */
-import { AutofocusDirective } from 'src/app/shared';
+import { AutofocusModule, FormStateModule } from 'src/app/shared';
 /* shared components */
 import { RCardComponent, RDataRowComponent } from 'src/app/shared/components';
 /* components */
@@ -32,10 +32,11 @@ import { ClientesPesquisarModalComponent } from './modals/clientes-pesquisar-mod
     ReactiveFormsModule,
     FormsModule,
     DashboardPageRoutingModule,
-    ClarityModule
+    ClarityModule,
+    FormStateModule,
+    AutofocusModule
   ],
   declarations: [
-    AutofocusDirective,
     RCardComponent,
     RDataRowComponent,
     DashboardPageComponent,
