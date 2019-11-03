@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { tap, concatMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -13,7 +13,8 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 @Component({
   selector: 'app-encomendas-criar-nova-page',
   templateUrl: './encomendas-criar-nova-page.component.html',
-  styleUrls: ['./encomendas-criar-nova-page.component.scss']
+  styleUrls: ['./encomendas-criar-nova-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('artigoSearchModalInput', { static: false }) artigoSearchModalInputEl: ElementRef<HTMLElement>;
@@ -21,7 +22,7 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
   @ViewChild(ClientesPesquisarModalComponent, { static: false }) clientesSearchModal: ClientesPesquisarModalComponent;
 
   public artigoSearchModalOpened = false;
-  public artigoSearchResults: Artigo[];
+  public artigoSearchResults$: Observable<Artigo[]>;
 
   public artigoSearchForm = this.fb.group({
     input: [null]
@@ -36,6 +37,7 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
     nif: [''],
     id: [null]
   });
+  public artigo: Artigo;
   public artigoForm = this.fb.group({
     id: [null],
     marca: [null],
@@ -177,9 +179,8 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
         '}' +
         '}';
 
-      this.artigos
-        .find(JSON.parse(dbQuery))
-        .subscribe((res: Artigo[]) => this.artigoSearchResults = clone(res));
+      this.artigoSearchResults$ = this.artigos
+        .find(JSON.parse(dbQuery));
     }
   }
 
