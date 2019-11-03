@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Artigo } from 'src/app/shared';
 import { ArtigosService, UIService } from 'src/app/shared/state';
+import { tap } from 'rxjs/operators';
 
 @AutoUnsubscribe()
 @Component({
@@ -13,7 +15,7 @@ import { ArtigosService, UIService } from 'src/app/shared/state';
 })
 export class StockPageComponent implements OnInit, OnDestroy {
   public loading = false;
-  public results: Artigo[];
+  public results$: Observable<Artigo[]>;
   public artigoSearchForm = this.fb.group({
     input: [null]
   });
@@ -25,9 +27,17 @@ export class StockPageComponent implements OnInit, OnDestroy {
     private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.loading = true;
+    this.uiService.state$
+      .subscribe(
+        ({ stockPageArtigoSearch$ }) => { this.results$ = stockPageArtigoSearch$; }
+      );
+    this.loading = false;
   }
 
   ngOnDestroy() {
+    this.uiService.patchState({ stockPageArtigoSearch$: this.results$ })
+      .subscribe();
   }
 
   searchArtigo(input?: string) {
@@ -52,12 +62,11 @@ export class StockPageComponent implements OnInit, OnDestroy {
         '}' +
         '}';
 
-      return this.artigos
+      this.results$ = this.artigos
         .find(JSON.parse(dbQuery))
-        .subscribe(artigos => {
-          this.loading = false;
-          this.results = artigos;
-        });
+        .pipe(
+          tap(() => { this.loading = false; })
+        );
     }
   }
 
@@ -81,12 +90,11 @@ export class StockPageComponent implements OnInit, OnDestroy {
         '}' +
         '}';
 
-      return this.artigos
+      this.results$ = this.artigos
         .find(JSON.parse(dbQuery))
-        .subscribe(artigos => {
-          this.loading = false;
-          this.results = artigos;
-        });
+        .pipe(
+          tap(() => { this.loading = false; })
+        );
     }
   }
 

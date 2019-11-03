@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { UIStateAbstraction } from 'src/app/shared/abstraction-classes';
 import { Artigo } from '../models';
 
@@ -21,6 +22,7 @@ export interface UI {
   encomendaPageEncomendaForm: {};
   encomendasPesquisarPageEncomendasSearchForm: {};
   stockPageArtigoSearchForm: {};
+  stockPageArtigoSearch$: Observable<Artigo[]>;
 
   // prints
 }
@@ -43,7 +45,8 @@ const defaults: UI = {
   encomendaPageArtigoForm: {},
   encomendaPageEncomendaForm: {},
   encomendasPesquisarPageEncomendasSearchForm: {},
-  stockPageArtigoSearchForm: {}
+  stockPageArtigoSearchForm: {},
+  stockPageArtigoSearch$: null
   // prints
 };
 
