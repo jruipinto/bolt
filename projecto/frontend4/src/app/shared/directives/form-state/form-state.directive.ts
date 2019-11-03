@@ -1,4 +1,4 @@
-import { Directive, Input, OnInit } from '@angular/core';
+import { Directive, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { UIService, UI } from '../../state';
 import { FormGroupDirective } from '@angular/forms';
 import { first, concatMap, tap } from 'rxjs/operators';
@@ -15,7 +15,8 @@ export class FormStateDirective implements OnInit {
 
   constructor(
     private uiService: UIService,
-    private formGroupDirective: FormGroupDirective
+    private formGroupDirective: FormGroupDirective,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -24,7 +25,8 @@ export class FormStateDirective implements OnInit {
     this.uiService.state$
       .pipe(
         first(),
-        tap((uiState: UI) => form.patchValue(uiState[this.path]))
+        tap((uiState: UI) => form.patchValue(uiState[this.path])),
+        tap(() => this.cdr.detectChanges())
       ).subscribe();
 
     form.valueChanges
