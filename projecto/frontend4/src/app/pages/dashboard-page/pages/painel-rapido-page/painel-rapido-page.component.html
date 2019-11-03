@@ -47,11 +47,12 @@
         </div>
       </div>
       <div class="card-footer">
-        <button class="btn btn-success btn-sm"
-          (click)="saveEncomenda('aguarda entrega', encomenda)">Encomendado</button>
+        <button class="btn btn-success btn-sm" (click)="saveEncomenda('aguarda entrega', encomenda)">
+          <clr-icon shape="check"></clr-icon> Encomendado
+        </button>
         <clr-dropdown>
           <button type="button" class="btn btn-sm" clrDropdownTrigger>
-            + Opções
+            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
             <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
@@ -101,10 +102,12 @@
         </div>
       </div>
       <div class="card-footer">
-        <button class="btn btn-success btn-sm" (click)="saveAssist('orçamento aprovado', orcamento)">Aceite</button>
+        <button class="btn btn-success btn-sm" (click)="saveAssist('orçamento aprovado', orcamento)">
+          <clr-icon shape="check"></clr-icon>Aceite
+        </button>
         <clr-dropdown>
           <button type="button" class="btn btn-sm" clrDropdownTrigger>
-            + Opções
+            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
             <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
@@ -158,11 +161,12 @@
         </div>
       </div>
       <div class="card-footer">
-        <button class="btn btn-success btn-sm"
-          (click)="saveAssist('contactado', pedidoContactoCliente)">Sucesso</button>
+        <button class="btn btn-success btn-sm" (click)="saveAssist('contactado', pedidoContactoCliente)">
+          <clr-icon shape="check"></clr-icon> Sucesso
+        </button>
         <clr-dropdown>
           <button type="button" class="btn btn-sm" clrDropdownTrigger>
-            + Opções
+            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
             <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>

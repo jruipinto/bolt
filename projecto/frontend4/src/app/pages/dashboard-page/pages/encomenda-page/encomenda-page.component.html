@@ -148,10 +148,15 @@
         || encomenda.estado === 'esgotada'
         || encomenda.estado === 'aguarda resposta de fornecedor'
         || encomenda.estado === 'detectado defeito'">
-            <button class="btn btn-success" (click)="saveEncomenda('aguarda entrega', encomenda)">Encomendado</button>
+            <button class="btn btn-success" (click)="saveEncomenda('aguarda entrega', encomenda)">
+                <clr-icon shape="check"></clr-icon> Encomendado
+            </button>
             <clr-dropdown>
-                <button clrDropdownTrigger class="btn btn-outline-primary">+ Opções <clr-icon shape="caret down">
-                    </clr-icon></button>
+                <button clrDropdownTrigger class="btn btn-outline-primary">
+                    <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
+                    <clr-icon shape="caret down">
+                    </clr-icon>
+                </button>
                 <clr-dropdown-menu clrPosition="top-left">
                     <button clrDropdownItem type="button"
                         (click)="saveEncomenda('aguarda resposta de fornecedor', encomenda)">
@@ -173,18 +178,24 @@
 
 
         <div *ngIf="encomenda.estado === 'marcada para ir ao fornecedor'">
-            <button class="btn btn-success" (click)="saveEncomenda('adquirida', encomenda)">Adquirido</button>
-            <button class="btn btn-danger" (click)="saveEncomenda('esgotada', encomenda)">Esgotado</button>
+            <button class="btn btn-success" (click)="saveEncomenda('adquirida', encomenda)">
+                <clr-icon shape="check"></clr-icon> Adquirido
+            </button>
+            <button class="btn btn-danger" (click)="saveEncomenda('esgotada', encomenda)">
+                <clr-icon shape="times"></clr-icon> Esgotado
+            </button>
         </div>
 
         <div *ngIf="encomenda.estado === 'aguarda entrega'">
-            <button class="btn btn-success" (click)="saveEncomenda('recebida', encomenda)">Recebida</button>
+            <button class="btn btn-success" (click)="saveEncomenda('recebida', encomenda)">
+                <clr-icon shape="check"></clr-icon> Recebida
+            </button>
         </div>
 
         <div *ngIf="encomenda.estado === 'recebida'
         || encomenda.estado === 'adquirida'
         || encomenda.estado === 'sem fornecedor'">
-            <button class="btn btn-success" (click)="saveEncomenda('entregue', encomenda)">Entregar</button>
+            <button class="btn btn-warning" (click)="saveEncomenda('entregue', encomenda)">Entregar</button>
         </div>
 
     </div>

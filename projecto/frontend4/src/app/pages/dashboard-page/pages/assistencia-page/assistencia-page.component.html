@@ -240,7 +240,7 @@
           || assistencia.estado === 'material recebido')
           && newEncomendasCounter === 0">
         <button class="btn btn-primary btn-icon" (click)="saveAssistencia('em análise', assistencia)">
-          <clr-icon shape="floppy" flip="vertical"></clr-icon>
+          <clr-icon shape="floppy"></clr-icon>
           Guardar
         </button>
         <clr-dropdown>
@@ -288,8 +288,8 @@
           || assistencia.estado === 'não atendeu p/ cont.'
           || assistencia.estado === 'cliente adiou resp.'">
         <button type="button" class="btn btn-success" (click)="saveAssistencia('contactado', assistencia)">
+          <clr-icon shape="check"></clr-icon>
           Sucesso
-          <clr-icon shape="caret down"></clr-icon>
         </button>
         <clr-dropdown>
           <button clrDropdownTrigger class="btn btn-outline-primary">
