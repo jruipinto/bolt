@@ -1,7 +1,7 @@
 <h3>
   Assistências activas
   <span class="badge badge-light-blue" *ngIf="(assistenciasTodas$ | async) as assistencias">
-    <span *ngIf="assistencias && assistencias.length < 99"> {{assistencias.length}}</span>
+    <span *ngIf="assistencias && assistencias.length < 100"> {{assistencias.length}}</span>
     <span *ngIf="assistencias && assistencias.length > 99"> 99+</span>
   </span>
 </h3>
@@ -11,7 +11,7 @@
     <button clrTabLink (click)="filterAssistencias('minhas')">
       Minhas
       <span *ngIf="(assistenciasMinhas$ | async) as assistencias">
-        <span *ngIf="assistencias.length < 99"> ({{assistencias.length}})</span>
+        <span *ngIf="assistencias.length < 100"> ({{assistencias.length}})</span>
         <span *ngIf="assistencias.length > 99"> (99+)</span>
       </span>
     </button>
@@ -20,7 +20,7 @@
     <button clrTabLink (click)="filterAssistencias('a fechar')" [clrTabLinkInOverflow]="inOverflow">
       A fechar
       <span *ngIf="(assistenciasAFechar$ | async) as assistencias">
-        <span *ngIf="assistencias.length < 99"> ({{assistencias.length}})</span>
+        <span *ngIf="assistencias.length < 100"> ({{assistencias.length}})</span>
         <span *ngIf="assistencias.length > 99"> (99+)</span>
       </span>
     </button>
@@ -29,7 +29,7 @@
     <button clrTabLink (click)="filterAssistencias('todas')" [clrTabLinkInOverflow]="inOverflow">
       Todas
       <span *ngIf="(assistenciasTodas$ | async) as assistencias">
-        <span *ngIf="assistencias.length < 99"> ({{assistencias.length}})</span>
+        <span *ngIf="assistencias.length < 100"> ({{assistencias.length}})</span>
         <span *ngIf="assistencias.length > 99"> (99+)</span>
       </span>
     </button>
