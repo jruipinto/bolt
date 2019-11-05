@@ -63,8 +63,20 @@ export class AssistenciasService extends EntityStateAbstraction {
   }
 
   public create(assistencia: Partial<Assistencia>) {
+    const {
+      relatorio_interno,
+      relatorio_cliente,
+      material,
+      encomendas,
+      preco
+    } = assistencia;
     const registo_cronologico: EventoCronologico[] = [{
       tecnico_user_id: this.authService.getUserId(),
+      relatorio_interno,
+      relatorio_cliente,
+      material,
+      encomendas,
+      preco,
       estado: 'recebido',
       updatedAt: new Date().toLocaleString() // dia/mes/ano, hora:minuto:segundo naquele momento
     }];
@@ -72,8 +84,20 @@ export class AssistenciasService extends EntityStateAbstraction {
   }
 
   public patch(id: number, assistencia: Partial<Assistencia>) {
+    const {
+      relatorio_interno,
+      relatorio_cliente,
+      material,
+      encomendas,
+      preco
+    } = assistencia;
     const novoRegisto: EventoCronologico = {
       tecnico_user_id: this.authService.getUserId(),
+      relatorio_interno,
+      relatorio_cliente,
+      material,
+      encomendas,
+      preco,
       estado: assistencia.estado,
       updatedAt: new Date().toLocaleString()
     };

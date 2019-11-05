@@ -28,6 +28,11 @@ export interface Assistencia {
 export interface EventoCronologico {
     tecnico_user_id: number;
     tecnico?: string;
+    relatorio_interno: string;
+    relatorio_cliente: string;
+    material: Partial<Artigo>[];
+    encomendas: Partial<Encomenda>[];
+    preco: number;
     estado: string;
     updatedAt: string;
 }
