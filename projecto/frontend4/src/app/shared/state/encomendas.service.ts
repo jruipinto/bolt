@@ -47,7 +47,7 @@ export class EncomendasService extends EntityStateAbstraction {
   }
 
   public create(encomenda: Partial<Encomenda>) {
-    const registo_cronologico: Partial<EventoCronologico>[] = [{
+    const registo_cronologico: EventoCronologico[] = [{
       tecnico_user_id: this.authService.getUserId(),
       estado: encomenda.estado,
       updatedAt: new Date().toLocaleString() // dia/mes/ano, hora:minuto:segundo naquele momento
@@ -56,12 +56,12 @@ export class EncomendasService extends EntityStateAbstraction {
   }
 
   public patch(id: number, encomenda: Partial<Encomenda>) {
-    const novoRegisto: Partial<EventoCronologico> = {
+    const novoRegisto: EventoCronologico = {
       tecnico_user_id: this.authService.getUserId(),
       estado: encomenda.estado,
       updatedAt: new Date().toLocaleString()
     };
-    const updatedRegistoCronologico: Partial<EventoCronologico>[] = [
+    const updatedRegistoCronologico: EventoCronologico[] = [
       ...encomenda.registo_cronologico,
       novoRegisto
     ];

@@ -11,7 +11,7 @@ export interface Encomenda {
     cliente_user_name?: string;
     cliente_user_contacto?: number;
     observacao: string;
-    registo_cronologico: Partial<EventoCronologico>[]; // JSON.stringify(data: EventoCronologico[])
+    registo_cronologico: EventoCronologico[]; // JSON.stringify(data: EventoCronologico[])
     estado: string;
     previsao_entrega: string;
     orcamento: number;
