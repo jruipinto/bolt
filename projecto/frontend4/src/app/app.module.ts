@@ -9,7 +9,7 @@ import localePT from '@angular/common/locales/pt';
 import { ClarityModule } from '@clr/angular';
 /* routing & custom modules */
 import { AppRoutingModule } from './app-routing.module';
-import { AutofocusModule ,FormStateModule } from './shared';
+import { AutofocusModule, FormStateModule } from './shared';
 /* components */
 import { AppComponent } from './app.component';
 import { LoginPageComponent, SignupPageComponent } from './pages';
