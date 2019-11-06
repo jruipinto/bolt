@@ -10,10 +10,20 @@ export class AutocapsDirective {
   @HostListener('keyup', ['$event'])
   onKeyDown(evt) {
     const format = (input) => {
+      const reducer1 = (accumulator, currentValue) => accumulator + '. ' + capitalize(currentValue);
+      const reducer2 = (accumulator, currentValue) => accumulator + '\r\n' + capitalize(currentValue);
+      const reducer3 = (accumulator, currentValue) => accumulator + '\r' + capitalize(currentValue);
+      const reducer4 = (accumulator, currentValue) => accumulator + '\n' + capitalize(currentValue);
       const inp = capitalize(input);
-      const phrases = inp.split('. ');
-      const reducer = (accumulator, currentValue) => accumulator + '. ' + capitalize(currentValue);
-      return phrases.reduce(reducer);
+      return inp
+        .split('. ')
+        .reduce(reducer1)
+        .split('\r\n')
+        .reduce(reducer2)
+        .split('\r')
+        .reduce(reducer3)
+        .split('\n')
+        .reduce(reducer4);
     };
     this.renderer.setProperty(this.el.nativeElement, 'value', format(evt.target.value));
   }
