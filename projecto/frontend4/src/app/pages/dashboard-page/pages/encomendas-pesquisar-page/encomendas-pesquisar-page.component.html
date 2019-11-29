@@ -6,7 +6,8 @@
     <div class="clr-col-lg-3">
       <clr-input-container>
         <label>Cliente</label>
-        <input clrInput placeholder="cliente..." (click)="clientesSearchModal.open()" formControlName="cliente" />
+        <input clrInput placeholder="cliente..." (click)="clientesSearchModal.open()"
+          formControlName="cliente_user_id" />
       </clr-input-container>
     </div>
     <div class="clr-col-lg-3">
@@ -20,15 +21,12 @@
     <div class="clr-col-lg-3">
       <clr-input-container>
         <label>Pesquisar</label>
-        <input clrInput placeholder="digita algo..." formControlName="input" (keydown.enter)="searchEncomenda(encomendasSearchForm.value.input,
-                encomendasSearchForm.value.estado,
-                encomendasSearchForm.value.cliente)" autofocus />
+        <input clrInput placeholder="digita algo..." formControlName="input"
+          (keydown.enter)="searchEncomenda(encomendasSearchForm.value)" autofocus />
       </clr-input-container>
     </div>
     <div class="clr-col-lg-3">
-      <button type="submit" class="btn btn-primary" (click)="searchEncomenda(encomendasSearchForm.value.input,
-              encomendasSearchForm.value.estado,
-              encomendasSearchForm.value.cliente)">
+      <button type="submit" class="btn btn-primary" (click)="searchEncomenda(encomendasSearchForm.value)">
         <clr-icon shape="search"></clr-icon> Pesquisar
       </button>
     </div>

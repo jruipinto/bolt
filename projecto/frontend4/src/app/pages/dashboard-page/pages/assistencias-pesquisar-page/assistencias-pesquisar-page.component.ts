@@ -1,4 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy, ViewChild,
+  ElementRef, AfterViewInit, ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -12,7 +16,8 @@ import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/mo
 @Component({
   selector: 'app-assistencias-pesquisar-page',
   templateUrl: './assistencias-pesquisar-page.component.html',
-  styleUrls: ['./assistencias-pesquisar-page.component.scss']
+  styleUrls: ['./assistencias-pesquisar-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
@@ -21,9 +26,9 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy, Af
   public results: Assistencia[];
 
   public assistenciasSearchForm = this.fb.group({
-    input: [''],
+    input: [null],
     estado: ['qualquer'],
-    cliente: ['']
+    cliente: [null]
   });
 
   public estados = [
@@ -51,16 +56,17 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy, Af
   constructor(
     private assistencias: AssistenciasService,
     private router: Router,
-    private fb: FormBuilder) {}
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
-    this.clientesSearchModal.selectedCliente
-      .subscribe(
-        (user: User) => this.assistenciasSearchForm.patchValue({ cliente: clone(user.id) })
-      );
+    this.clientesSearchModal.selectedCliente.subscribe(
+      (user: User) => this.assistenciasSearchForm.patchValue({ cliente: clone(user.id) })
+    );
+    this.searchAssistencia(this.assistenciasSearchForm.value);
   }
 
   ngOnDestroy() {
@@ -70,19 +76,23 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy, Af
     return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
   }
 
-  searchAssistencia(input: string, estado?: string, cliente?: number) {
+  searchAssistencia({ input, estado, cliente }) {
+    if (!input) {
+      return;
+    }
     this.loading = true;
-    const inputSplited = input.split(' ');
-    const inputMapped = inputSplited.map(word =>
-      '{"$or": [' +
-      '{ "categoria": { "$like": "%' + word + '%" }},' +
-      '{ "marca": { "$like": "%' + word + '%" }},' +
-      '{ "modelo": { "$like": "%' + word + '%" }},' +
-      '{ "cor": { "$like": "%' + word + '%" }},' +
-      '{ "serial": { "$like": "%' + word + '%" }},' +
-      '{ "problema": { "$like": "%' + word + '%" }}' +
-      ' ]}'
-    );
+    const inputMapped = input
+      .split(' ')
+      .map(word =>
+        '{"$or": [' +
+        '{ "categoria": { "$like": "%' + word + '%" }},' +
+        '{ "marca": { "$like": "%' + word + '%" }},' +
+        '{ "modelo": { "$like": "%' + word + '%" }},' +
+        '{ "cor": { "$like": "%' + word + '%" }},' +
+        '{ "serial": { "$like": "%' + word + '%" }},' +
+        '{ "problema": { "$like": "%' + word + '%" }}' +
+        ' ]}'
+      );
 
     const clienteStatement = cliente && typeof cliente === 'number' ? ',"cliente_user_id":' + cliente : '';
     const estadoStatement = estado && estado !== 'qualquer' ? ',"estado": "' + estado + '"' : '';
@@ -102,8 +112,9 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy, Af
     return this.assistencias
       .find(JSON.parse(dbQuery))
       .subscribe(assistencias => {
-        this.loading = false;
         this.results = assistencias;
+        this.loading = false;
+        this.cdr.detectChanges();
       });
   }
 

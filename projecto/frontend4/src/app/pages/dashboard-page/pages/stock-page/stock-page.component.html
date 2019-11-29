@@ -8,7 +8,9 @@
     </div>
     <div class="clr-col-xl-3 clr-col-lg-12 padding-bottom-05">
       <clr-button-group class="btn-primary" [clrMenuPosition]="'bottom-right'">
-        <clr-button (click)="searchArtigo(artigoSearchForm.value.input)"><clr-icon shape="search"></clr-icon> Pesquisar</clr-button>
+        <clr-button (click)="searchArtigo(artigoSearchForm.value.input)">
+          <clr-icon shape="search"></clr-icon> Pesquisar
+        </clr-button>
         <clr-button [clrInMenu]="true" (click)="newArtigo()">Novo artigo</clr-button>
         <clr-button [clrInMenu]="true" (click)="searchArtigoByLocal(artigoSearchForm.value.input)">
           Pesquisar por local</clr-button>
@@ -26,7 +28,7 @@
   </span>
 </div>
 
-<div *ngIf="results$ | async as artigos">
+<div *ngIf="results as artigos">
   <p *ngIf="artigos.length===0">Nenhum resultado encontrado para esses parametros...</p>
   <div *ngIf="artigos.length>0">
     <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index" (click)="openArtigo(artigo.id)">

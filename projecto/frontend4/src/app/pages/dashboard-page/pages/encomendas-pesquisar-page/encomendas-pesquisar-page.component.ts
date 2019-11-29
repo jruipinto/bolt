@@ -1,10 +1,14 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy,
+  AfterViewInit, ViewChild, ElementRef,
+  ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { concat, of } from 'rxjs';
 import { concatMap, reduce } from 'rxjs/operators';
-import { Encomenda, User, Artigo } from 'src/app/shared';
+import { Encomenda, User, Artigo, dbQuery } from 'src/app/shared';
 import { EncomendasService, ArtigosService } from 'src/app/shared/state';
 import { clone } from 'ramda';
 import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/modals';
@@ -13,7 +17,8 @@ import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/mo
 @Component({
   selector: 'app-encomendas-pesquisar-page',
   templateUrl: './encomendas-pesquisar-page.component.html',
-  styleUrls: ['./encomendas-pesquisar-page.component.scss']
+  styleUrls: ['./encomendas-pesquisar-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
@@ -22,9 +27,9 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy, Afte
   public loading = false;
   public results: Encomenda[];
   public encomendasSearchForm = this.fb.group({
-    input: [''],
+    input: [null],
     estado: ['qualquer'],
-    cliente: ['']
+    cliente_user_id: [null]
   });
 
   public estados = [
@@ -45,16 +50,17 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy, Afte
     private encomendas: EncomendasService,
     private artigos: ArtigosService,
     private router: Router,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
-    this.clientesSearchModal.selectedCliente
-      .subscribe(
-        (user: User) => this.encomendasSearchForm.patchValue({ cliente: clone(user.id) })
-      );
+    this.clientesSearchModal.selectedCliente.subscribe(
+      (user: User) => this.encomendasSearchForm.patchValue({ cliente_user_id: clone(user.id) })
+    );
+    this.searchEncomenda(this.encomendasSearchForm.value);
   }
 
   ngOnDestroy() {
@@ -64,67 +70,40 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy, Afte
     return this.router.navigate(['/dashboard/encomenda', encomendaID]);
   }
 
-  searchEncomenda(input: string, estado?: string, cliente_user_id?: number) {
+  searchEncomenda({ input, estado, cliente_user_id }) {
+    if (!input) {
+      return;
+    }
     this.loading = true;
-    const inputSplited = input.split(' ');
-    const inputMapped = inputSplited.map(word =>
-      '{"$or": [' +
-      '{ "marca": { "$like": "%' + word + '%" }},' +
-      '{ "modelo": { "$like": "%' + word + '%" }},' +
-      '{ "descricao": { "$like": "%' + word + '%" }}' +
-      ' ]}'
-    );
 
     const clienteStatement = cliente_user_id && typeof cliente_user_id === 'number' ? ',"cliente_user_id":' + cliente_user_id : '';
     const estadoStatement = estado && estado !== 'qualquer' ? ',"estado": "' + estado + '"' : '';
-    const dbQuery =
-      JSON.parse(
-        '{' +
-        '"query": {' +
-        '"$sort": { "marca": "1", "modelo": "1",  "descricao": "1"},' +
-        '"$limit": "200",' +
-        '"$and": [' +
-        inputMapped +
-        ']' +
-        '}' +
-        '}'
-      );
 
-    return this.artigos
-      .find(dbQuery)
-      .pipe(
-        concatMap(
-          (artigosDB: Artigo[]) => {
-            if (artigosDB && artigosDB.length > 0) {
-              return concat(
-                ...artigosDB.map(
-                  ({ id }) => {
-                    return this.encomendas
-                      .find(
-                        JSON.parse(
-                          '{' +
-                          '"query": {' +
-                          '"$limit": "200",' +
-                          '"artigo_id": ' + id +
-                          clienteStatement +
-                          estadoStatement +
-                          '}' +
-                          '}'
-                        )
-                      );
-                  }
-                )
-              )
-                .pipe(reduce((acc, val) => ([...acc, ...val])));
-            }
-            return of([]);
-          }
-        )
-      )
-      .subscribe(encomendas => {
-        this.loading = false;
-        this.results = clone(encomendas);
-      });
+    return this.artigos.find(dbQuery(input, ['marca', 'modelo', 'descricao'])).pipe(
+      concatMap((artigosDB: Artigo[]) => {
+        if (!artigosDB || !artigosDB.length) {
+          return of(null);
+        }
+        return concat(...artigosDB.map(
+          ({ id }) => this.encomendas.find(
+            JSON.parse(
+              '{' +
+              '"query": {' +
+              '"$limit": "200",' +
+              '"artigo_id": ' + id +
+              clienteStatement +
+              estadoStatement +
+              '}' +
+              '}'
+            )
+          )
+        )).pipe(reduce((acc, val) => ([...acc, ...val])));
+      })
+    ).subscribe(encomendas => {
+      this.results = clone(encomendas);
+      this.loading = false;
+      this.cdr.detectChanges();
+    });
   }
 
 }
