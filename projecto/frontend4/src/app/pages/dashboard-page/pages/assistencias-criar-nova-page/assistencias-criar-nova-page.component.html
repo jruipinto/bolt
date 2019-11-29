@@ -152,8 +152,8 @@
         <label for="problema">Problema:*</label>
       </div>
       <div class="clr-col-md-9 clr-col-lg-6">
-        <textarea class="clr-textarea wd-100" name="problema" id="problema" required
-          formControlName="problema" autocaps></textarea>
+        <textarea class="clr-textarea wd-100" name="problema" id="problema" required formControlName="problema"
+          autocaps></textarea>
       </div>
     </div>
     <div class="clr-row">
@@ -162,6 +162,19 @@
       </div>
       <div class="clr-col-md-9 clr-col-lg-6">
         <input class="clr-input wd-100" type="number" name="orcamento" id="orcamento" formControlName="orcamento">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="categoria">Técnico:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <div class="clr-select-wrapper wd-100">
+          <select class="clr-select wd-100" name="categoria" id="categoria" formControlName="tecnico_user_id">
+            <option value="">Qualquer</option>
+            <option *ngFor="let tecnico of tecnicos$ | async" value={{tecnico.id}}>{{tecnico.nome}}</option>
+          </select>
+        </div>
       </div>
     </div>
     <div class="clr-row no-gutters">

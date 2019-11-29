@@ -52,7 +52,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
             const encomendasLeft = assistencia.encomendas.filter((e: Encomenda) => e.estado !== 'recebida' && e.estado !== 'entregue');
             console.log(encomendasLeft, encomendasLeft.length);
             if (encomendasLeft.length === 0) {
-              return this.assistencias.patch(encomenda.assistencia_id, { ...assistencia, estado: 'material recebido' })
+              return this.assistencias.patch(encomenda.assistencia_id, { ...assistencia, estado: 'material recebido' }, 'novo estado')
                 .pipe(
                   concatMap(() => of([encomenda]))
                 );
@@ -97,7 +97,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
 
   saveEncomenda(newEstado: string, encomenda: Encomenda) {
     if ((newEstado === 'recebida' || newEstado === 'entregue') && encomenda.cliente_user_contacto === 918867376) {
-      return this.encomendas.patch(encomenda.id, { ...encomenda, estado: 'entregue' })
+      return this.encomendas.patch(encomenda.id, { ...encomenda, estado: 'entregue' }, 'novo estado')
         .pipe(
           tap(
             () => this.router.navigate(['/dashboard/artigo', encomenda.artigo_id])
@@ -106,7 +106,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
         .subscribe();
     }
     if ((newEstado === 'recebida' || newEstado === 'entregue') && encomenda.assistencia_id) {
-      return this.encomendas.patch(encomenda.id, { ...encomenda, estado: 'entregue' })
+      return this.encomendas.patch(encomenda.id, { ...encomenda, estado: 'entregue' }, 'novo estado')
         .pipe(
           map(res => res[0]),
           concatMap(this.notifyAssistencia),
@@ -117,7 +117,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
         .subscribe(/*() => alert(`👍 Assistência ${encomenda.assistencia_id} foi notificada da chegada de material!`)*/);
     }
 
-    return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
+    return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado }, 'novo estado')
       .pipe(
         tap(() => window.history.back())
       )

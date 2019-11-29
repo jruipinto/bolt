@@ -7,4 +7,6 @@ export interface Artigo {
     qty: number;
     preco: number;
     pvp: number;
+    createdAt: string;
+    updatedAt: string;
 }

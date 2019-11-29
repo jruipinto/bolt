@@ -1,9 +1,7 @@
 import { of, BehaviorSubject, merge } from 'rxjs';
 import { map, concatMap, first } from 'rxjs/operators';
 import { EntityApiAbstration } from './entity-api-abstration';
-import uniqBy from 'ramda/es/uniqBy';
-import pipe from 'ramda/es/pipe';
-import { sort, clone } from 'ramda';
+import { sort, clone, uniqBy, pipe } from 'ramda';
 
 export abstract class EntityStateAbstraction {
   private defaults = [];

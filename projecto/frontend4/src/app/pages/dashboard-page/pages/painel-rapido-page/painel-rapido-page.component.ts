@@ -108,7 +108,7 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
   }
 
   saveEncomenda(newEstado: string, encomenda: Encomenda) {
-    return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado })
+    return this.encomendas.patch(encomenda.id, { ...encomenda, estado: newEstado }, 'novo estado')
       .subscribe();
   }
 }

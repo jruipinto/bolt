@@ -86,3 +86,4 @@ import '@clr/icons';
 import '@clr/icons/shapes/core-shapes';
 import '@clr/icons/shapes/essential-shapes';
 import '@clr/icons/shapes/technology-shapes';
+import '@clr/icons/shapes/media-shapes';

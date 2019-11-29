@@ -124,10 +124,20 @@
                         <clr-accordion-title>Registo Cronológico</clr-accordion-title>
                         <clr-accordion-content *clrIfExpanded>
                             <clr-datagrid>
+                                <clr-dg-column>Evento</clr-dg-column>
+                                <clr-dg-column>Editor</clr-dg-column>
                                 <clr-dg-column>Técnico</clr-dg-column>
                                 <clr-dg-column>Estado</clr-dg-column>
                                 <clr-dg-column>Data</clr-dg-column>
                                 <clr-dg-row *ngFor="let evento of encomenda.registo_cronologico">
+                                    <clr-dg-cell>
+                                        <span *ngIf="evento.editor_action">{{evento.editor_action}}</span>
+                                        <span *ngIf="!evento.editor_action">novo estado</span>
+                                    </clr-dg-cell>
+                                    <clr-dg-cell>
+                                        <span *ngIf="evento.editor_action">{{evento.editor}}</span>
+                                        <span *ngIf="!evento.editor_action">{{evento.tecnico}}</span>
+                                    </clr-dg-cell>
                                     <clr-dg-cell>{{evento.tecnico_user_id}} {{evento.tecnico}}</clr-dg-cell>
                                     <clr-dg-cell>{{evento.estado}}</clr-dg-cell>
                                     <clr-dg-cell>{{evento.updatedAt | slice:0:10}}</clr-dg-cell>

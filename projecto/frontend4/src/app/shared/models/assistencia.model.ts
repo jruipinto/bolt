@@ -7,7 +7,8 @@ export interface Assistencia {
     cliente_user_name?: string;
     cliente_user_contacto?: number;
     registo_cronologico: EventoCronologico[]; // JSON.stringify(data: EventoCronologico[])
-    tecnico?: string; // tecnico is extrated & filtered from registo_cronologico
+    tecnico_user_id?: number;
+    tecnico?: string; /* tecnico is extrated & filtered from registo_cronologico */
     categoria: string;
     marca: string;
     modelo: string;
@@ -26,7 +27,10 @@ export interface Assistencia {
 }
 
 export interface EventoCronologico {
-    tecnico_user_id: number;
+    editor_user_id?: number; /* this property is required! (only made it non required in code because of backwards compatibility issues) */
+    editor?: string;
+    editor_action?: 'novo estado' | 'edição';
+    tecnico_user_id?: number;
     tecnico?: string;
     relatorio_interno?: string;
     relatorio_cliente?: string;

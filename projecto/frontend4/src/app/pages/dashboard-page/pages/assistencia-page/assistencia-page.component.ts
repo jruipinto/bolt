@@ -1,16 +1,18 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { map, concatMap, tap, toArray } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
-import { Assistencia, Artigo, Encomenda } from 'src/app/shared/models';
+import { Assistencia, Artigo, Encomenda, User } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
 import { UIService } from 'src/app/shared/state/ui.service';
-import { AssistenciasService, ArtigosService, EncomendasService } from 'src/app/shared/state';
+import { AssistenciasService, ArtigosService, EncomendasService, UsersService } from 'src/app/shared/state';
 import { Observable, concat, of } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
-import { clone } from 'ramda';
+import { clone, uniqBy } from 'ramda';
+import { dbQuery } from 'src/app/shared/utilities';
+import { AuthService } from 'src/app/shared';
 
 @AutoUnsubscribe()
 @Component({
@@ -20,7 +22,9 @@ import { clone } from 'ramda';
 })
 export class AssistenciaPageComponent implements OnInit, OnDestroy {
   public loading = true;
+  public tecnicos$ = this.users.find({ query: { tipo: 'tecnico' } });
   public assistencia: Assistencia;
+  public tecnicoSelectModalOpened = false;
   public artigoSearchModalOpened = false;
   public artigoSearchForm = this.fb.group({
     input: [null]
@@ -57,7 +61,8 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     private assistencias: AssistenciasService,
     private artigos: ArtigosService,
     private encomendas: EncomendasService,
-    // private artigosApi: ArtigosApiService,
+    private users: UsersService,
+    private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -65,13 +70,12 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.paramMap
-      .pipe(
-        tap(() => this.loading = true),
-        concatMap((params: ParamMap) => this.assistencias.get(+params.get('id'))),
-        map(res => res[0]),
-        tap(assistencia => this.assistenciaOnInit = clone(assistencia))
-      )
+    this.route.paramMap.pipe(
+      tap(() => this.loading = true),
+      concatMap(params => this.assistencias.get(+params.get('id'))),
+      map(res => res[0]),
+      tap(assistencia => this.assistenciaOnInit = clone(assistencia))
+    )
       .subscribe(assistencia => {/*
         if (this.assistencia) {
           const receivedAssistencia = clone(assistencia);
@@ -105,112 +109,113 @@ ${this.assistencia.relatorio_cliente}`
 
   ngOnDestroy() { }
 
-  saveChangesOnStock(arg: Partial<Artigo>[]): Observable<any> {
-    if (arg && arg.length) {
-      const currentMaterial = clone(arg);
-      const materialOnInit = clone(this.assistenciaOnInit.material);
-      const newMaterial = materialOnInit && materialOnInit.length
-        ? materialOnInit.map(
-          artigoOnInit => {
-            const currentArtigo = currentMaterial.find(a => a.id === artigoOnInit.id);
-            if (!currentArtigo) {
-              return { ...artigoOnInit, qty: 0 };
-            }
-            return currentArtigo;
-          }
-        )
-        : currentMaterial;
-      return concat(
-        newMaterial.map(
-          (currentArtigo: Artigo) => this.artigos.get(currentArtigo.id)
-            .pipe(
-              map((res) => res[0]),
-              map(artigoOnDB => {
-                const {
-                  createdAt,
-                  updatedAt,
-                  ...artigoOnDBMod
-                } = artigoOnDB;
-                return artigoOnDBMod;
-              }),
-              concatMap(artigoOnDB => {
-                const artigoOnInit = materialOnInit ? materialOnInit.find(a => a.id === artigoOnDB.id) : null;
-                if (!artigoOnInit) {
-                  return this.artigos.patch(
-                    artigoOnDB.id,
-                    { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty }
-                  );
-                }
-                return this.artigos.patch(
-                  artigoOnDB.id,
-                  { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty + artigoOnInit.qty }
-                );
-              }
-              )
-            )
-        )
-      ).pipe(concatMap(a => a), toArray());
-    }
-    return of(null);
-  }
-
-  createEncomendasOnApi(args: Partial<Encomenda>[]) {
-    if (args && args) {
-      const encomendas = clone(args);
-      return concat(encomendas
-        .filter(encomenda => encomenda.estado === 'nova')
-        .map(encomenda => this.encomendas.create({ ...encomenda, estado: 'registada' })
-          .pipe(
-            map((encomendaDB: Encomenda[]) => encomendaDB[0]),
-            map(encomendaDB => {
-              const {
-                cliente_user_name,
-                cliente_user_contacto,
-                artigo_marca,
-                artigo_modelo,
-                artigo_descricao,
-                createdAt,
-                updatedAt,
-                registo_cronologico,
-                ...encomendaMod } = encomendaDB;
-              return encomendaMod;
-            })
-          )
-        )).pipe(concatMap(a => a), toArray());
-    } else {
-      return of(null);
-    }
-  }
 
   saveAssistencia(newEstado: string, arg: Assistencia) {
     const assistencia = clone(arg);
-    if (newEstado !== 'em análise' && !assistencia.relatorio_cliente) {
+    const assistenciaOnInit = clone(this.assistenciaOnInit);
+    const editor_action = newEstado === assistenciaOnInit.estado ? 'edição' : 'novo estado';
+    if ((newEstado !== 'em análise' && newEstado !== 'recebido') && !assistencia.relatorio_cliente) {
       return alert('Preenche o relatório para o cliente!');
     }
-    return this.saveChangesOnStock(assistencia.material)
-      .pipe(
-        concatMap(() => this.createEncomendasOnApi(assistencia.encomendas)),
-        concatMap(
-          (encomendas) => this.assistencias
-            .patch(
-              assistencia.id,
-              {
-                ...assistencia,
-                estado: newEstado,
-                material: assistencia.material,
-                encomendas
+    if (newEstado === 'em análise' && assistenciaOnInit.estado === 'recebido') {
+      assistencia.tecnico_user_id = this.authService.getUserId();
+    }
+
+    return of(null).pipe(
+
+      // calculates the mutations provoked by assistencia.material  and submits them to artigosApi
+      concatMap(() => {
+        if (
+          (!assistenciaOnInit.material || !assistenciaOnInit.material.length)
+          && (!assistencia.material || !assistencia.material.length)
+        ) {
+          return of(null);
+        }
+        const materialMutation = () => {
+          if (assistenciaOnInit.material) {
+            return uniqBy(
+              ({ id }) => id,
+              [
+                ...assistenciaOnInit.material.map(artigoOnInit => {
+                  const currentArtigo = assistencia.material.filter(({ id }) => artigoOnInit.id === id)[0];
+                  if (currentArtigo) {
+                    return {
+                      ...artigoOnInit,
+                      qty: (artigoOnInit.qty - currentArtigo.qty)
+                    };
+                  }
+                  return artigoOnInit;
+                }),
+                ...assistencia.material.map(e => ({ ...e, qty: -e.qty }))
+              ]
+            );
+          }
+          return assistencia.material.map(e => ({ ...e, qty: -e.qty }));
+        };
+        return concat(...materialMutation().map(
+          (artigoMutation: Artigo) => this.artigos.get(artigoMutation.id).pipe(
+            map((res: Artigo[]) => res[0]),
+            concatMap(artigoOnDB => this.artigos.patch(
+              artigoOnDB.id,
+              { qty: (artigoOnDB.qty + artigoMutation.qty) }
+            ))
+          )
+        )).pipe(toArray());
+      }),
+
+      // create encomendas (wich estado === 'nova') on encomendasApi
+      concatMap((): Observable<Partial<Encomenda>[]> => {
+        if (!assistencia.encomendas || !assistencia.encomendas.length) {
+          return of(null);
+        }
+        return concat(
+          ...assistencia.encomendas
+            .filter(({ estado }) => estado === 'nova')
+            .map(encomenda => this.encomendas.create({ ...encomenda, estado: 'registada' }).pipe(
+              map((encomendaDB: Encomenda[]) => encomendaDB[0]),
+              map(encomendaDB => {
+                const {
+                  cliente_user_name,
+                  cliente_user_contacto,
+                  artigo_marca,
+                  artigo_modelo,
+                  artigo_descricao,
+                  createdAt,
+                  updatedAt,
+                  registo_cronologico,
+                  ...encomendaMod } = encomendaDB;
+                return encomendaMod;
               })
-            .pipe(
-              tap(() => {
-                if (newEstado === 'entregue') { this.printService.printAssistenciaSaida(assistencia); }
-              }),
-              tap(() => window.history.back())
-            )
-        )
-      ).subscribe();
+            ))
+        ).pipe(
+          toArray(),
+          map((encomendasMod): Partial<Encomenda>[] => uniqBy(
+            ({ id }) => id,
+            [...encomendasMod, ...assistencia.encomendas])
+          ),
+          map(encomendas => encomendas.filter(({ id }) => id))
+        );
+      }),
+
+      // submit assistencia to assistenciasApi, print paper and return to last page
+      concatMap(encomendas => this.assistencias.patch(
+        assistencia.id,
+        {
+          ...assistencia,
+          estado: newEstado,
+          material: assistencia.material,
+          encomendas
+        },
+        editor_action
+      )),
+      tap(() => newEstado === 'entregue' ? this.printService.printAssistenciaSaida(assistencia) : null),
+      tap(() => window.history.back())
+
+    ).subscribe();
   }
 
-  openNewAssistenciaWithThisData(assistencia: Assistencia) {
+
+  createAssistenciaWithThisData(assistencia: Assistencia) {
     this.uiService.patchState(
       {
         // modals
@@ -225,91 +230,71 @@ ${this.assistencia.relatorio_cliente}`
         },
         // prints
       }
-    )
-      .subscribe(() => this.router.navigate(['/dashboard/assistencias-criar-nova']));
+    ).subscribe(() => this.router.navigate(['/dashboard/assistencias-criar-nova']));
   }
+
 
   navigateBack() {
     window.history.back();
   }
 
-  searchArtigo(input?: string) {
-    if (input) {
-      const inputSplited = input.split(' ');
-      const inputMapped = inputSplited.map(word =>
-        '{"$or": [' +
-        '{ "marca": { "$like": "%' + word + '%" }},' +
-        '{ "modelo": { "$like": "%' + word + '%" }},' +
-        '{ "descricao": { "$like": "%' + word + '%" }}' +
-        ' ]}'
-      );
-      const dbQuery =
-        '{' +
-        '"query": {' +
-        '"$sort": { "marca": "1", "modelo": "1",  "descricao": "1"},' +
-        '"$limit": "200",' +
-        '"$and": [' +
-        inputMapped +
-        ']' +
-        '}' +
-        '}';
 
-      this.artigos
-        .find(JSON.parse(dbQuery))
-        .pipe(
-          map((artigos: Artigo[]) => {
-            return artigos.map(
-              artigoOnDB => {
-                const currentArtigo = this.assistencia.material
-                  ? this.assistencia.material.find(a => a.id === artigoOnDB.id)
-                  : null;
-                const artigoOnInit = this.assistenciaOnInit.material
-                  ? this.assistenciaOnInit.material.find(a => a.id === artigoOnDB.id)
-                  : null;
-                if (!currentArtigo && !artigoOnInit) {
-                  return artigoOnDB;
-                }
-                if (!currentArtigo && artigoOnInit) {
-                  return { ...artigoOnDB, qty: artigoOnDB.qty + artigoOnInit.qty };
-                }
-                if (currentArtigo && !artigoOnInit) {
-                  return { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty };
-                }
-                return { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty + artigoOnInit.qty };
-              }
-            );
-          })
-        )
-        .subscribe((res: Artigo[]) => this.artigoSearchResults = clone(res));
+  searchArtigo(input?: string) {
+    if (!input) {
+      return;
     }
+
+    this.artigos.find(dbQuery(input, ['marca', 'modelo', 'descricao'])).pipe(
+      map((artigos: Artigo[]) => artigos.map(
+        artigoOnDB => {
+          const currentArtigo = this.assistencia.material
+            ? this.assistencia.material.find(a => a.id === artigoOnDB.id)
+            : null;
+          const artigoOnInit = this.assistenciaOnInit.material
+            ? this.assistenciaOnInit.material.find(a => a.id === artigoOnDB.id)
+            : null;
+          if (!currentArtigo && !artigoOnInit) {
+            return artigoOnDB;
+          }
+          if (!currentArtigo && artigoOnInit) {
+            return { ...artigoOnDB, qty: artigoOnDB.qty + artigoOnInit.qty };
+          }
+          if (currentArtigo && !artigoOnInit) {
+            return { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty };
+          }
+          return { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty + artigoOnInit.qty };
+        }
+      ))
+    ).subscribe((res: Artigo[]) => this.artigoSearchResults = clone(res));
   }
 
   addArtigo(artigoInStock: Artigo) {
+    if (artigoInStock.qty < 1) {
+      return;
+    }
     const artigo = { ...artigoInStock, qty: 1 };
     let material = clone(this.assistencia.material);
-    if (artigoInStock.qty > 0) {
-      if (material) {
-        if (material.findIndex(item => item.id === artigo.id) < 0) {
-          material = [...material, artigo];
-        } else {
-          material = material.map(
-            item => {
-              if (item.id === artigo.id) {
-                return { ...item, qty: item.qty + 1 };
-              } else {
-                return item;
-              }
-            }
-          );
-        }
+    if (material) {
+      if (material.findIndex(item => item.id === artigo.id) < 0) {
+        material = [...material, artigo];
       } else {
-        material = clone([artigo]);
+        material = material.map(
+          item => {
+            if (item.id === artigo.id) {
+              return { ...item, qty: item.qty + 1 };
+            } else {
+              return item;
+            }
+          }
+        );
       }
-      const resultIndex = this.artigoSearchResults.findIndex(result => result.id === artigo.id);
-      this.artigoSearchResults[resultIndex].qty = this.artigoSearchResults[resultIndex].qty - artigo.qty;
-      this.assistencia.material = clone(material);
-      this.artigoSearchModalOpened = false;
+    } else {
+      material = clone([artigo]);
     }
+    const resultIndex = this.artigoSearchResults.findIndex(result => result.id === artigo.id);
+    this.artigoSearchResults[resultIndex].qty = this.artigoSearchResults[resultIndex].qty - artigo.qty;
+    this.assistencia.material = clone(material);
+    this.artigoSearchModalOpened = false;
   }
 
   pushToWizardEncomendaForm(arg: Artigo) {
@@ -370,6 +355,12 @@ ${this.assistencia.relatorio_cliente}`
   openEncomendaWizard() {
     this.encomendaWizardOpened = true;
     setTimeout(() => this.focusMonitor.focusVia(this.encomendaWizardInputEl, 'program'), 0.1);
+  }
+
+  replaceTecnicoBy(tecnico: User) {
+    this.assistencia.tecnico_user_id = tecnico.id;
+    this.assistencia.tecnico = tecnico.nome;
+    this.tecnicoSelectModalOpened = false;
   }
 
 }

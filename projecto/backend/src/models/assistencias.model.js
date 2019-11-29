@@ -11,6 +11,10 @@ module.exports = function (app) {
       type: Sequelize.INTEGER,
       allowNull: false
     },
+    //int
+    tecnico_user_id: {
+      type: Sequelize.INTEGER
+    },
     //json, not null
     registo_cronologico: {
       type: Sequelize.JSON,
@@ -90,12 +94,12 @@ module.exports = function (app) {
       */
     },
   }, {
-      hooks: {
-        beforeCount(options) {
-          options.raw = true;
-        }
+    hooks: {
+      beforeCount(options) {
+        options.raw = true;
       }
-    });
+    }
+  });
 
   // eslint-disable-next-line no-unused-vars
   assistencias.associate = function (models) {

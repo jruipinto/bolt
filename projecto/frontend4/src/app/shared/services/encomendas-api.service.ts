@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable, concat } from 'rxjs';
-import { map, concatMap, toArray, mergeMap, tap } from 'rxjs/operators';
+import { Observable, concat, of } from 'rxjs';
+import { map, concatMap, toArray } from 'rxjs/operators';
 
 import { EntityApiAbstration } from 'src/app/shared/abstraction-classes';
 import { FeathersService } from 'src/app/shared/services/feathers.service';
 import { EventoCronologico, User, Encomenda, Artigo } from 'src/app/shared/models';
 import { UsersService } from 'src/app/shared/state/users.service';
 import { ArtigosService } from 'src/app/shared/state/artigos.service';
+import { deserialize } from 'src/app/shared/utilities';
 
 @Injectable({
   providedIn: 'root'
@@ -14,74 +15,77 @@ import { ArtigosService } from 'src/app/shared/state/artigos.service';
 export class EncomendasApiService extends EntityApiAbstration {
   private usersAPI = this.usersService;
 
-  private detailedEventoCronologico$ = (evento: EventoCronologico): Observable<EventoCronologico> =>
-    this.usersAPI.get(evento.tecnico_user_id)
-      .pipe(
-        map((user: User[]) => ({ ...evento, tecnico: user[0].nome }))
-      )
 
-  private detailedRegistoCronologico$ = (registoCronologico: EventoCronologico[]) =>
-    concat([...registoCronologico.map(this.detailedEventoCronologico$)])
-      .pipe(
-        concatMap(concats => concats),
-        toArray()
-      )
+  /**
+   * Observable that mutates the encomendasApi's stream
+   * deserializing its JSON props and fecthing the props
+   * from the their respective entities on API
+   */
+  private fullyDetailedEncomendas$ = (encomendasFromApi$: Observable<Encomenda[]>) =>
+    encomendasFromApi$.pipe(
+      concatMap(encomendasFromApi => (
+        concat(...encomendasFromApi.map(encomendaFromApi => (
+          this.usersAPI.get(encomendaFromApi.cliente_user_id).pipe(
 
-  private encomendaWithDetailedRegistoCronologico$ = (encomenda: Encomenda): Observable<Encomenda> =>
-    this.detailedRegistoCronologico$(encomenda.registo_cronologico)
-      .pipe(
-        map((detailedRegistoCronologico$) =>
-          ({ ...encomenda, registo_cronologico: detailedRegistoCronologico$ }))
-      )
+            // retrieve client data
+            map((res: User[]) => res[0]),
+            map((cliente): Encomenda => ({
+              ...encomendaFromApi,
+              cliente_user_name: cliente.nome,
+              cliente_user_contacto: cliente.contacto
+            })),
 
-  private acceptClienteDetails = (cliente: User) =>
-    (encomenda: Encomenda): Encomenda =>
-      ({
-        ...encomenda,
-        cliente_user_name: cliente.nome,
-        cliente_user_contacto: cliente.contacto
-      })
+            // retrieve artigo data
+            concatMap((encomenda: Encomenda) => this.artigosService.get(encomenda.artigo_id).pipe(
+              map((res: Artigo[]) => res[0]),
+              map((artigo: Artigo): Encomenda => ({
+                ...encomenda,
+                artigo_marca: artigo.marca,
+                artigo_modelo: artigo.modelo,
+                artigo_descricao: artigo.descricao
+              })
+              )
+            )),
 
-  private encomendaWithParsedRegistoCronologico = (encomenda: Encomenda): Encomenda =>
-    typeof encomenda.registo_cronologico === 'string'
-      ? { ...encomenda, registo_cronologico: JSON.parse(encomenda.registo_cronologico) }
-      : encomenda
+            // deserialize JSON props
+            map(encomenda => deserialize(encomenda, 'registo_cronologico')),
 
-  private encomendaWithArtigoDetails$ = (encomenda: Encomenda) => this.artigosService.get(encomenda.artigo_id)
-    .pipe(
-      map((artigos: Artigo[]) => artigos[0]),
-      map(
-        (artigo: Artigo) => {
-          return {
-            ...encomenda,
-            artigo_marca: artigo.marca,
-            artigo_modelo: artigo.modelo,
-            artigo_descricao: artigo.descricao
-          };
-        }
-      )
+            // retrieve tecnico data for all eventos of registo_cronologico
+            concatMap(encomenda => (
+              concat(...encomenda.registo_cronologico.map(evento => {
+                if (evento.tecnico_user_id) {
+                  return this.usersAPI.get(evento.tecnico_user_id).pipe(
+                    map((user: User[]): EventoCronologico => ({ ...evento, tecnico: user[0].nome }))
+                  );
+                }
+                return of(evento);
+
+              })).pipe(
+                toArray(),
+                map((registo_cronologico): Encomenda => ({ ...encomenda, registo_cronologico }))
+              )
+            )),
+
+            // retrieve editor data for all eventos of registo_cronologico
+            concatMap(encomenda => (
+              concat(...encomenda.registo_cronologico.map(evento => {
+                if (evento.editor_user_id) { // check because of backwards compatibility
+                  return this.usersAPI.get(evento.editor_user_id).pipe(
+                    map((user: User[]): EventoCronologico => ({ ...evento, editor: user[0].nome }))
+                  );
+                }
+                return of(evento);
+
+              })).pipe(
+                toArray(),
+                map((registo_cronologico): Encomenda => ({ ...encomenda, registo_cronologico }))
+              )
+            ))
+          )
+        )))
+      )),
+      toArray()
     )
-
-  private fullyDetailedEncomenda$ = (encomendaFromApi: Encomenda) =>
-    this.usersAPI.get(encomendaFromApi.cliente_user_id)
-      .pipe(
-        map(cliente => cliente[0]),
-        map(this.acceptClienteDetails),
-        map(curryEncomendaWithClientDetails => curryEncomendaWithClientDetails(encomendaFromApi)),
-        map(this.encomendaWithParsedRegistoCronologico),
-        concatMap(this.encomendaWithDetailedRegistoCronologico$),
-        concatMap(this.encomendaWithArtigoDetails$)
-      )
-
-  private fullyDetailedEncomendasStream$ = (encomendas: Encomenda[]) =>
-    concat(...encomendas.map(this.fullyDetailedEncomenda$))
-
-  private fullyDetailedEncomendas$ = (encomendas$: Observable<Encomenda[]>) =>
-    encomendas$
-      .pipe(
-        concatMap(this.fullyDetailedEncomendasStream$),
-        toArray()
-      )
 
   constructor(
     protected feathersService: FeathersService,
@@ -92,42 +96,38 @@ export class EncomendasApiService extends EntityApiAbstration {
 
 
   find(query?: object) {
-    const encomendas$ = super.find(query);
-    return this.fullyDetailedEncomendas$(encomendas$);
+    return this.fullyDetailedEncomendas$(
+      super.find(query)
+    );
   }
 
   get(id: number) {
-    const encomenda$ = super.get(id);
-    return this.fullyDetailedEncomendas$(encomenda$);
+    return this.fullyDetailedEncomendas$(
+      super.get(id)
+    );
   }
 
   create(data: object, actionType?: string) {
-    const encomenda$ = super.create(data);
-    return this.fullyDetailedEncomendas$(encomenda$);
+    return this.fullyDetailedEncomendas$(
+      super.create(data)
+    );
   }
 
   patch(id: number, data: object, actionType?: string) {
-    const encomenda$ = super.patch(id, data);
-    return this.fullyDetailedEncomendas$(encomenda$);
+    return this.fullyDetailedEncomendas$(
+      super.patch(id, data)
+    );
   }
 
   onCreated() {
-    const encomenda$ = super.onCreated()
-      .pipe(
-        map(encomendas => encomendas[0]),
-        mergeMap(this.fullyDetailedEncomenda$),
-        map(encomenda => [encomenda])
-      );
-    return encomenda$;
+    return this.fullyDetailedEncomendas$(
+      super.onCreated()
+    );
   }
 
   onPatched() {
-    const encomenda$ = super.onPatched()
-      .pipe(
-        map(encomendas => encomendas[0]),
-        mergeMap(this.fullyDetailedEncomenda$),
-        map(encomenda => [encomenda])
-      );
-    return encomenda$;
+    return this.fullyDetailedEncomendas$(
+      super.onPatched()
+    );
   }
 }

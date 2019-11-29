@@ -47,6 +47,8 @@
       <div class="clr-col">
         {{assistencia.tecnico}}
         <span *ngIf="!assistencia.tecnico">(aguarda técnico)</span>
+        <clr-icon shape="pencil" style="cursor: pointer;margin-left: 1em;" (click)="tecnicoSelectModalOpened=true">
+        </clr-icon>
       </div>
     </div>
     <div class="clr-row">
@@ -148,10 +150,20 @@
             <clr-accordion-title>Registo Cronológico</clr-accordion-title>
             <clr-accordion-content *clrIfExpanded>
               <clr-datagrid>
+                <clr-dg-column>Evento</clr-dg-column>
+                <clr-dg-column>Editor</clr-dg-column>
                 <clr-dg-column>Técnico</clr-dg-column>
                 <clr-dg-column>Estado</clr-dg-column>
                 <clr-dg-column>Data</clr-dg-column>
                 <clr-dg-row *ngFor="let evento of assistencia.registo_cronologico">
+                  <clr-dg-cell>
+                    <span *ngIf="evento.editor_action">{{evento.editor_action}}</span>
+                    <span *ngIf="!evento.editor_action">novo estado</span>
+                  </clr-dg-cell>
+                  <clr-dg-cell>
+                    <span *ngIf="evento.editor_action">{{evento.editor}}</span>
+                    <span *ngIf="!evento.editor_action">{{evento.tecnico}}</span>
+                  </clr-dg-cell>
                   <clr-dg-cell>{{evento.tecnico_user_id}} {{evento.tecnico}}</clr-dg-cell>
                   <clr-dg-cell>{{evento.estado}}</clr-dg-cell>
                   <clr-dg-cell>{{evento.updatedAt | slice:0:10}}</clr-dg-cell>
@@ -239,7 +251,13 @@
           || assistencia.estado === 'orçamento recusado'
           || assistencia.estado === 'material recebido')
           && newEncomendasCounter === 0">
-        <button class="btn btn-primary btn-icon" (click)="saveAssistencia('em análise', assistencia)">
+        <button *ngIf="(assistencia.estado !== 'em análise')" class="btn btn-success btn-icon"
+          (click)="saveAssistencia('em análise', assistencia)">
+          <clr-icon shape="play"></clr-icon>
+          Iniciar
+        </button>
+        <button *ngIf="(assistencia.estado === 'em análise')" class="btn btn-primary btn-icon"
+          (click)="saveAssistencia('em análise', assistencia)">
           <clr-icon shape="floppy"></clr-icon>
           Guardar
         </button>
@@ -253,6 +271,9 @@
             <button clrDropdownItem (click)="saveAssistencia('contacto pendente', assistencia)">Contactar
             </button>
             <button clrDropdownItem (click)="saveAssistencia('concluído', assistencia)">Concluir</button>
+            <button clrDropdownItem *ngIf="(assistencia.estado !== 'em análise')"
+              (click)="saveAssistencia(assistencia.estado, assistencia)">Guardar
+            </button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>
@@ -280,6 +301,8 @@
             </button>
             <button clrDropdownItem (click)="saveAssistencia('incontactável', assistencia)">Incontactável
             </button>
+            <button clrDropdownItem (click)="saveAssistencia(assistencia.estado, assistencia)">Guardar
+            </button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>
@@ -296,12 +319,14 @@
             <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button type="button" (click)="saveAssistencia('contactado', assistencia)" clrDropdownItem>Cliente adiou
+            <button type="button" (click)="saveAssistencia('cliente adiou resp.', assistencia)" clrDropdownItem>Cliente adiou
               resposta</button>
             <button type="button" (click)="saveAssistencia('não atendeu p/ cont.', assistencia)" clrDropdownItem>Não
               atendeu</button>
             <button type="button" (click)="saveAssistencia('incontactável', assistencia)"
               clrDropdownItem>Incontactável</button>
+            <button clrDropdownItem (click)="saveAssistencia(assistencia.estado, assistencia)">Guardar
+            </button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>
@@ -310,10 +335,12 @@
         <button class="btn btn-warning" (click)="saveAssistencia('entregue', assistencia)">
           Entregar
         </button>
+        <button class="btn" (click)="saveAssistencia(assistencia.estado, assistencia)">Guardar
+        </button>
       </div>
 
       <div *ngIf="assistencia.estado === 'entregue'">
-        <button class="btn" (click)="openNewAssistenciaWithThisData(assistencia)">
+        <button class="btn" (click)="createAssistenciaWithThisData(assistencia)">
           Receber Novamente
         </button>
       </div>
@@ -460,3 +487,11 @@
     </form>
   </clr-wizard-page>
 </clr-wizard>
+
+<clr-modal [(clrModalOpen)]="tecnicoSelectModalOpened" [clrModalSize]="'sm'">
+  <h3 class="modal-title">Atribuir Técnico</h3>
+  <div class="modal-body">
+    <r-data-row class="clr-row" *ngFor="let tecnico of tecnicos$ | async" (click)="replaceTecnicoBy(tecnico)">
+      {{tecnico.nome}}</r-data-row>
+  </div>
+</clr-modal>

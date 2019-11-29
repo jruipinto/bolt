@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Artigo } from 'src/app/shared';
+import { Artigo, dbQuery } from 'src/app/shared';
 import { ArtigosService, UIService } from 'src/app/shared/state';
 import { tap } from 'rxjs/operators';
 
@@ -29,10 +29,10 @@ export class StockPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loading = true;
     this.uiService.state$
-      .subscribe(
-        ({ stockPageArtigoSearch$ }) => { this.results$ = stockPageArtigoSearch$; }
-      );
-    this.loading = false;
+      .subscribe(({ stockPageArtigoSearch$ }) => {
+        this.results$ = stockPageArtigoSearch$;
+        this.loading = false;
+      });
   }
 
   ngOnDestroy() {
@@ -41,33 +41,14 @@ export class StockPageComponent implements OnInit, OnDestroy {
   }
 
   searchArtigo(input?: string) {
-    if (input) {
-      this.loading = true;
-      const inputSplited = input.split(' ');
-      const inputMapped = inputSplited.map(word =>
-        '{"$or": [' +
-        '{ "marca": { "$like": "%' + word + '%" }},' +
-        '{ "modelo": { "$like": "%' + word + '%" }},' +
-        '{ "descricao": { "$like": "%' + word + '%" }}' +
-        ' ]}'
-      );
-      const dbQuery =
-        '{' +
-        '"query": {' +
-        '"$sort": { "marca": "1", "modelo": "1",  "descricao": "1"},' +
-        '"$limit": "200",' +
-        '"$and": [' +
-        inputMapped +
-        ']' +
-        '}' +
-        '}';
-
-      this.results$ = this.artigos
-        .find(JSON.parse(dbQuery))
-        .pipe(
-          tap(() => { this.loading = false; })
-        );
+    if (!input) {
+      return;
     }
+    this.loading = true;
+
+    this.results$ = this.artigos.find(dbQuery(input, ['marca', 'modelo', 'descricao'])).pipe(
+      tap(() => { this.loading = false; })
+    );
   }
 
   searchArtigoByLocal(input?: string) {
@@ -79,7 +60,7 @@ export class StockPageComponent implements OnInit, OnDestroy {
         '{ "localizacao": { "$like": "%' + word + '%" }}' +
         ' ]}'
       );
-      const dbQuery =
+      const query =
         '{' +
         '"query": {' +
         '"$sort": { "localizacao": "1", "marca": "1", "modelo": "1",  "descricao": "1"},' +
@@ -91,7 +72,7 @@ export class StockPageComponent implements OnInit, OnDestroy {
         '}';
 
       this.results$ = this.artigos
-        .find(JSON.parse(dbQuery))
+        .find(JSON.parse(query))
         .pipe(
           tap(() => { this.loading = false; })
         );

@@ -25,10 +25,19 @@ import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/mo
 })
 export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
+
+  constructor(
+    private fb: FormBuilder,
+    private usersService: UsersService,
+    private assistenciasService: AssistenciasService,
+    private printService: PrintService,
+    private cdr: ChangeDetectorRef) { }
+
   @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
   @ViewChild(ClientesPesquisarModalComponent, { static: false }) clientesSearchModal: ClientesPesquisarModalComponent;
 
   public oldAssists$: Observable<Assistencia[]>;
+  public tecnicos$ = this.usersService.find({ query: { tipo: 'tecnico' } });
 
   /* Declaration of the 3 Forms on the UI */
   public contactoClienteForm = this.fb.group({
@@ -50,7 +59,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
     codigo: [''],
     acessorios: [''],
     problema: ['', Validators.required],
-    orcamento: [null]
+    orcamento: [null],
+    tecnico_user_id: ['']
   });
   /*########################################### */
   private clienteChange$ = this.contactoClienteForm.valueChanges
@@ -74,15 +84,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
       ))
     );
 
-  private user$ = (contacto: number) => this.usersService.find({ query: { contacto } }) as Observable<User[]>;
-
-
-  constructor(
-    private fb: FormBuilder,
-    private usersService: UsersService,
-    private assistenciasService: AssistenciasService,
-    private printService: PrintService,
-    private cdr: ChangeDetectorRef) { }
+  private user$ = (contacto: number): Observable<User[]> => this.usersService.find({ query: { contacto } });
 
   ngOnInit() {
     this.clienteChange$.subscribe();
@@ -116,7 +118,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
       problema: equipment.problema +
         (equipment.acessorios ? ` - Acessórios: ${equipment.acessorios}` : '') +
         (equipment.codigo ? ` - Código: ${equipment.codigo}` : ''),
-      orcamento: equipment.orcamento
+      orcamento: equipment.orcamento,
+      tecnico_user_id: equipment.tecnico_user_id === '' ? null : equipment.tecnico_user_id
     };
     const assistenciasService = {
       create$: (data: Partial<Assistencia>) =>

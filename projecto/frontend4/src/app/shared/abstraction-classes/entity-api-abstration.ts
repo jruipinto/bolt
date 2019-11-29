@@ -1,4 +1,4 @@
-import { from, Observable, fromEvent, throwError } from 'rxjs';
+import { from, Observable, fromEvent } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { FeathersService } from 'src/app/shared/services/feathers.service';
@@ -13,12 +13,13 @@ export abstract class EntityApiAbstration {
     private entity: string) {
   }
 
-  private handleError = (entityName: String) => (error) => {
-    console.log(`${entityName}Api -> handleError -> error`, error);
+  private handleError = (entityName: String, data: any) => (error) => {
+    console.error(`${entityName}Api -> handleError -> error`, error);
+    console.log(`${entityName}Api -> handleError -> debugData:`, data);
     if (error.code === 401) {
       alert('Não está autorizado!');
     } else {
-      alert('Algo correu mal! Chama o Admin ou CTRL + SHIFT + I');
+      alert('Algo correu mal! Chame o Admin ou CTRL + SHIFT + I');
     }
     throw error;
   }
@@ -27,11 +28,8 @@ export abstract class EntityApiAbstration {
     console.log(`[${this.entityName}Api] find query:`, query);
     const apiResponse$ = from(
       this.entityAPI.find(query)
-        .then(
-          apiResponse => apiResponse.data,
-          this.handleError(this.entityName)
-        )
-        .catch(this.handleError(this.entityName))
+        .then(apiResponse => apiResponse.data)
+        .catch(this.handleError(this.entityName, query))
     );
     return apiResponse$ as Observable<any[]>;
   }
@@ -39,11 +37,8 @@ export abstract class EntityApiAbstration {
   public get(id: number) {
     console.log(`[${this.entityName}Api] get id:`, id);
     const apiResponse$ = from(this.entityAPI.get(id)
-      .then(
-        apiResponse => [apiResponse],
-        this.handleError(this.entityName)
-      )
-      .catch(this.handleError(this.entityName))
+      .then(apiResponse => [apiResponse])
+      .catch(this.handleError(this.entityName, id))
     );
     return apiResponse$ as Observable<any[]>;
   }
@@ -51,11 +46,8 @@ export abstract class EntityApiAbstration {
   public create(data: object, actionType?: string) {
     console.log(`[${this.entityName}Api] create data:`, data);
     const apiResponse$ = from(this.entityAPI.create(data)
-      .then(
-        apiResponse => [apiResponse],
-        this.handleError(this.entityName)
-      )
-      .catch(this.handleError(this.entityName))
+      .then(apiResponse => [apiResponse])
+      .catch(this.handleError(this.entityName, data))
     );
     return apiResponse$ as Observable<any[]>;
   }
@@ -63,11 +55,8 @@ export abstract class EntityApiAbstration {
   public patch(id: number, data: object, actionType?: string) {
     console.log(`[${this.entityName}Api] patch id: ${id}, data:`, data);
     const apiResponse$ = from(this.entityAPI.patch(id, data)
-      .then(
-        apiResponse => [apiResponse],
-        this.handleError(this.entityName)
-      )
-      .catch(this.handleError(this.entityName))
+      .then(apiResponse => [apiResponse])
+      .catch(this.handleError(this.entityName, { id, data }))
     );
     return apiResponse$ as Observable<any[]>;
   }

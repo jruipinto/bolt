@@ -15,7 +15,7 @@ export interface Encomenda {
     estado: string;
     previsao_entrega: string;
     orcamento: number;
-    fornecedor: string;
+    fornecedor: string; /* sugestão de 1 fornecedor */
     qty: number;
     createdAt?: Date;
     updatedAt?: Date;
