@@ -10,6 +10,8 @@ import { AuthService } from 'src/app/shared';
 })
 export class LoginPageComponent implements OnInit {
 
+  public currentYear = new Date().getFullYear();
+
   loginForm = this.fb.group({
     email: ['', Validators.required],
     password: ['', Validators.required]
