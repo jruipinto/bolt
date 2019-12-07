@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { concatMap, tap, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Encomenda, Assistencia } from 'src/app/shared/models';
@@ -11,7 +11,7 @@ import { of } from 'rxjs';
   templateUrl: './encomenda-page.component.html',
   styleUrls: ['./encomenda-page.component.scss']
 })
-export class EncomendaPageComponent implements OnInit, OnDestroy {
+export class EncomendaPageComponent implements AfterViewInit, OnDestroy {
   public encomenda: Encomenda;
 
   constructor(
@@ -21,7 +21,7 @@ export class EncomendaPageComponent implements OnInit, OnDestroy {
     private router: Router) {
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.route.paramMap
       .pipe(
         concatMap((params: ParamMap) => this.encomendas.get(+params.get('id')))

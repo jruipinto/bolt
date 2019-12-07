@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { tap, concatMap, map } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { of } from 'rxjs';
   templateUrl: './artigo-page.component.html',
   styleUrls: ['./artigo-page.component.scss']
 })
-export class ArtigoPageComponent implements OnInit, OnDestroy {
+export class ArtigoPageComponent implements AfterViewInit, OnDestroy {
   public artigoForm = this.fb.group({
     id: [null],
     marca: [null, [Validators.maxLength(45)]],
@@ -34,7 +34,7 @@ export class ArtigoPageComponent implements OnInit, OnDestroy {
     private uiService: UIService
   ) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.route.paramMap
       .pipe(
         map((params: ParamMap) => +params.get('id')),

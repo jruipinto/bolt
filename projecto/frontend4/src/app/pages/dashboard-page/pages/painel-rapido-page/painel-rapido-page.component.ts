@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { AssistenciasService, EncomendasService } from 'src/app/shared/state';
   styleUrls: ['./painel-rapido-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PainelRapidoPageComponent implements OnInit, OnDestroy {
+export class PainelRapidoPageComponent implements AfterViewInit, OnDestroy {
   public loadingEncomendas = true;
   public loadingAssistencias = true;
 
@@ -59,7 +59,7 @@ export class PainelRapidoPageComponent implements OnInit, OnDestroy {
       )
     );
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.assistencias
       .find({
         query: {

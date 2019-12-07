@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { map, concatMap, tap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { AssistenciasService } from 'src/app/shared/state';
@@ -13,7 +13,7 @@ import { Assistencia, AuthService } from 'src/app/shared';
   styleUrls: ['./assistencias-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AssistenciasPageComponent implements OnInit, OnDestroy {
+export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
   public loading = true;
   public inOverflow = null;
   public loggedInUserName: string;
@@ -69,7 +69,7 @@ export class AssistenciasPageComponent implements OnInit, OnDestroy {
     private router: Router) {
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     window.innerWidth < 890 ? this.inOverflow = 'inOverflow' : this.inOverflow = null;
     this.authService.getUserName$()
       .pipe(

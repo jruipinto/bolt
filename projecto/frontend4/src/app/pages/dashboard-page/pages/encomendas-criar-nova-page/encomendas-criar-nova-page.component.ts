@@ -91,11 +91,11 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
   ) { }
 
   ngOnInit() {
-    this.clienteChange$.subscribe();
-    this.encomendaForm.patchValue({ artigo_id: this.artigoForm.value.id });
   }
 
   ngAfterViewInit() {
+    this.clienteChange$.subscribe();
+    this.encomendaForm.patchValue({ artigo_id: this.artigoForm.value.id });
     this.clientesSearchModal.selectedCliente
       .subscribe(
         (user: User) => this.contactoClienteForm.patchValue({ contacto: clone(user.contacto) })

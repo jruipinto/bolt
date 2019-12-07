@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { Observable, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -13,7 +13,7 @@ import { FormBuilder } from '@angular/forms';
   templateUrl: './dashboard-page.component.html',
   styleUrls: ['./dashboard-page.component.scss']
 })
-export class DashboardPageComponent implements OnInit, OnDestroy {
+export class DashboardPageComponent implements AfterViewInit, OnDestroy {
   public userName: string;
   public sidebarVisible = false;
   // public assistenciaID: string;
@@ -45,7 +45,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.authService.getUserName$()
       .subscribe(res => {
         const nomeCompleto: string = res[0].nome;

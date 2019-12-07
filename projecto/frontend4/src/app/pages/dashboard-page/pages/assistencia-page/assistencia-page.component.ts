@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { map, concatMap, tap, toArray } from 'rxjs/operators';
@@ -20,7 +20,7 @@ import { AuthService } from 'src/app/shared';
   templateUrl: './assistencia-page.component.html',
   styleUrls: ['./assistencia-page.component.scss']
 })
-export class AssistenciaPageComponent implements OnInit, OnDestroy {
+export class AssistenciaPageComponent implements AfterViewInit, OnDestroy {
   public loading = true;
   public tecnicos$ = this.users.find({ query: { tipo: 'tecnico' } });
   public assistencia: Assistencia;
@@ -69,7 +69,7 @@ export class AssistenciaPageComponent implements OnInit, OnDestroy {
     private focusMonitor: FocusMonitor) {
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.route.paramMap.pipe(
       tap(() => this.loading = true),
       concatMap(params => this.assistencias.get(+params.get('id'))),

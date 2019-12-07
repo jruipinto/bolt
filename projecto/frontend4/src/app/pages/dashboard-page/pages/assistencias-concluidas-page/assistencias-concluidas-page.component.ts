@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { UIService, AssistenciasService } from 'src/app/shared/state';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './assistencias-concluidas-page.component.html',
   styleUrls: ['./assistencias-concluidas-page.component.scss']
 })
-export class AssistenciasConcluidasPageComponent implements OnInit, OnDestroy {
+export class AssistenciasConcluidasPageComponent implements AfterViewInit, OnDestroy {
   public loading = true;
 
   constructor(
@@ -28,7 +28,7 @@ export class AssistenciasConcluidasPageComponent implements OnInit, OnDestroy {
       )
     );
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.assistencias
       .find({
         query: {

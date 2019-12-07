@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -12,7 +12,7 @@ import { Encomenda } from 'src/app/shared';
   templateUrl: './encomendas-page.component.html',
   styleUrls: ['./encomendas-page.component.scss']
 })
-export class EncomendasPageComponent implements OnInit, OnDestroy {
+export class EncomendasPageComponent implements AfterViewInit, OnDestroy {
   public loading = true;
   public inOverflow = null;
   public encomendas$: Observable<Encomenda[]>;
@@ -84,7 +84,7 @@ export class EncomendasPageComponent implements OnInit, OnDestroy {
     entregue
   */
 
-  ngOnInit() {
+  ngAfterViewInit() {
     window.innerWidth < 890 ? this.inOverflow = 'inOverflow' : this.inOverflow = null;
     this.encomendas
       .find({ query: { $limit: 200, estado: { $ne: 'entregue' } } })
