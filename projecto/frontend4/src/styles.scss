@@ -35,6 +35,9 @@ a {
 r-data-row {
   // min-height: 3em;
   border-bottom: 1px solid #EEEEEE !important;
+  // fix clarity design style .clr-row for r-data-row component
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 r-data-row:nth-child(even){background-color: #E1F1F6 !important;}
