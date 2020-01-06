@@ -35,26 +35,28 @@
   </div>
 </div>
 -->
+<r-loading-fullscreen *ngIf="loading"></r-loading-fullscreen>
 
 <div class="login-wrapper">
-    <form class="login" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <section class="title">
-            <h3 class="welcome">Bem-vindo a</h3>
-            N Reparações
-            <h5 class="hint">O acesso a esta página, é restrito, à área técnica da empresa</h5>
-        </section>
-        <div class="login-group">
-            <clr-input-container>
-                <input clrInput  type="email" name="email" placeholder="Email" formControlName="email" required autofocus>
-            </clr-input-container>
-            <clr-password-container>
-                <input clrPassword type="password" name="password" placeholder="Password" formControlName="password" required>
-            </clr-password-container>
-            <div class="error active" *ngIf="loginForm.invalid">
-                Utilizador ou password inválido
-            </div>
-            <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">ENTRAR</button>
-        </div>
-        <small>Desenvolvido por JRui Pinto &copy; 2018-{{currentYear}}</small>
-    </form>
+  <form class="login" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <section class="title">
+      <h3 class="welcome">Bem-vindo a</h3>
+      N Reparações
+      <h5 class="hint">O acesso a esta página, é restrito, à área técnica da empresa</h5>
+    </section>
+    <div class="login-group">
+      <clr-input-container>
+        <input clrInput type="email" name="email" placeholder="Email" formControlName="email" required autofocus>
+      </clr-input-container>
+      <clr-password-container>
+        <input clrPassword type="password" name="password" placeholder="Password" formControlName="password" required>
+      </clr-password-container>
+      <div class="error active" *ngIf="loginForm.invalid">
+        Utilizador ou password inválido
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid"
+        [clrLoading]="submitBtnState">ENTRAR</button>
+    </div>
+    <small>Desenvolvido por JRui Pinto &copy; 2018-{{currentYear}}</small>
+  </form>
 </div>

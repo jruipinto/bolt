@@ -13,7 +13,7 @@ import { AutofocusModule, FormStateModule } from './shared';
 /* components */
 import { AppComponent } from './app.component';
 import { LoginPageComponent, SignupPageComponent } from './pages';
-
+import { RLoadingComponent, RLoadingFullscreenComponent, ROfflineComponent } from './shared';
 
 // the second parameter 'pt' is optional
 registerLocaleData(localePT, 'pt');
@@ -23,7 +23,10 @@ registerLocaleData(localePT, 'pt');
   declarations: [
     AppComponent,
     LoginPageComponent,
-    SignupPageComponent
+    SignupPageComponent,
+    RLoadingComponent,
+    RLoadingFullscreenComponent,
+    ROfflineComponent
   ],
   imports: [
     BrowserModule,
