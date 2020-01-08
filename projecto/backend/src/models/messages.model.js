@@ -6,16 +6,19 @@ const DataTypes = Sequelize.DataTypes;
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
   const messages = sequelizeClient.define('messages', {
+    //bigint(14), not null
     phoneNumber: {
       type: Sequelize.BIGINT(14),
       allowNull: false
     },
+    // varchar(160), not null
     text: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING(160),
       allowNull: false
     },
+    // varchar(10), not null
     state: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING(10),
       allowNull: false
     },
     deliveredAt: {
