@@ -51,7 +51,7 @@
     "pin": null,
     "smsMode": true,
     "extendedErrorReports": true,
-    "debugMode": true,
+    "debugMode": false,
     "initCommands": [
       "\u241bAT",
       "AT+CMGF=1",
