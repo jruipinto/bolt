@@ -11,6 +11,10 @@ module.exports = function (app) {
       type: Sequelize.BIGINT(14),
       allowNull: false
     },
+    // varchar(30), not null
+    subject: {
+      type: Sequelize.STRING(30),
+    },
     // varchar(160), not null
     text: {
       type: Sequelize.STRING(160),
@@ -22,8 +26,7 @@ module.exports = function (app) {
       allowNull: false
     },
     deliveredAt: {
-      type: Sequelize.DATE,
-      allowNull: true
+      type: Sequelize.DATE
     }
   }, {
     hooks: {
