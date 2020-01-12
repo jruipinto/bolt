@@ -22,9 +22,14 @@ module.exports = function (app) {
     },
     // varchar(10), not null
     state: {
-      type: Sequelize.STRING(10),
+      type: Sequelize.STRING(12),
       allowNull: false
     },
+    /** submitedAt === deliveryReport.submitTime */
+    submitedAt: {
+      type: Sequelize.DATE
+    },
+    /** deliveredAt === deliveryReport.deliveryTime */
     deliveredAt: {
       type: Sequelize.DATE
     }
