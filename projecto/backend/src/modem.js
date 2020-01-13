@@ -13,4 +13,18 @@ const modem = new Modem(modemConfig, err => {
     }
 });
 
-module.exports = modem;
+const listen = function (app) {
+    modem.onReceivedSMS().subscribe(({ phoneNumber, text, submitTime }) => {
+        app.service('messages').create(
+            {
+                phoneNumber,
+                text,
+                submitedAt: submitTime,
+                state: 'received'
+            }
+        );
+    });
+}
+
+module.exports.modem = modem;
+module.exports.listen = listen;

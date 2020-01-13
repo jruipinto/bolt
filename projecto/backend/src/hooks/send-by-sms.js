@@ -1,8 +1,12 @@
-const modem = require('../modem.js');
+const modem = require('../modem.js').modem;
 
 const send = function (context) {
     const phoneNumber = context.data.phoneNumber || null;
     const text = context.data.text || null;
+
+    if (context.data.state === 'received') {
+        return;
+    }
 
     if (modem.status.error || !modem.status.connected) {
         console.log('Modem error: Verify modem. Status:', modem.status);

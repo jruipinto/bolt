@@ -3,6 +3,7 @@ const logger = require('./logger');
 const app = require('./app');
 const port = app.get('port');
 const server = app.listen(port);
+const modemListen = require('./modem').listen;
 
 process.on('unhandledRejection', (reason, p) =>
   logger.error('Unhandled Rejection at: Promise ', p, reason)
@@ -11,3 +12,5 @@ process.on('unhandledRejection', (reason, p) =>
 server.on('listening', () =>
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port)
 );
+
+modemListen(app);
