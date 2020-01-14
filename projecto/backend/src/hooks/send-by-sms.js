@@ -4,13 +4,13 @@ const send = function (context) {
     const phoneNumber = context.data.phoneNumber || null;
     const text = context.data.text || null;
 
-    if (context.data.state === 'received') {
+    if (context.data.state === 'unread') {
         return;
     }
 
     if (modem.status.error || !modem.status.connected) {
         console.log('Modem error: Verify modem. Status:', modem.status);
-        context.app.service(context.path).patch(+context.result.id, { state: "modem error" });
+        context.app.service(context.path).patch(+context.result.id, { state: "error" });
         return;
     }
 
@@ -38,7 +38,7 @@ const send = function (context) {
             },
             err => {
                 console.log('SMS error:', err);
-                context.app.service(context.path).patch(+context.result.id, { state: "modem error" });
+                context.app.service(context.path).patch(+context.result.id, { state: "error" });
             }
         );
 };

@@ -24,14 +24,28 @@ module.exports = function (app) {
     state: {
       type: Sequelize.STRING(12),
       allowNull: false
+      /**
+       * Possible states:
+       *  for incoming messages:
+       *    unread
+       *    read
+       *  for outgoing messages:
+       *    pending (waiting report)
+       *    unreachable (report says that address isn´t availble in this moment)
+       *    error  (try again. verify modem connected, signal or money balance)
+       *    delivered
+       */
     },
-    /** submitedAt === deliveryReport.submitTime */
+    tecnico_user_id: {
+      type: Sequelize.INTEGER
+    },
     submitedAt: {
       type: Sequelize.DATE
+      /** submitedAt === deliveryReport.submitTime */
     },
-    /** deliveredAt === deliveryReport.deliveryTime */
     deliveredAt: {
       type: Sequelize.DATE
+      /** deliveredAt === deliveryReport.deliveryTime */
     }
   }, {
     hooks: {

@@ -20,7 +20,7 @@ const listen = function (app) {
                 phoneNumber,
                 text,
                 submitedAt: submitTime,
-                state: 'received'
+                state: 'unread'
             }
         );
     });
