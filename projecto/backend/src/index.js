@@ -13,4 +13,7 @@ server.on('listening', () =>
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port)
 );
 
-modemListen(app);
+setTimeout(
+  () => modemListen(app),
+  5000
+);

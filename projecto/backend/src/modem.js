@@ -1,10 +1,10 @@
-// import { from } from 'rxjs';
 const from = require('rxjs').from;
-// import { concatMap, tap, map } from 'rxjs/operators';
 const concatMap = require('rxjs/operators').concatMap;
 const tap = require('rxjs/operators').tap;
 const map = require('rxjs/operators').map;
 const Modem = require('modemjs').Modem;
+
+let modem;
 let modemConfig;
 
 if (process.env.NODE_ENV === "production") {
@@ -13,13 +13,12 @@ if (process.env.NODE_ENV === "production") {
     modemConfig = require("../config/default.json").modemConfig;
 }
 
-const modem = new Modem(modemConfig, err => {
-    if (err) {
-        console.log(err);
-    }
-});
-
 const listen = function (app) {
+    modem = new Modem(modemConfig, err => {
+        if (err) {
+            console.log(err);
+        }
+    });
     modem.onReceivedSMS().subscribe(({ phoneNumber, text, submitTime }) => {
         app.service('messages').create(
             {
@@ -32,16 +31,26 @@ const listen = function (app) {
     });
 
     let newLog = null;
+    let createdFlag = false;
     modem.log$.pipe(
         map(log => log.trim()),
         tap(log => newLog = (newLog ? (newLog + ';\r' + log) : log).slice(-1500)),
-        concatMap(() => from(
-            app.service('configs').patch(
-                null,
-                { value: newLog },
-                { query: { key: "modemLog" } }
-            )
-        ))
+        concatMap(() => from(app.service('configs').find({ query: { key: "modemLog" } }))),
+        map(result => +result.total),
+        concatMap(total => {
+            if (!total && !createdFlag) {
+                createdFlag = true;
+                return from(app.service('configs').create({ key: "modemLog", value: newLog }));
+            }
+            return from(
+                app.service('configs').patch(
+                    null,
+                    { value: newLog },
+                    { query: { key: "modemLog" } }
+                )
+            );
+
+        })
     ).subscribe();
 
 }
