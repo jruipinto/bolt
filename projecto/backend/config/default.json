@@ -60,6 +60,7 @@
       "AT+CSMP=49,167,0,0",
       "AT+CPMS=\"SM\",\"SM\",\"SM\""
     ],
-    "msPause": 10000
+    "msPause": 10000,
+    "autoOpen": false
   }
 }

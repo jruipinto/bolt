@@ -4,7 +4,6 @@ const tap = require('rxjs/operators').tap;
 const map = require('rxjs/operators').map;
 const Modem = require('modemjs').Modem;
 
-let modem;
 let modemConfig;
 
 if (process.env.NODE_ENV === "production") {
@@ -13,12 +12,15 @@ if (process.env.NODE_ENV === "production") {
     modemConfig = require("../config/default.json").modemConfig;
 }
 
+const modem = new Modem(modemConfig);
+
 const listen = function (app) {
-    modem = new Modem(modemConfig, err => {
+    modem.init(err => {
         if (err) {
             console.log(err);
         }
     });
+
     modem.onReceivedSMS().subscribe(({ phoneNumber, text, submitTime }) => {
         app.service('messages').create(
             {
