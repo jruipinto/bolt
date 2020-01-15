@@ -45,6 +45,7 @@
     "modemjs": "^1.1.1",
     "mysql2": "^1.5.3",
     "passport-google-oauth20": "^1.0.0",
+    "rxjs": "^6.5.4",
     "sequelize": "^4.38.0",
     "serve-favicon": "^2.5.0",
     "winston": "^3.0.0"
