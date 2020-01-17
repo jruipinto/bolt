@@ -55,6 +55,18 @@ const listen = function (app) {
         })
     ).subscribe();
 
+    modem.status$.subscribe(status => {
+        if (!status.connected && status.error) {
+            // console.log('Modem disconnected.');
+        }
+        if (status.connected && status.error) {
+            // console.log('Modem error.');
+        }
+        if (status.debug) {
+            // console.log('Modem in debug mode.');
+        }
+    });
+
 }
 
 module.exports.modem = modem;

@@ -1,4 +1,6 @@
 const modem = require('../modem.js').modem;
+const of = require('rxjs').of;
+const concatMap = require('rxjs/operators').concatMap;
 
 const send = function (context) {
     const phoneNumber = context.data.phoneNumber || null;
@@ -8,15 +10,18 @@ const send = function (context) {
         return;
     }
 
-    if (modem.status.error || !modem.status.connected) {
-        console.log('Modem error: Verify modem. Status:', modem.status);
-        context.app.service(context.path).patch(+context.result.id, { state: "error" });
-        return;
-    }
-
-    modem.sendSMS({ phoneNumber, text })
-        .subscribe(
-            report => {
+    modem.status$.pipe(
+        concatMap(status => {
+            if (!status.error && status.connected) {
+                return modem.sendSMS({ phoneNumber, text });
+            }
+            console.log('Modem error: Verify modem. Status:', modem.status);
+            context.app.service(context.path).patch(+context.result.id, { state: "error" });
+            return of(null);
+        })
+    ).subscribe(
+        report => {
+            if (report !== null) {
                 if (+report.st === 0) {
                     context.app.service(context.path).patch(
                         +context.result.id,
@@ -35,12 +40,14 @@ const send = function (context) {
                         }
                     );
                 }
-            },
-            err => {
-                console.log('SMS error:', err);
-                context.app.service(context.path).patch(+context.result.id, { state: "error" });
             }
-        );
+        },
+        err => {
+            console.log('SMS error:', err);
+            context.app.service(context.path).patch(+context.result.id, { state: "error" });
+        }
+    );
+
 };
 
 module.exports = send;
