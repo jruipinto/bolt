@@ -117,7 +117,16 @@ ${this.assistencia.relatorio_cliente}`
     if ((newEstado !== 'em análise' && newEstado !== 'recebido') && !assistencia.relatorio_cliente) {
       return alert('Preenche o relatório para o cliente!');
     }
-    if (newEstado === 'em análise' && assistenciaOnInit.estado === 'recebido') {
+    if (
+      (
+        newEstado === 'em análise' ||
+        newEstado === 'contacto pendente' ||
+        newEstado === 'orçamento pendente' ||
+        newEstado === 'aguarda material' ||
+        newEstado === 'concluído'
+      )
+      && assistenciaOnInit.estado === 'recebido'
+    ) {
       assistencia.tecnico_user_id = this.authService.getUserId();
     }
 
