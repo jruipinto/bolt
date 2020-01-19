@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, AfterContentInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { tap, concatMap, map } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import { of } from 'rxjs';
   templateUrl: './artigo-page.component.html',
   styleUrls: ['./artigo-page.component.scss']
 })
-export class ArtigoPageComponent implements AfterViewInit, OnDestroy {
+export class ArtigoPageComponent implements AfterContentInit, OnDestroy {
   public artigoForm = this.fb.group({
     id: [null],
     marca: [null, [Validators.maxLength(45)]],
@@ -34,55 +34,52 @@ export class ArtigoPageComponent implements AfterViewInit, OnDestroy {
     private uiService: UIService
   ) { }
 
-  ngAfterViewInit() {
-    this.route.paramMap
-      .pipe(
-        map((params: ParamMap) => +params.get('id')),
-        concatMap((id: number) => {
-          if (id > 0) {
-            return this.artigos.get(id);
-          } else {
-            return of();
-          }
-        })
-      ).subscribe();
-    this.route.paramMap
-      .pipe(
-        map((params: ParamMap) => +params.get('id')),
-        concatMap((id: number) => this.artigos.state$
-          .pipe(map((state: Artigo[]) => {
-            return state && state.length
-              ? state.filter(a => a.id === id)
-              : null;
-          }))
-        )
-      )
-      .subscribe(
-        (artigo: Artigo[]) => {
-          if (artigo && artigo.length) {
-            this.artigoForm.patchValue(artigo[0]);
-          }
+  ngAfterContentInit() {
+    // retrieves the article from DB (wich gets cached on state$)
+    this.route.paramMap.pipe(
+      map((params: ParamMap) => +params.get('id')),
+      concatMap((id: number) => {
+        if (id > 0) {
+          return this.artigos.get(id);
+        } else {
+          return of();
         }
-      );
+      })
+    ).subscribe();
+    // retrieves the article from state$ (this is how state$ work in this app, for now)
+    this.route.paramMap.pipe(
+      map((params: ParamMap) => +params.get('id')),
+      concatMap((id: number) => (
+        this.artigos.state$.pipe(
+          map((state: Artigo[]) => {
+            return state && state.length ? state.filter(a => a.id === id) : null;
+          })
+        )
+      ))
+    ).subscribe(
+      (artigo: Artigo[]) => {
+        if (artigo && artigo.length) {
+          this.artigoForm.patchValue(artigo[0]);
+        }
+      }
+    );
   }
 
   ngOnDestroy() { }
 
   saveArtigo(artigo: Artigo) {
-    return this.artigos.patch(artigo.id, capitalize(artigo))
-      .pipe(
-        concatMap(
-          () => (
-            !artigo.qty || artigo.qty < 2
-              ? this.uiService.patchState({
-                encomendaPromptModalVisible: true,
-                encomendaPromptModalArtigo: artigo,
-              })
-              : of(true)
-          )),
-        tap(() => window.history.back())
-      )
-      .subscribe();
+    return this.artigos.patch(artigo.id, capitalize(artigo)).pipe(
+      concatMap(
+        () => (
+          !artigo.qty || artigo.qty < 2
+            ? this.uiService.patchState({
+              encomendaPromptModalVisible: true,
+              encomendaPromptModalArtigo: artigo,
+            })
+            : of(true)
+        )),
+      tap(() => window.history.back())
+    ).subscribe();
   }
 
   createArtigo(artigo: Artigo) {
