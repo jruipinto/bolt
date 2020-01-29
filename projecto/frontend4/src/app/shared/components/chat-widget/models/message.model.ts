@@ -1,4 +1,5 @@
 export interface Message {
+  id: number;
   phoneNumber: number;
   subject: string;
   text: string;
