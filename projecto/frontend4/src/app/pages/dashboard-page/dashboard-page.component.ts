@@ -1,11 +1,13 @@
 import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { Observable, merge } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap, concatMap, filter, mergeMap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { AuthService } from 'src/app/shared';
-import { UI, UIService, AssistenciasService, ArtigosService, EncomendasService, UsersService } from 'src/app/shared/state';
+import { UI, UIService, AssistenciasService, ArtigosService, EncomendasService, UsersService, MessagesService } from 'src/app/shared/state';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { uniqBy } from 'ramda';
+import { CwStateService } from 'src/app/shared/components/chat-widget/services/cw-state.service';
 
 @AutoUnsubscribe()
 @Component({
@@ -42,6 +44,8 @@ export class DashboardPageComponent implements AfterViewInit, OnDestroy {
     private artigos: ArtigosService,
     private encomendas: EncomendasService,
     private users: UsersService,
+    private messages: MessagesService,
+    private cws: CwStateService,
     private router: Router,
     private fb: FormBuilder) { }
 
@@ -59,6 +63,33 @@ export class DashboardPageComponent implements AfterViewInit, OnDestroy {
       this.users.watch(),
       this.encomendaPromptModalVisible$
     ).subscribe();
+
+    this.messages.find({
+      query: {
+        $limit: 200,
+        $sort: {
+          createdAt: -1
+        }
+      }
+    }).pipe(
+      map(messages => uniqBy((msg: any) => msg.phoneNumber, messages)),
+      concatMap(chatsPreview => this.cws.patchState$({ chatsPreview }))
+    ).subscribe();
+
+    const notNull = <T>(value: T | null): value is T => value !== null;
+    const notUndefined = <T>(value: T | null): value is T => value !== undefined;
+    this.cws.stateMutation$.pipe(
+      filter(notNull),
+      map(stateMutation => stateMutation.selectedChatPreview),
+      filter(notNull),
+      filter(notUndefined),
+      tap(a => console.log('messages selectChat:', a)),
+      concatMap(selectedChatPreview => (
+        this.messages.find({ query: { phoneNumber: selectedChatPreview.phoneNumber } }))
+      ),
+      concatMap(activeChat => this.cws.patchState$({ activeChat }))
+    ).subscribe();
+
   }
 
   ngOnDestroy() { }

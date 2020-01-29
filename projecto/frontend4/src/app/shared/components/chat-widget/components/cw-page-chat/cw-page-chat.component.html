@@ -1,0 +1,7 @@
+<app-cw-header></app-cw-header>
+<div class="chat-body" *ngIf="state$ | async as state" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+    <div class="row" *ngFor="let message of state.activeChat">
+        <app-cw-message [message]="message"></app-cw-message>
+    </div>
+</div>
+<app-cw-editor></app-cw-editor>

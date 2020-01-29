@@ -1,0 +1,11 @@
+:host{
+  margin-right: .1rem;
+  .feedback-svg{
+    width: .7rem;
+    height: .7rem;
+    margin-bottom: -.2rem;
+  }
+  .feedback-delivered-svg{fill: #0077B8;}
+  .feedback-failed-svg{fill: #B60E0E;}
+  .feedback-pending-svg{fill: #C4C4C4;}
+}
