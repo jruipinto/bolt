@@ -1,4 +1,6 @@
 import { lensProp, view, set } from 'ramda';
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 /**
  * Capitalize the first character of a string or
@@ -42,4 +44,17 @@ export function deserialize<T>(obj: T, objPropName: string) {
     return set(lens, JSON.parse(view(lens, obj)), obj);
   }
   return obj;
+}
+
+function inputIsNotNullOrUndefined<T>(input: null | undefined | T): input is T {
+  return input !== null && input !== undefined;
+}
+/**
+ * RXJS operator that filters nulls and undefineds
+ */
+export function isNotNullOrUndefined<T>() {
+  return (source$: Observable<null | undefined | T>) =>
+    source$.pipe(
+      filter(inputIsNotNullOrUndefined)
+    );
 }

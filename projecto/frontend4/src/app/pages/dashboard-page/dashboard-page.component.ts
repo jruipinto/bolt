@@ -2,7 +2,7 @@ import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { Observable, merge, of, concat } from 'rxjs';
 import { map, tap, concatMap, filter, mergeMap, first } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { AuthService, MessagesApiService } from 'src/app/shared';
+import { AuthService, MessagesApiService, isNotNullOrUndefined } from 'src/app/shared';
 import { UI, UIService, AssistenciasService, ArtigosService, EncomendasService, UsersService, MessagesService } from 'src/app/shared/state';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
@@ -78,25 +78,29 @@ export class DashboardPageComponent implements AfterViewInit, OnDestroy {
     ).subscribe();
 
     // on opening the selected chat retrieves the last messages of the chat
-    const notNull = <T>(value: T | null): value is T => value !== null;
-    const notUndefined = <T>(value: T | null): value is T => value !== undefined;
     this.cws.stateMutation$.pipe(
-      filter(notNull),
+      isNotNullOrUndefined(),
       map(stateMutation => stateMutation.selectedChatPreview),
-      filter(notNull),
-      filter(notUndefined),
+      isNotNullOrUndefined(),
       concatMap(selectedChatPreview => (
-        this.messages.find({ query: { phoneNumber: selectedChatPreview.phoneNumber } }))
-      ),
+        this.messages.find({
+          query: {
+            phoneNumber: selectedChatPreview.phoneNumber,
+            $limit: 200,
+            $sort: {
+              id: -1
+            }
+          }
+        })
+      )),
       concatMap(activeChat => this.cws.patchState$({ activeChat }))
     ).subscribe();
 
     // on opening the selected chat detects 'unread' messages and patchs them to 'read'
     this.cws.stateMutation$.pipe(
-      filter(notNull),
+      isNotNullOrUndefined(),
       map(stateMutation => stateMutation.activeChat),
-      filter(notNull),
-      filter(notUndefined),
+      isNotNullOrUndefined(),
       map(activeChat => activeChat.filter(msg => msg.state === 'unread')),
       concatMap(unreadMessages => {
         if (!unreadMessages) {
@@ -108,36 +112,60 @@ export class DashboardPageComponent implements AfterViewInit, OnDestroy {
       })
     ).subscribe();
 
-    // on created messages
+    // onPatched messages
     let patchedMsg;
     this.messages.onPatched().pipe(
       map(a => a[0]),
       tap(msg => patchedMsg = msg),
-      concatMap(() => this.cws.state$),
-      first(),
-      filter(notNull),
-      filter(notUndefined),
+      concatMap(() => this.cws.state$.pipe(first())),
+      isNotNullOrUndefined(),
       map((state): CwState => ({ ...state, activeChat: state.activeChat.map(msg => msg.id === patchedMsg.id ? patchedMsg : msg) })),
       map((state): CwState => ({ ...state, chatsPreview: state.chatsPreview.map(msg => msg.id === patchedMsg.id ? patchedMsg : msg) })),
       tap(a => console.log('state after patch: ', a)),
       concatMap(state => this.cws.patchState$(state))
     ).subscribe();
 
-    // on created messages
+    // onCreated messages
     let createdMsg;
     this.messages.onCreated().pipe(
       map(a => a[0]),
       tap(msg => createdMsg = msg),
-      concatMap(() => this.cws.state$),
-      first(),
-      filter(notNull),
-      filter(notUndefined),
+      concatMap(() => this.cws.state$.pipe(first())),
+      isNotNullOrUndefined(),
       map(state => ({
         ...state,
-        chatsPreview: { createdMsg, ...state.chatsPreview },
-        activeChat: { createdMsg, ...state.activeChat },
+        chatsPreview: uniqBy((msg: any) => msg.phoneNumber, [createdMsg, ...state.chatsPreview]),
+        activeChat: state.activeChat ? [createdMsg, ...state.activeChat] : null,
       })),
       concatMap(state => this.cws.patchState$(state))
+    ).subscribe();
+
+    // when a new message is created by Chat-Widget editor
+    let newMessage;
+    this.cws.stateMutation$.pipe(
+      isNotNullOrUndefined(),
+      map(stateMutation => stateMutation.newMessage),
+      isNotNullOrUndefined(),
+      tap(newMsg => newMessage = newMsg),
+      concatMap(() => this.cws.state$.pipe(first())),
+      map(state => state.selectedChatPreview.phoneNumber),
+      concatMap(phoneNumber => this.messages.create({
+        phoneNumber,
+        text: newMessage,
+        state: 'pending'
+      }))
+    ).subscribe();
+
+    // clear state.activeChat when not on Chat-Widget.cw-page-chat
+    this.cws.stateMutation$.pipe(
+      isNotNullOrUndefined(),
+      map(stateMutation => stateMutation.activeRoute),
+      concatMap(activeRoute => {
+        if (activeRoute === 'chat') {
+          return of(null);
+        }
+        return this.cws.patchState$({ activeChat: null });
+      })
     ).subscribe();
 
   }

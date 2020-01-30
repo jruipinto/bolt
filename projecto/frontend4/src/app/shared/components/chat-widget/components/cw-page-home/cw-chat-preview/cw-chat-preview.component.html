@@ -12,13 +12,12 @@
   <div class="row negative-mt">
     <app-cw-message-state-icon [messageState]="chatPreview.state"></app-cw-message-state-icon>
     <div class="chat-conversation-message-preview">
-      <div *ngIf="chatPreview.state==='unread'" class="chat-conversation-message-preview-unread">
+      <div [ngClass]="{'chat-conversation-message-preview-unread': chatPreview.state==='unread'}">
         <span *ngIf="chatPreview.text">
           {{chatPreview.text | slice:0:29}}
           <span *ngIf="chatPreview.text.length > 30">...</span>
         </span>
       </div>
-      <div *ngIf="chatPreview.state!=='unread'">{{chatPreview.text}}</div>
     </div>
   </div>
 </div>

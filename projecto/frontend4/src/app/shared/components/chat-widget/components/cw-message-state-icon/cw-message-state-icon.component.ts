@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./cw-message-state-icon.component.scss']
 })
 export class CwMessageStateIconComponent {
-  @Input() messageState: 'delivered' | 'failed' | 'pending';
+  @Input() messageState: 'unread' | 'read' | 'pending' | 'unreachable' | 'error' | 'delivered';
 }
