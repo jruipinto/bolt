@@ -119,9 +119,10 @@ export class DashboardPageComponent implements AfterViewInit, OnDestroy {
       tap(msg => patchedMsg = msg),
       concatMap(() => this.cws.state$.pipe(first())),
       isNotNullOrUndefined(),
-      map((state): CwState => ({ ...state, activeChat: state.activeChat.map(msg => msg.id === patchedMsg.id ? patchedMsg : msg) })),
-      map((state): CwState => ({ ...state, chatsPreview: state.chatsPreview.map(msg => msg.id === patchedMsg.id ? patchedMsg : msg) })),
-      tap(a => console.log('state after patch: ', a)),
+      map((state) => ({
+        activeChat: state.activeChat.map(msg => msg.id === patchedMsg.id ? patchedMsg : msg),
+        chatsPreview: state.chatsPreview.map(msg => msg.id === patchedMsg.id ? patchedMsg : msg)
+      })),
       concatMap(state => this.cws.patchState$(state))
     ).subscribe();
 
@@ -133,9 +134,8 @@ export class DashboardPageComponent implements AfterViewInit, OnDestroy {
       concatMap(() => this.cws.state$.pipe(first())),
       isNotNullOrUndefined(),
       map(state => ({
-        ...state,
-        chatsPreview: uniqBy((msg: any) => msg.phoneNumber, [createdMsg, ...state.chatsPreview]),
         activeChat: state.activeChat ? [createdMsg, ...state.activeChat] : null,
+        chatsPreview: state.chatsPreview ? uniqBy((msg: any) => msg.phoneNumber, [createdMsg, ...state.chatsPreview]) : null
       })),
       concatMap(state => this.cws.patchState$(state))
     ).subscribe();
