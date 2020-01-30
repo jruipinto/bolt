@@ -160,6 +160,7 @@ export class DashboardPageComponent implements AfterViewInit, OnDestroy {
     this.cws.stateMutation$.pipe(
       isNotNullOrUndefined(),
       map(stateMutation => stateMutation.activeRoute),
+      isNotNullOrUndefined(),
       concatMap(activeRoute => {
         if (activeRoute === 'chat') {
           return of(null);
