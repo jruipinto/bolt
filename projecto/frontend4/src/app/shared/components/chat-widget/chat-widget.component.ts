@@ -14,7 +14,8 @@ import { CwStateService } from './services/cw-state.service';
     <app-cw-floating-icon *ngIf="state.activeRoute === 'icon'" (click)="expandCw()">
     </app-cw-floating-icon>
   </div>
-  `
+  `,
+  styles: ['@media print { * {display: none;}}']
 })
 export class ChatWidgetComponent {
   state$ = this.cws.state$;
