@@ -1,22 +1,41 @@
-@media print{
+@media print {
   /*
   * Reset to print-friendly styles
   */
   * {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     line-height: normal;
   }
-  ul, ol {
-      list-style-position: outside;
-      padding-inline-start: 40px;
-      margin-block-start: 1em;
-      margin-block-end: 1em;
+  ul,
+  ol {
+    list-style-position: outside;
+    padding-inline-start: 40px;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
   }
   /* ####################################  */
-  html, body, h1, h2, h3, h4, p, img { margin: 0;} /* margin reset*/
-  h1{font-size: 18pt; font-weight: 500; margin-bottom: 0.5cm;}
-  h2{font-size: 16pt; font-weight: 500;}
-  p{font-size: 12pt;}
+  html,
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  img {
+    margin: 0;
+  } /* margin reset*/
+  h1 {
+    font-size: 18pt;
+    font-weight: 600;
+    margin-bottom: 0.5cm;
+  }
+  h2 {
+    font-size: 16pt;
+    font-weight: 600;
+  }
+  p {
+    font-size: 12pt;
+  }
 
   .items-group {
     border-style: solid;
@@ -34,14 +53,29 @@
   }
 
   .description-label,
-  .description-label > p { font-weight: 500;}
+  .description-label > p {
+    font-weight: 600;
+  }
 
-  .disclaimer, .address p {
+  .disclaimer,
+  .address p {
     font-size: 10pt;
   }
 
   .signature-field {
     padding-bottom: 24pt;
     border-bottom: solid black 1pt;
+  }
+
+  .clr-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .padding-right-left-0 {
+    padding-left: 0;
+    padding-right: 0;
   }
 }
