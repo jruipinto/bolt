@@ -146,6 +146,30 @@
               </div>
             </clr-accordion-content>
           </clr-accordion-panel>
+
+          <clr-accordion-panel>
+            <clr-accordion-title>Mensagens</clr-accordion-title>
+            <clr-accordion-content *clrIfExpanded>
+              <div class="clr-row" *ngIf="assistencia.messages && assistencia.messages.length">
+                <div class="clr-col">
+                  <clr-datagrid>
+                    <clr-dg-column>Assunto</clr-dg-column>
+                    <clr-dg-column>Estado</clr-dg-column>
+                    <clr-dg-column>Enviada</clr-dg-column>
+                    <clr-dg-column>Entregue</clr-dg-column>
+                    <clr-dg-row *ngFor="let message of assistencia.messages">
+                      <clr-dg-cell>{{message.subject}}</clr-dg-cell>
+                      <clr-dg-cell>{{message.state}}</clr-dg-cell>
+                      <clr-dg-cell>{{message.createdAt}}</clr-dg-cell>
+                      <clr-dg-cell>{{message?.deliveredAt}}</clr-dg-cell>
+                    </clr-dg-row>
+                    <clr-dg-footer>{{assistencia.messages.length}} mensagens</clr-dg-footer>
+                  </clr-datagrid>
+                </div>
+              </div>
+            </clr-accordion-content>
+          </clr-accordion-panel>
+
           <clr-accordion-panel>
             <clr-accordion-title>Registo Cronológico</clr-accordion-title>
             <clr-accordion-content *clrIfExpanded>
@@ -319,7 +343,8 @@
             <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button type="button" (click)="saveAssistencia('cliente adiou resp.', assistencia)" clrDropdownItem>Cliente adiou
+            <button type="button" (click)="saveAssistencia('cliente adiou resp.', assistencia)" clrDropdownItem>Cliente
+              adiou
               resposta</button>
             <button type="button" (click)="saveAssistencia('não atendeu p/ cont.', assistencia)" clrDropdownItem>Não
               atendeu</button>

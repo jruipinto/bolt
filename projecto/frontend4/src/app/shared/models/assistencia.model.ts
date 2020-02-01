@@ -1,5 +1,6 @@
 import { Artigo } from './artigo.model';
 import { Encomenda } from './encomenda.model';
+import { Message } from '../components/chat-widget/models/message.model';
 
 export interface Assistencia {
     id: number;
@@ -20,6 +21,7 @@ export interface Assistencia {
     relatorio_cliente: string;
     material: Partial<Artigo>[];
     encomendas: Partial<Encomenda>[];
+    messages: Partial<Message>[];
     preco: number;
     estado: string;
     createdAt: string;
