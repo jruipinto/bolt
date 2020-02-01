@@ -61,7 +61,12 @@ module.exports = function (app) {
     material: {
       type: Sequelize.JSON
     },
+    //longtext
     encomendas: {
+      type: Sequelize.JSON
+    },
+    //longtext
+    messages: {
       type: Sequelize.JSON
     },
     //varchar(8)
