@@ -140,7 +140,7 @@ export class DashboardPageComponent implements AfterViewInit, OnDestroy {
       concatMap(state => this.cws.patchState$(state))
     ).subscribe();
 
-    // when a new message is created by Chat-Widget editor
+    // send message (when a new message is created by Chat-Widget editor)
     let newMessage;
     this.cws.stateMutation$.pipe(
       isNotNullOrUndefined(),
@@ -152,6 +152,7 @@ export class DashboardPageComponent implements AfterViewInit, OnDestroy {
       concatMap(phoneNumber => this.messages.create({
         phoneNumber,
         text: newMessage,
+        tecnico_user_id: this.authService.getUserId(),
         state: 'pending'
       }))
     ).subscribe();
