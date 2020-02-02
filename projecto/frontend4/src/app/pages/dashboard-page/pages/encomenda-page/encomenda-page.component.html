@@ -120,6 +120,30 @@
         <div class="clr-row">
             <div class="clr-col">
                 <clr-accordion>
+
+                    <clr-accordion-panel>
+                        <clr-accordion-title>Mensagens ({{encomenda?.messages?.length}})</clr-accordion-title>
+                        <clr-accordion-content *clrIfExpanded>
+                            <div class="clr-row" *ngIf="encomenda.messages && encomenda.messages.length">
+                                <div class="clr-col">
+                                    <clr-datagrid>
+                                        <clr-dg-column>Assunto</clr-dg-column>
+                                        <clr-dg-column>Estado</clr-dg-column>
+                                        <clr-dg-column>Enviada</clr-dg-column>
+                                        <clr-dg-column>Entregue</clr-dg-column>
+                                        <clr-dg-row *ngFor="let message of encomenda.messages">
+                                            <clr-dg-cell>{{message.subject}}</clr-dg-cell>
+                                            <clr-dg-cell>{{message.state}}</clr-dg-cell>
+                                            <clr-dg-cell>{{message.createdAt | slice:0:10}}</clr-dg-cell>
+                                            <clr-dg-cell>{{message?.deliveredAt | slice:0:10}}</clr-dg-cell>
+                                        </clr-dg-row>
+                                        <clr-dg-footer>{{encomenda.messages.length}} mensagens</clr-dg-footer>
+                                    </clr-datagrid>
+                                </div>
+                            </div>
+                        </clr-accordion-content>
+                    </clr-accordion-panel>
+
                     <clr-accordion-panel>
                         <clr-accordion-title>Registo Cronológico</clr-accordion-title>
                         <clr-accordion-content *clrIfExpanded>
@@ -147,6 +171,7 @@
                             </clr-datagrid>
                         </clr-accordion-content>
                     </clr-accordion-panel>
+
                 </clr-accordion>
             </div>
         </div>

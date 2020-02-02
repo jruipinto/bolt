@@ -15,7 +15,7 @@ import { CwStateService } from './services/cw-state.service';
     </app-cw-floating-icon>
   </div>
   `,
-  styles: ['@media print { * {display: none;}}']
+  styles: ['@media print { * {display: none; } }', '* { z-index: 5000; }']
 })
 export class ChatWidgetComponent {
   state$ = this.cws.state$;

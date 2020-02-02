@@ -160,8 +160,8 @@
                     <clr-dg-row *ngFor="let message of assistencia.messages">
                       <clr-dg-cell>{{message.subject}}</clr-dg-cell>
                       <clr-dg-cell>{{message.state}}</clr-dg-cell>
-                      <clr-dg-cell>{{message.createdAt}}</clr-dg-cell>
-                      <clr-dg-cell>{{message?.deliveredAt}}</clr-dg-cell>
+                      <clr-dg-cell>{{message.createdAt | slice:0:10}}</clr-dg-cell>
+                      <clr-dg-cell>{{message?.deliveredAt | slice:0:10}}</clr-dg-cell>
                     </clr-dg-row>
                     <clr-dg-footer>{{assistencia.messages.length}} mensagens</clr-dg-footer>
                   </clr-datagrid>
@@ -295,6 +295,7 @@
             <button clrDropdownItem (click)="saveAssistencia('contacto pendente', assistencia)">Contactar
             </button>
             <button clrDropdownItem (click)="saveAssistencia('concluído', assistencia)">Concluir</button>
+            <button clrDropdownItem (click)="saveAssistencia('concluído s/ rep.', assistencia)">Concluir s/ rep.</button>
             <button clrDropdownItem *ngIf="(assistencia.estado !== 'em análise')"
               (click)="saveAssistencia(assistencia.estado, assistencia)">Guardar
             </button>
@@ -356,7 +357,7 @@
         </clr-dropdown>
       </div>
 
-      <div *ngIf="assistencia.estado === 'concluído'">
+      <div *ngIf="assistencia.estado === 'concluído' || assistencia.estado === 'concluído s/ rep.'">
         <button class="btn btn-warning" (click)="saveAssistencia('entregue', assistencia)">
           Entregar
         </button>

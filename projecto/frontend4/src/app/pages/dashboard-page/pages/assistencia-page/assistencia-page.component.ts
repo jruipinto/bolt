@@ -12,7 +12,8 @@ import { Observable, concat, of } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 import { clone, uniqBy } from 'ramda';
 import { dbQuery } from 'src/app/shared/utilities';
-import { AuthService } from 'src/app/shared';
+import { AuthService, MessagesApiService } from 'src/app/shared';
+import { Message } from 'src/app/shared/components/chat-widget/models/message.model';
 
 @AutoUnsubscribe()
 @Component({
@@ -61,6 +62,7 @@ export class AssistenciaPageComponent implements AfterContentInit, OnDestroy {
     private assistencias: AssistenciasService,
     private artigos: ArtigosService,
     private encomendas: EncomendasService,
+    private messages: MessagesApiService,
     private users: UsersService,
     private authService: AuthService,
     private router: Router,
@@ -123,7 +125,8 @@ ${this.assistencia.relatorio_cliente}`
         newEstado === 'contacto pendente' ||
         newEstado === 'orçamento pendente' ||
         newEstado === 'aguarda material' ||
-        newEstado === 'concluído'
+        newEstado === 'concluído' ||
+        newEstado === 'concluído s/ rep.'
       )
       && assistenciaOnInit.estado === 'recebido'
     ) {
@@ -206,14 +209,40 @@ ${this.assistencia.relatorio_cliente}`
         );
       }),
 
+      // send SMS to client if newEstado === 'concluído' || newEstado === 'concluído s/ rep.' || newEstado === 'orçamento pendente'
+      concatMap(encomendas => {
+        if (newEstado !== 'concluído' && newEstado !== 'concluído s/ rep.' && newEstado !== 'orçamento pendente') {
+          return of({ encomendas, messages: assistencia.messages });
+        }
+        if (newEstado === 'concluído' || newEstado === 'concluído s/ rep.') {
+          return this.messages.notificarConclusaoDe(assistencia).pipe(
+            map(e => e[0]),
+            map((msg: Message) => ({
+              encomendas,
+              messages: assistencia.messages ? [...assistencia.messages, { id: msg.id }] : [{ id: msg.id }]
+            }))
+          );
+        }
+        if (newEstado === 'orçamento pendente') {
+          return this.messages.notificarOrcamentoDe(assistencia).pipe(
+            map(e => e[0]),
+            map((msg: Message) => ({
+              encomendas,
+              messages: assistencia.messages ? [...assistencia.messages, { id: msg.id }] : [{ id: msg.id }]
+            }))
+          );
+        }
+      }),
+
       // submit assistencia to assistenciasApi, print paper and return to last page
-      concatMap(encomendas => this.assistencias.patch(
+      concatMap(data => this.assistencias.patch(
         assistencia.id,
         {
           ...assistencia,
           estado: newEstado,
           material: assistencia.material,
-          encomendas
+          encomendas: data.encomendas,
+          messages: data.messages
         },
         editor_action
       )),

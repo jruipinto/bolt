@@ -38,6 +38,7 @@ export interface EventoCronologico {
     relatorio_cliente?: string;
     material?: Partial<Artigo>[];
     encomendas?: Partial<Encomenda>[];
+    messages?: Partial<Message>[];
     preco?: number;
     estado: string;
     updatedAt: string;

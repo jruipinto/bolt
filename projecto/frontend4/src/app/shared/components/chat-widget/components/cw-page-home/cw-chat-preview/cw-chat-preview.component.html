@@ -14,7 +14,7 @@
     <div class="chat-conversation-message-preview">
       <div [ngClass]="{'chat-conversation-message-preview-unread': chatPreview.state==='unread'}">
         <span *ngIf="chatPreview.text">
-          {{chatPreview.text | slice:0:29}}
+          {{chatPreview.text | slice:0:25}}
           <span *ngIf="chatPreview.text.length > 30">...</span>
         </span>
       </div>

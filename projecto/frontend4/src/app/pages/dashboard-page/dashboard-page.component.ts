@@ -120,8 +120,8 @@ export class DashboardPageComponent implements AfterViewInit, OnDestroy {
       concatMap(() => this.cws.state$.pipe(first())),
       isNotNullOrUndefined(),
       map((state) => ({
-        activeChat: state.activeChat.map(msg => msg.id === patchedMsg.id ? patchedMsg : msg),
-        chatsPreview: state.chatsPreview.map(msg => msg.id === patchedMsg.id ? patchedMsg : msg)
+        activeChat: state.activeChat ? state.activeChat.map(msg => msg.id === patchedMsg.id ? patchedMsg : msg) : null,
+        chatsPreview: state.chatsPreview ? state.chatsPreview.map(msg => msg.id === patchedMsg.id ? patchedMsg : msg) : null
       })),
       concatMap(state => this.cws.patchState$(state))
     ).subscribe();
