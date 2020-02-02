@@ -84,7 +84,7 @@
       <div class="clr-col">
         <clr-accordion>
           <clr-accordion-panel>
-            <clr-accordion-title>Material</clr-accordion-title>
+            <clr-accordion-title>Material ({{assistencia?.material?.length}})</clr-accordion-title>
             <clr-accordion-content *clrIfExpanded>
               <div class="clr-row">
                 <div class="clr-col">
@@ -116,7 +116,7 @@
           </clr-accordion-panel>
 
           <clr-accordion-panel>
-            <clr-accordion-title>Encomendas</clr-accordion-title>
+            <clr-accordion-title>Encomendas ({{assistencia?.encomendas?.length}})</clr-accordion-title>
             <clr-accordion-content *clrIfExpanded>
               <div class="clr-row">
                 <div class="clr-col">
@@ -148,7 +148,7 @@
           </clr-accordion-panel>
 
           <clr-accordion-panel>
-            <clr-accordion-title>Mensagens</clr-accordion-title>
+            <clr-accordion-title>Mensagens ({{assistencia?.messages?.length}})</clr-accordion-title>
             <clr-accordion-content *clrIfExpanded>
               <div class="clr-row" *ngIf="assistencia.messages && assistencia.messages.length">
                 <div class="clr-col">
@@ -171,7 +171,7 @@
           </clr-accordion-panel>
 
           <clr-accordion-panel>
-            <clr-accordion-title>Registo Cronológico</clr-accordion-title>
+            <clr-accordion-title>Registo Cronológico ({{assistencia?.registo_cronologico?.length}})</clr-accordion-title>
             <clr-accordion-content *clrIfExpanded>
               <clr-datagrid>
                 <clr-dg-column>Evento</clr-dg-column>
