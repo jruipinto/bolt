@@ -215,7 +215,7 @@ ${this.assistencia.relatorio_cliente}`
           return of({ encomendas, messages: assistencia.messages });
         }
         if (newEstado === 'concluído' || newEstado === 'concluído s/ rep.') {
-          return this.messages.notificarConclusaoDe(assistencia).pipe(
+          return this.messages.notificarConclusaoDe({ ...assistencia, estado: newEstado }).pipe(
             map(e => e[0]),
             map((msg: Message) => ({
               encomendas,
