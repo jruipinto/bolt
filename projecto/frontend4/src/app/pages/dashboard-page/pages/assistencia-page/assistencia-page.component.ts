@@ -119,7 +119,7 @@ ${this.assistencia.relatorio_cliente}`
     if ((newEstado !== 'em análise' && newEstado !== 'recebido') && !assistencia.relatorio_cliente) {
       return alert('Preencha o relatório para o cliente!');
     }
-    if (newEstado === 'orçamento pendente' && assistencia.preco) {
+    if (newEstado === 'orçamento pendente' && !assistencia.preco) {
       return alert('Para orçamentar assistência o preço não pode ser 0€!');
     }
     if (
