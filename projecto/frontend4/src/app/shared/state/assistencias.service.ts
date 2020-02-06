@@ -166,7 +166,7 @@ export class AssistenciasService extends EntityStateAbstraction {
           ...assistencia.registo_cronologico,
           novoRegisto
         ];
-        return ({ ...assistencia, registo_cronologico: updatedRegistoCronologico } as Assistencia);
+        return ({ ...patchedAssistencia, registo_cronologico: updatedRegistoCronologico } as Assistencia);
       }),
       concatMap(patchedAssistencia => super.patch(id, patchedAssistencia))
 

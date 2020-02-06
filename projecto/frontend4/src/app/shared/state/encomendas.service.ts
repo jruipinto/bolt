@@ -80,7 +80,7 @@ export class EncomendasService extends EntityStateAbstraction {
           ...encomenda.registo_cronologico,
           novoRegisto
         ];
-        return ({ ...encomenda, registo_cronologico: updatedRegistoCronologico } as Encomenda);
+        return ({ ...patchedEncomenda, registo_cronologico: updatedRegistoCronologico } as Encomenda);
       }),
       concatMap(patchedEncomenda => super.patch(id, patchedEncomenda))
 
