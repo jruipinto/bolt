@@ -1,6 +1,7 @@
 const modem = require('../modem.js').modem;
 const of = require('rxjs').of;
 const concatMap = require('rxjs/operators').concatMap;
+const first = require('rxjs/operators').first;
 
 const send = function (context) {
     const phoneNumber = context.data.phoneNumber || null;
@@ -11,6 +12,7 @@ const send = function (context) {
     }
 
     modem.status$.pipe(
+        first(),
         concatMap(status => {
             if (!status.error && status.connected) {
                 return modem.sendSMS({ phoneNumber, text });
