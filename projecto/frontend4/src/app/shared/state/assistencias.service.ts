@@ -107,6 +107,8 @@ export class AssistenciasService extends EntityStateAbstraction {
 
   public patch(id: number, assistencia: Partial<Assistencia>, editor_action?: 'novo estado' | 'edição') {
     return of(assistencia as Assistencia).pipe(
+
+      // send SMS about the assistencia to the client
       concatMap(patchedAssistencia => {
         if (
           (patchedAssistencia.estado !== 'concluído'
@@ -135,6 +137,8 @@ export class AssistenciasService extends EntityStateAbstraction {
           );
         }
       }),
+
+      // patch the assistencia
       map(patchedAssistencia => {
         const {
           tecnico_user_id,
@@ -165,6 +169,7 @@ export class AssistenciasService extends EntityStateAbstraction {
         return ({ ...assistencia, registo_cronologico: updatedRegistoCronologico } as Assistencia);
       }),
       concatMap(patchedAssistencia => super.patch(id, patchedAssistencia))
+
     );
   }
 
