@@ -117,7 +117,10 @@ ${this.assistencia.relatorio_cliente}`
     const assistenciaOnInit = clone(this.assistenciaOnInit);
     const editor_action = newEstado === assistenciaOnInit.estado ? 'edição' : 'novo estado';
     if ((newEstado !== 'em análise' && newEstado !== 'recebido') && !assistencia.relatorio_cliente) {
-      return alert('Preenche o relatório para o cliente!');
+      return alert('Preencha o relatório para o cliente!');
+    }
+    if (newEstado === 'orçamento pendente' && assistencia.preco) {
+      return alert('Para orçamentar assistência o preço não pode ser 0€!');
     }
     if (
       (
