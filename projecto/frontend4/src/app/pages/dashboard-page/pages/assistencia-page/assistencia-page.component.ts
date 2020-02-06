@@ -209,40 +209,14 @@ ${this.assistencia.relatorio_cliente}`
         );
       }),
 
-      // send SMS to client if newEstado === 'concluído' || newEstado === 'concluído s/ rep.' || newEstado === 'orçamento pendente'
-      concatMap(encomendas => {
-        if (newEstado !== 'concluído' && newEstado !== 'concluído s/ rep.' && newEstado !== 'orçamento pendente') {
-          return of({ encomendas, messages: assistencia.messages });
-        }
-        if (newEstado === 'concluído' || newEstado === 'concluído s/ rep.') {
-          return this.messages.notificarConclusaoDe({ ...assistencia, estado: newEstado }).pipe(
-            map(e => e[0]),
-            map((msg: Message) => ({
-              encomendas,
-              messages: assistencia.messages ? [...assistencia.messages, { id: msg.id }] : [{ id: msg.id }]
-            }))
-          );
-        }
-        if (newEstado === 'orçamento pendente') {
-          return this.messages.notificarOrcamentoDe(assistencia).pipe(
-            map(e => e[0]),
-            map((msg: Message) => ({
-              encomendas,
-              messages: assistencia.messages ? [...assistencia.messages, { id: msg.id }] : [{ id: msg.id }]
-            }))
-          );
-        }
-      }),
-
       // submit assistencia to assistenciasApi, print paper and return to last page
-      concatMap(data => this.assistencias.patch(
+      concatMap(encomendas => this.assistencias.patch(
         assistencia.id,
         {
           ...assistencia,
           estado: newEstado,
           material: assistencia.material,
-          encomendas: data.encomendas,
-          messages: data.messages
+          encomendas
         },
         editor_action
       )),

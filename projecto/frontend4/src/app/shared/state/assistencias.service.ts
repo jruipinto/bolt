@@ -106,36 +106,67 @@ export class AssistenciasService extends EntityStateAbstraction {
   }
 
   public patch(id: number, assistencia: Partial<Assistencia>, editor_action?: 'novo estado' | 'edição') {
-    const {
-      tecnico_user_id,
-      relatorio_interno,
-      relatorio_cliente,
-      material,
-      encomendas,
-      messages,
-      preco
-    } = assistencia;
-    const novoRegisto: EventoCronologico = {
-      editor_user_id: this.authService.getUserId(),
-      editor_action,
-      tecnico_user_id,
-      relatorio_interno,
-      relatorio_cliente,
-      material,
-      encomendas,
-      messages,
-      preco,
-      estado: assistencia.estado,
-      updatedAt: new Date().toLocaleString()
-    };
-    const updatedRegistoCronologico: EventoCronologico[] = [
-      ...assistencia.registo_cronologico,
-      novoRegisto
-    ];
-    return super.patch(
-      id,
-      { ...assistencia, registo_cronologico: updatedRegistoCronologico } as Assistencia
+    return of(assistencia as Assistencia).pipe(
+      concatMap(patchedAssistencia => {
+        if (
+          (patchedAssistencia.estado !== 'concluído'
+            && patchedAssistencia.estado !== 'concluído s/ rep.'
+            && patchedAssistencia.estado !== 'orçamento pendente')
+          || editor_action === 'edição'
+        ) {
+          return of({ ...patchedAssistencia, messages: assistencia.messages });
+        }
+        if (patchedAssistencia.estado === 'concluído' || patchedAssistencia.estado === 'concluído s/ rep.') {
+          return this.messagesService.notificarConclusaoDe(patchedAssistencia).pipe(
+            map(e => e[0]),
+            map((msg: Message) => ({
+              ...patchedAssistencia,
+              messages: assistencia.messages ? [...assistencia.messages, { id: msg.id }] : [{ id: msg.id }]
+            }))
+          );
+        }
+        if (patchedAssistencia.estado === 'orçamento pendente') {
+          return this.messagesService.notificarOrcamentoDe(patchedAssistencia).pipe(
+            map(e => e[0]),
+            map((msg: Message) => ({
+              ...patchedAssistencia,
+              messages: assistencia.messages ? [...assistencia.messages, { id: msg.id }] : [{ id: msg.id }]
+            }))
+          );
+        }
+      }),
+      map(patchedAssistencia => {
+        const {
+          tecnico_user_id,
+          relatorio_interno,
+          relatorio_cliente,
+          material,
+          encomendas,
+          messages,
+          preco
+        } = patchedAssistencia;
+        const novoRegisto: EventoCronologico = {
+          editor_user_id: this.authService.getUserId(),
+          editor_action,
+          tecnico_user_id,
+          relatorio_interno,
+          relatorio_cliente,
+          material,
+          encomendas,
+          messages,
+          preco,
+          estado: assistencia.estado,
+          updatedAt: new Date().toLocaleString()
+        };
+        const updatedRegistoCronologico: EventoCronologico[] = [
+          ...assistencia.registo_cronologico,
+          novoRegisto
+        ];
+        return ({ ...assistencia, registo_cronologico: updatedRegistoCronologico } as Assistencia);
+      }),
+      concatMap(patchedAssistencia => super.patch(id, patchedAssistencia))
     );
   }
+
 
 }
