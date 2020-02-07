@@ -59,7 +59,7 @@ export class MessagesApiService extends EntityApiAbstration {
         text: `Bom dia,\n\nN Reparações informa que a sua encomenda ${encomenda.id} já foi adquirida e pode ser levantada apartir de amanhã.\n\nObrigado.`,
         tecnico_user_id: this.authService.getUserId(),
         state: 'pending',
-        subject: `Notificção de E${encomenda.id}`
+        subject: `Notificação de E${encomenda.id}`
       });
     }
     if (encomenda.estado === 'esgotada') {
@@ -69,7 +69,7 @@ export class MessagesApiService extends EntityApiAbstration {
         text: `Bom dia,\n\nN Reparações informa que a sua encomenda ${encomenda.id} infelizmente não está disponível em fornecedor.\n\nObrigado.`,
         tecnico_user_id: this.authService.getUserId(),
         state: 'pending',
-        subject: `Notificção de E${encomenda.id}`
+        subject: `Notificação de E${encomenda.id}`
       });
     }
     if (encomenda.estado === 'sem fornecedor') {
@@ -79,7 +79,7 @@ export class MessagesApiService extends EntityApiAbstration {
         text: `Bom dia,\n\nN Reparações informa que a sua encomenda ${encomenda.id} infelizmente não está disponível em fornecedor.\n\nObrigado.`,
         tecnico_user_id: this.authService.getUserId(),
         state: 'pending',
-        subject: `Notificção de E${encomenda.id}`
+        subject: `Notificação de E${encomenda.id}`
       });
     }
     if (encomenda.estado === 'recebida') {
@@ -89,7 +89,7 @@ export class MessagesApiService extends EntityApiAbstration {
         text: `Bom dia,\n\nN Reparações informa que a sua encomenda ${encomenda.id} já chegou e aguarda levantamento.\n\nObrigado.`,
         tecnico_user_id: this.authService.getUserId(),
         state: 'pending',
-        subject: `Notificção de E${encomenda.id}`
+        subject: `Notificação de E${encomenda.id}`
       });
     }
     if (encomenda.estado === 'detectado defeito') {
@@ -99,7 +99,7 @@ export class MessagesApiService extends EntityApiAbstration {
         text: `Bom dia,\n\nN Reparações informa que a sua encomenda ${encomenda.id} infelizmente chegou com defeito. Estamos em contacto com o fornecedor para tentar a substituição.\n\nObrigado.`,
         tecnico_user_id: this.authService.getUserId(),
         state: 'pending',
-        subject: `Notificção de E${encomenda.id}`
+        subject: `Notificação de E${encomenda.id}`
       });
     }
   }
