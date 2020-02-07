@@ -8,7 +8,7 @@ module.exports = function (app) {
   const messages = sequelizeClient.define('messages', {
     //bigint(14), not null
     phoneNumber: {
-      type: Sequelize.BIGINT(14),
+      type: Sequelize.BIGINT(20),
       allowNull: false
     },
     // varchar(30), not null
