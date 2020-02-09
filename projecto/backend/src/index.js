@@ -4,6 +4,7 @@ const app = require('./app');
 const port = app.get('port');
 const server = app.listen(port);
 const modemListen = require('./modem').listen;
+const dbAutoBackup = require('./db-auto-backup');
 
 process.on('unhandledRejection', (reason, p) =>
   logger.error('Unhandled Rejection at: Promise ', p, reason)
@@ -14,6 +15,9 @@ server.on('listening', () =>
 );
 
 setTimeout(
-  () => modemListen(app),
+  () => {
+    modemListen(app);
+    dbAutoBackup();
+  },
   5000
 );

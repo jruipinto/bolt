@@ -63,5 +63,12 @@
     ],
     "msPause": 10000,
     "autoOpen": false
+  },
+  "nodemailer": {
+    "service": "gmail",
+    "auth": {
+      "user": "rui.nreparacoes@gmail.com",
+      "pass": "....0313"
+    }
   }
 }
