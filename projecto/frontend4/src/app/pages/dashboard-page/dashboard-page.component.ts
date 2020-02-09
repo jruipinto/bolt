@@ -1,13 +1,13 @@
 import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { Observable, merge, of, concat } from 'rxjs';
-import { map, tap, concatMap, filter, mergeMap, first } from 'rxjs/operators';
+import { map, tap, concatMap, first } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { AuthService, MessagesApiService, isNotNullOrUndefined } from 'src/app/shared';
-import { UI, UIService, AssistenciasService, ArtigosService, EncomendasService, UsersService, MessagesService } from 'src/app/shared/state';
+import { UI, UIService, AssistenciasService, ArtigosService, EncomendasService, UsersService } from 'src/app/shared/state';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { uniqBy } from 'ramda';
-import { CwStateService, CwState } from 'src/app/shared/components/chat-widget/services/cw-state.service';
+import { CwStateService } from 'src/app/shared/components/chat-widget/services/cw-state.service';
 
 @AutoUnsubscribe()
 @Component({
