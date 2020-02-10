@@ -11,7 +11,7 @@ module.exports = function (app) {
       type: Sequelize.BIGINT(20),
       allowNull: false
     },
-    // varchar(30), not null
+    // varchar(30)
     subject: {
       type: Sequelize.STRING(30),
     },
