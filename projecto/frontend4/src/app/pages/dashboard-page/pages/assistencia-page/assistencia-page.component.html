@@ -84,7 +84,7 @@
       <div class="clr-col">
         <clr-accordion>
           <clr-accordion-panel>
-            <clr-accordion-title>Material</clr-accordion-title>
+            <clr-accordion-title>Material ({{assistencia?.material?.length}})</clr-accordion-title>
             <clr-accordion-content *clrIfExpanded>
               <div class="clr-row">
                 <div class="clr-col">
@@ -116,7 +116,7 @@
           </clr-accordion-panel>
 
           <clr-accordion-panel>
-            <clr-accordion-title>Encomendas</clr-accordion-title>
+            <clr-accordion-title>Encomendas ({{assistencia?.encomendas?.length}})</clr-accordion-title>
             <clr-accordion-content *clrIfExpanded>
               <div class="clr-row">
                 <div class="clr-col">
@@ -146,8 +146,33 @@
               </div>
             </clr-accordion-content>
           </clr-accordion-panel>
+
           <clr-accordion-panel>
-            <clr-accordion-title>Registo Cronológico</clr-accordion-title>
+            <clr-accordion-title>Mensagens ({{assistencia?.messages?.length}})</clr-accordion-title>
+            <clr-accordion-content *clrIfExpanded>
+              <div class="clr-row" *ngIf="assistencia.messages && assistencia.messages.length">
+                <div class="clr-col">
+                  <clr-datagrid>
+                    <clr-dg-column>Assunto</clr-dg-column>
+                    <clr-dg-column>Estado</clr-dg-column>
+                    <clr-dg-column>Enviada</clr-dg-column>
+                    <clr-dg-column>Entregue</clr-dg-column>
+                    <clr-dg-row *ngFor="let message of assistencia.messages">
+                      <clr-dg-cell>{{message.subject}}</clr-dg-cell>
+                      <clr-dg-cell>{{message.state}}</clr-dg-cell>
+                      <clr-dg-cell>{{message.createdAt | slice:0:10}}</clr-dg-cell>
+                      <clr-dg-cell>{{message?.deliveredAt | slice:0:10}}</clr-dg-cell>
+                    </clr-dg-row>
+                    <clr-dg-footer>{{assistencia.messages.length}} mensagens</clr-dg-footer>
+                  </clr-datagrid>
+                </div>
+              </div>
+            </clr-accordion-content>
+          </clr-accordion-panel>
+
+          <clr-accordion-panel>
+            <clr-accordion-title>Registo Cronológico ({{assistencia?.registo_cronologico?.length}})
+            </clr-accordion-title>
             <clr-accordion-content *clrIfExpanded>
               <clr-datagrid>
                 <clr-dg-column>Evento</clr-dg-column>
@@ -266,13 +291,21 @@
             <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button clrDropdownItem (click)="saveAssistencia('orçamento pendente', assistencia)">Orçamentar
+            <button clrDropdownItem (click)="saveAssistencia('orçamento pendente', assistencia)">
+              Orçamentar
             </button>
-            <button clrDropdownItem (click)="saveAssistencia('contacto pendente', assistencia)">Contactar
+            <button clrDropdownItem (click)="saveAssistencia('contacto pendente', assistencia)">
+              Contactar
             </button>
-            <button clrDropdownItem (click)="saveAssistencia('concluído', assistencia)">Concluir</button>
+            <button clrDropdownItem (click)="saveAssistencia('concluído s/ rep.', assistencia)">
+              Concluir s/ rep.
+            </button>
+            <button clrDropdownItem (click)="saveAssistencia('concluído', assistencia)">
+              Concluir
+            </button>
             <button clrDropdownItem *ngIf="(assistencia.estado !== 'em análise')"
-              (click)="saveAssistencia(assistencia.estado, assistencia)">Guardar
+              (click)="saveAssistencia(assistencia.estado, assistencia)">
+              Guardar
             </button>
           </clr-dropdown-menu>
         </clr-dropdown>
@@ -287,21 +320,28 @@
       <div *ngIf="assistencia.estado === 'orçamento pendente'
           || assistencia.estado === 'não atendeu p/ orç.'
           || assistencia.estado === 'cliente adiou orç.'">
-        <button class="btn btn-success" (click)="saveAssistencia('orçamento aprovado', assistencia)">Aceite</button>
+        <button class="btn btn-success" (click)="saveAssistencia('orçamento aprovado', assistencia)">
+          Aceite
+        </button>
         <clr-dropdown>
           <button clrDropdownTrigger class="btn btn-outline-primary">
             <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button clrDropdownItem (click)="saveAssistencia('orçamento recusado', assistencia)">Recusado
+            <button clrDropdownItem (click)="saveAssistencia('orçamento recusado', assistencia)">
+              Recusado
             </button>
-            <button clrDropdownItem (click)="saveAssistencia('cliente adiou orç.', assistencia)">Cliente adiou
-              resposta</button>
-            <button clrDropdownItem (click)="saveAssistencia('não atendeu p/ orç.', assistencia)">Não atendeu
+            <button clrDropdownItem (click)="saveAssistencia('cliente adiou orç.', assistencia)">
+              Cliente adiou resposta
             </button>
-            <button clrDropdownItem (click)="saveAssistencia('incontactável', assistencia)">Incontactável
+            <button clrDropdownItem (click)="saveAssistencia('não atendeu p/ orç.', assistencia)">
+              Não atendeu
             </button>
-            <button clrDropdownItem (click)="saveAssistencia(assistencia.estado, assistencia)">Guardar
+            <button clrDropdownItem (click)="saveAssistencia('incontactável', assistencia)">
+              Incontactável
+            </button>
+            <button clrDropdownItem (click)="saveAssistencia(assistencia.estado, assistencia)">
+              Guardar
             </button>
           </clr-dropdown-menu>
         </clr-dropdown>
@@ -319,23 +359,28 @@
             <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button type="button" (click)="saveAssistencia('cliente adiou resp.', assistencia)" clrDropdownItem>Cliente adiou
-              resposta</button>
-            <button type="button" (click)="saveAssistencia('não atendeu p/ cont.', assistencia)" clrDropdownItem>Não
-              atendeu</button>
-            <button type="button" (click)="saveAssistencia('incontactável', assistencia)"
-              clrDropdownItem>Incontactável</button>
-            <button clrDropdownItem (click)="saveAssistencia(assistencia.estado, assistencia)">Guardar
+            <button type="button" (click)="saveAssistencia('cliente adiou resp.', assistencia)" clrDropdownItem>
+              Cliente adiou resposta
+            </button>
+            <button type="button" (click)="saveAssistencia('não atendeu p/ cont.', assistencia)" clrDropdownItem>
+              Não atendeu
+            </button>
+            <button type="button" (click)="saveAssistencia('incontactável', assistencia)" clrDropdownItem>
+              Incontactável
+            </button>
+            <button clrDropdownItem (click)="saveAssistencia(assistencia.estado, assistencia)">
+              Guardar
             </button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>
 
-      <div *ngIf="assistencia.estado === 'concluído'">
+      <div *ngIf="assistencia.estado === 'concluído' || assistencia.estado === 'concluído s/ rep.'">
         <button class="btn btn-warning" (click)="saveAssistencia('entregue', assistencia)">
           Entregar
         </button>
-        <button class="btn" (click)="saveAssistencia(assistencia.estado, assistencia)">Guardar
+        <button class="btn" (click)="saveAssistencia(assistencia.estado, assistencia)">
+          Guardar
         </button>
       </div>
 

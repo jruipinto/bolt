@@ -23,7 +23,7 @@ export class AssistenciasConcluidasPageComponent implements AfterViewInit, OnDes
       map(state =>
         state
           ? state.filter(assistencia =>
-            assistencia.estado === 'concluído')
+            assistencia.estado === 'concluído' || assistencia.estado === 'concluído s/ rep.')
           : null
       )
     );
@@ -34,7 +34,8 @@ export class AssistenciasConcluidasPageComponent implements AfterViewInit, OnDes
         query: {
           $limit: 200, estado: {
             $in: [
-              'concluído'
+              'concluído',
+              'concluído s/ rep.'
             ]
           }
         }

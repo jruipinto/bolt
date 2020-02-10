@@ -21,7 +21,9 @@
         </button>
         <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
           <!--<a href="." clrDropdownItem>Preferências</a>-->
-          <a (click)="logOut()" clrDropdownItem><clr-icon shape="logout"></clr-icon> Sair</a>
+          <a (click)="logOut()" clrDropdownItem>
+            <clr-icon shape="logout"></clr-icon> Sair
+          </a>
         </clr-dropdown-menu>
       </clr-dropdown>
     </div>
@@ -68,3 +70,5 @@
 </clr-main-container>
 <app-assistencia-entrada-print class="printable"></app-assistencia-entrada-print>
 <app-assistencia-saida-print class="printable"></app-assistencia-saida-print>
+
+<app-chat-widget></app-chat-widget>

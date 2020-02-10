@@ -1,4 +1,5 @@
 import { EventoCronologico } from './assistencia.model';
+import { Message } from '../components/chat-widget/models/message.model';
 
 export interface Encomenda {
     id: number;
@@ -17,6 +18,7 @@ export interface Encomenda {
     orcamento: number;
     fornecedor: string; /* sugestão de 1 fornecedor */
     qty: number;
+    messages: Partial<Message>[];
     createdAt?: Date;
     updatedAt?: Date;
 }

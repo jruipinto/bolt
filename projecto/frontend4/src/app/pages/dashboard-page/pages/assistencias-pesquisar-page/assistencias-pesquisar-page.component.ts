@@ -50,6 +50,7 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy, Af
     'aguarda material',
     'material recebido',
     'concluído',
+    'concluído s/ rep.',
     'entregue'
   ];
 

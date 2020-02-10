@@ -61,23 +61,22 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
     qty: [null, [Validators.required]]
   });
 
-  private clienteChange$ = this.contactoClienteForm.valueChanges
-    .pipe(
-      tap(() => {
-        this.clienteForm.reset();
-        this.encomendaForm.patchValue({ cliente_user_id: null });
-      }),
-      concatMap(({ contacto }) => this.user$(contacto).pipe(
-        map((users: User[]) => users.filter((user: User) => user.contacto === +contacto)),
-        map((users: User[]) => users[0]),
-        tap((cliente: User) => {
-          if (cliente) {
-            this.clienteForm.patchValue(cliente);
-            this.encomendaForm.patchValue({ cliente_user_id: cliente.id });
-          }
-        })
-      ))
-    );
+  private clienteChange$ = this.contactoClienteForm.valueChanges.pipe(
+    tap(() => {
+      this.clienteForm.reset();
+      this.encomendaForm.patchValue({ cliente_user_id: null });
+    }),
+    concatMap(({ contacto }) => this.user$(contacto).pipe(
+      map((users: User[]) => users.filter((user: User) => user.contacto === +contacto)),
+      map((users: User[]) => users[0]),
+      tap((cliente: User) => {
+        if (cliente) {
+          this.clienteForm.patchValue(cliente);
+          this.encomendaForm.patchValue({ cliente_user_id: cliente.id });
+        }
+      })
+    ))
+  );
 
   private user$ = (contacto: number) => this.users.find({ query: { contacto } }) as Observable<User[]>;
 
@@ -91,10 +90,10 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
   ) { }
 
   ngOnInit() {
+    this.clienteChange$.subscribe();
   }
 
   ngAfterViewInit() {
-    this.clienteChange$.subscribe();
     this.encomendaForm.patchValue({ artigo_id: this.artigoForm.value.id });
     this.clientesSearchModal.selectedCliente
       .subscribe(

@@ -149,6 +149,31 @@
     </div>
     <div class="clr-row">
       <div class="clr-col-md-2">
+        <label for="serial">Estado:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <clr-checkbox-container clrInline>
+          <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox name="options" value="partido" formControlName="estadoPartido" />
+            <label>Partido</label>
+          </clr-checkbox-wrapper>
+          <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox name="options" value="empenado" formControlName="estadoEmpenado" />
+            <label>Empenado</label>
+          </clr-checkbox-wrapper>
+          <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox name="options" value="riscos" formControlName="estadoRiscos" />
+            <label>Riscos</label>
+          </clr-checkbox-wrapper>
+          <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox name="options" value="mossas" formControlName="estadoMossas" />
+            <label>Mossas</label>
+          </clr-checkbox-wrapper>
+        </clr-checkbox-container>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
         <label for="problema">Problema:*</label>
       </div>
       <div class="clr-col-md-9 clr-col-lg-6">

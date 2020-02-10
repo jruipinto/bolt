@@ -61,7 +61,12 @@ module.exports = function (app) {
     material: {
       type: Sequelize.JSON
     },
+    //longtext
     encomendas: {
+      type: Sequelize.JSON
+    },
+    //longtext
+    messages: {
       type: Sequelize.JSON
     },
     //varchar(8)
@@ -90,6 +95,7 @@ module.exports = function (app) {
       aguarda material
       material recebido
       concluído
+      concluído s/ rep.
       entregue
       */
     },

@@ -9,7 +9,7 @@ import { DashboardPageRoutingModule } from './dashboard-page-routing.module';
 /* directives */
 import { AutofocusModule, FormStateModule, AutocapsModule } from 'src/app/shared';
 /* shared components */
-import { RCardComponent, RDataRowComponent } from 'src/app/shared/components';
+import { RCardComponent, RDataRowComponent, ChatWidgetModule } from 'src/app/shared/components';
 /* components */
 import { DashboardPageComponent } from './dashboard-page.component';
 import { AssistenciaEntradaPrintComponent, AssistenciaSaidaPrintComponent } from './prints';
@@ -35,7 +35,8 @@ import { ClientesPesquisarModalComponent } from './modals/clientes-pesquisar-mod
     ClarityModule,
     FormStateModule,
     AutocapsModule,
-    AutofocusModule
+    AutofocusModule,
+    ChatWidgetModule
   ],
   declarations: [
     RCardComponent,

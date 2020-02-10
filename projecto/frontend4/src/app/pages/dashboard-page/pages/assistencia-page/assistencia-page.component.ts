@@ -12,7 +12,8 @@ import { Observable, concat, of } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 import { clone, uniqBy } from 'ramda';
 import { dbQuery } from 'src/app/shared/utilities';
-import { AuthService } from 'src/app/shared';
+import { AuthService, MessagesApiService } from 'src/app/shared';
+import { Message } from 'src/app/shared/components/chat-widget/models/message.model';
 
 @AutoUnsubscribe()
 @Component({
@@ -61,6 +62,7 @@ export class AssistenciaPageComponent implements AfterContentInit, OnDestroy {
     private assistencias: AssistenciasService,
     private artigos: ArtigosService,
     private encomendas: EncomendasService,
+    private messages: MessagesApiService,
     private users: UsersService,
     private authService: AuthService,
     private router: Router,
@@ -115,9 +117,22 @@ ${this.assistencia.relatorio_cliente}`
     const assistenciaOnInit = clone(this.assistenciaOnInit);
     const editor_action = newEstado === assistenciaOnInit.estado ? 'edição' : 'novo estado';
     if ((newEstado !== 'em análise' && newEstado !== 'recebido') && !assistencia.relatorio_cliente) {
-      return alert('Preenche o relatório para o cliente!');
+      return alert('Preencha o relatório para o cliente!');
     }
-    if (newEstado === 'em análise' && assistenciaOnInit.estado === 'recebido') {
+    if (newEstado === 'orçamento pendente' && !assistencia.preco) {
+      return alert('Para orçamentar assistência o preço não pode ser 0€!');
+    }
+    if (
+      (
+        newEstado === 'em análise' ||
+        newEstado === 'contacto pendente' ||
+        newEstado === 'orçamento pendente' ||
+        newEstado === 'aguarda material' ||
+        newEstado === 'concluído' ||
+        newEstado === 'concluído s/ rep.'
+      )
+      && assistenciaOnInit.estado === 'recebido'
+    ) {
       assistencia.tecnico_user_id = this.authService.getUserId();
     }
 

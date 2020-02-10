@@ -22,7 +22,7 @@ export class AssistenciasApiService extends EntityApiAbstration {
    */
   private simplify(arr: any[] | null): any[] | null {
     if (!arr) { return arr; }
-    return arr.map(item => ({ id: item.id, qty: item.qty }));
+    return arr.map(item => (item.qty ? { id: item.id, qty: item.qty } : { id: item.id }));
   }
 
   /**
@@ -48,6 +48,7 @@ export class AssistenciasApiService extends EntityApiAbstration {
             map(assistencia => deserialize(assistencia, 'registo_cronologico')),
             map(assistencia => deserialize(assistencia, 'material')),
             map(assistencia => deserialize(assistencia, 'encomendas')),
+            map(assistencia => deserialize(assistencia, 'messages')),
 
             // retrieve tecnico data for all eventos of registo_cronologico
             concatMap(assistencia => (
@@ -96,7 +97,8 @@ export class AssistenciasApiService extends EntityApiAbstration {
                   evento.estado === 'contacto pendente' ||
                   evento.estado === 'orçamento pendente' ||
                   evento.estado === 'aguarda material' ||
-                  evento.estado === 'concluído'
+                  evento.estado === 'concluído' ||
+                  evento.estado === 'concluído s/ rep.'
                 ))
                 .filter(evento => evento.tecnico);
               const lastEvento = registoFiltered ? registoFiltered[registoFiltered.length - 1] : null;
@@ -132,7 +134,8 @@ export class AssistenciasApiService extends EntityApiAbstration {
       super.create({
         ...data,
         material: this.simplify(data.material),
-        encomendas: this.simplify(data.encomendas)
+        encomendas: this.simplify(data.encomendas),
+        messages: this.simplify(data.messages)
       })
     );
   }
@@ -144,7 +147,8 @@ export class AssistenciasApiService extends EntityApiAbstration {
         {
           ...data,
           material: this.simplify(data.material),
-          encomendas: this.simplify(data.encomendas)
+          encomendas: this.simplify(data.encomendas),
+          messages: this.simplify(data.messages)
         }
       )
     );

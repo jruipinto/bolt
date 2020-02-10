@@ -58,6 +58,10 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
     serial: [''],
     codigo: [''],
     acessorios: [''],
+    estadoPartido: [false],
+    estadoEmpenado: [false],
+    estadoRiscos: [false],
+    estadoMossas: [false],
     problema: ['', Validators.required],
     orcamento: [null],
     tecnico_user_id: ['']
@@ -117,7 +121,18 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
       serial: equipment.serial,
       problema: equipment.problema +
         (equipment.acessorios ? ` - Acessórios: ${equipment.acessorios}` : '') +
-        (equipment.codigo ? ` - Código: ${equipment.codigo}` : ''),
+        (equipment.codigo ? ` - Código: ${equipment.codigo}` : '') +
+        ' - Estado visível:' +
+        (
+          equipment.estadoPartido || equipment.estadoEmpenado || equipment.estadoRiscos || equipment.estadoMossas
+            ? (
+              (equipment.estadoPartido ? ' partido;' : '') +
+              (equipment.estadoEmpenado ? ' empenado;' : '') +
+              (equipment.estadoRiscos ? ' riscos;' : '') +
+              (equipment.estadoMossas ? ' mossas;' : '')
+            )
+            : ' sem marcas.'
+        ),
       orcamento: equipment.orcamento,
       tecnico_user_id: equipment.tecnico_user_id === '' ? null : equipment.tecnico_user_id
     };

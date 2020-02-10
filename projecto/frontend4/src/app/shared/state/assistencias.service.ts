@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { concat, of } from 'rxjs';
 import { map, concatMap, toArray } from 'rxjs/operators';
 import { EntityStateAbstraction } from 'src/app/shared/abstraction-classes';
-import { AssistenciasApiService, AuthService } from 'src/app/shared/services';
+import { AssistenciasApiService, AuthService, MessagesApiService } from 'src/app/shared/services';
 import { ArtigosService } from './artigos.service';
 import { EncomendasService } from './encomendas.service';
 import { Assistencia, EventoCronologico, Artigo, Encomenda } from 'src/app/shared/models';
+import { Message } from '../components/chat-widget/models/message.model';
 
 @Injectable({ providedIn: 'root' })
 export class AssistenciasService extends EntityStateAbstraction {
@@ -14,7 +15,8 @@ export class AssistenciasService extends EntityStateAbstraction {
     protected assistenciasAPI: AssistenciasApiService,
     private authService: AuthService,
     private artigosService: ArtigosService,
-    private encomendasService: EncomendasService) {
+    private encomendasService: EncomendasService,
+    private messagesService: MessagesApiService) {
     super(assistenciasAPI);
   }
 
@@ -56,6 +58,22 @@ export class AssistenciasService extends EntityStateAbstraction {
 
       }),
 
+      // retrieve assistencia.messages data
+      concatMap(assistencia => {
+        if (assistencia && assistencia.messages) {
+          return concat(...assistencia.messages.map(
+            (message: Partial<Message>) => this.messagesService.get(message.id).pipe(
+              map((dbMessage: Message[]) => dbMessage[0])
+            )
+          )).pipe(
+            toArray(),
+            map((messages: Message[]) => ({ ...assistencia, messages }) as Assistencia)
+          );
+        }
+        return of(assistencia);
+
+      }),
+
       map(res => [res])
     );
   }
@@ -67,6 +85,7 @@ export class AssistenciasService extends EntityStateAbstraction {
       relatorio_cliente,
       material,
       encomendas,
+      messages,
       preco,
       estado
     } = assistencia;
@@ -78,6 +97,7 @@ export class AssistenciasService extends EntityStateAbstraction {
       relatorio_cliente,
       material,
       encomendas,
+      messages,
       preco,
       estado,
       updatedAt: new Date().toLocaleString() // dia/mes/ano, hora:minuto:segundo naquele momento
@@ -86,34 +106,72 @@ export class AssistenciasService extends EntityStateAbstraction {
   }
 
   public patch(id: number, assistencia: Partial<Assistencia>, editor_action?: 'novo estado' | 'edição') {
-    const {
-      tecnico_user_id,
-      relatorio_interno,
-      relatorio_cliente,
-      material,
-      encomendas,
-      preco
-    } = assistencia;
-    const novoRegisto: EventoCronologico = {
-      editor_user_id: this.authService.getUserId(),
-      editor_action,
-      tecnico_user_id,
-      relatorio_interno,
-      relatorio_cliente,
-      material,
-      encomendas,
-      preco,
-      estado: assistencia.estado,
-      updatedAt: new Date().toLocaleString()
-    };
-    const updatedRegistoCronologico: EventoCronologico[] = [
-      ...assistencia.registo_cronologico,
-      novoRegisto
-    ];
-    return super.patch(
-      id,
-      { ...assistencia, registo_cronologico: updatedRegistoCronologico } as Assistencia
+    return of(assistencia as Assistencia).pipe(
+
+      // send SMS about the assistencia to the client
+      concatMap(patchedAssistencia => {
+        if (
+          (patchedAssistencia.estado !== 'concluído'
+            && patchedAssistencia.estado !== 'concluído s/ rep.'
+            && patchedAssistencia.estado !== 'orçamento pendente')
+          || editor_action === 'edição'
+        ) {
+          return of({ ...patchedAssistencia, messages: assistencia.messages });
+        }
+        if (patchedAssistencia.estado === 'concluído' || patchedAssistencia.estado === 'concluído s/ rep.') {
+          return this.messagesService.notificarConclusaoDe(patchedAssistencia).pipe(
+            map(e => e[0]),
+            map((msg: Message) => ({
+              ...patchedAssistencia,
+              messages: assistencia.messages ? [...assistencia.messages, { id: msg.id }] : [{ id: msg.id }]
+            }))
+          );
+        }
+        if (patchedAssistencia.estado === 'orçamento pendente') {
+          return this.messagesService.notificarOrcamentoDe(patchedAssistencia).pipe(
+            map(e => e[0]),
+            map((msg: Message) => ({
+              ...patchedAssistencia,
+              messages: assistencia.messages ? [...assistencia.messages, { id: msg.id }] : [{ id: msg.id }]
+            }))
+          );
+        }
+      }),
+
+      // patch the assistencia
+      map(patchedAssistencia => {
+        const {
+          tecnico_user_id,
+          relatorio_interno,
+          relatorio_cliente,
+          material,
+          encomendas,
+          messages,
+          preco
+        } = patchedAssistencia;
+        const novoRegisto: EventoCronologico = {
+          editor_user_id: this.authService.getUserId(),
+          editor_action,
+          tecnico_user_id,
+          relatorio_interno,
+          relatorio_cliente,
+          material,
+          encomendas,
+          messages,
+          preco,
+          estado: assistencia.estado,
+          updatedAt: new Date().toLocaleString()
+        };
+        const updatedRegistoCronologico: EventoCronologico[] = [
+          ...assistencia.registo_cronologico,
+          novoRegisto
+        ];
+        return ({ ...patchedAssistencia, registo_cronologico: updatedRegistoCronologico } as Assistencia);
+      }),
+      concatMap(patchedAssistencia => super.patch(id, patchedAssistencia))
+
     );
   }
+
 
 }

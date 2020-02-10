@@ -1,0 +1,29 @@
+:host {
+  min-width: 100%;
+  margin-bottom: 0.5rem;
+}
+.received-message,
+.sent-message {
+  padding: 0.3rem;
+  max-width: 9rem;
+  border-radius: 10px;
+}
+.received-message {
+  background-color: #e1e1e1;
+  float: left;
+}
+.sent-message {
+  background-color: #cbe5dd;
+  float: right;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.col-12 {
+  width: 100%;
+}
+app-cw-message-state-icon {
+  float: right;
+  margin: -0.3rem 0 -0.3rem 0;
+}
