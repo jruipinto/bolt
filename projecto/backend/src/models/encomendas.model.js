@@ -28,6 +28,10 @@ module.exports = function (app) {
       type: Sequelize.JSON,
       allowNull: false
     },
+    //longtext
+    messages: {
+      type: Sequelize.JSON
+    },
     //varchar(45), not null
     estado: {
       type: Sequelize.STRING(45),
