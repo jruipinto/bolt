@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="pt">
+
 <head>
   <meta charset="utf-8">
   <title>Bolt</title>
@@ -7,8 +8,64 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="stylesheet" href="styles.2887103ebc9a59f5598b.css"></head>
+  <style>
+    /* overlay */
+    .overlay {
+      cursor: default;
+      display: block;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(255, 255, 255, 0.767);
+      padding: 50vh 50vw;
+    }
+
+    .loader {
+      position: relative;
+      top: -0.5rem;
+      left: -0.5rem;
+      border: 0.1rem solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 0.1rem solid #3498db;
+      width: 1rem;
+      height: 1rem;
+      /* Safari */
+      -webkit-animation: spin 2s linear infinite;
+      animation: spin 2s linear infinite;
+    }
+
+    /* Safari */
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+<link rel="stylesheet" href="styles.9693526a4dff0e75a175.css"></head>
+
 <body>
-  <app-root></app-root>
-<script src="runtime-es2015.826bcf3ef1ee5d341f37.js" type="module"></script><script src="runtime-es5.826bcf3ef1ee5d341f37.js" nomodule defer></script><script src="polyfills-es5.fa4b847207943381d32f.js" nomodule defer></script><script src="polyfills-es2015.002fde572e4aff253909.js" type="module"></script><script src="main-es2015.70d58c595c6f6e40e7e6.js" type="module"></script><script src="main-es5.70d58c595c6f6e40e7e6.js" nomodule defer></script></body>
+  <app-root>
+    <div class="overlay">
+      <div class="loader"></div>
+    </div>
+  </app-root>
+<script src="runtime-es2015.380c20e24a8b1924cab4.js" type="module"></script><script src="runtime-es5.380c20e24a8b1924cab4.js" nomodule defer></script><script src="polyfills-es5.7ed641f6db2bc893eccf.js" nomodule defer></script><script src="polyfills-es2015.ea73bb5133585ebdea86.js" type="module"></script><script src="main-es2015.e5f7fb98894ba6ab4c17.js" type="module"></script><script src="main-es5.e5f7fb98894ba6ab4c17.js" nomodule defer></script></body>
+
 </html>
