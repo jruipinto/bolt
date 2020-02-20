@@ -17,7 +17,11 @@ export const dbQuery = (input: string, columns: string[]) => {
 
             $and: input
                 .split(' ')
-                .map(word => ({ $or: columns.map(col => ({ [col]: { $like: '%' + word + '%' } })) }))[0]
+                .map(word => ({
+                    $or: columns.map(
+                        col => ({ [col]: { $like: '%' + word + '%' } })
+                    )
+                }))
         }
     });
 
