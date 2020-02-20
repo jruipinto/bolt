@@ -1,10 +1,9 @@
 // Clarity Dependency SCSS
 // @import "~@clr/ui/src/utils/dependencies.clarity"; // Includes light theme
-// @import "~@clr/ui/src/utils/theme.dark.clarity"; 
+// @import "~@clr/ui/src/utils/theme.dark.clarity";
 
 // Your Application Theme File
 // @import "./theme.scss";
-
 
 // Clarity Component SCSS
 @import "~@clr/ui/src/utils/components.clarity";
@@ -34,16 +33,19 @@ a {
 
 r-data-row {
   // min-height: 3em;
-  border-bottom: 1px solid #EEEEEE !important;
+  border-bottom: 1px solid #eeeeee !important;
   // fix clarity design style .clr-row for r-data-row component
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
 
-r-data-row:nth-child(even){background-color: #E1F1F6 !important;}
+r-data-row:nth-child(even) {
+  background-color: #e1f1f6 !important;
+}
 
-r-data-row:hover {background-color: #ddd !important;}
-
+r-data-row:hover {
+  background-color: #ddd !important;
+}
 
 /*
 * Clarity Style fixes
@@ -60,7 +62,31 @@ main.content-area {
   }
 }
 */
+@media screen and (max-width: 768px) {
+  header .search-box label input,
+  header .search label input,
+  .header .search-box label input,
+  .header .search label input {
+    display: initial;
+  }
+  header .branding .title,
+  .header .branding .title {
+    display: none;
+  }
+  header .search-box,
+  header .search,
+  .header .search-box,
+  .header .search {
+    justify-content: unset;
+  }
+  .header .search input[type="text"] {
+    max-width: 4rem;
+  }
+  .header .branding {
+    padding: 0 0.3rem;
+  }
+}
 
 /* ############################# */
 
-@import "./print"
+@import "./print";
