@@ -10,7 +10,7 @@ import { concat, of } from 'rxjs';
 import { concatMap, reduce } from 'rxjs/operators';
 import { Encomenda, User, Artigo, dbQuery } from 'src/app/shared';
 import { EncomendasService, ArtigosService } from 'src/app/shared/state';
-import { clone } from 'ramda';
+import { clone, sort } from 'ramda';
 import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/modals';
 
 @AutoUnsubscribe()
@@ -100,7 +100,8 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy, Afte
         )).pipe(reduce((acc, val) => ([...acc, ...val])));
       })
     ).subscribe(encomendas => {
-      this.results = clone(encomendas);
+      const inverseDiff = (objA, objB) => objB.id - objA.id;
+      this.results = sort(inverseDiff, clone(encomendas));
       this.loading = false;
       this.cdr.detectChanges();
     });

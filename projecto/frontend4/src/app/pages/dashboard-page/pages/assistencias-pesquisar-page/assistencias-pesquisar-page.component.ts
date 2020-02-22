@@ -78,11 +78,11 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy, Af
   }
 
   searchAssistencia({ input, estado, cliente }) {
-    if (!input) {
+    if (!input && !cliente) {
       return;
     }
     this.loading = true;
-    const inputMapped = input
+    const inputMapped = (input + ' ')
       .split(' ')
       .map(word =>
         '{"$or": [' +
@@ -100,7 +100,7 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy, Af
     const dbQuery =
       '{' +
       '"query": {' +
-      '"$sort": { "marca": "1", "modelo": "1"},' +
+      '"$sort": { "id": "-1"},' +
       '"$limit": "200",' +
       '"$and": [' +
       inputMapped +
