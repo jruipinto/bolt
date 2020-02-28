@@ -24,6 +24,7 @@ import { EncomendasPesquisarPageComponent } from './pages/encomendas-pesquisar-p
 import { AssistenciasConcluidasPageComponent } from './pages/assistencias-concluidas-page/assistencias-concluidas-page.component';
 import { EncomendaPromptModalComponent } from './modals/encomenda-prompt-modal';
 import { ClientesPesquisarModalComponent } from './modals/clientes-pesquisar-modal/clientes-pesquisar-modal.component';
+import { ConfigsPageComponent } from './pages/configs-page/configs-page.component';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { ClientesPesquisarModalComponent } from './modals/clientes-pesquisar-mod
     EncomendasPesquisarPageComponent,
     AssistenciasConcluidasPageComponent,
     EncomendaPromptModalComponent,
-    ClientesPesquisarModalComponent
+    ClientesPesquisarModalComponent,
+    ConfigsPageComponent
   ]
 })
 export class DashboardPageModule { }

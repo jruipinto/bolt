@@ -207,4 +207,8 @@ export class DashboardPageComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  openConfigsPage() {
+    return this.router.navigate(['/dashboard/configs']);
+  }
+
 }

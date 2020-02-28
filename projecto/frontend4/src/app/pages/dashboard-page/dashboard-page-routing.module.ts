@@ -12,7 +12,8 @@ import {
   AssistenciaPageComponent, ArtigoPageComponent, EncomendaPageComponent,
   EncomendasCriarNovaPageComponent,
   EncomendasPesquisarPageComponent,
-  AssistenciasConcluidasPageComponent
+  AssistenciasConcluidasPageComponent,
+  ConfigsPageComponent
 } from './pages';
 
 
@@ -34,6 +35,7 @@ const routes: Routes = [
           { path: 'assistencias-pesquisar', component: AssistenciasPesquisarPageComponent },
           { path: 'artigo/:id', component: ArtigoPageComponent },
           { path: 'artigo', component: ArtigoPageComponent },
+          { path: 'configs', component: ConfigsPageComponent },
           { path: 'encomenda/:id', component: EncomendaPageComponent },
           { path: 'encomendas', component: EncomendasPageComponent },
           { path: 'encomendas-criar-nova', component: EncomendasCriarNovaPageComponent },

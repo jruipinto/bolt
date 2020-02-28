@@ -21,6 +21,9 @@
         </button>
         <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
           <!--<a href="." clrDropdownItem>Preferências</a>-->
+          <a (click)="openConfigsPage()" clrDropdownItem>
+            <clr-icon shape="cog"></clr-icon> Configs
+          </a>
           <a (click)="logOut()" clrDropdownItem>
             <clr-icon shape="logout"></clr-icon> Sair
           </a>
