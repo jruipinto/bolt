@@ -188,11 +188,23 @@ export class DashboardPageComponent implements AfterViewInit, OnDestroy {
 
   openAssistencia(arg: number) {
     const assistenciaID = +arg;
+    this.dashboardSearchBarForm.reset();
     if (assistenciaID && typeof assistenciaID === 'number' && assistenciaID > 0) {
-      this.dashboardSearchBarForm.reset();
-      return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
+      this.assistencias.find({
+        query: {
+          $limit: 1,
+          id: assistenciaID
+        }
+      }).subscribe(response => {
+        if (!response.length) {
+          return alert(`Assistência \"${assistenciaID}\" não encontrada. (verifique se escreveu correctamente)`);
+        } else {
+          return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
+        }
+      });
+    } else {
+      return alert(`Não é possível pesquisar \"${arg}\" neste campo. (verifique se escreveu correctamente)`);
     }
-    return alert('valor incorrecto para pesquisa');
   }
 
 }
