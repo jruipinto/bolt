@@ -16,11 +16,23 @@ export abstract class EntityApiAbstration {
   private handleError = (entityName: String, data: any) => (error) => {
     console.error(`${entityName}Api -> handleError -> error`, error);
     console.log(`${entityName}Api -> handleError -> debugData:`, data);
-    if (error.code === 401) {
-      alert('Não está autorizado!');
-    } else {
-      alert('Algo correu mal! Chame o Admin ou CTRL + SHIFT + I');
+    switch (error.code) {
+      case 401:
+        alert('Não está autorizado! (Pode verificar o seu login)');
+        break;
+      case 404:
+        alert(`\"${data}\" não encontrado. (Verifique se escreveu correctamente)`);
+        break;
+
+      default:
+        alert('Erro desconhecido. Chame o Admin ou CTRL + SHIFT + I');
+        break;
     }
+    // if (error.code === 401) {
+    //   alert('Não está autorizado!');
+    // } else {
+    //   alert('Algo correu mal! Chame o Admin ou CTRL + SHIFT + I');
+    // }
     throw error;
   }
 
