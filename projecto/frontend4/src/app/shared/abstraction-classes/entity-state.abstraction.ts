@@ -42,20 +42,23 @@ export abstract class EntityStateAbstraction {
   }
 
   public get(id: number) {
-    return this.state$
-      .pipe(
-        first(),
-        concatMap(state => {
-          const item = state.find(i => i.id === id);
-          if (item) {
-            return of([item]);
-          }
-          return this.xAPIservice.get(id)
-            .pipe(
-              concatMap(this.patchState)
-            );
-        })
-      );
+    return this.xAPIservice.get(id).pipe(
+      concatMap(this.patchState)
+    );
+    // return this.state$
+    //   .pipe(
+    //     first(),
+    //     concatMap(state => {
+    //       const item = state.find(i => i.id === id);
+    //       if (item) {
+    //         return of([item]);
+    //       }
+    //       return this.xAPIservice.get(id)
+    //         .pipe(
+    //           concatMap(this.patchState)
+    //         );
+    //     })
+    //   );
   }
 
   public create(data: object) {
