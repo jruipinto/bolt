@@ -71,7 +71,7 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy, Afte
   }
 
   searchEncomenda({ input, estado, cliente_user_id }) {
-    if (!input) {
+    if (!input && !cliente_user_id) {
       return;
     }
     this.loading = true;
@@ -79,7 +79,7 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy, Afte
     const clienteStatement = cliente_user_id && typeof cliente_user_id === 'number' ? ',"cliente_user_id":' + cliente_user_id : '';
     const estadoStatement = estado && estado !== 'qualquer' ? ',"estado": "' + estado + '"' : '';
 
-    return this.artigos.find(dbQuery(input, ['marca', 'modelo', 'descricao'])).pipe(
+    return this.artigos.find(dbQuery(input || ' ', ['marca', 'modelo', 'descricao'])).pipe(
       concatMap((artigosDB: Artigo[]) => {
         if (!artigosDB || !artigosDB.length) {
           return of(null);

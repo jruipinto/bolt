@@ -82,7 +82,7 @@ export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy, Af
       return;
     }
     this.loading = true;
-    const inputMapped = (input + ' ')
+    const inputMapped = (input || ' ')
       .split(' ')
       .map(word =>
         '{"$or": [' +
