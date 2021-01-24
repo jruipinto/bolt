@@ -1,0 +1,77 @@
+<clr-main-container class="screenable">
+  <clr-header class="header header-1">
+    <div class="branding">
+      <a class="nav-link">
+        <img class="mylogo" src="../../assets/logo.svg" height="48" width="85" alt="logo">
+        <!--<clr-icon shape="home" size="24"></clr-icon>-->
+        <span class="title">N Reparações</span>
+      </a>
+    </div>
+    <form class="search" [formGroup]="dashboardSearchBarForm"
+      (ngSubmit)="openAssistencia(dashboardSearchBarForm.value.assistenciaID)">
+      <label for="search_input">
+        <input id="search_input" type="text" placeholder="Ficha..." formControlName="assistenciaID">
+      </label>
+    </form>
+    <div class="header-actions">
+      <clr-dropdown>
+        <button class="nav-text" clrDropdownTrigger>
+          <clr-icon shape="user"></clr-icon> {{userName}}
+          <clr-icon shape="caret down"></clr-icon>
+        </button>
+        <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+          <!--<a href="." clrDropdownItem>Preferências</a>-->
+          <a (click)="openConfigsPage()" clrDropdownItem>
+            <clr-icon shape="cog"></clr-icon> Configs
+          </a>
+          <a (click)="logOut()" clrDropdownItem>
+            <clr-icon shape="logout"></clr-icon> Sair
+          </a>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+    </div>
+  </clr-header>
+
+  <div class="content-container">
+    <main class="content-area">
+      <router-outlet></router-outlet>
+      <app-encomenda-prompt-modal *ngIf="encomendaPromptModalVisible$ | async"></app-encomenda-prompt-modal>
+    </main>
+    <nav class="sidenav" [clr-nav-level]="1">
+      <section class="sidenav-content">
+        <a class="nav-link" routerLink="./painel-rapido" routerLinkActive="active">Painel Rápido</a>
+        <section class="nav-group">
+          <input id="tabexample1" type="checkbox">
+          <label for="tabexample1">Assistências</label>
+          <ul class="nav-list">
+            <li><a class="nav-link" routerLink="./assistencias" routerLinkActive="active">Activas</a></li>
+            <li><a class="nav-link" routerLink="./assistencias-concluidas" routerLinkActive="active">Concluídas</a></li>
+            <li><a class="nav-link" routerLink="./assistencias-criar-nova" routerLinkActive="active">Nova</a>
+            </li>
+            <li><a class="nav-link" routerLink="./assistencias-pesquisar" routerLinkActive="active">Pesquisar</a></li>
+          </ul>
+        </section>
+        <section class="nav-group">
+          <input id="tabexample2" type="checkbox">
+          <label for="tabexample2">Encomendas</label>
+          <ul class="nav-list">
+            <li><a class="nav-link" routerLink="./encomendas" routerLinkActive="active">Activas</a></li>
+            <li><a class="nav-link" routerLink="./encomendas-criar-nova" routerLinkActive="active">Nova</a></li>
+            <li><a class="nav-link" routerLink="./encomendas-pesquisar" routerLinkActive="active">Pesquisar</a></li>
+          </ul>
+        </section>
+        <section class="nav-group">
+          <input id="tabexample3" type="checkbox">
+          <label for="tabexample3">Stock</label>
+          <ul class="nav-list">
+            <li><a class="nav-link" routerLink="./stock" routerLinkActive="active">Pesquisar</a></li>
+          </ul>
+        </section>
+      </section>
+    </nav>
+  </div>
+</clr-main-container>
+<app-assistencia-entrada-print class="printable"></app-assistencia-entrada-print>
+<app-assistencia-saida-print class="printable"></app-assistencia-saida-print>
+
+<app-chat-widget></app-chat-widget>

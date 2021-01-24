@@ -1,0 +1,75 @@
+<h3>Pesquisar Assistências</h3>
+<div>
+  <form clrForm clrLayout="vertical" class="clr-row" [formGroup]="assistenciasSearchForm"
+    formState="assistenciasPesquisarPageAssistenciasSearchForm">
+    <div class="clr-col-lg-3">
+      <clr-input-container>
+        <label>Cliente</label>
+        <input clrInput placeholder="cliente..." (click)="clientesSearchModal.open()" formControlName="cliente" />
+      </clr-input-container>
+    </div>
+    <div class="clr-col-lg-3">
+      <clr-select-container>
+        <label>Estado</label>
+        <select clrSelect name="estado" formControlName="estado">
+          <option *ngFor="let estado of estados" [value]=estado>{{estado}}</option>
+        </select>
+      </clr-select-container>
+    </div>
+    <div class="clr-col-lg-3">
+      <clr-input-container>
+        <label>Pesquisar</label>
+        <input clrInput placeholder="digita algo..." formControlName="input"
+          (keydown.enter)="searchAssistencia(assistenciasSearchForm.value)" autofocus />
+      </clr-input-container>
+    </div>
+    <div class="clr-col-lg-3">
+      <button type="submit" class="btn btn-primary" (click)="searchAssistencia(assistenciasSearchForm.value)">
+        <clr-icon shape="search"></clr-icon> Pesquisar
+      </button>
+    </div>
+  </form>
+</div>
+
+<h4>Resultados:</h4>
+<div *ngIf="loading">
+  <span class="spinner spinner-inline">
+  </span>
+  <span>
+    A carregar dados...
+  </span>
+</div>
+
+<div *ngIf="results">
+  <p *ngIf="results.length===0">Nenhum resultado encontrado para esses parametros...</p>
+  <div *ngIf="results.length>0">
+    <r-data-row class="clr-row" *ngFor="let result of results; let listaIndex=index"
+      (click)="openAssistencia(result.id)">
+      <div class="clr-col-lg-1 fontheavy">
+        {{result.id}}
+      </div>
+      <div class="clr-col-lg-2 lessimportant">
+        {{result.categoria}}:
+      </div>
+      <div class="clr-col-lg-2">
+        <span class="fontheavy">{{result.marca}}</span>
+        {{result.modelo}}
+      </div>
+      <div class="clr-col-lg-1 lessimportant">
+        {{result.cor}}
+      </div>
+      <div class="clr-col-lg-3 lessimportant">
+        {{result.problema | slice:0:29}}
+        <span *ngIf="result.problema.length > 30">...</span>
+      </div>
+      <div class="clr-col-lg-2 lessimportant">
+        Cliente:{{result.cliente_user_name}}
+      </div>
+      <div class="clr-col-lg-1 lessimportant">
+        {{result.estado}}
+      </div>
+    </r-data-row>
+  </div>
+</div>
+
+<app-clientes-pesquisar-modal></app-clientes-pesquisar-modal>

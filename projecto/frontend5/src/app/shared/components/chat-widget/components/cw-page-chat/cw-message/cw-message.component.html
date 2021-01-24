@@ -1,0 +1,8 @@
+<div [ngClass]="message.state === 'unread' || message.state === 'read' ? 'received-message' : 'sent-message'">
+  <div class="row">{{message.text}}</div>
+  <div class="row">
+    <div class="col-12">
+      <app-cw-message-state-icon [messageState]="message.state"></app-cw-message-state-icon>
+    </div>
+  </div>
+</div>

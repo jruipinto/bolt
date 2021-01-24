@@ -1,0 +1,156 @@
+<h3>Nova encomenda</h3>
+
+<button class="btn" (click)="openArtigoSearchModal()">
+  <clr-icon shape="search"></clr-icon> Pesquisar material
+</button>
+
+<clr-modal [(clrModalOpen)]="artigoSearchModalOpened" [clrModalSize]="'lg'">
+  <h3 class="modal-title">Pesquisar material</h3>
+  <div class="modal-body">
+    <form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
+      <div class="clr-row">
+        <div class="clr-col-12 padding-bottom-05">
+          <input #artigoSearchModalInput type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input"
+            formControlName="input" />
+        </div>
+      </div>
+    </form>
+    <h4>Resultados:</h4>
+    <div *ngIf="artigoSearchResults$ | async as artigos">
+      <p *ngIf="artigos.length===0">Nenhum resultado encontrado para esses parametros...</p>
+      <div *ngIf="artigos.length>0">
+        <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index" (click)="addArtigo(artigo)">
+          <div class="clr-col-lg-3">
+            <span class="fontheavy">{{artigo.marca}}</span>
+            {{artigo.modelo}}
+          </div>
+          <div class="clr-col-lg-6 lessimportant">
+            {{artigo.descricao}}
+          </div>
+          <div class="clr-col-lg-1 lessimportant">
+            Qty: {{artigo.qty}}
+          </div>
+          <div class="clr-col-lg-2 lessimportant">
+            Local: {{artigo.localizacao}}
+          </div>
+        </r-data-row>
+      </div>
+    </div>
+  </div>
+</clr-modal>
+
+<div class="separate clr-form clr-row">
+  <form style="display: none" [formGroup]="artigoForm" formState="encomendaPageArtigoForm"></form>
+  <div class="clr-col-lg-2">
+    <label for="">Artigo:*</label>
+  </div>
+  <div class="clr-col-lg-6">
+    <span *ngIf="encomendaForm.value.artigo_id">
+      {{artigoForm.value.descricao}} {{artigoForm.value.marca}} {{artigoForm.value.modelo}}
+    </span>
+    <span *ngIf="!encomendaForm.value.artigo_id">
+      (Seleccione um artigo, com a ajuda do botão acima)
+    </span>
+  </div>
+</div>
+
+<button type="button" class="btn" (click)="clientesSearchModal.open()">
+  <clr-icon shape="search"></clr-icon> Pesquisar cliente
+</button>
+
+<app-clientes-pesquisar-modal></app-clientes-pesquisar-modal>
+
+<form class="separate clr-form" [formGroup]="contactoClienteForm" formState="encomendaPageContactoClienteForm">
+  <div class="clr-row">
+    <div class="clr-col-lg-2">
+      <label for="contacto">Contacto:*</label>
+    </div>
+    <div class="clr-col-lg-6">
+      <input class="clr-input wd-100" type="tel" name="contacto" id="contacto" placeholder="☎️" required autofocus
+        formControlName="contacto">
+    </div>
+  </div>
+</form>
+
+<form class="separate clr-form" [formGroup]="clienteForm" formState="encomendaPageClienteForm">
+  <div class="clr-row">
+    <div class="clr-col-lg-2">
+      <label for="nome">Nome:*</label>
+    </div>
+    <div class="clr-col-lg-6">
+      <input class="clr-input wd-100" type="text" name="nome" id="nome" required formControlName="nome">
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-lg-2">
+      <label for="email">Email:</label>
+    </div>
+    <div class="clr-col-lg-6">
+      <input class="clr-input wd-100" type="email" name="email" id="email" formControlName="email">
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-lg-2">
+      <label for="endereco">Endereço:</label>
+    </div>
+    <div class="clr-col-lg-6">
+      <input class="clr-input wd-100" type="text" name="endereço" id="endereço" formControlName="endereço" autocaps>
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-lg-2">
+      <label for="nif">NIF:</label>
+    </div>
+    <div class="clr-col-lg-6">
+      <input class="clr-input wd-100" type="number" name="nif" id="nif" formControlName="nif">
+    </div>
+  </div>
+</form>
+
+<form class="separate clr-form" [formGroup]="encomendaForm" formState="encomendaPageEncomendaForm">
+  <div class="clr-row">
+    <div class="clr-col-lg-2">
+      <label for="observacao">Observação:</label>
+    </div>
+    <div class="clr-col-lg-6">
+      <input type="text" class="clr-input wd-100" name="observacao" id="observacao" formControlName="observacao" autocaps>
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-lg-2">
+      <label for="previsao_entrega">Previsão de entrega:*</label>
+    </div>
+    <div class="clr-col-lg-6">
+      <input type="date" class="clr-input wd-100" name="previsao_entrega" id="previsao_entrega"
+        formControlName="previsao_entrega" required>
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-lg-2">
+      <label for="orcamento">Orçamento (€):</label>
+    </div>
+    <div class="clr-col-lg-6">
+      <input type="number" class="clr-input wd-100" name="orcamento" id="orcamento"
+        placeholder="(valor combinado com o cliente)" formControlName="orcamento">
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-lg-2">
+      <label for="fornecedor">Fornecedor:</label>
+    </div>
+    <div class="clr-col-lg-6">
+      <input type="text" class="clr-input wd-100" name="fornecedor" id="fornecedor" placeholder="(link ou fornecedor)"
+        formControlName="fornecedor">
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-lg-2">
+      <label for="qty">Qty:*</label>
+    </div>
+    <div class="clr-col-lg-6">
+      <input type="number" class="clr-input wd-100" name="qty" id="qty" placeholder="0" formControlName="qty" required>
+    </div>
+  </div>
+  <input class="btn btn-primary" type="submit" value="Criar" (click)="createEncomenda(encomendaForm.value)"
+    [disabled]="encomendaForm.invalid || contactoClienteForm.invalid || clienteForm.invalid">
+</form>

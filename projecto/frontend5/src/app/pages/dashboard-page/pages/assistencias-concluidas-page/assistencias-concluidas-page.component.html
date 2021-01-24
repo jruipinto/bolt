@@ -1,0 +1,53 @@
+<h3>
+  Assistências concluídas
+  <span class="badge badge-light-blue" *ngIf="(assistencias$ | async) as assistencias">
+    <span *ngIf="assistencias && assistencias.length < 99"> {{assistencias.length}}</span>
+    <span *ngIf="assistencias && assistencias.length > 99"> 99+</span>
+  </span>
+</h3>
+
+<div *ngIf="loading">
+  <span class="spinner spinner-inline">
+  </span>
+  <span>
+    A carregar dados...
+  </span>
+</div>
+
+<div class="separate" *ngIf="(assistencias$ | async) as assistencias">
+  <div *ngIf="assistencias.length>0">
+    <r-data-row class="clr-row overflow-hidden" *ngFor="let assistencia of assistencias; let listaIndex=index"
+      (click)="openAssistencia(assistencia.id)">
+      <div class="clr-col-lg-2">
+        <div class="clr-row">
+          <div class="clr-col-lg-4 fontheavy">
+            {{assistencia.id}}
+          </div>
+          <div class="clr-col-lg-6">
+            {{assistencia.categoria}}:
+          </div>
+        </div>
+      </div>
+      <div class="clr-col-lg-2">
+        <span class="fontheavy">{{assistencia.marca}}</span>
+        {{assistencia.modelo}}
+      </div>
+      <div class="clr-col-lg-1">
+        {{assistencia.cor}}
+      </div>
+      <div class="clr-col-lg-2 lessimportant">
+        {{assistencia.problema | slice:0:29}}
+        <span *ngIf="assistencia.problema.length > 30">...</span>
+      </div>
+      <div class="clr-col-lg-2 lessimportant">
+        Cliente:{{assistencia.cliente_user_name}}
+      </div>
+      <div class="clr-col-lg-2 lessimportant">
+        Técnico:{{assistencia.registo_cronologico[assistencia.registo_cronologico.length-1].tecnico}}
+      </div>
+      <div class="clr-col-lg-1 lessimportant">
+        {{assistencia.estado}}
+      </div>
+    </r-data-row>
+  </div>
+</div>

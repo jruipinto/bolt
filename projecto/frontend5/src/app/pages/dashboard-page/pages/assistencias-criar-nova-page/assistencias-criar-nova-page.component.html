@@ -1,0 +1,212 @@
+<h3>Nova assistência</h3>
+
+<button type="button" class="btn" (click)="clientesSearchModal.open()">
+  <clr-icon shape="search"></clr-icon> Pesquisar cliente
+</button>
+
+<app-clientes-pesquisar-modal></app-clientes-pesquisar-modal>
+
+<form class="separate clr-form" [formGroup]="contactoClienteForm"
+  formState="assistenciasCriarNovaPageContactoClienteForm">
+  <div class="clr-row">
+    <div class="clr-col-md-2">
+      <label for="contacto">Contacto:*</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input class="clr-input wd-100" type="tel" name="contacto" id="contacto" placeholder="☎️" required autofocus
+        formControlName="contacto">
+    </div>
+  </div>
+</form>
+
+<form class="separate clr-form" [formGroup]="clienteForm" formState="assistenciasCriarNovaPageClienteForm">
+  <div class="clr-row">
+    <div class="clr-col-md-2">
+      <label for="nome">Nome:*</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input class="clr-input wd-100" type="text" name="nome" id="nome" required formControlName="nome">
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-md-2">
+      <label for="email">Email:</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input class="clr-input wd-100" type="email" name="email" id="email" formControlName="email">
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-md-2">
+      <label for="endereco">Endereço:</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input class="clr-input wd-100" type="text" name="endereço" id="endereço" formControlName="endereço" autocaps>
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-md-2">
+      <label for="nif">NIF:</label>
+    </div>
+    <div class="clr-col-md-9 clr-col-lg-6">
+      <input class="clr-input wd-100" type="number" name="nif" id="nif" formControlName="nif">
+    </div>
+  </div>
+</form>
+
+<div *ngIf="oldAssists$ | async as oldAssists">
+  <clr-signpost *ngIf="oldAssists.length && oldAssists.length > 0">
+    <button class="btn btn-link" clrSignpostTrigger>
+      Últimas fichas <clr-icon shape="help-info"></clr-icon>
+    </button>
+    <clr-signpost-content *clrIfOpen>
+      <h5>Últimas fichas</h5>
+      <p class="p7">(marca modelo cor serial)</p>
+      <div *ngFor="let oldAssist of oldAssists">
+        <p> {{oldAssist.marca}} {{oldAssist.modelo}} {{oldAssist.cor}} {{oldAssist.serial}} </p>
+        <button class="btn btn-sm btn-link" (click)="copyToCriarNovaForm(oldAssist)">copiar</button>
+      </div>
+    </clr-signpost-content>
+  </clr-signpost>
+</div>
+
+<div class="separate">
+  <form class="clr-form" [formGroup]="criarNovaForm" formState="assistenciasCriarNovaPageCriarNovaForm"
+    (ngSubmit)="onSubmit()">
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="categoria">Categoria:*</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <div class="clr-select-wrapper wd-100">
+          <select class="clr-select wd-100" name="categoria" id="categoria" formControlName="categoria">
+            <option value="Telemóvel">Telemóvel</option>
+            <option value="Tablet">Tablet</option>
+            <option value="Portátil">Portátil</option>
+            <option value="Consola">Consola</option>
+            <option value="PC fixo">PC fixo</option>
+            <option value="GPS">GPS</option>
+            <option value="Coluna portátil">Coluna portátil</option>
+            <option value="TV">TV</option>
+            <option value="Monitor">Monitor</option>
+            <option value="Centralina">Centralina</option>
+            <option value="Placa">Placa</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="marca">Marca:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="clr-input wd-100" type="text" name="marca" id="marca" formControlName="marca" autocaps>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="modelo">Modelo:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="clr-input wd-100" type="text" name="modelo" id="modelo" formControlName="modelo">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="cor">Cor: *</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="clr-input wd-100" type="text" name="cor" id="cor" required formControlName="cor" autocaps>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="serial">Serial:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="clr-input wd-100" type="text" name="serial" id="serial" placeholder="(recomendado)"
+          formControlName="serial">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="serial">Código:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="clr-input wd-100" type="text" name="codigo" id="codigo" placeholder="(recomendado)"
+          formControlName="codigo">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="serial">Acessórios:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="clr-input wd-100" type="text" name="acessorios" id="acessorios" placeholder="(recomendado)"
+          formControlName="acessorios" autocaps>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="serial">Estado:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <clr-checkbox-container clrInline>
+          <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox name="options" value="partido" formControlName="estadoPartido" />
+            <label>Partido</label>
+          </clr-checkbox-wrapper>
+          <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox name="options" value="empenado" formControlName="estadoEmpenado" />
+            <label>Empenado</label>
+          </clr-checkbox-wrapper>
+          <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox name="options" value="riscos" formControlName="estadoRiscos" />
+            <label>Riscos</label>
+          </clr-checkbox-wrapper>
+          <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox name="options" value="mossas" formControlName="estadoMossas" />
+            <label>Mossas</label>
+          </clr-checkbox-wrapper>
+        </clr-checkbox-container>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="problema">Problema:*</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <textarea class="clr-textarea wd-100" name="problema" id="problema" required formControlName="problema"
+          autocaps></textarea>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="orcamento">Orçamento:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <input class="clr-input wd-100" type="number" name="orcamento" id="orcamento" formControlName="orcamento">
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2">
+        <label for="categoria">Técnico:</label>
+      </div>
+      <div class="clr-col-md-9 clr-col-lg-6">
+        <div class="clr-select-wrapper wd-100">
+          <select class="clr-select wd-100" name="categoria" id="categoria" formControlName="tecnico_user_id">
+            <option value="">Qualquer</option>
+            <option *ngFor="let tecnico of tecnicos$ | async" value={{tecnico.id}}>{{tecnico.nome}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="clr-row no-gutters">
+      <div class="clr-col-md-12 clr-col-lg-2">
+        <input class="btn btn-primary wd-100" type="submit" value="Submeter"
+          [disabled]="contactoClienteForm.invalid || clienteForm.invalid || criarNovaForm.invalid">
+      </div>
+    </div>
+  </form>
+</div>

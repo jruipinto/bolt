@@ -1,0 +1,92 @@
+// Clarity Dependency SCSS
+// @import "~@clr/ui/src/utils/dependencies.clarity"; // Includes light theme
+// @import "~@clr/ui/src/utils/theme.dark.clarity";
+
+// Your Application Theme File
+// @import "./theme.scss";
+
+// Clarity Component SCSS
+@import "~@clr/ui/src/utils/components.clarity";
+
+/*
+.login-wrapper {
+    background: url(./assets/logo.svg);
+}
+*/
+
+a {
+  cursor: pointer;
+}
+
+.wd-100 {
+  width: 100%;
+  max-width: 100%;
+}
+
+.separate:not(:first-child) {
+  margin-top: 1rem;
+}
+
+.fontheavy {
+  font-weight: 600;
+}
+
+r-data-row {
+  // min-height: 3em;
+  border-bottom: 1px solid #eeeeee !important;
+  // fix clarity design style .clr-row for r-data-row component
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+r-data-row:nth-child(even) {
+  background-color: #e1f1f6 !important;
+}
+
+r-data-row:hover {
+  background-color: #ddd !important;
+}
+
+/*
+* Clarity Style fixes
+*/
+main.content-area {
+  padding-top: 0 !important;
+}
+/*
+// this fix breaks the screen below 380px which is actually iphone 6 and 5 resolutions
+@media screen and (max-width: 576px) {
+  .branding {
+    max-width: 10rem !important;
+    padding-right: 0 !important;
+  }
+}
+*/
+@media screen and (max-width: 768px) {
+  header .search-box label input,
+  header .search label input,
+  .header .search-box label input,
+  .header .search label input {
+    display: initial;
+  }
+  header .branding .title,
+  .header .branding .title {
+    display: none;
+  }
+  header .search-box,
+  header .search,
+  .header .search-box,
+  .header .search {
+    justify-content: unset;
+  }
+  .header .search input[type="text"] {
+    max-width: 4rem;
+  }
+  .header .branding {
+    padding: 0 0.3rem;
+  }
+}
+
+/* ############################# */
+
+@import "./print";
