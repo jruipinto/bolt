@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ROfflineComponent } from './r-offline.component';
 
@@ -6,7 +6,7 @@ describe('ROfflineComponent', () => {
   let component: ROfflineComponent;
   let fixture: ComponentFixture<ROfflineComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ROfflineComponent ]
     })

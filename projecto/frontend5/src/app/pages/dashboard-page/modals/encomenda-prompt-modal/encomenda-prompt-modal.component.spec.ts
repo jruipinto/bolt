@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { EncomendaPromptModalComponent } from './encomenda-prompt-modal.component';
 
@@ -6,7 +6,7 @@ describe('EncomendaPromptModalComponent', () => {
   let component: EncomendaPromptModalComponent;
   let fixture: ComponentFixture<EncomendaPromptModalComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ EncomendaPromptModalComponent ]
     })
