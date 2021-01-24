@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PainelRapidoPageComponent } from './painel-rapido-page.component';
 
@@ -6,7 +6,7 @@ describe('PainelRapidoPageComponent', () => {
   let component: PainelRapidoPageComponent;
   let fixture: ComponentFixture<PainelRapidoPageComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PainelRapidoPageComponent ]
     })
