@@ -12,7 +12,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^11.1.0",
-    "@angular/cdk": "^8.2.2",
+    "@angular/cdk": "^8.2.3",
     "@angular/common": "^11.1.0",
     "@angular/compiler": "^11.1.0",
     "@angular/core": "^11.1.0",
@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^11.1.0",
     "@angular/platform-browser-dynamic": "^11.1.0",
     "@angular/router": "^11.1.0",
+    "@cds/core": "^5.0.0",
     "@clr/angular": "^5.0.0",
     "@clr/icons": "^5.0.0",
     "@clr/ui": "^5.0.0",
@@ -30,6 +31,8 @@
     "@types/feathersjs__feathers": "^3.1.5",
     "@types/feathersjs__socketio-client": "^1.0.3",
     "@types/ramda": "^0.26.12",
+    "@webcomponents/custom-elements": "^1.0.0",
+    "@webcomponents/webcomponentsjs": "^2.5.0",
     "ajv": "^6.9.1",
     "core-js": "^2.6.9",
     "feathers-reactive": "^0.7.2",
@@ -38,9 +41,7 @@
     "ramda": "^0.26.1",
     "rxjs": "~6.5.3",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.2",
-    "@webcomponents/webcomponentsjs": "^2.0.0",
-    "@cds/core": "^5.0.0"
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1101.1",
