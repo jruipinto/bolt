@@ -33,8 +33,8 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
     private printService: PrintService,
     private cdr: ChangeDetectorRef) { }
 
-  @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
-  @ViewChild(ClientesPesquisarModalComponent, { static: false }) clientesSearchModal: ClientesPesquisarModalComponent;
+  @ViewChild('userSearchModalInput') userSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild(ClientesPesquisarModalComponent) clientesSearchModal: ClientesPesquisarModalComponent;
 
   public oldAssists$: Observable<Assistencia[]>;
   public tecnicos$ = this.usersService.find({ query: { tipo: 'tecnico' } });

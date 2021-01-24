@@ -17,9 +17,9 @@ import { FocusMonitor } from '@angular/cdk/a11y';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('artigoSearchModalInput', { static: false }) artigoSearchModalInputEl: ElementRef<HTMLElement>;
-  @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
-  @ViewChild(ClientesPesquisarModalComponent, { static: false }) clientesSearchModal: ClientesPesquisarModalComponent;
+  @ViewChild('artigoSearchModalInput') artigoSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild('userSearchModalInput') userSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild(ClientesPesquisarModalComponent) clientesSearchModal: ClientesPesquisarModalComponent;
 
   public artigoSearchModalOpened = false;
   public artigoSearchResults$: Observable<Artigo[]>;

@@ -35,10 +35,10 @@ export class AssistenciaPageComponent implements AfterContentInit, OnDestroy {
   });
   public artigoSearchResults: Artigo[];
   public encomendaWizardOpened = false;
-  @ViewChild('artigoSearchModalInput', { static: false }) artigoSearchModalInputEl: ElementRef<HTMLElement>;
-  @ViewChild('encomendaWizardInput', { static: false }) encomendaWizardInputEl: ElementRef<HTMLElement>;
-  @ViewChild('wizard', { static: false }) wizard;
-  @ViewChild('wizardPageTwo', { static: false }) wizardPageTwo;
+  @ViewChild('artigoSearchModalInput') artigoSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild('encomendaWizardInput') encomendaWizardInputEl: ElementRef<HTMLElement>;
+  @ViewChild('wizard') wizard;
+  @ViewChild('wizardPageTwo') wizardPageTwo;
   public wizardEncomendaForm = this.fb.group({
     artigo_id: [null, [Validators.required]],
     artigo_marca: [null],

@@ -20,8 +20,8 @@ import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/mo
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssistenciasPesquisarPageComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
-  @ViewChild(ClientesPesquisarModalComponent, { static: false }) clientesSearchModal: ClientesPesquisarModalComponent;
+  @ViewChild('userSearchModalInput') userSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild(ClientesPesquisarModalComponent) clientesSearchModal: ClientesPesquisarModalComponent;
   public loading = false;
   public results: Assistencia[];
 
