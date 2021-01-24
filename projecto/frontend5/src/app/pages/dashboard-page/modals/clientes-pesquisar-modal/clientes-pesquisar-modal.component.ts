@@ -11,7 +11,7 @@ import { UsersService } from 'src/app/shared/state';
   styleUrls: ['./clientes-pesquisar-modal.component.scss']
 })
 export class ClientesPesquisarModalComponent implements OnInit {
-  @ViewChild('userSearchModalInput', { static: false }) userSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild('userSearchModalInput') userSearchModalInputEl: ElementRef<HTMLElement>;
   @Output() selectedCliente: EventEmitter<User> = new EventEmitter<User>();
   public loading = false;
   public modalOpen = false;
