@@ -1,0 +1,23 @@
+/* overlay */
+:host {
+    cursor:  default;
+    display: block; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100vw; /* Full width */
+    height: 100vh; /* Full height */
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 50vh 50vw;
+  }
+
+  /* Centered Box */
+  .box {
+    font-size: large;
+    color: #F52F22;
+    position: relative;
+    left: -4.5rem;
+    min-width: 12rem;
+
+  }

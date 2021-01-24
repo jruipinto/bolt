@@ -1,0 +1,10 @@
+<div *ngIf="configs$ | async as configs">
+    <div *ngFor="let config of configs">
+        <h3>{{config.key}}</h3>
+        <ul>
+            <li><strong>value: </strong>{{config.value}}</li>
+            <li><strong>createdAt: </strong>{{config.createdAt}}</li>
+            <li><strong>updatedAt: </strong>{{config.updatedAt}}</li>
+        </ul>
+    </div>
+</div>

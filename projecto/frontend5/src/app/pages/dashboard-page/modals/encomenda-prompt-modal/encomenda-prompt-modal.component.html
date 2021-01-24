@@ -1,0 +1,10 @@
+<clr-modal [clrModalOpen]="true" [clrModalClosable]="false" [clrModalSize]="'sm'">
+  <h3 class="modal-title">Informação</h3>
+  <div class="modal-body">
+      <p>A quantidade deste artigo está muito baixa. Quer encomendar mais?</p>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-outline" (click)="close()">Não</button>
+      <button type="button" class="btn btn-primary" (click)="orderArtigo(artigo)">Sim</button>
+  </div>
+</clr-modal>

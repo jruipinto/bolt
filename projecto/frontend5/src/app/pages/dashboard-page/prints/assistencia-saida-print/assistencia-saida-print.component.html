@@ -1,0 +1,116 @@
+<div *ngIf="printData$ | async as print">
+  <div class="clr-row">
+    <div class="clr-col">
+      <h1> Assistência Nº {{print.id}} </h1>
+    </div>
+  </div>
+
+  <div class="clr-row">
+    <div class="clr-col">
+      <img src="../../../../../assets/logo.svg" alt="Logotipo" class="logotipo">
+    </div>
+
+    <div class="clr-col">
+      <h2>N Reparações</h2>
+      <p>91 886 73 76</p>
+      <div class="address">
+        <p>geral@nreparacoes.com</p>
+        <p>Av. Dr. Ribeiro de Magalhães, 1391</p>
+        <p>Centro Comercial 123, Loja BD</p>
+        <p>4610-108 Felgueiras</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="items-group">
+    <div class="clr-row">
+      <div class="clr-col-3 description-label">
+        <p>Cliente:</p>
+      </div>
+      <div class="clr-col-9">
+        <p>{{print?.cliente_user_name}}</p>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-3 description-label">
+        <p>Contacto:</p>
+      </div>
+      <div class="clr-col-9">
+        <p>{{print?.cliente_user_contacto}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="items-group">
+    <div class="clr-row">
+      <div class="clr-col-3 description-label">
+        <p>Equipamento:</p>
+      </div>
+      <div class="clr-col-9">
+        <p>
+          {{print?.categoria}} > {{print?.marca}}
+          <span *ngIf="print && !print.marca">(sem marca)</span> > {{print?.modelo}}
+          <span *ngIf="print && !print.modelo">(sem modelo)</span>
+        </p>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-3 description-label">
+        <p>Cor:</p>
+      </div>
+      <div class="clr-col-9">
+        <p>{{print?.cor}}</p>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-3 description-label">
+        <p>Serial:</p>
+      </div>
+      <div class="clr-col-9">
+        <p>{{print?.serial}}<span *ngIf="print && !print.serial">(não visível)</span></p>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-3 description-label">
+        <p>Relatório:</p>
+      </div>
+      <div class="clr-col-9">
+        <p>{{print?.relatorio_cliente}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="clr-row items-group">
+    <div class="clr-col">
+      <p class="description-label">Condições de Garantia:</p>
+      <ul class="disclaimer">
+        <li>Garantia de 90 dias a contar de hoje</li>
+        <li>Esta garantia cobre defeitos de fabrico do material substituído</li>
+        <li>
+          Esta garantia <strong>não cobre</strong> defeitos provocados por má utilização do equipamento, por exemplo:
+          quebras, quedas, compressão/apertos ou torção/dobragem do equipamento (excepto se o equipamento for dobrável)
+        </li>
+        <li>(Equipamentos sem reparação ou cuja reparação não foi cobrada, não são cobertos por nenhuma garantia)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="clr-row items-group">
+    <div class="clr-col-3 description-label">
+      <p>Preço:</p>
+    </div>
+
+    <div class="clr-col-9">
+      <p><strong>{{print?.preco | currency: 'EUR'}}</strong></p>
+    </div>
+  </div>
+
+  <div class="clr-row">
+    <div class="clr-col padding-right-left-0">
+      <p class="disclaimer signature-field">
+        Declaro que recebi o equipamento em conformidade e concordo com o disposto
+        neste documento em {{print.updatedAt}}
+      </p>
+    </div>
+  </div>
+</div>
