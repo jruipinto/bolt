@@ -1,81 +1,78 @@
 <div *ngIf="loading">
-  <span class="spinner spinner-inline">
-  </span>
-  <span>
-    A carregar dados...
-  </span>
+  <span class="spinner spinner-inline"> </span>
+  <span> A carregar dados... </span>
 </div>
 
 <div *ngIf="assistencia && !loading">
-  <button type="button" class="btn btn-link btn-icon" style="margin:0; padding:0" (click)="navigateBack()">
-    <clr-icon class="is-solid" size="36" shape="arrow" style="transform: rotate(270deg);"></clr-icon>
+  <button
+    type="button"
+    class="btn btn-link btn-icon"
+    style="margin: 0; padding: 0"
+    (click)="navigateBack()"
+  >
+    <clr-icon
+      class="is-solid"
+      size="36"
+      shape="arrow"
+      style="transform: rotate(270deg)"
+    ></clr-icon>
   </button>
 
-  <h3>Assistência {{assistencia.id}}</h3>
+  <h3>Assistência {{ assistencia.id }}</h3>
 
   <div class="separate">
     <div class="clr-row">
-      <div class="clr-col-4 clr-col-md-2 fontheavy">
-        Estado:
-      </div>
+      <div class="clr-col-4 clr-col-md-2 fontheavy">Estado:</div>
       <div class="clr-col">
-        {{assistencia.estado}}
+        {{ assistencia.estado }}
       </div>
     </div>
   </div>
   <div class="separate">
     <div class="clr-row">
-      <div class="clr-col-4 clr-col-md-2 fontheavy">
-        Cliente:
-      </div>
+      <div class="clr-col-4 clr-col-md-2 fontheavy">Cliente:</div>
       <div class="clr-col">
-        {{assistencia.cliente_user_name}}
+        {{ assistencia.cliente_user_name }}
       </div>
     </div>
     <div class="clr-row">
-      <div class="clr-col-4 clr-col-md-2 fontheavy">
-        Contacto:
-      </div>
+      <div class="clr-col-4 clr-col-md-2 fontheavy">Contacto:</div>
       <div class="clr-col">
-        {{assistencia.cliente_user_contacto}}
+        {{ assistencia.cliente_user_contacto }}
       </div>
     </div>
     <div class="clr-row">
-      <div class="clr-col-4 clr-col-md-2 fontheavy">
-        Técnico:
-      </div>
+      <div class="clr-col-4 clr-col-md-2 fontheavy">Técnico:</div>
       <div class="clr-col">
-        {{assistencia.tecnico}}
+        {{ assistencia.tecnico }}
         <span *ngIf="!assistencia.tecnico">(aguarda técnico)</span>
-        <clr-icon shape="pencil" style="cursor: pointer;margin-left: 1em;" (click)="tecnicoSelectModalOpened=true">
+        <clr-icon
+          shape="pencil"
+          style="cursor: pointer; margin-left: 1em"
+          (click)="tecnicoSelectModalOpened = true"
+        >
         </clr-icon>
       </div>
     </div>
     <div class="clr-row">
-      <div class="clr-col-4 clr-col-md-2 fontheavy">
-        Equipamento:
-      </div>
+      <div class="clr-col-4 clr-col-md-2 fontheavy">Equipamento:</div>
       <div class="clr-col">
-        {{assistencia.categoria}}
-        {{assistencia.marca}}
-        {{assistencia.modelo}}
-        {{assistencia.cor}}
+        {{ assistencia.categoria }}
+        {{ assistencia.marca }}
+        {{ assistencia.modelo }}
+        {{ assistencia.cor }}
       </div>
     </div>
     <div class="clr-row">
-      <div class="clr-col-4 clr-col-md-2 fontheavy">
-        Serial:
-      </div>
+      <div class="clr-col-4 clr-col-md-2 fontheavy">Serial:</div>
       <div class="clr-col">
-        {{assistencia.serial}}
+        {{ assistencia.serial }}
       </div>
     </div>
     <div class="clr-row">
-      <div class="clr-col-4 clr-col-md-2 fontheavy">
-        Problema:
-      </div>
+      <div class="clr-col-4 clr-col-md-2 fontheavy">Problema:</div>
       <div class="clr-col">
-        {{assistencia.problema}}
+        {{ assistencia.problema }}
       </div>
     </div>
   </div>
@@ -84,14 +81,26 @@
       <div class="clr-col">
         <clr-accordion>
           <clr-accordion-panel>
-            <clr-accordion-title>Material ({{assistencia?.material?.length}})</clr-accordion-title>
+            <clr-accordion-title
+              >Material ({{
+                assistencia?.material?.length
+              }})</clr-accordion-title
+            >
             <clr-accordion-content *clrIfExpanded>
               <div class="clr-row">
                 <div class="clr-col">
-                  <button class="btn btn-link" (click)="openArtigoSearchModal()">Adicionar material</button>
+                  <button
+                    class="btn btn-link"
+                    (click)="openArtigoSearchModal()"
+                  >
+                    Adicionar material
+                  </button>
                 </div>
               </div>
-              <div class="clr-row" *ngIf="assistencia.material && assistencia.material.length">
+              <div
+                class="clr-row"
+                *ngIf="assistencia.material && assistencia.material.length"
+              >
                 <div class="clr-col">
                   <clr-datagrid>
                     <clr-dg-column>Qty</clr-dg-column>
@@ -100,15 +109,32 @@
                     <clr-dg-column>Custo p/ unidade</clr-dg-column>
                     <clr-dg-column>PVP</clr-dg-column>
                     <clr-dg-row *ngFor="let artigo of assistencia.material">
-                      <clr-dg-cell><input class="clr-input small-input" type="number" name="newQty" id="newQty"
-                          [(ngModel)]="artigo.qty" (change)="materialChanged(artigo)">
+                      <clr-dg-cell
+                        ><input
+                          class="clr-input small-input"
+                          type="number"
+                          name="newQty"
+                          id="newQty"
+                          [(ngModel)]="artigo.qty"
+                          (change)="materialChanged(artigo)"
+                        />
                       </clr-dg-cell>
-                      <clr-dg-cell>{{artigo.descricao}} {{artigo.marca}} {{artigo.modelo}}</clr-dg-cell>
-                      <clr-dg-cell>{{artigo.localizacao}}</clr-dg-cell>
-                      <clr-dg-cell>{{artigo.preco | currency: 'EUR'}}</clr-dg-cell>
-                      <clr-dg-cell>{{artigo.pvp | currency: 'EUR'}}</clr-dg-cell>
+                      <clr-dg-cell
+                        >{{ artigo.descricao }} {{ artigo.marca }}
+                        {{ artigo.modelo }}</clr-dg-cell
+                      >
+                      <clr-dg-cell>{{ artigo.localizacao }}</clr-dg-cell>
+                      <clr-dg-cell>{{
+                        artigo.preco | currency: "EUR"
+                      }}</clr-dg-cell>
+                      <clr-dg-cell>{{
+                        artigo.pvp | currency: "EUR"
+                      }}</clr-dg-cell>
                     </clr-dg-row>
-                    <clr-dg-footer>{{assistencia.material.length}} artigos adicionados</clr-dg-footer>
+                    <clr-dg-footer
+                      >{{ assistencia.material.length }} artigos
+                      adicionados</clr-dg-footer
+                    >
                   </clr-datagrid>
                 </div>
               </div>
@@ -116,31 +142,72 @@
           </clr-accordion-panel>
 
           <clr-accordion-panel>
-            <clr-accordion-title>Encomendas ({{assistencia?.encomendas?.length}})</clr-accordion-title>
+            <clr-accordion-title
+              >Encomendas ({{
+                assistencia?.encomendas?.length
+              }})</clr-accordion-title
+            >
             <clr-accordion-content *clrIfExpanded>
               <div class="clr-row">
                 <div class="clr-col">
-                  <button class="btn btn-link" (click)="openEncomendaWizard()">Adicionar encomenda</button>
+                  <button
+                    class="btn btn-link"
+                    (click)="openEncomendaWizard()"
+                    [disabled]="
+                      assistencia.estado === 'orçamento pendente' ||
+                      assistencia.estado === 'não atendeu p/ orç.' ||
+                      assistencia.estado === 'cliente adiou orç.' ||
+                      assistencia.estado === 'contacto pendente' ||
+                      assistencia.estado === 'não atendeu p/ cont.' ||
+                      assistencia.estado === 'cliente adiou resp.'
+                    "
+                  >
+                    Adicionar encomenda
+                  </button>
                 </div>
               </div>
-              <div class="clr-row" *ngIf="assistencia.encomendas && assistencia.encomendas.length">
+              <div
+                class="clr-row"
+                *ngIf="assistencia.encomendas && assistencia.encomendas.length"
+              >
                 <div class="clr-col">
                   <clr-datagrid>
                     <clr-dg-column>Qty</clr-dg-column>
                     <clr-dg-column>Descrição</clr-dg-column>
                     <clr-dg-column>Prazo</clr-dg-column>
                     <clr-dg-column>Estado</clr-dg-column>
-                    <clr-dg-row *ngFor="let encomenda of assistencia.encomendas">
-                      <clr-dg-cell><input *ngIf="encomenda.estado === 'nova'" class="clr-input small-input"
-                          type="number" name="newQty" id="newQty" [(ngModel)]="encomenda.qty"
-                          (change)="encomendasChanged(encomenda)"><span
-                          *ngIf="encomenda.estado !== 'nova'">{{encomenda.qty}}</span></clr-dg-cell>
-                      <clr-dg-cell>{{encomenda.artigo_descricao}} {{encomenda.artigo_marca}} {{encomenda.artigo_modelo}}
+                    <clr-dg-row
+                      *ngFor="let encomenda of assistencia.encomendas"
+                    >
+                      <clr-dg-cell
+                        ><input
+                          *ngIf="encomenda.estado === 'nova'"
+                          class="clr-input small-input"
+                          type="number"
+                          name="newQty"
+                          id="newQty"
+                          [(ngModel)]="encomenda.qty"
+                          (change)="encomendasChanged(encomenda)"
+                        /><span *ngIf="encomenda.estado !== 'nova'">{{
+                          encomenda.qty
+                        }}</span></clr-dg-cell
+                      >
+                      <clr-dg-cell
+                        >{{ encomenda.artigo_descricao }}
+                        {{ encomenda.artigo_marca }}
+                        {{ encomenda.artigo_modelo }}
                       </clr-dg-cell>
-                      <clr-dg-cell>{{encomenda.previsao_entrega}}</clr-dg-cell>
-                      <clr-dg-cell>{{encomenda.estado}}</clr-dg-cell>
+                      <clr-dg-cell>{{
+                        encomenda.previsao_entrega
+                      }}</clr-dg-cell>
+                      <clr-dg-cell>{{ encomenda.estado }}</clr-dg-cell>
                     </clr-dg-row>
-                    <clr-dg-footer>{{assistencia.encomendas.length}} encomendas</clr-dg-footer>
+                    <clr-dg-footer
+                      >{{
+                        assistencia.encomendas.length
+                      }}
+                      encomendas</clr-dg-footer
+                    >
                   </clr-datagrid>
                 </div>
               </div>
@@ -148,9 +215,16 @@
           </clr-accordion-panel>
 
           <clr-accordion-panel>
-            <clr-accordion-title>Mensagens ({{assistencia?.messages?.length}})</clr-accordion-title>
+            <clr-accordion-title
+              >Mensagens ({{
+                assistencia?.messages?.length
+              }})</clr-accordion-title
+            >
             <clr-accordion-content *clrIfExpanded>
-              <div class="clr-row" *ngIf="assistencia.messages && assistencia.messages.length">
+              <div
+                class="clr-row"
+                *ngIf="assistencia.messages && assistencia.messages.length"
+              >
                 <div class="clr-col">
                   <clr-datagrid>
                     <clr-dg-column>Assunto</clr-dg-column>
@@ -158,12 +232,21 @@
                     <clr-dg-column>Enviada</clr-dg-column>
                     <clr-dg-column>Entregue</clr-dg-column>
                     <clr-dg-row *ngFor="let message of assistencia.messages">
-                      <clr-dg-cell>{{message.subject}}</clr-dg-cell>
-                      <clr-dg-cell>{{message.state}}</clr-dg-cell>
-                      <clr-dg-cell>{{message.createdAt | slice:0:10}}</clr-dg-cell>
-                      <clr-dg-cell>{{message?.deliveredAt | slice:0:10}}</clr-dg-cell>
+                      <clr-dg-cell>{{ message.subject }}</clr-dg-cell>
+                      <clr-dg-cell>{{ message.state }}</clr-dg-cell>
+                      <clr-dg-cell>{{
+                        message.createdAt | slice: 0:10
+                      }}</clr-dg-cell>
+                      <clr-dg-cell>{{
+                        message?.deliveredAt | slice: 0:10
+                      }}</clr-dg-cell>
                     </clr-dg-row>
-                    <clr-dg-footer>{{assistencia.messages.length}} mensagens</clr-dg-footer>
+                    <clr-dg-footer
+                      >{{
+                        assistencia.messages.length
+                      }}
+                      mensagens</clr-dg-footer
+                    >
                   </clr-datagrid>
                 </div>
               </div>
@@ -171,7 +254,10 @@
           </clr-accordion-panel>
 
           <clr-accordion-panel>
-            <clr-accordion-title>Registo Cronológico ({{assistencia?.registo_cronologico?.length}})
+            <clr-accordion-title
+              >Registo Cronológico ({{
+                assistencia?.registo_cronologico?.length
+              }})
             </clr-accordion-title>
             <clr-accordion-content *clrIfExpanded>
               <clr-datagrid>
@@ -180,20 +266,36 @@
                 <clr-dg-column>Técnico</clr-dg-column>
                 <clr-dg-column>Estado</clr-dg-column>
                 <clr-dg-column>Data</clr-dg-column>
-                <clr-dg-row *ngFor="let evento of assistencia.registo_cronologico">
+                <clr-dg-row
+                  *ngFor="let evento of assistencia.registo_cronologico"
+                >
                   <clr-dg-cell>
-                    <span *ngIf="evento.editor_action">{{evento.editor_action}}</span>
+                    <span *ngIf="evento.editor_action">{{
+                      evento.editor_action
+                    }}</span>
                     <span *ngIf="!evento.editor_action">novo estado</span>
                   </clr-dg-cell>
                   <clr-dg-cell>
-                    <span *ngIf="evento.editor_action">{{evento.editor}}</span>
-                    <span *ngIf="!evento.editor_action">{{evento.tecnico}}</span>
+                    <span *ngIf="evento.editor_action">{{
+                      evento.editor
+                    }}</span>
+                    <span *ngIf="!evento.editor_action">{{
+                      evento.tecnico
+                    }}</span>
                   </clr-dg-cell>
-                  <clr-dg-cell>{{evento.tecnico_user_id}} {{evento.tecnico}}</clr-dg-cell>
-                  <clr-dg-cell>{{evento.estado}}</clr-dg-cell>
-                  <clr-dg-cell>{{evento.updatedAt | slice:0:10}}</clr-dg-cell>
+                  <clr-dg-cell
+                    >{{ evento.tecnico_user_id }}
+                    {{ evento.tecnico }}</clr-dg-cell
+                  >
+                  <clr-dg-cell>{{ evento.estado }}</clr-dg-cell>
+                  <clr-dg-cell>{{
+                    evento.updatedAt | slice: 0:10
+                  }}</clr-dg-cell>
                 </clr-dg-row>
-                <clr-dg-footer>{{assistencia.registo_cronologico.length}} eventos registados</clr-dg-footer>
+                <clr-dg-footer
+                  >{{ assistencia.registo_cronologico.length }} eventos
+                  registados</clr-dg-footer
+                >
               </clr-datagrid>
             </clr-accordion-content>
           </clr-accordion-panel>
@@ -205,9 +307,7 @@
     <div class="clr-row">
       <div class="clr-col-md-6">
         <div class="clr-row">
-          <div class="clr-col fontheavy">
-            Informação técnica interna:
-          </div>
+          <div class="clr-col fontheavy">Informação técnica interna:</div>
         </div>
         <div class="clr-row">
           <div class="clr-col">
@@ -222,8 +322,13 @@
                 || assistencia.estado === 'concluído'
                 || assistencia.estado === 'entregue'" [(ngModel)]='assistencia.relatorio_interno'></textarea>
               -->
-            <textarea class="clr-textarea wd-100" name="relatorio_interno" id="relatorio_interno"
-              [(ngModel)]='assistencia.relatorio_interno' autocaps></textarea>
+            <textarea
+              class="clr-textarea wd-100"
+              name="relatorio_interno"
+              id="relatorio_interno"
+              [(ngModel)]="assistencia.relatorio_interno"
+              autocaps
+            ></textarea>
           </div>
         </div>
       </div>
@@ -231,15 +336,23 @@
         <div class="clr-row">
           <div class="clr-col fontheavy">
             Informação para o cliente:
-            <span style="font-weight: lighter; cursor: pointer" (click)="cloneRelatorioInterno()">
+            <span
+              style="font-weight: lighter; cursor: pointer"
+              (click)="cloneRelatorioInterno()"
+            >
               <clr-icon shape="clone"></clr-icon>Copiar
             </span>
           </div>
         </div>
         <div class="clr-row">
           <div class="clr-col">
-            <textarea class="clr-textarea wd-100" name="relatorio_cliente" id="relatorio_cliente"
-              [(ngModel)]='assistencia.relatorio_cliente' autocaps></textarea>
+            <textarea
+              class="clr-textarea wd-100"
+              name="relatorio_cliente"
+              id="relatorio_cliente"
+              [(ngModel)]="assistencia.relatorio_cliente"
+              autocaps
+            ></textarea>
           </div>
         </div>
       </div>
@@ -247,145 +360,246 @@
   </div>
   <div class="separate">
     <div class="clr-row">
-      <div class="clr-col-4 clr-col-md-2 fontheavy">
-        Orçamento:
-      </div>
+      <div class="clr-col-4 clr-col-md-2 fontheavy">Orçamento:</div>
       <div class="clr-col">
-        <span *ngIf="assistencia.orcamento">€ {{assistencia.orcamento}}</span>
+        <span *ngIf="assistencia.orcamento">€ {{ assistencia.orcamento }}</span>
         <span *ngIf="!assistencia.orcamento">não tem</span>
       </div>
     </div>
     <div class="clr-row">
-      <div class="clr-col-4 clr-col-md-2 fontheavy">
-        Preço:
-      </div>
+      <div class="clr-col-4 clr-col-md-2 fontheavy">Preço:</div>
       <div class="clr-col-3">
-        €<input class="clr-input wd-80" type="number" name="preco" id="preco" [(ngModel)]='assistencia.preco'>
+        €<input
+          class="clr-input wd-80"
+          type="number"
+          name="preco"
+          id="preco"
+          [(ngModel)]="assistencia.preco"
+        />
       </div>
     </div>
   </div>
 
   <div class="separate">
     <div class="clr-row">
-
-      <div *ngIf="(assistencia.estado === 'recebido'
-          || assistencia.estado === 'em análise'
-          || assistencia.estado === 'contactado'
-          || assistencia.estado === 'incontactável'
-          || assistencia.estado === 'orçamento aprovado'
-          || assistencia.estado === 'orçamento recusado'
-          || assistencia.estado === 'material recebido')
-          && newEncomendasCounter === 0">
-        <button *ngIf="(assistencia.estado !== 'em análise')" class="btn btn-success btn-icon"
-          (click)="saveAssistencia('em análise', assistencia)">
+      <div
+        *ngIf="
+          (assistencia.estado === 'recebido' ||
+            assistencia.estado === 'em análise' ||
+            assistencia.estado === 'contactado' ||
+            assistencia.estado === 'incontactável' ||
+            assistencia.estado === 'orçamento aprovado' ||
+            assistencia.estado === 'orçamento recusado' ||
+            assistencia.estado === 'material recebido') &&
+          newEncomendasCounter === 0
+        "
+      >
+        <button
+          *ngIf="assistencia.estado !== 'em análise'"
+          class="btn btn-success btn-icon"
+          (click)="saveAssistencia('em análise', assistencia)"
+        >
           <clr-icon shape="play"></clr-icon>
           Iniciar
         </button>
-        <button *ngIf="(assistencia.estado === 'em análise')" class="btn btn-primary btn-icon"
-          (click)="saveAssistencia('em análise', assistencia)">
+        <button
+          *ngIf="assistencia.estado === 'em análise'"
+          class="btn btn-primary btn-icon"
+          (click)="saveAssistencia('em análise', assistencia)"
+        >
           <clr-icon shape="floppy"></clr-icon>
           Guardar
         </button>
         <clr-dropdown>
           <button clrDropdownTrigger class="btn btn-outline-primary">
-            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
+            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
+            <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button clrDropdownItem (click)="saveAssistencia('orçamento pendente', assistencia)">
+            <button
+              clrDropdownItem
+              (click)="saveAssistencia('orçamento pendente', assistencia)"
+            >
               Orçamentar
             </button>
-            <button clrDropdownItem (click)="saveAssistencia('contacto pendente', assistencia)">
+            <button
+              clrDropdownItem
+              (click)="saveAssistencia('contacto pendente', assistencia)"
+            >
               Contactar
             </button>
-            <button clrDropdownItem (click)="saveAssistencia('concluído s/ rep.', assistencia)">
+            <button
+              clrDropdownItem
+              (click)="saveAssistencia('concluído s/ rep.', assistencia)"
+            >
               Concluir s/ rep.
             </button>
-            <button clrDropdownItem (click)="saveAssistencia('concluído', assistencia)">
+            <button
+              clrDropdownItem
+              (click)="saveAssistencia('concluído', assistencia)"
+            >
               Concluir
             </button>
-            <button clrDropdownItem *ngIf="(assistencia.estado !== 'em análise')"
-              (click)="saveAssistencia(assistencia.estado, assistencia)">
+            <button
+              clrDropdownItem
+              *ngIf="assistencia.estado !== 'em análise'"
+              (click)="saveAssistencia(assistencia.estado, assistencia)"
+            >
               Guardar
             </button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>
 
-      <div *ngIf="newEncomendasCounter > 0">
-        <button class="btn btn-warning" (click)="saveAssistencia('aguarda material', assistencia)">
+      <div
+        *ngIf="
+          newEncomendasCounter > 0 &&
+          assistencia.estado !== 'orçamento pendente' &&
+          assistencia.estado !== 'não atendeu p/ orç.' &&
+          assistencia.estado !== 'cliente adiou orç.' &&
+          assistencia.estado !== 'contacto pendente' &&
+          assistencia.estado !== 'não atendeu p/ cont.' &&
+          assistencia.estado !== 'cliente adiou resp.'
+        "
+      >
+        <button
+          class="btn btn-warning"
+          (click)="saveAssistencia('aguarda material', assistencia)"
+        >
           Aguardar Material
         </button>
       </div>
 
-      <div *ngIf="assistencia.estado === 'orçamento pendente'
-          || assistencia.estado === 'não atendeu p/ orç.'
-          || assistencia.estado === 'cliente adiou orç.'">
-        <button class="btn btn-success" (click)="saveAssistencia('orçamento aprovado', assistencia)">
+      <div
+        *ngIf="
+          assistencia.estado === 'orçamento pendente' ||
+          assistencia.estado === 'não atendeu p/ orç.' ||
+          assistencia.estado === 'cliente adiou orç.'
+        "
+      >
+        <button
+          class="btn btn-success"
+          (click)="saveAssistencia('orçamento aprovado', assistencia)"
+        >
           Aceite
         </button>
         <clr-dropdown>
           <button clrDropdownTrigger class="btn btn-outline-primary">
-            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
+            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
+            <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button clrDropdownItem (click)="saveAssistencia('orçamento recusado', assistencia)">
+            <button
+              clrDropdownItem
+              (click)="saveAssistencia('orçamento recusado', assistencia)"
+            >
               Recusado
             </button>
-            <button clrDropdownItem (click)="saveAssistencia('cliente adiou orç.', assistencia)">
+            <button
+              clrDropdownItem
+              (click)="saveAssistencia('cliente adiou orç.', assistencia)"
+            >
               Cliente adiou resposta
             </button>
-            <button clrDropdownItem (click)="saveAssistencia('não atendeu p/ orç.', assistencia)">
+            <button
+              clrDropdownItem
+              (click)="saveAssistencia('não atendeu p/ orç.', assistencia)"
+            >
               Não atendeu
             </button>
-            <button clrDropdownItem (click)="saveAssistencia('incontactável', assistencia)">
+            <button
+              clrDropdownItem
+              (click)="saveAssistencia('incontactável', assistencia)"
+            >
               Incontactável
             </button>
-            <button clrDropdownItem (click)="saveAssistencia(assistencia.estado, assistencia)">
+            <button
+              clrDropdownItem
+              (click)="saveAssistencia(assistencia.estado, assistencia)"
+            >
               Guardar
             </button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>
 
-      <div *ngIf="assistencia.estado === 'contacto pendente'
-          || assistencia.estado === 'não atendeu p/ cont.'
-          || assistencia.estado === 'cliente adiou resp.'">
-        <button type="button" class="btn btn-success" (click)="saveAssistencia('contactado', assistencia)">
+      <div
+        *ngIf="
+          assistencia.estado === 'contacto pendente' ||
+          assistencia.estado === 'não atendeu p/ cont.' ||
+          assistencia.estado === 'cliente adiou resp.'
+        "
+      >
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="saveAssistencia('contactado', assistencia)"
+        >
           <clr-icon shape="check"></clr-icon>
           Sucesso
         </button>
         <clr-dropdown>
           <button clrDropdownTrigger class="btn btn-outline-primary">
-            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções <clr-icon shape="caret down"></clr-icon>
+            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
+            <clr-icon shape="caret down"></clr-icon>
           </button>
           <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button type="button" (click)="saveAssistencia('cliente adiou resp.', assistencia)" clrDropdownItem>
+            <button
+              type="button"
+              (click)="saveAssistencia('cliente adiou resp.', assistencia)"
+              clrDropdownItem
+            >
               Cliente adiou resposta
             </button>
-            <button type="button" (click)="saveAssistencia('não atendeu p/ cont.', assistencia)" clrDropdownItem>
+            <button
+              type="button"
+              (click)="saveAssistencia('não atendeu p/ cont.', assistencia)"
+              clrDropdownItem
+            >
               Não atendeu
             </button>
-            <button type="button" (click)="saveAssistencia('incontactável', assistencia)" clrDropdownItem>
+            <button
+              type="button"
+              (click)="saveAssistencia('incontactável', assistencia)"
+              clrDropdownItem
+            >
               Incontactável
             </button>
-            <button clrDropdownItem (click)="saveAssistencia(assistencia.estado, assistencia)">
+            <button
+              clrDropdownItem
+              (click)="saveAssistencia(assistencia.estado, assistencia)"
+            >
               Guardar
             </button>
           </clr-dropdown-menu>
         </clr-dropdown>
       </div>
 
-      <div *ngIf="assistencia.estado === 'concluído' || assistencia.estado === 'concluído s/ rep.'">
-        <button class="btn btn-warning" (click)="saveAssistencia('entregue', assistencia)">
+      <div
+        *ngIf="
+          assistencia.estado === 'concluído' ||
+          assistencia.estado === 'concluído s/ rep.'
+        "
+      >
+        <button
+          class="btn btn-warning"
+          (click)="saveAssistencia('entregue', assistencia)"
+        >
           Entregar
         </button>
-        <button class="btn" (click)="saveAssistencia(assistencia.estado, assistencia)">
+        <button
+          class="btn"
+          (click)="saveAssistencia(assistencia.estado, assistencia)"
+        >
           Guardar
         </button>
       </div>
 
       <div *ngIf="assistencia.estado === 'entregue'">
-        <button class="btn" (click)="createAssistenciaWithThisData(assistencia)">
+        <button
+          class="btn"
+          (click)="createAssistenciaWithThisData(assistencia)"
+        >
           Receber Novamente
         </button>
       </div>
@@ -394,38 +608,50 @@
         <clr-icon shape="printer"></clr-icon> Reimprimir
       </button>
     </div>
-
   </div>
 </div>
 
 <clr-modal [(clrModalOpen)]="artigoSearchModalOpened" [clrModalSize]="'lg'">
   <h3 class="modal-title">Adicionar Material</h3>
   <div class="modal-body">
-    <form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
+    <form
+      [formGroup]="artigoSearchForm"
+      (ngSubmit)="searchArtigo(artigoSearchForm.value.input)"
+    >
       <div class="clr-row">
         <div class="clr-col-12 padding-bottom-05">
-          <input #artigoSearchModalInput type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input"
-            formControlName="input" />
+          <input
+            #artigoSearchModalInput
+            type="text"
+            class="clr-input wd-100"
+            placeholder="Digita algo..."
+            name="input"
+            formControlName="input"
+          />
         </div>
       </div>
     </form>
     <h4>Resultados:</h4>
     <div *ngIf="artigoSearchResults as artigos">
-      <p *ngIf="artigos.length===0">Nenhum resultado encontrado para esses parametros...</p>
-      <div *ngIf="artigos.length>0">
-        <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index" (click)="addArtigo(artigo)">
+      <p *ngIf="artigos.length === 0">
+        Nenhum resultado encontrado para esses parametros...
+      </p>
+      <div *ngIf="artigos.length > 0">
+        <r-data-row
+          class="clr-row"
+          *ngFor="let artigo of artigos; let listaIndex = index"
+          (click)="addArtigo(artigo)"
+        >
           <div class="clr-col-lg-3">
-            <span class="fontheavy">{{artigo.marca}}</span>
-            {{artigo.modelo}}
+            <span class="fontheavy">{{ artigo.marca }}</span>
+            {{ artigo.modelo }}
           </div>
           <div class="clr-col-lg-6 lessimportant">
-            {{artigo.descricao}}
+            {{ artigo.descricao }}
           </div>
-          <div class="clr-col-lg-1 lessimportant">
-            Qty: {{artigo.qty}}
-          </div>
+          <div class="clr-col-lg-1 lessimportant">Qty: {{ artigo.qty }}</div>
           <div class="clr-col-lg-2 lessimportant">
-            Local: {{artigo.localizacao}}
+            Local: {{ artigo.localizacao }}
           </div>
         </r-data-row>
       </div>
@@ -433,8 +659,12 @@
   </div>
 </clr-modal>
 
-<clr-wizard #wizard [(clrWizardOpen)]="encomendaWizardOpened" clrWizardSize="lg"
-  (clrWizardOnFinish)="addEncomenda(wizardEncomendaForm.value)">
+<clr-wizard
+  #wizard
+  [(clrWizardOpen)]="encomendaWizardOpened"
+  clrWizardSize="lg"
+  (clrWizardOnFinish)="addEncomenda(wizardEncomendaForm.value)"
+>
   <clr-wizard-title>Encomendar Artigo</clr-wizard-title>
 
   <clr-wizard-button [type]="'cancel'">Cancelar</clr-wizard-button>
@@ -444,89 +674,122 @@
 
   <clr-wizard-page>
     <ng-template clrPageTitle>Escolher Artigo</ng-template>
-    <form [formGroup]="wizardArtigoSearchForm" (ngSubmit)="searchArtigo(wizardArtigoSearchForm.value.input)">
+    <form
+      [formGroup]="wizardArtigoSearchForm"
+      (ngSubmit)="searchArtigo(wizardArtigoSearchForm.value.input)"
+    >
       <div class="clr-row">
         <div class="clr-col-12 padding-bottom-05">
-          <input #encomendaWizardInput type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input"
-            formControlName="input" />
+          <input
+            #encomendaWizardInput
+            type="text"
+            class="clr-input wd-100"
+            placeholder="Digita algo..."
+            name="input"
+            formControlName="input"
+          />
         </div>
       </div>
     </form>
     <h4>Resultados:</h4>
     <div *ngIf="artigoSearchResults as artigos">
-      <p *ngIf="artigos.length===0">Nenhum resultado encontrado para esses parametros...</p>
-      <div *ngIf="artigos.length>0">
-        <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index"
-          (click)="pushToWizardEncomendaForm(artigo)">
+      <p *ngIf="artigos.length === 0">
+        Nenhum resultado encontrado para esses parametros...
+      </p>
+      <div *ngIf="artigos.length > 0">
+        <r-data-row
+          class="clr-row"
+          *ngFor="let artigo of artigos; let listaIndex = index"
+          (click)="pushToWizardEncomendaForm(artigo)"
+        >
           <div class="clr-col-lg-3">
-            <span class="fontheavy">{{artigo.marca}}</span>
-            {{artigo.modelo}}
+            <span class="fontheavy">{{ artigo.marca }}</span>
+            {{ artigo.modelo }}
           </div>
           <div class="clr-col-lg-6 lessimportant">
-            {{artigo.descricao}}
+            {{ artigo.descricao }}
           </div>
-          <div class="clr-col-lg-1 lessimportant">
-            Qty: {{artigo.qty}}
-          </div>
+          <div class="clr-col-lg-1 lessimportant">Qty: {{ artigo.qty }}</div>
           <div class="clr-col-lg-2 lessimportant">
-            Local: {{artigo.localizacao}}
+            Local: {{ artigo.localizacao }}
           </div>
         </r-data-row>
       </div>
     </div>
   </clr-wizard-page>
 
-  <clr-wizard-page #wizardPageTwo [clrWizardPageNextDisabled]="!wizardEncomendaForm.valid">
+  <clr-wizard-page
+    #wizardPageTwo
+    [clrWizardPageNextDisabled]="!wizardEncomendaForm.valid"
+  >
     <ng-template clrPageTitle>Editar Encomenda</ng-template>
     <div class="clr-row">
-      <div class="clr-col-sm-2">
-        Artigo:
-      </div>
+      <div class="clr-col-sm-2">Artigo:</div>
       <div class="clr-col">
-        {{wizardEncomendaForm?.value.artigo_descricao}} {{wizardEncomendaForm?.value.artigo_marca}}
-        {{wizardEncomendaForm?.value.artigo_modelo}}
+        {{ wizardEncomendaForm?.value.artigo_descricao }}
+        {{ wizardEncomendaForm?.value.artigo_marca }}
+        {{ wizardEncomendaForm?.value.artigo_modelo }}
       </div>
     </div>
     <form [formGroup]="wizardEncomendaForm">
       <div class="clr-row">
-        <div class="clr-col-sm-3">
-          Observação:
-        </div>
+        <div class="clr-col-sm-3">Observação:</div>
         <div class="clr-col">
-          <input type="text" class="clr-input wd-100" placeholder="" name="observacao" formControlName="observacao" />
+          <input
+            type="text"
+            class="clr-input wd-100"
+            placeholder=""
+            name="observacao"
+            formControlName="observacao"
+          />
         </div>
       </div>
       <div class="clr-row">
-        <div class="clr-col-sm-3">
-          Prazo:*
-        </div>
+        <div class="clr-col-sm-3">Prazo:*</div>
         <div class="clr-col">
-          <input type="date" class="clr-input wd-100" placeholder="" name="previsao_entrega"
-            formControlName="previsao_entrega" />
+          <input
+            type="date"
+            class="clr-input wd-100"
+            placeholder=""
+            name="previsao_entrega"
+            formControlName="previsao_entrega"
+          />
         </div>
       </div>
       <div class="clr-row">
-        <div class="clr-col-sm-3">
-          Orçamento:
-        </div>
+        <div class="clr-col-sm-3">Orçamento:</div>
         <div class="clr-col">
-          <input type="number" class="clr-input wd-100" placeholder="" name="orcamento" formControlName="orcamento" />
+          <input
+            type="number"
+            class="clr-input wd-100"
+            placeholder=""
+            name="orcamento"
+            formControlName="orcamento"
+          />
         </div>
       </div>
       <div class="clr-row">
-        <div class="clr-col-sm-3">
-          Fornecedor:
-        </div>
+        <div class="clr-col-sm-3">Fornecedor:</div>
         <div class="clr-col">
-          <input type="text" class="clr-input wd-100" placeholder="" name="fornecedor" formControlName="fornecedor" />
+          <input
+            type="text"
+            class="clr-input wd-100"
+            placeholder=""
+            name="fornecedor"
+            formControlName="fornecedor"
+          />
         </div>
       </div>
       <div class="clr-row">
-        <div class="clr-col-sm-3">
-          Qty:*
-        </div>
+        <div class="clr-col-sm-3">Qty:*</div>
         <div class="clr-col">
-          <input type="number" class="clr-input wd-100" placeholder="" name="qty" formControlName="qty" />
+          <input
+            type="number"
+            class="clr-input wd-100"
+            placeholder=""
+            name="qty"
+            formControlName="qty"
+          />
         </div>
       </div>
     </form>
@@ -536,7 +799,12 @@
 <clr-modal [(clrModalOpen)]="tecnicoSelectModalOpened" [clrModalSize]="'sm'">
   <h3 class="modal-title">Atribuir Técnico</h3>
   <div class="modal-body">
-    <r-data-row class="clr-row" *ngFor="let tecnico of tecnicos$ | async" (click)="replaceTecnicoBy(tecnico)">
-      {{tecnico.nome}}</r-data-row>
+    <r-data-row
+      class="clr-row"
+      *ngFor="let tecnico of tecnicos$ | async"
+      (click)="replaceTecnicoBy(tecnico)"
+    >
+      {{ tecnico.nome }}</r-data-row
+    >
   </div>
 </clr-modal>
