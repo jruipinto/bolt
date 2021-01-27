@@ -49,6 +49,7 @@ export class EncomendasApiService extends EntityApiAbstration {
 
             // deserialize JSON props
             map(encomenda => deserialize(encomenda, 'registo_cronologico')),
+            map(encomenda => deserialize(encomenda, 'messages')),
 
             // retrieve tecnico data for all eventos of registo_cronologico
             concatMap(encomenda => (

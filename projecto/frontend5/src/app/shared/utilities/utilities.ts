@@ -12,16 +12,20 @@ export function capitalize(param: {} | string) {
   if (typeof param === 'string') {
     return param.charAt(0).toUpperCase() + param.slice(1);
   } else if (typeof param === 'object') {
-    Object.keys(param)
-      .map(key => {
-        if (typeof param[key] !== 'string') {
-          acc = { ...acc, ...{ [key]: param[key] } };
-          return acc;
-        } else {
-          acc = { ...acc, ...{ [key]: param[key].charAt(0).toUpperCase() + param[key].slice(1) } };
-          return acc;
-        }
-      });
+    Object.keys(param).map((key) => {
+      if (typeof param[key] !== 'string') {
+        acc = { ...acc, ...{ [key]: param[key] } };
+        return acc;
+      } else {
+        acc = {
+          ...acc,
+          ...{
+            [key]: param[key].charAt(0).toUpperCase() + param[key].slice(1),
+          },
+        };
+        return acc;
+      }
+    });
   } else {
     acc = param;
   }
@@ -32,7 +36,7 @@ export function capitalize(param: {} | string) {
  * Sort an array by the ID prop of its objects
  */
 export function sortByID(list: any[]) {
-  return list.sort((a, b) => (a.id > b.id) ? 1 : -1);
+  return list.sort((a, b) => (a.id > b.id ? 1 : -1));
 }
 
 /**
@@ -40,10 +44,40 @@ export function sortByID(list: any[]) {
  */
 export function deserialize<T>(obj: T, objPropName: string) {
   const lens = lensProp(objPropName);
-  if (typeof view(lens, obj) === 'string') {
-    return set(lens, JSON.parse(view(lens, obj)), obj);
+  const lensValue = <string>view(lens, obj);
+  function isParseableJSON(jsonString) {
+    try {
+      let o = JSON.parse(jsonString);
+
+      // Handle non-exception-throwing cases:
+      // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
+      // but... JSON.parse(null) returns null, and typeof null === "object",
+      // so we must check for that, too. Thankfully, null is falsey, so this suffices:
+      if (typeof o === 'string') {
+        o = JSON.parse(o);
+      }
+      if (o && typeof o === 'object') {
+        return true;
+      }
+    } catch (e) {}
+
+    return false;
   }
-  return obj;
+
+  function tryParseToJSON(str) {
+    if (Array.isArray(str)) {
+      return str;
+    }
+    if (isParseableJSON(str)) {
+      let q = str;
+      while (isParseableJSON(q)) {
+        q = JSON.parse(q);
+      }
+      return q;
+    }
+    return [];
+  }
+  return set(lens, tryParseToJSON(lensValue), obj);
 }
 
 function inputIsNotNullOrUndefined<T>(input: null | undefined | T): input is T {
@@ -54,7 +88,5 @@ function inputIsNotNullOrUndefined<T>(input: null | undefined | T): input is T {
  */
 export function isNotNullOrUndefined<T>() {
   return (source$: Observable<null | undefined | T>) =>
-    source$.pipe(
-      filter(inputIsNotNullOrUndefined)
-    );
+    source$.pipe(filter(inputIsNotNullOrUndefined));
 }

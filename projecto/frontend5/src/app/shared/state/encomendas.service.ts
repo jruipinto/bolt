@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { EntityStateAbstraction } from 'src/app/shared/abstraction-classes';
 import { EncomendasApiService, AuthService, MessagesApiService } from 'src/app/shared/services';
 import { Encomenda, EventoCronologico } from 'src/app/shared/models';
-import { of } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { concat, of } from 'rxjs';
+import { concatMap, map, toArray } from 'rxjs/operators';
 import { Message } from '../components/chat-widget/models/message.model';
 
 @Injectable({ providedIn: 'root' })
@@ -14,6 +14,30 @@ export class EncomendasService extends EntityStateAbstraction {
     private authService: AuthService,
     private messagesService: MessagesApiService) {
     super(encomendasAPI);
+  }
+
+  public get(id: number) {
+    return super.get(id).pipe(
+      map((res: Encomenda[]) => res[0]),
+
+      // retrieve encomenda.messages data
+      concatMap(encomenda => {
+        if (encomenda && encomenda.messages) {
+          return concat(...encomenda.messages.map(
+            (message: Partial<Message>) => this.messagesService.get(message.id).pipe(
+              map((dbMessage: Message[]) => dbMessage[0])
+            )
+          )).pipe(
+            toArray(),
+            map((messages: Message[]) => ({ ...encomenda, messages }) as Encomenda)
+          );
+        }
+        return of(encomenda);
+
+      }),
+
+      map(res => [res])
+    );
   }
 
   public create(encomenda: Partial<Encomenda>) {
