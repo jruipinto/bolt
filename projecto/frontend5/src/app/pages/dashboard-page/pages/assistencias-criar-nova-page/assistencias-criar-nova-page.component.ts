@@ -155,7 +155,7 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
     };
 
     if (this.clienteForm.dirty) {
-      if (cliente.id) {
+      if (+cliente.id) {
         return usersService.patch$(cliente.id, cliente)
           .pipe(concatMap(() => assistenciasService.create$(assistencia)))
           .subscribe(success, error);

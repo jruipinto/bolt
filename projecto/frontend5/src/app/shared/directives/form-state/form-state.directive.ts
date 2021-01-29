@@ -5,10 +5,9 @@ import { first, concatMap, tap } from 'rxjs/operators';
 
 @Directive({
   // tslint:disable-next-line: directive-selector
-  selector: '[formState]'
+  selector: '[formState]',
 })
 export class FormStateDirective implements OnInit {
-
   @Input('formState')
   // tslint:disable-next-line: no-non-null-assertion
   path: string = null!;
@@ -17,7 +16,7 @@ export class FormStateDirective implements OnInit {
     private uiService: UIService,
     private formGroupDirective: FormGroupDirective,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {}
 
   ngOnInit() {
     const form = this.formGroupDirective.control;
@@ -26,16 +25,26 @@ export class FormStateDirective implements OnInit {
       .pipe(
         first(),
         tap((uiState: UI) => form.patchValue(uiState[this.path])),
+        tap((uiState: UI) => {
+          if (uiState[this.path].dirty) {
+            form.markAsDirty();
+          }
+        }),
         tap(() => this.cdr.detectChanges())
-      ).subscribe();
+      )
+      .subscribe();
 
     form.valueChanges
       .pipe(
-        concatMap(
-          (formValue) => this.uiService.patchState({ [this.path]: formValue })
+        concatMap((formValue) =>
+          this.uiService.patchState({
+            [this.path]: {
+              ...formValue,
+              dirty: form.dirty,
+            },
+          })
         )
       )
       .subscribe();
   }
-
 }
