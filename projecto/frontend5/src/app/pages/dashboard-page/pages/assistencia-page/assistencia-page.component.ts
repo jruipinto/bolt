@@ -122,7 +122,11 @@ ${this.assistencia.relatorio_cliente}`
     if (newEstado === 'orçamento pendente' && !assistencia.preco) {
       return alert('Para orçamentar assistência o preço não pode ser 0€!');
     }
+    // If assistencia.estado is subject of change &&
+    // is going to be one of these,
+    // then assign the authenticated user to assistencia.tecnico_user_id
     if (
+      newEstado !== assistenciaOnInit.estado &&
       (
         newEstado === 'em análise' ||
         newEstado === 'contacto pendente' ||
@@ -131,7 +135,6 @@ ${this.assistencia.relatorio_cliente}`
         newEstado === 'concluído' ||
         newEstado === 'concluído s/ rep.'
       )
-      && assistenciaOnInit.estado === 'recebido'
     ) {
       assistencia.tecnico_user_id = this.authService.getUserId();
     }
