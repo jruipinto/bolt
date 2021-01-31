@@ -6,52 +6,103 @@
 
 <app-clientes-pesquisar-modal></app-clientes-pesquisar-modal>
 
-<form class="separate clr-form" [formGroup]="contactoClienteForm"
-  formState="assistenciasCriarNovaPageContactoClienteForm">
-  <div class="clr-row">
-    <div class="clr-col-md-2">
-      <label for="contacto">Contacto:*</label>
-    </div>
-    <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="tel" name="contacto" id="contacto" placeholder="☎️" required autofocus
-        formControlName="contacto">
-    </div>
-  </div>
+<form
+  class="separate"
+  [formGroup]="contactoClienteForm"
+  formState="assistenciasCriarNovaPageContactoClienteForm"
+  clrForm
+  clrLayout="compact"
+>
+  <clr-input-container>
+    <label for="contacto">Contacto*</label>
+    <input
+      maxlength="14"
+      minlength="9"
+      required
+      type="tel"
+      name="contacto"
+      id="contacto"
+      placeholder="911444777"
+      autofocus
+      formControlName="contacto"
+      clrInput
+    />
+    <clr-control-error
+      >Contacto válido, entre 9 e 14 digitos, requirido</clr-control-error
+    >
+  </clr-input-container>
 </form>
 
-<form class="separate clr-form" [formGroup]="clienteForm" formState="assistenciasCriarNovaPageClienteForm">
-  <div class="clr-row">
-    <div class="clr-col-md-2">
-      <label for="nome">Nome:*</label>
-    </div>
-    <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="text" name="nome" id="nome" required formControlName="nome">
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-md-2">
-      <label for="email">Email:</label>
-    </div>
-    <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="email" name="email" id="email" formControlName="email">
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-md-2">
-      <label for="endereco">Endereço:</label>
-    </div>
-    <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="text" name="endereço" id="endereço" formControlName="endereço" autocaps>
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-md-2">
-      <label for="nif">NIF:</label>
-    </div>
-    <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="number" name="nif" id="nif" formControlName="nif">
-    </div>
-  </div>
+<form
+  class="separate"
+  [formGroup]="clienteForm"
+  formState="assistenciasCriarNovaPageClienteForm"
+  clrForm
+  clrLayout="compact"
+>
+  <clr-input-container>
+    <label for="nome">Nome*</label>
+    <input
+      maxlength="45"
+      minlength="3"
+      required
+      autocaps
+      type="text"
+      name="nome"
+      id="nome"
+      placeholder="Manuel Silva"
+      formControlName="nome"
+      clrInput
+    />
+    <clr-control-error
+      >Nome válido, entre 3 e 45 caracteres, requirido!</clr-control-error
+    >
+  </clr-input-container>
+  <clr-input-container>
+    <label for="email">Email</label>
+    <input
+      maxlength="45"
+      type="email"
+      name="email"
+      id="email"
+      placeholder="exemplo@exemplo.pt"
+      formControlName="email"
+      clrInput
+    />
+    <clr-control-error
+      >Email tem de ser válido e no máximo 45 caracteres!</clr-control-error
+    >
+  </clr-input-container>
+  <clr-input-container>
+    <label for="endereço">Endereço</label>
+    <input
+      maxlength="400"
+      type="text"
+      name="endereço"
+      id="endereço"
+      placeholder="Av. da Liberdade, 2345-671, Lisboa"
+      formControlName="endereço"
+      autocaps
+      clrInput
+    />
+    <clr-control-error>Máximo 400 caracteres!</clr-control-error>
+  </clr-input-container>
+  <clr-input-container>
+    <label for="nif">NIF</label>
+    <input
+      maxlength="9"
+      minlength="9"
+      type="number"
+      name="nif"
+      id="nif"
+      placeholder="000 000 000"
+      formControlName="nif"
+      clrInput
+    />
+    <clr-control-error
+      >NIF precisa 9 digitos para ser válido!</clr-control-error
+    >
+  </clr-input-container>
 </form>
 
 <div *ngIf="oldAssists$ | async as oldAssists">
@@ -63,150 +114,233 @@
       <h5>Últimas fichas</h5>
       <p class="p7">(marca modelo cor serial)</p>
       <div *ngFor="let oldAssist of oldAssists">
-        <p> {{oldAssist.marca}} {{oldAssist.modelo}} {{oldAssist.cor}} {{oldAssist.serial}} </p>
-        <button class="btn btn-sm btn-link" (click)="copyToCriarNovaForm(oldAssist)">copiar</button>
+        <p>
+          {{ oldAssist.marca }} {{ oldAssist.modelo }} {{ oldAssist.cor }}
+          {{ oldAssist.serial }}
+        </p>
+        <button
+          class="btn btn-sm btn-link"
+          (click)="copyToCriarNovaForm(oldAssist)"
+        >
+          copiar
+        </button>
       </div>
     </clr-signpost-content>
   </clr-signpost>
 </div>
 
-<div class="separate">
-  <form class="clr-form" [formGroup]="criarNovaForm" formState="assistenciasCriarNovaPageCriarNovaForm"
-    (ngSubmit)="onSubmit()">
-    <div class="clr-row">
-      <div class="clr-col-md-2">
-        <label for="categoria">Categoria:*</label>
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-        <div class="clr-select-wrapper wd-100">
-          <select class="clr-select wd-100" name="categoria" id="categoria" formControlName="categoria">
-            <option value="Telemóvel">Telemóvel</option>
-            <option value="Tablet">Tablet</option>
-            <option value="Portátil">Portátil</option>
-            <option value="Consola">Consola</option>
-            <option value="PC fixo">PC fixo</option>
-            <option value="GPS">GPS</option>
-            <option value="Coluna portátil">Coluna portátil</option>
-            <option value="TV">TV</option>
-            <option value="Monitor">Monitor</option>
-            <option value="Centralina">Centralina</option>
-            <option value="Placa">Placa</option>
-            <option value="Outro">Outro</option>
-          </select>
-        </div>
-      </div>
+<form
+  class="separate"
+  [formGroup]="criarNovaForm"
+  formState="assistenciasCriarNovaPageCriarNovaForm"
+  (ngSubmit)="onSubmit()"
+  clrForm
+  clrLayout="compact"
+>
+  <clr-select-container>
+    <label for="categoria">Categoria:*</label>
+    <select
+      clrSelect
+      name="categoria"
+      id="categoria"
+      formControlName="categoria"
+      required
+    >
+      <option value="Centralina">Centralina</option>
+      <option value="Coluna portátil">Coluna portátil</option>
+      <option value="Consola">Consola</option>
+      <option value="GPS">GPS</option>
+      <option value="Monitor">Monitor</option>
+      <option value="Outro">Outro</option>
+      <option value="PC fixo">PC fixo</option>
+      <option value="Placa">Placa</option>
+      <option value="Portátil">Portátil</option>
+      <option value="Tablet">Tablet</option>
+      <option value="Telemóvel">Telemóvel</option>
+      <option value="TV">TV</option>
+    </select>
+    <clr-control-helper
+      >Se categoria for "outro", depois escreva, no problema,
+      qual.</clr-control-helper
+    >
+    <clr-control-error>Categoria requirida!</clr-control-error>
+  </clr-select-container>
+  <clr-input-container>
+    <label for="marca">Marca</label>
+    <input
+      maxlength="20"
+      type="text"
+      name="marca"
+      id="marca"
+      placeholder="Samsung"
+      formControlName="marca"
+      autocaps
+      clrInput
+    />
+    <clr-control-error>Máximo 20 caracteres!</clr-control-error>
+  </clr-input-container>
+  <clr-input-container>
+    <label for="modelo">Modelo</label>
+    <input
+      maxlength="20"
+      type="text"
+      name="modelo"
+      id="modelo"
+      placeholder="Galaxy S21"
+      formControlName="modelo"
+      clrInput
+    />
+    <clr-control-error>Máximo 20 caracteres!</clr-control-error>
+  </clr-input-container>
+  <clr-input-container>
+    <label for="cor">Cor*</label>
+    <input
+      type="text"
+      name="cor"
+      id="cor"
+      placeholder="Azul"
+      formControlName="cor"
+      clrInput
+      required
+      autocaps
+    />
+    <clr-control-error
+      >Cor válida, até 20 carcateres, requirida!</clr-control-error
+    >
+  </clr-input-container>
+  <clr-input-container>
+    <label for="serial">Serial</label>
+    <input
+      maxlength="45"
+      type="text"
+      name="serial"
+      id="serial"
+      placeholder="sn1233ax8989t"
+      formControlName="serial"
+      clrInput
+    />
+    <clr-control-error>Máximo 45 caracteres!</clr-control-error>
+  </clr-input-container>
+  <clr-input-container>
+    <label for="codigo">Código</label>
+    <input
+      maxlength="20"
+      type="text"
+      name="codigo"
+      id="codigo"
+      placeholder="0000"
+      formControlName="codigo"
+      clrInput
+    />
+    <clr-control-error>Máximo 20 caracteres!</clr-control-error>
+  </clr-input-container>
+  <clr-input-container>
+    <label for="acessorios">Acessórios</label>
+    <input
+      maxlength="100"
+      type="text"
+      name="acessorios"
+      id="acessorios"
+      placeholder="carregador"
+      formControlName="acessorios"
+      clrInput
+    />
+    <clr-control-error>Máximo 100 caracteres!</clr-control-error>
+  </clr-input-container>
+  <clr-checkbox-container>
+    <label for="estado">Estado</label>
+    <clr-checkbox-wrapper>
+      <input
+        type="checkbox"
+        clrCheckbox
+        name="options"
+        value="partido"
+        formControlName="estadoPartido"
+      />
+      <label>Partido</label>
+    </clr-checkbox-wrapper>
+    <clr-checkbox-wrapper>
+      <input
+        type="checkbox"
+        clrCheckbox
+        name="options"
+        value="empenado"
+        formControlName="estadoEmpenado"
+      />
+      <label>Empenado</label>
+    </clr-checkbox-wrapper>
+    <clr-checkbox-wrapper>
+      <input
+        type="checkbox"
+        clrCheckbox
+        name="options"
+        value="riscos"
+        formControlName="estadoRiscos"
+      />
+      <label>Riscos</label>
+    </clr-checkbox-wrapper>
+    <clr-checkbox-wrapper>
+      <input
+        type="checkbox"
+        clrCheckbox
+        name="options"
+        value="mossas"
+        formControlName="estadoMossas"
+      />
+      <label>Mossas</label>
+    </clr-checkbox-wrapper>
+    <clr-control-helper>Verifique o equipamento.</clr-control-helper>
+  </clr-checkbox-container>
+  <clr-textarea-container>
+    <label for="problema">Problema*</label>
+    <textarea
+      maxlength="1700"
+      required
+      placeholder="Não carrega. OBS: prometido para dia 21/02."
+      clrTextarea
+      name="problema"
+      id="problema"
+      formControlName="problema"
+      autocaps
+    ></textarea>
+    <clr-control-error
+      >Descrição, até 1700 caracteres, requirida!</clr-control-error
+    >
+  </clr-textarea-container>
+  <clr-input-container>
+    <label for="orcamento">Orçamento</label>
+    <input
+      max="10000"
+      type="number"
+      name="orcamento"
+      id="orcamento"
+      placeholder="€25"
+      formControlName="orcamento"
+      clrInput
+    />
+    <clr-control-error>Orçamento máximo de €10000!</clr-control-error>
+  </clr-input-container>
+  <clr-select-container>
+    <label for="tecnico">Técnico</label>
+    <select
+      clrSelect
+      name="tecnico"
+      id="tecnico"
+      formControlName="tecnico_user_id"
+    >
+      <option value="">Qualquer</option>
+      <option
+        *ngFor="let tecnico of tecnicos$ | async"
+        value="{{ tecnico.id }}"
+      >
+        {{ tecnico.nome }}
+      </option>
+    </select>
+    <clr-control-helper>É recomendado escolher o técnico.</clr-control-helper>
+  </clr-select-container>
+  <div class="clr-row no-gutters">
+    <div class="clr-col-md-12 clr-col-lg-2">
+      <input class="btn btn-primary wd-100" type="submit" value="Submeter" />
     </div>
-    <div class="clr-row">
-      <div class="clr-col-md-2">
-        <label for="marca">Marca:</label>
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-        <input class="clr-input wd-100" type="text" name="marca" id="marca" formControlName="marca" autocaps>
-      </div>
-    </div>
-    <div class="clr-row">
-      <div class="clr-col-md-2">
-        <label for="modelo">Modelo:</label>
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-        <input class="clr-input wd-100" type="text" name="modelo" id="modelo" formControlName="modelo">
-      </div>
-    </div>
-    <div class="clr-row">
-      <div class="clr-col-md-2">
-        <label for="cor">Cor: *</label>
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-        <input class="clr-input wd-100" type="text" name="cor" id="cor" required formControlName="cor" autocaps>
-      </div>
-    </div>
-    <div class="clr-row">
-      <div class="clr-col-md-2">
-        <label for="serial">Serial:</label>
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-        <input class="clr-input wd-100" type="text" name="serial" id="serial" placeholder="(recomendado)"
-          formControlName="serial">
-      </div>
-    </div>
-    <div class="clr-row">
-      <div class="clr-col-md-2">
-        <label for="serial">Código:</label>
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-        <input class="clr-input wd-100" type="text" name="codigo" id="codigo" placeholder="(recomendado)"
-          formControlName="codigo">
-      </div>
-    </div>
-    <div class="clr-row">
-      <div class="clr-col-md-2">
-        <label for="serial">Acessórios:</label>
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-        <input class="clr-input wd-100" type="text" name="acessorios" id="acessorios" placeholder="(recomendado)"
-          formControlName="acessorios" autocaps>
-      </div>
-    </div>
-    <div class="clr-row">
-      <div class="clr-col-md-2">
-        <label for="serial">Estado:</label>
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-        <clr-checkbox-container clrInline>
-          <clr-checkbox-wrapper>
-            <input type="checkbox" clrCheckbox name="options" value="partido" formControlName="estadoPartido" />
-            <label>Partido</label>
-          </clr-checkbox-wrapper>
-          <clr-checkbox-wrapper>
-            <input type="checkbox" clrCheckbox name="options" value="empenado" formControlName="estadoEmpenado" />
-            <label>Empenado</label>
-          </clr-checkbox-wrapper>
-          <clr-checkbox-wrapper>
-            <input type="checkbox" clrCheckbox name="options" value="riscos" formControlName="estadoRiscos" />
-            <label>Riscos</label>
-          </clr-checkbox-wrapper>
-          <clr-checkbox-wrapper>
-            <input type="checkbox" clrCheckbox name="options" value="mossas" formControlName="estadoMossas" />
-            <label>Mossas</label>
-          </clr-checkbox-wrapper>
-        </clr-checkbox-container>
-      </div>
-    </div>
-    <div class="clr-row">
-      <div class="clr-col-md-2">
-        <label for="problema">Problema:*</label>
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-        <textarea class="clr-textarea wd-100" name="problema" id="problema" required formControlName="problema"
-          autocaps></textarea>
-      </div>
-    </div>
-    <div class="clr-row">
-      <div class="clr-col-md-2">
-        <label for="orcamento">Orçamento:</label>
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-        <input class="clr-input wd-100" type="number" name="orcamento" id="orcamento" formControlName="orcamento">
-      </div>
-    </div>
-    <div class="clr-row">
-      <div class="clr-col-md-2">
-        <label for="categoria">Técnico:</label>
-      </div>
-      <div class="clr-col-md-9 clr-col-lg-6">
-        <div class="clr-select-wrapper wd-100">
-          <select class="clr-select wd-100" name="categoria" id="categoria" formControlName="tecnico_user_id">
-            <option value="">Qualquer</option>
-            <option *ngFor="let tecnico of tecnicos$ | async" value={{tecnico.id}}>{{tecnico.nome}}</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="clr-row no-gutters">
-      <div class="clr-col-md-12 clr-col-lg-2">
-        <input class="btn btn-primary wd-100" type="submit" value="Submeter"
-          [disabled]="contactoClienteForm.invalid || clienteForm.invalid || criarNovaForm.invalid">
-      </div>
-    </div>
-  </form>
-</div>
+  </div>
+</form>
