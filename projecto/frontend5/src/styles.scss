@@ -87,6 +87,17 @@ main.content-area {
   }
 }
 
+app-assistencias-criar-nova-page {
+  .clr-input-wrapper,
+  .clr-input-wrapper input,
+  .clr-select-wrapper,
+  .clr-select-wrapper select,
+  .clr-textarea-wrapper,
+  .clr-textarea-wrapper textarea {
+    min-width: 350px;
+  }
+}
+
 /* ############################# */
 
 @import "./print";

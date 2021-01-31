@@ -1,6 +1,12 @@
 import {
-  Component, OnInit, ChangeDetectionStrategy, OnDestroy,
-  ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
@@ -14,41 +20,41 @@ import { capitalize } from 'src/app/shared/utilities';
 import { clone } from 'ramda';
 import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/modals';
 
-
-
 @AutoUnsubscribe()
 @Component({
   selector: 'app-assistencias-criar-nova-page',
   templateUrl: './assistencias-criar-nova-page.component.html',
   styleUrls: ['./assistencias-criar-nova-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, AfterViewInit {
-
-
+export class AssistenciasCriarNovaPageComponent
+  implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
     private assistenciasService: AssistenciasService,
     private printService: PrintService,
-    private cdr: ChangeDetectorRef) { }
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  @ViewChild('userSearchModalInput') userSearchModalInputEl: ElementRef<HTMLElement>;
-  @ViewChild(ClientesPesquisarModalComponent) clientesSearchModal: ClientesPesquisarModalComponent;
+  @ViewChild('userSearchModalInput')
+  userSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild(ClientesPesquisarModalComponent)
+  clientesSearchModal: ClientesPesquisarModalComponent;
 
   public oldAssists$: Observable<Assistencia[]>;
   public tecnicos$ = this.usersService.find({ query: { tipo: 'tecnico' } });
 
   /* Declaration of the 3 Forms on the UI */
   public contactoClienteForm = this.fb.group({
-    contacto: [null, Validators.min(200000000)] // por exemplo, contacto: 255486001
+    contacto: [null, Validators.required], // por exemplo, contacto: 255486001
   });
   public clienteForm = this.fb.group({
-    nome: [null, [Validators.required, Validators.minLength(3)]],
-    email: [''],
+    nome: [null, Validators.required],
+    email: ['', Validators.email],
     endereço: [''],
     nif: [''],
-    id: [null]
+    id: [null],
   });
   public criarNovaForm = this.fb.group({
     categoria: ['', Validators.required],
@@ -64,47 +70,56 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
     estadoMossas: [false],
     problema: ['', Validators.required],
     orcamento: [null],
-    tecnico_user_id: ['']
+    tecnico_user_id: [''],
   });
   /*########################################### */
-  private clienteChange$ = this.contactoClienteForm.valueChanges
-    .pipe(
-      tap(() => {
-        this.clienteForm.reset();
-        this.oldAssists$ = of();
-      }),
-      concatMap(({ contacto }) => this.user$(contacto).pipe(
-        map((users: User[]) => users.filter((user: User) => user.contacto === +contacto)),
+  private clienteChange$ = this.contactoClienteForm.valueChanges.pipe(
+    tap(() => {
+      this.clienteForm.reset();
+      this.oldAssists$ = of();
+    }),
+    concatMap(({ contacto }) =>
+      this.user$(contacto).pipe(
+        map((users: User[]) =>
+          users.filter((user: User) => user.contacto === +contacto)
+        ),
         map((users: User[]) => users[0]),
         tap((cliente: User) => {
           if (cliente) {
             this.clienteForm.patchValue(cliente);
-            this.oldAssists$ = this.assistenciasService.find({ query: { cliente_user_id: cliente.id, estado: 'entregue' } });
+            this.oldAssists$ = this.assistenciasService.find({
+              query: { cliente_user_id: cliente.id, estado: 'entregue' },
+            });
             setTimeout(() => {
               this.cdr.detectChanges();
             }, 200);
           }
         })
-      ))
-    );
+      )
+    )
+  );
 
-  private user$ = (contacto: number): Observable<User[]> => this.usersService.find({ query: { contacto } });
+  private user$ = (contacto: number): Observable<User[]> =>
+    this.usersService.find({ query: { contacto } });
 
   ngOnInit() {
     this.clienteChange$.subscribe();
   }
 
   ngAfterViewInit() {
-    this.clientesSearchModal.selectedCliente
-      .subscribe(
-        (user: User) => this.contactoClienteForm.patchValue({ contacto: clone(user.contacto) })
-      );
+    this.clientesSearchModal.selectedCliente.subscribe((user: User) =>
+      this.contactoClienteForm.patchValue({ contacto: clone(user.contacto) })
+    );
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 
   onSubmit() {
-    if (this.contactoClienteForm.invalid || this.clienteForm.invalid || this.criarNovaForm.invalid) {
+    if (
+      this.contactoClienteForm.invalid ||
+      this.clienteForm.invalid ||
+      this.criarNovaForm.invalid
+    ) {
       return alert('Alguns dados obrigatórios em falta!');
     }
     const estado = 'recebido';
@@ -119,64 +134,78 @@ export class AssistenciasCriarNovaPageComponent implements OnInit, OnDestroy, Af
       modelo: equipment.modelo,
       cor: equipment.cor,
       serial: equipment.serial,
-      problema: equipment.problema +
+      problema:
+        equipment.problema +
         (equipment.acessorios ? ` - Acessórios: ${equipment.acessorios}` : '') +
         (equipment.codigo ? ` - Código: ${equipment.codigo}` : '') +
         ' - Estado visível:' +
-        (
-          equipment.estadoPartido || equipment.estadoEmpenado || equipment.estadoRiscos || equipment.estadoMossas
-            ? (
-              (equipment.estadoPartido ? ' partido;' : '') +
-              (equipment.estadoEmpenado ? ' empenado;' : '') +
-              (equipment.estadoRiscos ? ' riscos;' : '') +
-              (equipment.estadoMossas ? ' mossas;' : '')
-            )
-            : ' sem marcas.'
-        ),
+        (equipment.estadoPartido ||
+        equipment.estadoEmpenado ||
+        equipment.estadoRiscos ||
+        equipment.estadoMossas
+          ? (equipment.estadoPartido ? ' partido;' : '') +
+            (equipment.estadoEmpenado ? ' empenado;' : '') +
+            (equipment.estadoRiscos ? ' riscos;' : '') +
+            (equipment.estadoMossas ? ' mossas;' : '')
+          : ' sem marcas.'),
       orcamento: equipment.orcamento,
-      tecnico_user_id: equipment.tecnico_user_id === '' ? null : equipment.tecnico_user_id
+      tecnico_user_id:
+        equipment.tecnico_user_id === '' ? null : equipment.tecnico_user_id,
     };
     const assistenciasService = {
       create$: (data: Partial<Assistencia>) =>
-        this.assistenciasService.create(data)
-          .pipe(tap(() => {
+        this.assistenciasService.create(data).pipe(
+          tap(() => {
             this.criarNovaForm.reset();
             // you can open print service here!
-          }))
+          })
+        ),
     };
     const usersService = {
       create$: (data: Partial<User>) => this.usersService.create(data),
-      patch$: (id: number, data: Partial<User>) => this.usersService.patch(id, data)
+      patch$: (id: number, data: Partial<User>) =>
+        this.usersService.patch(id, data),
     };
-    const success = (response: Assistencia[]) => this.printService.printAssistenciaEntrada(response[0]);
-    const error = err => {
+    const success = (response: Assistencia[]) =>
+      this.printService.printAssistenciaEntrada(response[0]);
+    const error = (err) => {
       console.log('Falhou a submissão. Chame o Admin.', err);
       alert('Falhou a submissão. Chame o Admin. (detalhes: CTRL + SHIFT + I)');
     };
 
     if (this.clienteForm.dirty) {
       if (+cliente.id) {
-        return usersService.patch$(cliente.id, cliente)
+        return usersService
+          .patch$(cliente.id, cliente)
           .pipe(concatMap(() => assistenciasService.create$(assistencia)))
           .subscribe(success, error);
       }
-      return usersService.create$({ ...cliente, contacto, ...{ tipo: 'cliente' } })
+      return usersService
+        .create$({ ...cliente, contacto, ...{ tipo: 'cliente' } })
         .pipe(
           // refresh contacto form to fix bug when creating new user
-          tap((newUserArr: User[]) => this.contactoClienteForm.patchValue({ contacto: newUserArr[0].contacto })),
-          concatMap((newUserArr: User[]) => assistenciasService.create$({ ...assistencia, ...{ cliente_user_id: newUserArr[0].id } })))
+          tap((newUserArr: User[]) =>
+            this.contactoClienteForm.patchValue({
+              contacto: newUserArr[0].contacto,
+            })
+          ),
+          concatMap((newUserArr: User[]) =>
+            assistenciasService.create$({
+              ...assistencia,
+              ...{ cliente_user_id: newUserArr[0].id },
+            })
+          )
+        )
         .subscribe(success, error);
     }
-    return assistenciasService.create$(assistencia)
-      .subscribe(success, error);
+    return assistenciasService.create$(assistencia).subscribe(success, error);
   }
 
   copyToCriarNovaForm(assistencia: Assistencia) {
     this.criarNovaForm.patchValue(assistencia);
     this.criarNovaForm.patchValue({
       problema: `(Ficha anterior: ${assistencia.id}) `,
-      orcamento: null
+      orcamento: null,
     });
   }
-
 }
