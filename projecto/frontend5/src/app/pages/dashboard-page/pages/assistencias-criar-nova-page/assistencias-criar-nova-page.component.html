@@ -11,7 +11,7 @@
   [formGroup]="contactoClienteForm"
   formState="assistenciasCriarNovaPageContactoClienteForm"
   clrForm
-  clrLayout="compact"
+  clrLayout="horizontal"
 >
   <clr-input-container>
     <label for="contacto">Contacto*</label>
@@ -38,7 +38,7 @@
   [formGroup]="clienteForm"
   formState="assistenciasCriarNovaPageClienteForm"
   clrForm
-  clrLayout="compact"
+  clrLayout="horizontal"
 >
   <clr-input-container>
     <label for="nome">Nome*</label>
@@ -135,7 +135,7 @@
   formState="assistenciasCriarNovaPageCriarNovaForm"
   (ngSubmit)="onSubmit()"
   clrForm
-  clrLayout="compact"
+  clrLayout="horizontal"
 >
   <clr-select-container>
     <label for="categoria">Categoria:*</label>
@@ -221,32 +221,6 @@
     />
     <clr-control-error>Máximo 45 caracteres!</clr-control-error>
   </clr-input-container>
-  <clr-input-container>
-    <label for="codigo">Código</label>
-    <input
-      maxlength="20"
-      type="text"
-      name="codigo"
-      id="codigo"
-      placeholder="0000"
-      formControlName="codigo"
-      clrInput
-    />
-    <clr-control-error>Máximo 20 caracteres!</clr-control-error>
-  </clr-input-container>
-  <clr-input-container>
-    <label for="acessorios">Acessórios</label>
-    <input
-      maxlength="100"
-      type="text"
-      name="acessorios"
-      id="acessorios"
-      placeholder="carregador"
-      formControlName="acessorios"
-      clrInput
-    />
-    <clr-control-error>Máximo 100 caracteres!</clr-control-error>
-  </clr-input-container>
   <clr-checkbox-container>
     <label for="estado">Estado</label>
     <clr-checkbox-wrapper>
@@ -307,6 +281,32 @@
       >Descrição, até 1700 caracteres, requirida!</clr-control-error
     >
   </clr-textarea-container>
+  <clr-input-container>
+    <label for="acessorios">Acessórios</label>
+    <input
+      maxlength="100"
+      type="text"
+      name="acessorios"
+      id="acessorios"
+      placeholder="carregador"
+      formControlName="acessorios"
+      clrInput
+    />
+    <clr-control-error>Máximo 100 caracteres!</clr-control-error>
+  </clr-input-container>
+  <clr-input-container>
+    <label for="codigo">Código</label>
+    <input
+      maxlength="20"
+      type="text"
+      name="codigo"
+      id="codigo"
+      placeholder="0000"
+      formControlName="codigo"
+      clrInput
+    />
+    <clr-control-error>Máximo 20 caracteres!</clr-control-error>
+  </clr-input-container>
   <clr-input-container>
     <label for="orcamento">Orçamento</label>
     <input
