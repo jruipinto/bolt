@@ -1,7 +1,7 @@
 @media print {
   /*
-  * Reset to print-friendly styles
-  */
+    * Reset to print-friendly styles
+    */
   * {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     line-height: normal;
@@ -27,14 +27,13 @@
   h1 {
     font-size: 18pt;
     font-weight: 600;
-    margin-bottom: 0.5cm;
   }
   h2 {
     font-size: 16pt;
     font-weight: 600;
   }
   p {
-    font-size: 12pt;
+    font-size: 12pt !important;
   }
 
   .items-group {
@@ -48,8 +47,12 @@
 
   .logotipo {
     width: 6cm;
-    height: 4cm;
-    margin: -0.5cm 0 -0.5cm 0;
+  }
+
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .description-label,
@@ -59,7 +62,7 @@
 
   .disclaimer,
   .address p {
-    font-size: 10pt;
+    font-size: 10pt !important;
   }
 
   .signature-field {
@@ -77,5 +80,16 @@
   .padding-right-left-0 {
     padding-left: 0;
     padding-right: 0;
+  }
+
+  /* ######### Clarity design style fixes for this print ########## */
+  p {
+    margin: 0 !important;
+    line-height: normal !important;
+  }
+
+  h1,
+  h2 {
+    font-family: "Segoe UI" !important;
   }
 }
