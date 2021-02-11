@@ -4,15 +4,12 @@ import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service'
 @Component({
   selector: 'app-assistencia-entrada-print',
   templateUrl: './assistencia-entrada-print.component.html',
-  styleUrls: ['./assistencia-entrada-print.component.scss']
+  styleUrls: ['../assistencia-common-print-styles.scss'],
 })
 export class AssistenciaEntradaPrintComponent implements OnInit {
-
-  constructor(private printService: PrintService) { }
+  constructor(private printService: PrintService) {}
 
   public printData$ = this.printService.currentAssistenciaEntradaPrint$;
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
