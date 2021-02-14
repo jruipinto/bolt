@@ -13,20 +13,19 @@ import { AutofocusModule, FormStateModule } from './shared';
 /* components */
 import { AppComponent } from './app.component';
 import { LoginPageComponent, SignupPageComponent } from './pages';
-import { RLoadingComponent, RLoadingFullscreenComponent, ROfflineComponent } from './shared';
+import { RLoadingFullscreenComponent, ROfflineComponent } from './shared';
+import { RLoadingModule } from './shared/components/r-loading/r-loading.module';
 
 // the second parameter 'pt' is optional
 registerLocaleData(localePT, 'pt');
-
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
     SignupPageComponent,
-    RLoadingComponent,
     RLoadingFullscreenComponent,
-    ROfflineComponent
+    ROfflineComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,9 +35,10 @@ registerLocaleData(localePT, 'pt');
     AppRoutingModule,
     ClarityModule,
     FormStateModule,
-    AutofocusModule
+    AutofocusModule,
+    RLoadingModule,
   ],
-  providers: [{ provide: LOCALE_ID, useValue: 'pt' } ],
-  bootstrap: [AppComponent]
+  providers: [{ provide: LOCALE_ID, useValue: 'pt' }],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
