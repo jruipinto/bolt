@@ -1,76 +1,95 @@
-<h3>
-  Encomendas
-  <span class="badge badge-light-blue" *ngIf="(encomendas$ | async) as encomendas">
-    <span *ngIf="encomendas && encomendas.length < 99">{{encomendas.length}}</span>
-    <span *ngIf="encomendas && encomendas.length > 99">99+</span>
-  </span>
-</h3>
+<div class="sticky">
+  <h3>
+    Encomendas
+    <span
+      class="badge badge-light-blue"
+      *ngIf="encomendas$ | async as encomendas"
+    >
+      <span *ngIf="encomendas && encomendas.length < 99">{{
+        encomendas.length
+      }}</span>
+      <span *ngIf="encomendas && encomendas.length > 99">99+</span>
+    </span>
+  </h3>
 
-<clr-tabs (window:resize)="onResize($event)">
-  <clr-tab>
-    <button clrTabLink (click)="filterEncomendas('aguarda entrega')">
-      Aguardam entrega
-      <span *ngIf="(encomendasAguardaEntrega$ | async) as encomendas">
-        <span *ngIf="encomendas.length < 99"> ({{encomendas.length}})</span>
-        <span *ngIf="encomendas.length > 99"> (99+)</span>
-      </span>
-    </button>
-  </clr-tab>
-  <clr-tab>
-    <button clrTabLink (click)="filterEncomendas('recebida')" [clrTabLinkInOverflow]="inOverflow">
-      Recebidas
-      <span *ngIf="(encomendasRecebidas$ | async) as encomendas">
-        <span *ngIf="encomendas.length < 99"> ({{encomendas.length}})</span>
-        <span *ngIf="encomendas.length > 99"> (99+)</span>
-      </span>
-    </button>
-  </clr-tab>
-  <clr-tab>
-    <button clrTabLink (click)="filterEncomendas('marcadas')" [clrTabLinkInOverflow]="inOverflow">
-      Marc. p/ ir a fornecedor
-      <span *ngIf="(encomendasMarcadas$ | async) as encomendas">
-        <span *ngIf="encomendas.length < 99"> ({{encomendas.length}})</span>
-        <span *ngIf="encomendas.length > 99"> (99+)</span>
-      </span>
-    </button>
-  </clr-tab>
-  <clr-tab>
-    <button clrTabLink (click)="filterEncomendas('todas')" [clrTabLinkInOverflow]="inOverflow">
-      Todas
-      <span *ngIf="(encomendasTodas$ | async) as encomendas">
-        <span *ngIf="encomendas.length < 99"> ({{encomendas.length}})</span>
-        <span *ngIf="encomendas.length > 99"> (99+)</span>
-      </span>
-    </button>
-  </clr-tab>
-</clr-tabs>
+  <clr-tabs (window:resize)="onResize($event)">
+    <clr-tab>
+      <button clrTabLink (click)="filterEncomendas('aguarda entrega')">
+        Aguardam entrega
+        <span *ngIf="encomendasAguardaEntrega$ | async as encomendas">
+          <span *ngIf="encomendas.length < 99"> ({{ encomendas.length }})</span>
+          <span *ngIf="encomendas.length > 99"> (99+)</span>
+        </span>
+      </button>
+    </clr-tab>
+    <clr-tab>
+      <button
+        clrTabLink
+        (click)="filterEncomendas('recebida')"
+        [clrTabLinkInOverflow]="inOverflow"
+      >
+        Recebidas
+        <span *ngIf="encomendasRecebidas$ | async as encomendas">
+          <span *ngIf="encomendas.length < 99"> ({{ encomendas.length }})</span>
+          <span *ngIf="encomendas.length > 99"> (99+)</span>
+        </span>
+      </button>
+    </clr-tab>
+    <clr-tab>
+      <button
+        clrTabLink
+        (click)="filterEncomendas('marcadas')"
+        [clrTabLinkInOverflow]="inOverflow"
+      >
+        Marc. p/ ir a fornecedor
+        <span *ngIf="encomendasMarcadas$ | async as encomendas">
+          <span *ngIf="encomendas.length < 99"> ({{ encomendas.length }})</span>
+          <span *ngIf="encomendas.length > 99"> (99+)</span>
+        </span>
+      </button>
+    </clr-tab>
+    <clr-tab>
+      <button
+        clrTabLink
+        (click)="filterEncomendas('todas')"
+        [clrTabLinkInOverflow]="inOverflow"
+      >
+        Todas
+        <span *ngIf="encomendasTodas$ | async as encomendas">
+          <span *ngIf="encomendas.length < 99"> ({{ encomendas.length }})</span>
+          <span *ngIf="encomendas.length > 99"> (99+)</span>
+        </span>
+      </button>
+    </clr-tab>
+  </clr-tabs>
+</div>
 
 <div *ngIf="loading">
-  <span class="spinner spinner-inline">
-  </span>
-  <span>
-    A carregar dados...
-  </span>
+  <span class="spinner spinner-inline"> </span>
+  <span> A carregar dados... </span>
 </div>
 
 <div class="separate">
-  <r-data-row class="clr-row" *ngFor="let encomenda of encomendas$ | async; let listaIndex=index"
-    (click)="openEncomenda(encomenda.id)">
+  <r-data-row
+    class="clr-row"
+    *ngFor="let encomenda of encomendas$ | async; let listaIndex = index"
+    (click)="openEncomenda(encomenda.id)"
+  >
     <div class="clr-col-lg-1 fontheavy">
-      {{encomenda.id}}
+      {{ encomenda.id }}
     </div>
-    <div class="clr-col-lg-2">
-      Prazo: {{encomenda.previsao_entrega}}
-    </div>
+    <div class="clr-col-lg-2">Prazo: {{ encomenda.previsao_entrega }}</div>
     <div class="clr-col-lg-5">
-      {{encomenda.qty}} x {{encomenda.artigo_descricao}} {{encomenda.artigo_marca}}
-      {{encomenda.artigo_modelo}}
+      {{ encomenda.qty }} x {{ encomenda.artigo_descricao }}
+      {{ encomenda.artigo_marca }}
+      {{ encomenda.artigo_modelo }}
     </div>
     <div class="clr-col-lg-2">
-      Orç: {{encomenda.orcamento | currency: 'EUR'}} <span *ngIf="!encomenda.orcamento">não tem</span>
+      Orç: {{ encomenda.orcamento | currency: "EUR" }}
+      <span *ngIf="!encomenda.orcamento">não tem</span>
     </div>
     <div class="clr-col-lg-2">
-      {{encomenda.estado}}
+      {{ encomenda.estado }}
     </div>
   </r-data-row>
 </div>
