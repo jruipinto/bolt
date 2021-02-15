@@ -1,10 +1,22 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { tap, concatMap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { User, Encomenda, Artigo } from 'src/app/shared/models';
-import { UsersService, EncomendasService, ArtigosService } from 'src/app/shared/state';
+import {
+  UsersService,
+  EncomendasService,
+  ArtigosService,
+} from 'src/app/shared/state';
 import clone from 'ramda/es/clone';
 import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/modals';
 import { FocusMonitor } from '@angular/cdk/a11y';
@@ -14,28 +26,32 @@ import { FocusMonitor } from '@angular/cdk/a11y';
   selector: 'app-encomendas-criar-nova-page',
   templateUrl: './encomendas-criar-nova-page.component.html',
   styleUrls: ['./encomendas-criar-nova-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('artigoSearchModalInput') artigoSearchModalInputEl: ElementRef<HTMLElement>;
-  @ViewChild('userSearchModalInput') userSearchModalInputEl: ElementRef<HTMLElement>;
-  @ViewChild(ClientesPesquisarModalComponent) clientesSearchModal: ClientesPesquisarModalComponent;
+export class EncomendasCriarNovaPageComponent
+  implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('artigoSearchModalInput')
+  artigoSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild('userSearchModalInput')
+  userSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild(ClientesPesquisarModalComponent)
+  clientesSearchModal: ClientesPesquisarModalComponent;
 
   public artigoSearchModalOpened = false;
   public artigoSearchResults$: Observable<Artigo[]>;
 
   public artigoSearchForm = this.fb.group({
-    input: [null]
+    input: [null],
   });
   public contactoClienteForm = this.fb.group({
-    contacto: [null, Validators.min(200000000)] // por exemplo, contacto: 255486001
+    contacto: [null, [Validators.required]], // por exemplo, contacto: 255486001
   });
   public clienteForm = this.fb.group({
-    nome: [null, [Validators.required, Validators.minLength(3)]],
+    nome: [null, [Validators.required]],
     email: [''],
     endereço: [''],
     nif: [''],
-    id: [null]
+    id: [null],
   });
   public artigo: Artigo;
   public artigoForm = this.fb.group({
@@ -46,7 +62,7 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
     localizacao: [null],
     qty: [null],
     preco: [null],
-    pvp: [null]
+    pvp: [null],
   });
   public encomendaForm = this.fb.group({
     id: [null],
@@ -58,7 +74,7 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
     previsao_entrega: [null, [Validators.required]],
     orcamento: [null],
     fornecedor: [null],
-    qty: [null, [Validators.required]]
+    qty: [null, [Validators.required]],
   });
 
   private clienteChange$ = this.contactoClienteForm.valueChanges.pipe(
@@ -66,20 +82,24 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
       this.clienteForm.reset();
       this.encomendaForm.patchValue({ cliente_user_id: null });
     }),
-    concatMap(({ contacto }) => this.user$(contacto).pipe(
-      map((users: User[]) => users.filter((user: User) => user.contacto === +contacto)),
-      map((users: User[]) => users[0]),
-      tap((cliente: User) => {
-        if (cliente) {
-          this.clienteForm.patchValue(cliente);
-          this.encomendaForm.patchValue({ cliente_user_id: cliente.id });
-        }
-      })
-    ))
+    concatMap(({ contacto }) =>
+      this.user$(contacto).pipe(
+        map((users: User[]) =>
+          users.filter((user: User) => user.contacto === +contacto)
+        ),
+        map((users: User[]) => users[0]),
+        tap((cliente: User) => {
+          if (cliente) {
+            this.clienteForm.patchValue(cliente);
+            this.encomendaForm.patchValue({ cliente_user_id: cliente.id });
+          }
+        })
+      )
+    )
   );
 
-  private user$ = (contacto: number) => this.users.find({ query: { contacto } }) as Observable<User[]>;
-
+  private user$ = (contacto: number) =>
+    this.users.find({ query: { contacto } }) as Observable<User[]>;
 
   constructor(
     private fb: FormBuilder,
@@ -87,7 +107,7 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
     private encomendas: EncomendasService,
     private artigos: ArtigosService,
     private focusMonitor: FocusMonitor
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.clienteChange$.subscribe();
@@ -95,17 +115,19 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
 
   ngAfterViewInit() {
     this.encomendaForm.patchValue({ artigo_id: this.artigoForm.value.id });
-    this.clientesSearchModal.selectedCliente
-      .subscribe(
-        (user: User) => this.contactoClienteForm.patchValue({ contacto: clone(user.contacto) })
-      );
+    this.clientesSearchModal.selectedCliente.subscribe((user: User) =>
+      this.contactoClienteForm.patchValue({ contacto: clone(user.contacto) })
+    );
   }
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 
   createEncomenda(arg: Encomenda) {
-    if (this.encomendaForm.invalid || this.contactoClienteForm.invalid || this.clienteForm.invalid) {
+    if (
+      this.encomendaForm.invalid ||
+      this.contactoClienteForm.invalid ||
+      this.clienteForm.invalid
+    ) {
       return alert('Alguns dados obrigatórios em falta!');
     }
     const encomenda = { ...clone(arg), estado: 'registada' };
@@ -114,32 +136,43 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
       this.encomendaForm.reset();
       alert('Sucesso!');
     };
-    const error = err => {
+    const error = (err) => {
       console.log('Falhou a submissão. Chame o Admin.', err);
       alert('Falhou a submissão. Chame o Admin. (detalhes: CTRL + SHIFT + I)');
     };
 
     if (this.clienteForm.dirty) {
       if (this.clienteForm.value.id) {
-        return this.users.patch(this.clienteForm.value.id, this.clienteForm.value)
+        return this.users
+          .patch(this.clienteForm.value.id, this.clienteForm.value)
           .pipe(concatMap(() => this.encomendas.create(encomenda)))
           .subscribe(success, error);
       } else {
-        return this.users.create({
-          ...this.clienteForm.value,
-          contacto: this.contactoClienteForm.value.contacto,
-          ...{ tipo: 'cliente' }
-        })
+        return this.users
+          .create({
+            ...this.clienteForm.value,
+            contacto: this.contactoClienteForm.value.contacto,
+            ...{ tipo: 'cliente' },
+          })
           .pipe(
             map((newUserArr: User[]) => newUserArr[0]),
             // refresh contacto form to fix bug when creating new user
-            tap((newUser: User) => this.contactoClienteForm.patchValue({ contacto: newUser.contacto })),
-            concatMap((newUser: User) => this.encomendas.create({ ...encomenda, ...{ cliente_user_id: newUser.id } })))
+            tap((newUser: User) =>
+              this.contactoClienteForm.patchValue({
+                contacto: newUser.contacto,
+              })
+            ),
+            concatMap((newUser: User) =>
+              this.encomendas.create({
+                ...encomenda,
+                ...{ cliente_user_id: newUser.id },
+              })
+            )
+          )
           .subscribe(success, error);
       }
     } else {
-      return this.encomendas.create(encomenda)
-        .subscribe(success, error);
+      return this.encomendas.create(encomenda).subscribe(success, error);
     }
   }
 
@@ -160,12 +193,19 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
   searchArtigo(input?: string) {
     if (input) {
       const inputSplited = input.split(' ');
-      const inputMapped = inputSplited.map(word =>
-        '{"$or": [' +
-        '{ "marca": { "$like": "%' + word + '%" }},' +
-        '{ "modelo": { "$like": "%' + word + '%" }},' +
-        '{ "descricao": { "$like": "%' + word + '%" }}' +
-        ' ]}'
+      const inputMapped = inputSplited.map(
+        (word) =>
+          '{"$or": [' +
+          '{ "marca": { "$like": "%' +
+          word +
+          '%" }},' +
+          '{ "modelo": { "$like": "%' +
+          word +
+          '%" }},' +
+          '{ "descricao": { "$like": "%' +
+          word +
+          '%" }}' +
+          ' ]}'
       );
       const dbQuery =
         '{' +
@@ -178,8 +218,7 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
         '}' +
         '}';
 
-      this.artigoSearchResults$ = this.artigos
-        .find(JSON.parse(dbQuery));
+      this.artigoSearchResults$ = this.artigos.find(JSON.parse(dbQuery));
     }
   }
 
@@ -191,7 +230,10 @@ export class EncomendasCriarNovaPageComponent implements OnInit, OnDestroy, Afte
 
   openArtigoSearchModal() {
     this.artigoSearchModalOpened = true;
-    setTimeout(() => this.focusMonitor.focusVia(this.artigoSearchModalInputEl, 'program'), 0.1);
+    setTimeout(
+      () =>
+        this.focusMonitor.focusVia(this.artigoSearchModalInputEl, 'program'),
+      0.1
+    );
   }
-
 }
