@@ -30,7 +30,11 @@ export class FormStateDirective implements OnInit {
             form.markAsDirty();
           }
         }),
-        tap(() => this.cdr.detectChanges())
+        tap(() => {
+          setTimeout(() => {
+            this.cdr.detectChanges();
+          }, 200);
+        })
       )
       .subscribe();
 
