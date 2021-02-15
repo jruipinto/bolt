@@ -5,7 +5,7 @@
       class="badge badge-light-blue"
       *ngIf="assistencias$ | async as assistencias"
     >
-      <span *ngIf="assistencias && assistencias.length < 99">
+      <span *ngIf="assistencias && assistencias.length < 100">
         {{ assistencias.length }}</span
       >
       <span *ngIf="assistencias && assistencias.length > 99"> 99+</span>
