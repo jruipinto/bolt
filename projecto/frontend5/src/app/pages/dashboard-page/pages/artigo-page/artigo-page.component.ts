@@ -12,18 +12,18 @@ import { of } from 'rxjs';
 @Component({
   selector: 'app-artigo-page',
   templateUrl: './artigo-page.component.html',
-  styleUrls: ['./artigo-page.component.scss']
+  styleUrls: ['./artigo-page.component.scss'],
 })
 export class ArtigoPageComponent implements AfterContentInit, OnDestroy {
   public artigoForm = this.fb.group({
     id: [null],
-    marca: [null, [Validators.maxLength(45)]],
-    modelo: [null, [Validators.maxLength(45)]],
-    descricao: [null, [Validators.required, Validators.maxLength(255)]],
-    localizacao: [null, [Validators.maxLength(5)]],
+    marca: [null],
+    modelo: [null],
+    descricao: [null, [Validators.required]],
+    localizacao: [null],
     qty: [null],
     preco: [null],
-    pvp: [null]
+    pvp: [null],
   });
 
   constructor(
@@ -32,69 +32,80 @@ export class ArtigoPageComponent implements AfterContentInit, OnDestroy {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private uiService: UIService
-  ) { }
+  ) {}
 
   ngAfterContentInit() {
     // retrieves the article from DB (wich gets cached on state$)
-    this.route.paramMap.pipe(
-      map((params: ParamMap) => +params.get('id')),
-      concatMap((id: number) => {
-        if (id > 0) {
-          return this.artigos.get(id);
-        } else {
-          return of();
-        }
-      })
-    ).subscribe();
+    this.route.paramMap
+      .pipe(
+        map((params: ParamMap) => +params.get('id')),
+        concatMap((id: number) => {
+          if (id > 0) {
+            return this.artigos.get(id);
+          } else {
+            return of();
+          }
+        })
+      )
+      .subscribe();
     // retrieves the article from state$ (this is how state$ work in this app, for now)
-    this.route.paramMap.pipe(
-      map((params: ParamMap) => +params.get('id')),
-      concatMap((id: number) => (
-        this.artigos.state$.pipe(
-          map((state: Artigo[]) => {
-            return state && state.length ? state.filter(a => a.id === id) : null;
-          })
+    this.route.paramMap
+      .pipe(
+        map((params: ParamMap) => +params.get('id')),
+        concatMap((id: number) =>
+          this.artigos.state$.pipe(
+            map((state: Artigo[]) => {
+              return state && state.length
+                ? state.filter((a) => a.id === id)
+                : null;
+            })
+          )
         )
-      ))
-    ).subscribe(
-      (artigo: Artigo[]) => {
+      )
+      .subscribe((artigo: Artigo[]) => {
         if (artigo && artigo.length) {
           this.artigoForm.patchValue(artigo[0]);
         }
-      }
-    );
+      });
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {}
 
   saveArtigo(artigo: Artigo) {
-    return this.artigos.patch(artigo.id, capitalize(artigo)).pipe(
-      concatMap(
-        () => (
+    if (this.artigoForm.invalid) {
+      return alert('Alguns dados obrigatórios em falta!');
+    }
+    return this.artigos
+      .patch(artigo.id, capitalize(artigo))
+      .pipe(
+        concatMap(() =>
           !artigo.qty || artigo.qty < 2
             ? this.uiService.patchState({
-              encomendaPromptModalVisible: true,
-              encomendaPromptModalArtigo: artigo,
-            })
+                encomendaPromptModalVisible: true,
+                encomendaPromptModalArtigo: artigo,
+              })
             : of(true)
-        )),
-      tap(() => window.history.back())
-    ).subscribe();
+        ),
+        tap(() => window.history.back())
+      )
+      .subscribe();
   }
 
   createArtigo(artigo: Artigo) {
-    return this.artigos.create(capitalize(artigo))
+    if (this.artigoForm.invalid) {
+      return alert('Alguns dados obrigatórios em falta!');
+    }
+    return this.artigos
+      .create(capitalize(artigo))
       .pipe(
         map((res: Artigo[]) => res[0]),
-        concatMap(
-          (newArtigo: Artigo) => (
-            !artigo.qty || artigo.qty < 2
-              ? this.uiService.patchState({
+        concatMap((newArtigo: Artigo) =>
+          !artigo.qty || artigo.qty < 2
+            ? this.uiService.patchState({
                 encomendaPromptModalVisible: true,
                 encomendaPromptModalArtigo: newArtigo,
               })
-              : of(true)
-          )
+            : of(true)
         ),
         tap(() => window.history.back())
       )
@@ -102,13 +113,18 @@ export class ArtigoPageComponent implements AfterContentInit, OnDestroy {
   }
 
   orderArtigo(artigo: Artigo) {
-    this.uiService.patchState({ encomendaPageArtigoForm: artigo })
-      .subscribe();
-    return this.router.navigate(['/dashboard/encomendas-criar-nova']);
+    if (this.artigoForm.invalid) {
+      alert('Alguns dados obrigatórios em falta!');
+      return;
+    }
+    this.uiService
+      .patchState({ encomendaPageArtigoForm: artigo })
+      .subscribe(() => {
+        this.router.navigate(['/dashboard/encomendas-criar-nova']);
+      });
   }
 
   navigateBack() {
     window.history.back();
   }
-
 }

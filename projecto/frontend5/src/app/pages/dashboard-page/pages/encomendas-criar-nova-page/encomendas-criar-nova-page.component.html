@@ -7,31 +7,44 @@
 <clr-modal [(clrModalOpen)]="artigoSearchModalOpened" [clrModalSize]="'lg'">
   <h3 class="modal-title">Pesquisar material</h3>
   <div class="modal-body">
-    <form [formGroup]="artigoSearchForm" (ngSubmit)="searchArtigo(artigoSearchForm.value.input)">
+    <form
+      [formGroup]="artigoSearchForm"
+      (ngSubmit)="searchArtigo(artigoSearchForm.value.input)"
+    >
       <div class="clr-row">
         <div class="clr-col-12 padding-bottom-05">
-          <input #artigoSearchModalInput type="text" class="clr-input wd-100" placeholder="Digita algo..." name="input"
-            formControlName="input" />
+          <input
+            #artigoSearchModalInput
+            type="text"
+            class="clr-input wd-100"
+            placeholder="Digita algo..."
+            name="input"
+            formControlName="input"
+          />
         </div>
       </div>
     </form>
     <h4>Resultados:</h4>
     <div *ngIf="artigoSearchResults$ | async as artigos">
-      <p *ngIf="artigos.length===0">Nenhum resultado encontrado para esses parametros...</p>
-      <div *ngIf="artigos.length>0">
-        <r-data-row class="clr-row" *ngFor="let artigo of artigos; let listaIndex=index" (click)="addArtigo(artigo)">
+      <p *ngIf="artigos.length === 0">
+        Nenhum resultado encontrado para esses parametros...
+      </p>
+      <div *ngIf="artigos.length > 0">
+        <r-data-row
+          class="clr-row"
+          *ngFor="let artigo of artigos; let listaIndex = index"
+          (click)="addArtigo(artigo)"
+        >
           <div class="clr-col-lg-3">
-            <span class="fontheavy">{{artigo.marca}}</span>
-            {{artigo.modelo}}
+            <span class="fontheavy">{{ artigo.marca }}</span>
+            {{ artigo.modelo }}
           </div>
           <div class="clr-col-lg-6 lessimportant">
-            {{artigo.descricao}}
+            {{ artigo.descricao }}
           </div>
-          <div class="clr-col-lg-1 lessimportant">
-            Qty: {{artigo.qty}}
-          </div>
+          <div class="clr-col-lg-1 lessimportant">Qty: {{ artigo.qty }}</div>
           <div class="clr-col-lg-2 lessimportant">
-            Local: {{artigo.localizacao}}
+            Local: {{ artigo.localizacao }}
           </div>
         </r-data-row>
       </div>
@@ -40,13 +53,18 @@
 </clr-modal>
 
 <div class="separate clr-form clr-row">
-  <form style="display: none" [formGroup]="artigoForm" formState="encomendaPageArtigoForm"></form>
+  <form
+    style="display: none"
+    [formGroup]="artigoForm"
+    formState="encomendaPageArtigoForm"
+  ></form>
   <div class="clr-col-lg-2">
-    <label for="">Artigo:*</label>
+    <label for=""><strong> Artigo*</strong></label>
   </div>
   <div class="clr-col-lg-6">
     <span *ngIf="encomendaForm.value.artigo_id">
-      {{artigoForm.value.descricao}} {{artigoForm.value.marca}} {{artigoForm.value.modelo}}
+      {{ artigoForm.value.descricao }} {{ artigoForm.value.marca }}
+      {{ artigoForm.value.modelo }}
     </span>
     <span *ngIf="!encomendaForm.value.artigo_id">
       (Seleccione um artigo, com a ajuda do botão acima)
@@ -60,97 +78,180 @@
 
 <app-clientes-pesquisar-modal></app-clientes-pesquisar-modal>
 
-<form class="separate clr-form" [formGroup]="contactoClienteForm" formState="encomendaPageContactoClienteForm">
-  <div class="clr-row">
-    <div class="clr-col-lg-2">
-      <label for="contacto">Contacto:*</label>
-    </div>
-    <div class="clr-col-lg-6">
-      <input class="clr-input wd-100" type="tel" name="contacto" id="contacto" placeholder="☎️" required autofocus
-        formControlName="contacto">
-    </div>
-  </div>
+<form
+  class="separate clr-form"
+  [formGroup]="contactoClienteForm"
+  formState="encomendaPageContactoClienteForm"
+  clrForm
+>
+  <clr-input-container>
+    <label for="contacto">Contacto*</label>
+    <input
+      maxlength="14"
+      minlength="9"
+      required
+      type="tel"
+      name="contacto"
+      id="contacto"
+      placeholder="911444777"
+      autofocus
+      formControlName="contacto"
+      clrInput
+    />
+    <clr-control-error
+      >Contacto válido, entre 9 e 14 digitos, requirido</clr-control-error
+    >
+  </clr-input-container>
 </form>
 
-<form class="separate clr-form" [formGroup]="clienteForm" formState="encomendaPageClienteForm">
-  <div class="clr-row">
-    <div class="clr-col-lg-2">
-      <label for="nome">Nome:*</label>
-    </div>
-    <div class="clr-col-lg-6">
-      <input class="clr-input wd-100" type="text" name="nome" id="nome" required formControlName="nome">
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-lg-2">
-      <label for="email">Email:</label>
-    </div>
-    <div class="clr-col-lg-6">
-      <input class="clr-input wd-100" type="email" name="email" id="email" formControlName="email">
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-lg-2">
-      <label for="endereco">Endereço:</label>
-    </div>
-    <div class="clr-col-lg-6">
-      <input class="clr-input wd-100" type="text" name="endereço" id="endereço" formControlName="endereço" autocaps>
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-lg-2">
-      <label for="nif">NIF:</label>
-    </div>
-    <div class="clr-col-lg-6">
-      <input class="clr-input wd-100" type="number" name="nif" id="nif" formControlName="nif">
-    </div>
-  </div>
+<form
+  class="separate clr-form"
+  [formGroup]="clienteForm"
+  formState="encomendaPageClienteForm"
+  clrForm
+>
+  <clr-input-container>
+    <label for="nome">Nome*</label>
+    <input
+      maxlength="45"
+      minlength="3"
+      required
+      autocaps
+      type="text"
+      name="nome"
+      id="nome"
+      placeholder="Manuel Silva"
+      formControlName="nome"
+      clrInput
+    />
+    <clr-control-error
+      >Nome válido, entre 3 e 45 caracteres, requirido!</clr-control-error
+    >
+  </clr-input-container>
+  <clr-input-container>
+    <label for="email">Email</label>
+    <input
+      maxlength="45"
+      type="email"
+      name="email"
+      id="email"
+      placeholder="exemplo@exemplo.pt"
+      formControlName="email"
+      clrInput
+    />
+    <clr-control-error
+      >Email tem de ser válido e no máximo 45 caracteres!</clr-control-error
+    >
+  </clr-input-container>
+  <clr-input-container>
+    <label for="endereço">Endereço</label>
+    <input
+      maxlength="400"
+      type="text"
+      name="endereço"
+      id="endereço"
+      placeholder="Av. da Liberdade, 2345-671, Lisboa"
+      formControlName="endereço"
+      autocaps
+      clrInput
+    />
+    <clr-control-error>Máximo 400 caracteres!</clr-control-error>
+  </clr-input-container>
+  <clr-input-container>
+    <label for="nif">NIF</label>
+    <input
+      maxlength="9"
+      minlength="9"
+      type="number"
+      name="nif"
+      id="nif"
+      placeholder="000 000 000"
+      formControlName="nif"
+      clrInput
+    />
+    <clr-control-error
+      >NIF precisa 9 digitos para ser válido!</clr-control-error
+    >
+  </clr-input-container>
 </form>
 
-<form class="separate clr-form" [formGroup]="encomendaForm" formState="encomendaPageEncomendaForm">
-  <div class="clr-row">
-    <div class="clr-col-lg-2">
-      <label for="observacao">Observação:</label>
-    </div>
-    <div class="clr-col-lg-6">
-      <input type="text" class="clr-input wd-100" name="observacao" id="observacao" formControlName="observacao" autocaps>
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-lg-2">
-      <label for="previsao_entrega">Previsão de entrega:*</label>
-    </div>
-    <div class="clr-col-lg-6">
-      <input type="date" class="clr-input wd-100" name="previsao_entrega" id="previsao_entrega"
-        formControlName="previsao_entrega" required>
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-lg-2">
-      <label for="orcamento">Orçamento (€):</label>
-    </div>
-    <div class="clr-col-lg-6">
-      <input type="number" class="clr-input wd-100" name="orcamento" id="orcamento"
-        placeholder="(valor combinado com o cliente)" formControlName="orcamento">
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-lg-2">
-      <label for="fornecedor">Fornecedor:</label>
-    </div>
-    <div class="clr-col-lg-6">
-      <input type="text" class="clr-input wd-100" name="fornecedor" id="fornecedor" placeholder="(link ou fornecedor)"
-        formControlName="fornecedor">
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-lg-2">
-      <label for="qty">Qty:*</label>
-    </div>
-    <div class="clr-col-lg-6">
-      <input type="number" class="clr-input wd-100" name="qty" id="qty" placeholder="0" formControlName="qty" required>
-    </div>
-  </div>
-  <input class="btn btn-primary" type="submit" value="Criar" (click)="createEncomenda(encomendaForm.value)"
-    [disabled]="encomendaForm.invalid || contactoClienteForm.invalid || clienteForm.invalid">
+<form
+  class="separate clr-form"
+  [formGroup]="encomendaForm"
+  formState="encomendaPageEncomendaForm"
+  clrForm
+>
+  <clr-input-container>
+    <label for="observacao">Observação</label>
+    <input
+      type="text"
+      maxlength="1000"
+      name="observacao"
+      id="observacao"
+      formControlName="observacao"
+      autocaps
+      clrInput
+    />
+    <clr-control-error>Máximo 1000 caracteres!</clr-control-error>
+  </clr-input-container>
+  <clr-input-container
+    ><label for="previsao_entrega">Previsão de entrega*</label>
+    <input
+      type="date"
+      name="previsao_entrega"
+      id="previsao_entrega"
+      formControlName="previsao_entrega"
+      required
+      clrInput
+    />
+    <clr-control-error>Previsão de entrega requirida!</clr-control-error>
+  </clr-input-container>
+  <clr-input-container>
+    <label for="orcamento">Orçamento (€)</label>
+    <input
+      type="number"
+      name="orcamento"
+      max="9999"
+      id="orcamento"
+      placeholder="(valor combinado com o cliente)"
+      formControlName="orcamento"
+      clrInput
+    />
+    <clr-control-helper>Valor combinado com o cliente.</clr-control-helper>
+    <clr-control-error>Orçamento máximo de €9999!</clr-control-error>
+  </clr-input-container>
+  <clr-input-container>
+    <label for="fornecedor">Fornecedor</label>
+    <input
+      type="text"
+      name="fornecedor"
+      maxlength="200"
+      id="fornecedor"
+      placeholder="(link ou fornecedor)"
+      formControlName="fornecedor"
+      clrInput
+    />
+    <clr-control-helper>Link ou nome do fornecedor.</clr-control-helper>
+    <clr-control-error>Máximo 200 caracteres!</clr-control-error>
+  </clr-input-container>
+  <clr-input-container>
+    <label for="qty">Qty*</label>
+    <input
+      type="number"
+      name="qty"
+      max="4294967295"
+      id="qty"
+      placeholder="0"
+      formControlName="qty"
+      required
+      clrInput
+    />
+    <clr-control-error>Qty, até 4294967295, requirida!</clr-control-error>
+  </clr-input-container>
+  <input
+    class="btn btn-primary"
+    type="submit"
+    value="Criar"
+    (click)="createEncomenda(encomendaForm.value)"
+  />
 </form>
