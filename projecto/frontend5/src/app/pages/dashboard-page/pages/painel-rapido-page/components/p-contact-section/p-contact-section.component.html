@@ -1,0 +1,90 @@
+<h3>
+  P. Contact. Cliente
+  <span *ngIf="pedidosContactoCliente$ | async as pedidosContactoCliente">
+    <span
+      class="badge badge-light-blue"
+      *ngIf="pedidosContactoCliente.length > 0"
+      >{{ pedidosContactoCliente.length }}</span
+    >
+  </span>
+</h3>
+
+<div
+  *ngIf="
+    !isLoading && pedidosContactoCliente$ | async as pedidosContactoCliente
+  "
+>
+  <p *ngIf="pedidosContactoCliente.length === 0">
+    <clr-icon shape="check"></clr-icon> Não há mais pedidos de contacto!
+  </p>
+</div>
+
+<r-loading *ngIf="isLoading"></r-loading>
+
+<div
+  class="card"
+  *ngFor="let pedidoContactoCliente of pedidosContactoCliente$ | async"
+>
+  <div class="card-block">
+    <div class="card-text">
+      <span class="label label-blue">
+        {{ pedidoContactoCliente.estado }} ({{
+          pedidoContactoCliente.updatedAt | date: "mediumDate"
+        }})
+      </span>
+      <p>
+        <strong>Cliente: </strong>{{ pedidoContactoCliente.cliente_user_name }}
+      </p>
+      <p>
+        <strong>Contacto: </strong
+        >{{ pedidoContactoCliente.cliente_user_contacto }}
+      </p>
+      <p>
+        <strong>Info: </strong>{{ pedidoContactoCliente.relatorio_cliente }}
+      </p>
+      <button
+        class="btn btn-sm btn-link"
+        (click)="openAssistencia(pedidoContactoCliente.id)"
+      >
+        Abrir (#{{ pedidoContactoCliente.id }})
+      </button>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button
+      class="btn btn-success btn-sm"
+      (click)="saveAssist('contactado', pedidoContactoCliente)"
+    >
+      <clr-icon shape="check"></clr-icon> Sucesso
+    </button>
+    <clr-dropdown>
+      <button type="button" class="btn btn-sm" clrDropdownTrigger>
+        <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
+        <clr-icon shape="caret down"></clr-icon>
+      </button>
+      <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+        <button
+          type="button"
+          clrDropdownItem
+          (click)="saveAssist('cliente adiou resp.', pedidoContactoCliente)"
+        >
+          Cliente adiou resposta
+        </button>
+        <button
+          type="button"
+          clrDropdownItem
+          (click)="saveAssist('não atendeu p/ cont.', pedidoContactoCliente)"
+        >
+          Não atendeu
+        </button>
+        <button
+          type="button"
+          clrDropdownItem
+          (click)="saveAssist('incontactável', pedidoContactoCliente)"
+        >
+          Incontactável
+        </button>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+  </div>
+</div>

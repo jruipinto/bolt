@@ -1,0 +1,99 @@
+<h3>
+  Encomendas
+  <span *ngIf="encomendas$ | async as encomendas">
+    <span class="badge badge-light-blue" *ngIf="encomendas.length > 0">{{
+      encomendas.length
+    }}</span>
+  </span>
+</h3>
+
+<div *ngIf="!isLoading && encomendas$ | async as encomendas">
+  <p *ngIf="encomendas.length === 0">
+    <clr-icon shape="check"></clr-icon> Não há mais encomendas!
+  </p>
+</div>
+
+<r-loading *ngIf="isLoading"></r-loading>
+
+<div class="card" *ngFor="let encomenda of encomendas$ | async">
+  <div class="card-block">
+    <div class="card-text">
+      <span class="label label-blue"
+        >{{ encomenda.estado }} ({{
+          encomenda.updatedAt | date: "mediumDate"
+        }})</span
+      >
+      <p>
+        <strong>Artigo: </strong>
+        {{ encomenda?.artigo_descricao }}
+        {{ encomenda?.artigo_marca }}
+        {{ encomenda?.artigo_modelo }}
+      </p>
+      <p><strong>QTY: </strong>{{ encomenda.qty }}</p>
+      <p>
+        <strong>Prazo: </strong
+        >{{ encomenda.previsao_entrega | date: "EEE, d MMM y" }}
+      </p>
+      <div *ngIf="encomenda.orcamento || encomenda.observacao">
+        <p *ngIf="encomenda.orcamento">
+          <strong>Orçamento: </strong>{{ encomenda.orcamento }}€
+        </p>
+        <p *ngIf="encomenda?.observacao">| {{ encomenda.observacao }}</p>
+      </div>
+      <button class="btn btn-sm btn-link" (click)="openEncomenda(encomenda.id)">
+        Abrir (Enc. {{ encomenda.id }})
+      </button>
+      <button
+        *ngIf="encomenda.assistencia_id"
+        class="btn btn-sm btn-link"
+        (click)="openAssistencia(encomenda.assistencia_id)"
+      >
+        Abrir (#{{ encomenda.assistencia_id }})
+      </button>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button
+      class="btn btn-success btn-sm"
+      (click)="saveEncomenda('aguarda entrega', encomenda)"
+    >
+      <clr-icon shape="check"></clr-icon> Encomend.
+    </button>
+    <clr-dropdown>
+      <button type="button" class="btn btn-sm" clrDropdownTrigger>
+        <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
+        <clr-icon shape="caret down"></clr-icon>
+      </button>
+      <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+        <button
+          type="button"
+          clrDropdownItem
+          (click)="saveEncomenda('aguarda resposta de fornecedor', encomenda)"
+        >
+          Aguarda resposta de fornecedor
+        </button>
+        <button
+          type="button"
+          clrDropdownItem
+          (click)="saveEncomenda('marcada para ir ao fornecedor', encomenda)"
+        >
+          Marcado para ir ao fornecedor
+        </button>
+        <button
+          type="button"
+          clrDropdownItem
+          (click)="saveEncomenda('esgotada', encomenda)"
+        >
+          Esgotado
+        </button>
+        <button
+          type="button"
+          clrDropdownItem
+          (click)="saveEncomenda('sem fornecedor', encomenda)"
+        >
+          Sem fornecedor
+        </button>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+  </div>
+</div>

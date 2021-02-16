@@ -1,0 +1,82 @@
+<h3>
+  Orçamentos
+  <span *ngIf="orcamentos$ | async as orcamentos">
+    <span class="badge badge-light-blue" *ngIf="orcamentos.length > 0">{{
+      orcamentos.length
+    }}</span>
+  </span>
+</h3>
+
+<div *ngIf="!isLoading && orcamentos$ | async as orcamentos">
+  <p *ngIf="orcamentos.length === 0">
+    <clr-icon shape="check"></clr-icon> Não há mais orçamentos!
+  </p>
+</div>
+
+<r-loading *ngIf="isLoading"></r-loading>
+
+<div class="card" *ngFor="let orcamento of orcamentos$ | async">
+  <div class="card-block">
+    <div class="card-text">
+      <span class="label label-blue"
+        >{{ orcamento.estado }} ({{
+          orcamento.updatedAt | date: "mediumDate"
+        }})</span
+      >
+      <p><strong>Cliente: </strong>{{ orcamento.cliente_user_name }}</p>
+      <p><strong>Contacto: </strong>{{ orcamento.cliente_user_contacto }}</p>
+      <p><strong>Preço: </strong>{{ orcamento.preco }}€</p>
+      <p><strong>Info: </strong>{{ orcamento.relatorio_cliente }}</p>
+      <button
+        class="btn btn-sm btn-link"
+        (click)="openAssistencia(orcamento.id)"
+      >
+        Abrir (#{{ orcamento.id }})
+      </button>
+    </div>
+  </div>
+  <div class="card-footer">
+    <button
+      class="btn btn-success btn-sm"
+      (click)="saveAssist('orçamento aprovado', orcamento)"
+    >
+      <clr-icon shape="check"></clr-icon> Aceite
+    </button>
+    <clr-dropdown>
+      <button type="button" class="btn btn-sm" clrDropdownTrigger>
+        <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
+        <clr-icon shape="caret down"></clr-icon>
+      </button>
+      <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
+        <button
+          type="button"
+          clrDropdownItem
+          (click)="saveAssist('orçamento recusado', orcamento)"
+        >
+          Recusado
+        </button>
+        <button
+          type="button"
+          clrDropdownItem
+          (click)="saveAssist('cliente adiou orç.', orcamento)"
+        >
+          Cliente adiou resposta
+        </button>
+        <button
+          type="button"
+          clrDropdownItem
+          (click)="saveAssist('não atendeu p/ orç.', orcamento)"
+        >
+          Não atendeu
+        </button>
+        <button
+          type="button"
+          clrDropdownItem
+          (click)="saveAssist('incontactável', orcamento)"
+        >
+          Incontactável
+        </button>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+  </div>
+</div>

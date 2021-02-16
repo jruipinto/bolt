@@ -7,25 +7,41 @@ import { ClarityModule } from '@clr/angular';
 /* routing & custom modules */
 import { DashboardPageRoutingModule } from './dashboard-page-routing.module';
 /* directives */
-import { AutofocusModule, FormStateModule, AutocapsModule } from 'src/app/shared';
+import {
+  AutofocusModule,
+  FormStateModule,
+  AutocapsModule,
+} from 'src/app/shared';
 /* shared components */
-import { RCardComponent, RDataRowComponent, ChatWidgetModule } from 'src/app/shared/components';
+import {
+  RCardComponent,
+  RDataRowComponent,
+  ChatWidgetModule,
+} from 'src/app/shared/components';
 /* components */
 import { DashboardPageComponent } from './dashboard-page.component';
-import { AssistenciaEntradaPrintComponent, AssistenciaSaidaPrintComponent } from './prints';
 import {
-  AssistenciasPageComponent, AssistenciasPesquisarPageComponent,
-  AssistenciasCriarNovaPageComponent, EncomendaPageComponent,
-  EncomendasCriarNovaPageComponent, EncomendasPageComponent,
-  StockPageComponent, PainelRapidoPageComponent,
-  AssistenciaPageComponent, ArtigoPageComponent
+  AssistenciaEntradaPrintComponent,
+  AssistenciaSaidaPrintComponent,
+} from './prints';
+import {
+  AssistenciasPageComponent,
+  AssistenciasPesquisarPageComponent,
+  AssistenciasCriarNovaPageComponent,
+  EncomendaPageComponent,
+  EncomendasCriarNovaPageComponent,
+  EncomendasPageComponent,
+  StockPageComponent,
+  AssistenciaPageComponent,
+  ArtigoPageComponent,
 } from './pages';
 import { EncomendasPesquisarPageComponent } from './pages/encomendas-pesquisar-page/encomendas-pesquisar-page.component';
 import { AssistenciasConcluidasPageComponent } from './pages/assistencias-concluidas-page/assistencias-concluidas-page.component';
 import { EncomendaPromptModalComponent } from './modals/encomenda-prompt-modal';
 import { ClientesPesquisarModalComponent } from './modals/clientes-pesquisar-modal/clientes-pesquisar-modal.component';
 import { ConfigsPageComponent } from './pages/configs-page/configs-page.component';
-
+import { PainelRapidoPageModule } from './pages/painel-rapido-page/painel-rapido-page.module';
+import { RLoadingModule } from 'src/app/shared/components/r-loading/r-loading.module';
 
 @NgModule({
   imports: [
@@ -37,7 +53,9 @@ import { ConfigsPageComponent } from './pages/configs-page/configs-page.componen
     FormStateModule,
     AutocapsModule,
     AutofocusModule,
-    ChatWidgetModule
+    ChatWidgetModule,
+    PainelRapidoPageModule,
+    RLoadingModule,
   ],
   declarations: [
     RCardComponent,
@@ -47,7 +65,6 @@ import { ConfigsPageComponent } from './pages/configs-page/configs-page.componen
     AssistenciasCriarNovaPageComponent,
     StockPageComponent,
     EncomendasPageComponent,
-    PainelRapidoPageComponent,
     EncomendasCriarNovaPageComponent,
     AssistenciaEntradaPrintComponent,
     AssistenciaSaidaPrintComponent,
@@ -59,7 +76,7 @@ import { ConfigsPageComponent } from './pages/configs-page/configs-page.componen
     AssistenciasConcluidasPageComponent,
     EncomendaPromptModalComponent,
     ClientesPesquisarModalComponent,
-    ConfigsPageComponent
-  ]
+    ConfigsPageComponent,
+  ],
 })
-export class DashboardPageModule { }
+export class DashboardPageModule {}
