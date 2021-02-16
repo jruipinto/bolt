@@ -1,184 +1,20 @@
+<div class="sticky">
+  <h1>Painel Rápido</h1>
+</div>
 <div class="clr-row">
   <div class="clr-col-lg-4">
-    <h3>
-      Encomendas
-      <span *ngIf="encomendas$ | async as encomendas">
-        <span class="badge badge-light-blue" *ngIf="encomendas.length > 0">{{encomendas.length}}</span>
-      </span>
-    </h3>
-    <div *ngIf="!loadingEncomendas && encomendas$ | async as encomendas">
-      <p *ngIf="encomendas.length === 0">
-        <clr-icon shape="check"></clr-icon> Não há mais encomendas!
-      </p>
-    </div>
-    <div *ngIf="loadingEncomendas">
-      <span class="spinner spinner-inline">
-      </span>
-      <span>
-        A carregar dados...
-      </span>
-    </div>
-    <div class="card" *ngFor="let encomenda of encomendas$ | async">
-      <div class="card-block">
-        <!--
-        <div class="progress success top">
-          <progress value="100" max="100"></progress>
-        </div>
-        -->
-        <div class="card-text">
-          <span class="label label-blue">{{encomenda.estado}} ({{encomenda.updatedAt  | date:'mediumDate'}})</span>
-          <p>
-            {{encomenda.qty}} x {{encomenda?.artigo_descricao}} {{encomenda?.artigo_marca}}
-            {{encomenda?.artigo_modelo}}
-            <br>
-            Até: {{encomenda.previsao_entrega}}
-          </p>
-          <p *ngIf="encomenda.orcamento || encomenda.observacao">
-            <span *ngIf="encomenda.orcamento">{{encomenda.orcamento}}€ </span>
-            <span *ngIf="encomenda?.observacao">
-              | {{encomenda.observacao | slice:0:29}}
-              <span *ngIf="encomenda?.observacao.length > 30">...</span>
-            </span>
-          </p>
-          <button class="btn btn-sm btn-link" (click)="openEncomenda(encomenda.id)">Abrir (Enc.
-            {{encomenda.id}})</button>
-          <button *ngIf="encomenda.assistencia_id" class="btn btn-sm btn-link"
-            (click)="openAssistencia(encomenda.assistencia_id)">Abrir (#{{encomenda.assistencia_id}})</button>
-        </div>
-      </div>
-      <div class="card-footer">
-        <button class="btn btn-success btn-sm" (click)="saveEncomenda('aguarda entrega', encomenda)">
-          <clr-icon shape="check"></clr-icon> Encomendado
-        </button>
-        <clr-dropdown>
-          <button type="button" class="btn btn-sm" clrDropdownTrigger>
-            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
-            <clr-icon shape="caret down"></clr-icon>
-          </button>
-          <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button type="button" clrDropdownItem
-              (click)="saveEncomenda('aguarda resposta de fornecedor', encomenda)">Aguarda resposta de
-              fornecedor</button>
-            <button type="button" clrDropdownItem
-              (click)="saveEncomenda('marcada para ir ao fornecedor', encomenda)">Marcado para ir ao fornecedor</button>
-            <button type="button" clrDropdownItem (click)="saveEncomenda('esgotada', encomenda)">Esgotado</button>
-            <button type="button" clrDropdownItem (click)="saveEncomenda('sem fornecedor', encomenda)">Sem
-              fornecedor</button>
-          </clr-dropdown-menu>
-        </clr-dropdown>
-      </div>
-    </div>
+    <app-encomendas-section
+      [isLoading]="isLoadingEncomendas"
+    ></app-encomendas-section>
   </div>
   <div class="clr-col-lg-4">
-    <h3>
-      Orçamentos
-      <span *ngIf="orcamentos$ | async as orcamentos">
-        <span class="badge badge-light-blue" *ngIf="orcamentos.length > 0">{{orcamentos.length}}</span>
-      </span>
-    </h3>
-    <div *ngIf="!loadingAssistencias && orcamentos$ | async as orcamentos">
-      <p *ngIf="orcamentos.length === 0">
-        <clr-icon shape="check"></clr-icon> Não há mais orçamentos!
-      </p>
-    </div>
-    <div *ngIf="loadingAssistencias">
-      <span class="spinner spinner-inline">
-      </span>
-      <span>
-        A carregar dados...
-      </span>
-    </div>
-    <div class="card" *ngFor="let orcamento of orcamentos$ | async">
-      <div class="card-block">
-        <div class="card-text">
-          <span class="label label-blue">{{orcamento.estado}} ({{orcamento.updatedAt  | date:'mediumDate'}})</span>
-          <p>
-            {{orcamento.cliente_user_name}} | {{orcamento.cliente_user_contacto}}
-            <br>
-            {{orcamento.preco}}€ | {{orcamento.relatorio_cliente | slice:0:29}}
-            <span *ngIf="orcamento.relatorio_cliente.length > 30">...</span>
-          </p>
-          <button class="btn btn-sm btn-link" (click)="openAssistencia(orcamento.id)">Abrir (#{{orcamento.id}})</button>
-        </div>
-      </div>
-      <div class="card-footer">
-        <button class="btn btn-success btn-sm" (click)="saveAssist('orçamento aprovado', orcamento)">
-          <clr-icon shape="check"></clr-icon> Aceite
-        </button>
-        <clr-dropdown>
-          <button type="button" class="btn btn-sm" clrDropdownTrigger>
-            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
-            <clr-icon shape="caret down"></clr-icon>
-          </button>
-          <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button type="button" clrDropdownItem
-              (click)="saveAssist('orçamento recusado', orcamento)">Recusado</button>
-            <button type="button" clrDropdownItem (click)="saveAssist('cliente adiou orç.', orcamento)">Cliente adiou
-              resposta</button>
-            <button type="button" clrDropdownItem (click)="saveAssist('não atendeu p/ orç.', orcamento)">Não
-              atendeu</button>
-            <button type="button" clrDropdownItem
-              (click)="saveAssist('incontactável', orcamento)">Incontactável</button>
-          </clr-dropdown-menu>
-        </clr-dropdown>
-      </div>
-    </div>
+    <app-orcamentos-section
+      [isLoading]="isLoadingAssistencias"
+    ></app-orcamentos-section>
   </div>
   <div class="clr-col-lg-4">
-    <h3>
-      P. Contact. Cliente
-      <span *ngIf="pedidosContactoCliente$ | async as pedidosContactoCliente">
-        <span class="badge badge-light-blue"
-          *ngIf="pedidosContactoCliente.length > 0">{{pedidosContactoCliente.length}}</span>
-      </span>
-    </h3>
-    <div *ngIf="!loadingAssistencias && pedidosContactoCliente$ | async as pedidosContactoCliente">
-      <p *ngIf="pedidosContactoCliente.length === 0">
-        <clr-icon shape="check"></clr-icon> Não há mais pedidos de contacto!
-      </p>
-    </div>
-    <div *ngIf="loadingAssistencias">
-      <span class="spinner spinner-inline">
-      </span>
-      <span>
-        A carregar dados...
-      </span>
-    </div>
-    <div class="card" *ngFor="let pedidoContactoCliente of pedidosContactoCliente$ | async">
-      <div class="card-block">
-        <div class="card-text">
-          <span class="label label-blue">
-            {{pedidoContactoCliente.estado}} ({{pedidoContactoCliente.updatedAt | date:'mediumDate'}})
-          </span>
-          <p>
-            {{pedidoContactoCliente.cliente_user_name}} | {{pedidoContactoCliente.cliente_user_contacto}}
-            <br>
-            {{pedidoContactoCliente.relatorio_cliente | slice:0:29}}
-            <span *ngIf="pedidoContactoCliente.relatorio_cliente.length > 30">...</span>
-          </p>
-          <button class="btn btn-sm btn-link" (click)="openAssistencia(pedidoContactoCliente.id)">Abrir
-            (#{{pedidoContactoCliente.id}})</button>
-        </div>
-      </div>
-      <div class="card-footer">
-        <button class="btn btn-success btn-sm" (click)="saveAssist('contactado', pedidoContactoCliente)">
-          <clr-icon shape="check"></clr-icon> Sucesso
-        </button>
-        <clr-dropdown>
-          <button type="button" class="btn btn-sm" clrDropdownTrigger>
-            <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
-            <clr-icon shape="caret down"></clr-icon>
-          </button>
-          <clr-dropdown-menu clrPosition="top-left" *clrIfOpen>
-            <button type="button" clrDropdownItem
-              (click)="saveAssist('cliente adiou resp.', pedidoContactoCliente)">Cliente adiou resposta</button>
-            <button type="button" clrDropdownItem
-              (click)="saveAssist('não atendeu p/ cont.', pedidoContactoCliente)">Não atendeu</button>
-            <button type="button" clrDropdownItem
-              (click)="saveAssist('incontactável', pedidoContactoCliente)">Incontactável</button>
-          </clr-dropdown-menu>
-        </clr-dropdown>
-      </div>
-    </div>
+    <app-p-contact-section
+      [isLoading]="isLoadingAssistencias"
+    ></app-p-contact-section>
   </div>
 </div>
