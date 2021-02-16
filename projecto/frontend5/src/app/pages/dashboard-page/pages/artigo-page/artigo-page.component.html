@@ -1,80 +1,119 @@
-<button type="button" class="btn btn-link btn-icon" style="margin:0; padding:0" (click)="navigateBack()">
-  <clr-icon class="is-solid" size="36" shape="arrow" style="transform: rotate(270deg);"></clr-icon>
+<button
+  type="button"
+  class="btn btn-link btn-icon"
+  style="margin: 0; padding: 0"
+  (click)="navigateBack()"
+>
+  <clr-icon
+    class="is-solid"
+    size="36"
+    shape="arrow"
+    style="transform: rotate(270deg)"
+  ></clr-icon>
 </button>
 
-<h3 class="modal-title">Artigo {{artigoForm?.value.id}}</h3>
-<form [formGroup]="artigoForm">
-  <div class="clr-row">
-    <div class="clr-col-md-2">
-      Marca:
-    </div>
-    <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="text" name="marca" id="marca" formControlName="marca" placeholder="Apple" autofocus>
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-md-2">
-      Modelo:
-    </div>
-    <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="text" name="modelo" id="modelo" formControlName="modelo"
-        placeholder="Iphone 6">
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-md-2">
-      Descrição:
-    </div>
-    <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="text" name="descricao" id="descricao" formControlName="descricao"
-        placeholder="Capa rosa às pintinhas">
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-md-2">
-      Localização:
-    </div>
-    <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="text" name="localizacao" id="localizacao" formControlName="localizacao"
-        placeholder="x (max 5 caracteres)">
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-md-2">
-      QTY:
-    </div>
-    <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="number" name="qty" id="qty" formControlName="qty" placeholder="0">
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-md-2">
-      Preço (€):
-    </div>
-    <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="number" name="preco" id="preco" formControlName="preco" placeholder="0">
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-md-2">
-      PVP (€):
-    </div>
-    <div class="clr-col-md-9 clr-col-lg-6">
-      <input class="clr-input wd-100" type="number" name="pvp" id="pvp" formControlName="pvp" placeholder="0">
-    </div>
-  </div>
+<h3 class="modal-title">Artigo {{ artigoForm?.value.id }}</h3>
+<form [formGroup]="artigoForm" clrForm>
+  <clr-input-container>
+    <label for="marca">Marca</label>
+    <input
+      type="text"
+      name="marca"
+      maxlength="45"
+      id="marca"
+      formControlName="marca"
+      placeholder="Apple"
+      autofocus
+      clrInput
+    />
+  </clr-input-container>
+  <clr-input-container>
+    <label for="modelo">Modelo</label>
+    <input
+      type="text"
+      name="modelo"
+      maxlength="45"
+      id="modelo"
+      formControlName="modelo"
+      placeholder="Iphone 6"
+      clrInput
+    />
+  </clr-input-container>
+  <clr-input-container>
+    <label for="descricao">Descrição*</label>
+    <input
+      type="text"
+      name="descricao"
+      maxlength="255"
+      id="descricao"
+      formControlName="descricao"
+      placeholder="Capa rosa às pintinhas"
+      required
+      clrInput
+    />
+    <clr-control-error
+      >Descrição, até 255 caracteres, requirida</clr-control-error
+    >
+  </clr-input-container>
+  <clr-input-container>
+    <label for="localizacao">Localização</label>
+    <input
+      type="text"
+      name="localizacao"
+      maxlength="5"
+      id="localizacao"
+      formControlName="localizacao"
+      placeholder="X99"
+      clrInput
+    />
+  </clr-input-container>
+  <clr-input-container>
+    <label for="qty">QTY</label>
+    <input
+      type="number"
+      name="qty"
+      id="qty"
+      formControlName="qty"
+      placeholder="0"
+      clrInput
+    />
+  </clr-input-container>
+  <clr-input-container>
+    <label for="preco">Preço (€)</label>
+    <input
+      type="number"
+      name="preco"
+      id="preco"
+      formControlName="preco"
+      placeholder="0"
+      clrInput
+    />
+  </clr-input-container>
+  <clr-input-container>
+    <label for="pvp">PVP (€)</label>
+    <input
+      type="number"
+      name="pvp"
+      id="pvp"
+      formControlName="pvp"
+      placeholder="0"
+      clrInput
+    />
+  </clr-input-container>
 </form>
 
-<div class="clr-row separate" *ngIf="artigoForm.value.id">
-  <div class="clr-col">
-    <button class="btn btn-primary" (click)="saveArtigo(artigoForm.value)"
-      [disabled]="artigoForm.invalid">Guardar</button>
-    <button class="btn" (click)="orderArtigo(artigoForm.value)" [disabled]="artigoForm.invalid">Encomendar</button>
+<div class="clr-row separate">
+  <div class="clr-col" *ngIf="artigoForm.value.id">
+    <button class="btn btn-primary" (click)="saveArtigo(artigoForm.value)">
+      Guardar
+    </button>
+    <button class="btn" (click)="orderArtigo(artigoForm.value)">
+      Encomendar
+    </button>
   </div>
-</div>
-<div class="clr-row separate" *ngIf="!artigoForm.value.id">
-  <div class="clr-col">
-    <button class="btn btn-primary" (click)="createArtigo(artigoForm.value)"
-      [disabled]="artigoForm.invalid">Criar</button>
+  <div class="clr-col" *ngIf="!artigoForm.value.id">
+    <button class="btn btn-primary" (click)="createArtigo(artigoForm.value)">
+      Criar
+    </button>
   </div>
 </div>

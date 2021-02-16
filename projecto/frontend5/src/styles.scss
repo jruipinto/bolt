@@ -93,7 +93,9 @@ main.content-area {
   .header .branding {
     padding: 0 0.3rem;
   }
-  app-assistencias-criar-nova-page {
+  app-assistencias-criar-nova-page,
+  app-encomendas-criar-nova-page,
+  app-artigo-page {
     .clr-input-wrapper,
     .clr-input-wrapper input,
     .clr-select-wrapper,
@@ -106,7 +108,9 @@ main.content-area {
 }
 
 @media screen and (min-width: 768px) {
-  app-assistencias-criar-nova-page {
+  app-assistencias-criar-nova-page,
+  app-encomendas-criar-nova-page,
+  app-artigo-page {
     .clr-input-wrapper,
     .clr-input-wrapper input,
     .clr-select-wrapper,
