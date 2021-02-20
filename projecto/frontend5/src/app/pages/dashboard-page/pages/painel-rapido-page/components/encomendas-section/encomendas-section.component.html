@@ -38,7 +38,9 @@
         <p *ngIf="encomenda.orcamento">
           <strong>Orçamento: </strong>{{ encomenda.orcamento }}€
         </p>
-        <p *ngIf="encomenda?.observacao">| {{ encomenda.observacao }}</p>
+        <p *ngIf="encomenda?.observacao">
+          <strong>OBS:</strong> {{ encomenda.observacao }}
+        </p>
       </div>
       <button class="btn btn-sm btn-link" (click)="openEncomenda(encomenda.id)">
         Abrir (Enc. {{ encomenda.id }})

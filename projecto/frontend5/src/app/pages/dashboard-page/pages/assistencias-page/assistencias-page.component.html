@@ -57,6 +57,55 @@
   </clr-tabs>
 </div>
 
+<r-loading *ngIf="loading"></r-loading>
+
+<div *ngIf="assistencias$ | async as assistencias">
+  <div
+    class="clr-row"
+    *ngFor="let assistencia of assistencias; let listaIndex = index"
+  >
+    <div class="clr-col-12">
+      <div class="card" (click)="openAssistencia(assistencia.id)">
+        <div class="card-block">
+          <h3 class="card-title">{{ assistencia.id }}</h3>
+          <!-- <p class="card-text">
+            <strong>{{ assistencia.id }}</strong>
+          </p> -->
+          <p class="card-text">
+            <strong>{{ assistencia.categoria }}</strong>
+            {{ assistencia.marca }} {{ assistencia.modelo }}
+            {{ assistencia.cor }}
+          </p>
+          <p class="card-text">
+            <strong>Cliente: </strong> {{ assistencia.cliente_user_name }}
+          </p>
+          <p class="card-text">
+            <strong>Problema: </strong> {{ assistencia.problema }}
+          </p>
+          <p class="card-text">
+            <strong>Técnico: </strong> {{ assistencia.tecnico }}
+          </p>
+          <p class="card-text">
+            <strong>Estado: </strong> {{ assistencia.estado }}
+          </p>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-success">
+            <clr-icon shape="play"></clr-icon> Iniciar
+          </button>
+          <button class="btn btn-link">
+            <clr-icon shape="pop-out"></clr-icon> Abrir
+          </button>
+          <button class="btn btn-link">
+            <clr-icon shape="cursor-hand-open"></clr-icon> Atribuir-me
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--
 <div *ngIf="loading">
   <span class="spinner spinner-inline"> </span>
   <span> A carregar dados... </span>
@@ -102,4 +151,4 @@
       </div>
     </r-data-row>
   </div>
-</div>
+</div> -->
