@@ -54,6 +54,12 @@ main.content-area {
   }
 }
 */
+r-data-row {
+  p,
+  p:not([cds-text]) {
+    margin: 0;
+  }
+}
 @media screen and (max-width: 768px) {
   header .search-box label input,
   header .search label input,
@@ -102,6 +108,16 @@ main.content-area {
     .clr-textarea-wrapper,
     .clr-textarea-wrapper textarea {
       min-width: 350px;
+    }
+  }
+
+  r-data-row {
+    p,
+    p:not([cds-text]) {
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }

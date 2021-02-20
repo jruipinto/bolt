@@ -16,11 +16,11 @@
     <clr-tab>
       <button clrTabLink (click)="filterAssistencias('minhas')">
         Minhas
-        <span *ngIf="assistenciasMinhas$ | async as assistencias">
+        <span class="badge" *ngIf="assistenciasMinhas$ | async as assistencias">
           <span *ngIf="assistencias.length < 100">
-            ({{ assistencias.length }})</span
+            {{ assistencias.length }}</span
           >
-          <span *ngIf="assistencias.length > 99"> (99+)</span>
+          <span *ngIf="assistencias.length > 99"> 99+</span>
         </span>
       </button>
     </clr-tab>
@@ -31,11 +31,14 @@
         [clrTabLinkInOverflow]="inOverflow"
       >
         A fechar
-        <span *ngIf="assistenciasAFechar$ | async as assistencias">
+        <span
+          class="badge"
+          *ngIf="assistenciasAFechar$ | async as assistencias"
+        >
           <span *ngIf="assistencias.length < 100">
-            ({{ assistencias.length }})</span
+            {{ assistencias.length }}</span
           >
-          <span *ngIf="assistencias.length > 99"> (99+)</span>
+          <span *ngIf="assistencias.length > 99"> 99+</span>
         </span>
       </button>
     </clr-tab>
@@ -46,60 +49,27 @@
         [clrTabLinkInOverflow]="inOverflow"
       >
         Todas
-        <span *ngIf="assistenciasTodas$ | async as assistencias">
+        <span class="badge" *ngIf="assistenciasTodas$ | async as assistencias">
           <span *ngIf="assistencias.length < 100">
-            ({{ assistencias.length }})</span
+            {{ assistencias.length }}</span
           >
-          <span *ngIf="assistencias.length > 99"> (99+)</span>
+          <span *ngIf="assistencias.length > 99"> 99+</span>
         </span>
       </button>
     </clr-tab>
   </clr-tabs>
 </div>
 
-<div *ngIf="loading">
-  <span class="spinner spinner-inline"> </span>
-  <span> A carregar dados... </span>
-</div>
+<r-loading *ngIf="isLoading"></r-loading>
 
-<div *ngIf="assistencias$ | async as assistencias" class="separate">
-  <div *ngIf="assistencias.length > 0">
-    <r-data-row
-      class="clr-row"
-      *ngFor="let assistencia of assistencias; let listaIndex = index"
-      (click)="openAssistencia(assistencia.id)"
-    >
-      <div class="clr-col-lg-2">
-        <div class="clr-row">
-          <div class="clr-col-lg-4 fontheavy">
-            {{ assistencia.id }}
-          </div>
-          <div class="clr-col-lg-6">{{ assistencia.categoria }}:</div>
-        </div>
-      </div>
-      <div class="clr-col-lg-2">
-        <span class="fontheavy">{{ assistencia.marca }}</span>
-        {{ assistencia.modelo }}
-      </div>
-      <div class="clr-col-lg-1">
-        {{ assistencia.cor }}
-      </div>
-      <div class="clr-col-lg-2 lessimportant">
-        {{ assistencia.problema | slice: 0:29 }}
-        <span *ngIf="assistencia.problema.length > 30">...</span>
-      </div>
-      <div class="clr-col-lg-2 lessimportant">
-        Cliente:{{ assistencia.cliente_user_name }}
-      </div>
-      <div class="clr-col-lg-2 lessimportant">
-        <span *ngIf="assistencia.tecnico"
-          >Técnico:{{ assistencia.tecnico }}</span
-        >
-        <span *ngIf="!assistencia.tecnico">(aguarda técnico)</span>
-      </div>
-      <div class="clr-col-lg-1 lessimportant">
-        {{ assistencia.estado }}
-      </div>
-    </r-data-row>
-  </div>
+<div *ngIf="assistencias$ | async as assistencias">
+  <ul *ngFor="let assistencia of assistencias; let listaIndex = index">
+    <li class="clr-row">
+      <app-assistencia-row
+        class="clr-col-12"
+        [assistencia]="assistencia"
+        (openAssistencia)="openAssistencia($event)"
+      ></app-assistencia-row>
+    </li>
+  </ul>
 </div>
