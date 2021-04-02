@@ -41,15 +41,18 @@ a {
 
 r-data-row {
   // min-height: 3em;
-  border-bottom: 1px solid #eeeeee !important;
+  border-bottom: 0px solid #eeeeee !important;
   // fix clarity design style .clr-row for r-data-row component
   margin-left: 0 !important;
   margin-right: 0 !important;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  background-color: #f1f4f5 !important;
 }
 
-r-data-row:nth-child(even) {
-  background-color: #e1f1f6 !important;
-}
+// r-data-row:nth-child(even) {
+//   background-color: #f1f4f5 !important;
+// }
 
 r-data-row:hover {
   background-color: #ddd !important;

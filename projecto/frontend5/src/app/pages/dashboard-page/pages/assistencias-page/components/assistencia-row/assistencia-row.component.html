@@ -1,0 +1,31 @@
+<r-data-row class="clr-row" (click)="openAssistencia.emit(assistencia.id)">
+  <div class="clr-col-lg-2">
+    <div class="clr-row">
+      <div class="clr-col-lg-4 fontheavy">
+        {{ assistencia.id }}
+      </div>
+      <div class="clr-col-lg-6">{{ assistencia.categoria }}:</div>
+    </div>
+  </div>
+  <div class="clr-col-lg-2">
+    <span class="fontheavy">{{ assistencia.marca }}</span>
+    {{ assistencia.modelo }}
+  </div>
+  <div class="clr-col-lg-1">
+    {{ assistencia.cor }}
+  </div>
+  <div class="clr-col-lg-2 lessimportant">
+    {{ assistencia.problema | slice: 0:29 }}
+    <span *ngIf="assistencia.problema.length > 30">...</span>
+  </div>
+  <div class="clr-col-lg-2 lessimportant">
+    Cliente:{{ assistencia.cliente_user_name }}
+  </div>
+  <div class="clr-col-lg-2 lessimportant">
+    <span *ngIf="assistencia.tecnico">Técnico:{{ assistencia.tecnico }}</span>
+    <span *ngIf="!assistencia.tecnico">(aguarda técnico)</span>
+  </div>
+  <div class="clr-col-lg-1 lessimportant">
+    {{ assistencia.estado }}
+  </div>
+</r-data-row>
