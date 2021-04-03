@@ -15,8 +15,7 @@
     {{ assistencia.cor }}
   </div>
   <div class="clr-col-lg-2 lessimportant">
-    {{ assistencia.problema | slice: 0:29 }}
-    <span *ngIf="assistencia.problema.length > 30">...</span>
+    {{ assistencia.problema }}
   </div>
   <div class="clr-col-lg-2 lessimportant">
     Cliente:{{ assistencia.cliente_user_name }}
@@ -25,7 +24,7 @@
     <span *ngIf="assistencia.tecnico">Técnico:{{ assistencia.tecnico }}</span>
     <span *ngIf="!assistencia.tecnico">(aguarda técnico)</span>
   </div>
-  <div class="clr-col-lg-1 lessimportant">
+  <p class="clr-col-lg-1 lessimportant m0">
     {{ assistencia.estado }}
-  </div>
+  </p>
 </r-data-row>
