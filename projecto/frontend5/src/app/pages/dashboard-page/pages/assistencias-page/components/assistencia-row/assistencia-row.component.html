@@ -1,30 +1,34 @@
 <r-data-row class="clr-row" (click)="openAssistencia.emit(assistencia.id)">
-  <div class="clr-col-lg-2">
-    <div class="clr-row">
-      <div class="clr-col-lg-4 fontheavy">
-        {{ assistencia.id }}
-      </div>
-      <div class="clr-col-lg-6">{{ assistencia.categoria }}:</div>
-    </div>
-  </div>
-  <div class="clr-col-lg-2">
-    <span class="fontheavy">{{ assistencia.marca }}</span>
-    {{ assistencia.modelo }}
-  </div>
   <div class="clr-col-lg-1">
-    {{ assistencia.cor }}
+    <p>
+      <span class="p2">{{ assistencia.id }}</span>
+    </p>
   </div>
-  <div class="clr-col-lg-2 lessimportant">
-    {{ assistencia.problema }}
+  <div class="clr-col-lg-2">
+    <p>
+      {{ assistencia.estado }}
+    </p>
   </div>
-  <div class="clr-col-lg-2 lessimportant">
-    Cliente:{{ assistencia.cliente_user_name }}
+  <div class="clr-col-lg-3">
+    <p>
+      <span class="p2">{{ assistencia.categoria }}</span>
+      {{ assistencia.marca }}
+      {{ assistencia.modelo }}
+      {{ assistencia.cor }}
+    </p>
   </div>
-  <div class="clr-col-lg-2 lessimportant">
-    <span *ngIf="assistencia.tecnico">Técnico:{{ assistencia.tecnico }}</span>
-    <span *ngIf="!assistencia.tecnico">(aguarda técnico)</span>
+  <div class="clr-col-lg-2">
+    <p>
+      {{ assistencia.problema }}
+    </p>
   </div>
-  <p class="clr-col-lg-1 lessimportant m0">
-    {{ assistencia.estado }}
-  </p>
+  <div class="clr-col-lg-2">
+    <p><span class="p7">Cliente:</span> {{ assistencia.cliente_user_name }}</p>
+  </div>
+  <div class="clr-col-lg-2">
+    <p>
+      <span class="p7">Técnico:</span> {{ assistencia.tecnico }}
+      <span *ngIf="!assistencia.tecnico">-</span>
+    </p>
+  </div>
 </r-data-row>

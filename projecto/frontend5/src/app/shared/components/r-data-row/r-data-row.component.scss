@@ -1,12 +1,13 @@
 :host {
-  background-color: #f1f4f5;
-  border-radius: 3px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 0.15rem;
   cursor: pointer;
   margin-bottom: 5px;
   margin-left: 0;
   margin-right: 0;
   overflow: hidden;
-  padding: 0em 0em 0em 0em;
+  padding: 0.6rem 0.9rem;
 }
 
 :host:first-child {
@@ -14,18 +15,11 @@
 }
 
 :host:hover {
-  background-color: #ddd;
-  max-height: none;
+  background-color: #e8e8e8;
 }
 
 p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-@media screen and (min-width: 768px) {
-  :host {
-    max-height: 3.5em;
-  }
 }
