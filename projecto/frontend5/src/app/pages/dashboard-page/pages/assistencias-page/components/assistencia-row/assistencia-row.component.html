@@ -32,3 +32,34 @@
     </p>
   </div>
 </r-data-row>
+<r-data-row class="clr-row">
+  <div class="r-card-block clr-col-12">
+    <h4 class="r-card-title">{{ assistencia.id }}</h4>
+    <div class="group">
+      <p class="r-card-text">
+        <strong>Estado: </strong> {{ assistencia.estado }}
+      </p>
+      <p class="r-card-text">
+        <strong>{{ assistencia.categoria }}</strong>
+        {{ assistencia.marca }} {{ assistencia.modelo }}
+        {{ assistencia.cor }}
+      </p>
+    </div>
+    <div class="group less-emphasis">
+      <p class="r-card-text">Problema: {{ assistencia.problema }}</p>
+      <p class="r-card-text">Cliente: {{ assistencia.cliente_user_name }}</p>
+      <p class="r-card-text">Técnico: {{ assistencia.tecnico }}</p>
+    </div>
+  </div>
+  <div class="r-card-footer clr-col-12">
+    <button class="btn btn-success">
+      <clr-icon shape="play"></clr-icon> Iniciar
+    </button>
+    <button class="btn btn-link">
+      <clr-icon shape="pop-out"></clr-icon> Abrir
+    </button>
+    <button class="btn btn-link">
+      <clr-icon shape="cursor-hand-open"></clr-icon> Atribuir-me
+    </button>
+  </div>
+</r-data-row>
