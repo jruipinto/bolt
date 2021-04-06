@@ -20,6 +20,8 @@ export class AssistenciaRowComponent implements OnInit {
   @Output() openAssistencia = new EventEmitter<number>();
   @Output() assignAssistencia = new EventEmitter<number>();
 
+  isSelected = false;
+
   constructor() {}
 
   ngOnInit(): void {}

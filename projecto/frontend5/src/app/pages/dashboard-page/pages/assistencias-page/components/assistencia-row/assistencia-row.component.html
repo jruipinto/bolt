@@ -1,4 +1,4 @@
-<r-data-row class="clr-row" (click)="openAssistencia.emit(assistencia.id)">
+<r-data-row class="clr-row" *ngIf="!isSelected" (click)="isSelected = true">
   <div class="clr-col-lg-1">
     <p>
       <span class="p2">{{ assistencia.id }}</span>
@@ -32,7 +32,12 @@
     </p>
   </div>
 </r-data-row>
-<r-data-row class="clr-row">
+<r-data-row
+  class="clr-row"
+  *ngIf="isSelected"
+  [ngClass]="{ selected: isSelected }"
+  (click)="isSelected = false"
+>
   <div class="r-card-block clr-col-12">
     <h4 class="r-card-title">{{ assistencia.id }}</h4>
     <div class="group">
@@ -53,12 +58,19 @@
   </div>
   <div class="r-card-footer clr-col-12">
     <button class="btn btn-success">
-      <clr-icon shape="play"></clr-icon> Iniciar
+      <clr-icon
+        shape="play"
+        (click)="runAssistencia.emit(assistencia.id)"
+      ></clr-icon>
+      Iniciar
     </button>
-    <button class="btn btn-link">
+    <button class="btn btn-link" (click)="openAssistencia.emit(assistencia.id)">
       <clr-icon shape="pop-out"></clr-icon> Abrir
     </button>
-    <button class="btn btn-link">
+    <button
+      class="btn btn-link"
+      (click)="assignAssistencia.emit(assistencia.id)"
+    >
       <clr-icon shape="cursor-hand-open"></clr-icon> Atribuir-me
     </button>
   </div>
