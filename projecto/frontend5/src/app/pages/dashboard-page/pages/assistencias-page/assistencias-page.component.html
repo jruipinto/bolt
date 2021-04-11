@@ -63,67 +63,13 @@
 <r-loading *ngIf="isLoading"></r-loading>
 
 <div *ngIf="assistencias$ | async as assistencias">
-  <div
-    class="clr-row"
-    *ngFor="let assistencia of assistencias; let listaIndex = index"
-  >
-    <!-- <app-assistencia-card
-      class="clr-col-12"
-      [assistencia]="assistencia"
-      (openAssistencia)="openAssistencia($event)"
-    ></app-assistencia-card> -->
-    <app-assistencia-row
-      class="clr-col-12"
-      [assistencia]="assistencia"
-      (openAssistencia)="openAssistencia($event)"
-    ></app-assistencia-row>
-  </div>
+  <ul *ngFor="let assistencia of assistencias; let listaIndex = index">
+    <li class="clr-row">
+      <app-assistencia-row
+        class="clr-col-12"
+        [assistencia]="assistencia"
+        (openAssistencia)="openAssistencia($event)"
+      ></app-assistencia-row>
+    </li>
+  </ul>
 </div>
-
-<!--
-<div *ngIf="loading">
-  <span class="spinner spinner-inline"> </span>
-  <span> A carregar dados... </span>
-</div>
-
-<div *ngIf="assistencias$ | async as assistencias" class="separate">
-  <div *ngIf="assistencias.length > 0">
-    <r-data-row
-      class="clr-row"
-      *ngFor="let assistencia of assistencias; let listaIndex = index"
-      (click)="openAssistencia(assistencia.id)"
-    >
-      <div class="clr-col-lg-2">
-        <div class="clr-row">
-          <div class="clr-col-lg-4 fontheavy">
-            {{ assistencia.id }}
-          </div>
-          <div class="clr-col-lg-6">{{ assistencia.categoria }}:</div>
-        </div>
-      </div>
-      <div class="clr-col-lg-2">
-        <span class="fontheavy">{{ assistencia.marca }}</span>
-        {{ assistencia.modelo }}
-      </div>
-      <div class="clr-col-lg-1">
-        {{ assistencia.cor }}
-      </div>
-      <div class="clr-col-lg-2 lessimportant">
-        {{ assistencia.problema | slice: 0:29 }}
-        <span *ngIf="assistencia.problema.length > 30">...</span>
-      </div>
-      <div class="clr-col-lg-2 lessimportant">
-        Cliente:{{ assistencia.cliente_user_name }}
-      </div>
-      <div class="clr-col-lg-2 lessimportant">
-        <span *ngIf="assistencia.tecnico"
-          >Técnico:{{ assistencia.tecnico }}</span
-        >
-        <span *ngIf="!assistencia.tecnico">(aguarda técnico)</span>
-      </div>
-      <div class="clr-col-lg-1 lessimportant">
-        {{ assistencia.estado }}
-      </div>
-    </r-data-row>
-  </div>
-</div> -->
