@@ -1,8 +1,4 @@
-<r-data-row
-  (click)="expandView(!isExpanded)"
-  [ngClass]="{ 'bg-white': isExpanded === true }"
-  [ariaExpanded]="isExpanded"
->
+<r-data-row (click)="toogleView()" [ariaExpanded]="isExpanded">
   <div #expandedView class="clr-row expanded-view">
     <div class="r-card-block clr-col-12">
       <h4 class="r-card-title">{{ assistencia.id }}</h4>
