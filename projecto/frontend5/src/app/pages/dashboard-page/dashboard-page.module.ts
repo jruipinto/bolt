@@ -42,7 +42,6 @@ import { ClientesPesquisarModalComponent } from './modals/clientes-pesquisar-mod
 import { ConfigsPageComponent } from './pages/configs-page/configs-page.component';
 import { PainelRapidoPageModule } from './pages/painel-rapido-page/painel-rapido-page.module';
 import { RLoadingModule } from 'src/app/shared/components/r-loading/r-loading.module';
-import { AssistenciaCardComponent } from './pages/assistencias-page/components/assistencia-card/assistencia-card.component';
 import { AssistenciaRowComponent } from './pages/assistencias-page/components/assistencia-row/assistencia-row.component';
 import { AssistenciaRowListComponent } from './pages/assistencias-page/components/assistencia-row-list/assistencia-row-list.component';
 
@@ -80,7 +79,6 @@ import { AssistenciaRowListComponent } from './pages/assistencias-page/component
     EncomendaPromptModalComponent,
     ClientesPesquisarModalComponent,
     ConfigsPageComponent,
-    AssistenciaCardComponent,
     AssistenciaRowComponent,
     AssistenciaRowListComponent,
   ],
