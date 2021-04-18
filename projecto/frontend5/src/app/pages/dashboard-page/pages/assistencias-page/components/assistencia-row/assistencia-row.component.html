@@ -22,20 +22,14 @@
       <button class="btn btn-success">
         <clr-icon
           shape="play"
-          (click)="runAssistencia.emit(assistencia.id)"
+          (click)="runAssistencia(assistencia.id)"
         ></clr-icon>
         Iniciar
       </button>
-      <button
-        class="btn btn-link"
-        (click)="openAssistencia.emit(assistencia.id)"
-      >
+      <button class="btn btn-link" (click)="openAssistencia(assistencia.id)">
         <clr-icon shape="pop-out"></clr-icon> Abrir
       </button>
-      <button
-        class="btn btn-link"
-        (click)="assignAssistencia.emit(assistencia.id)"
-      >
+      <button class="btn btn-link" (click)="assignAssistencia(assistencia.id)">
         <clr-icon shape="cursor-hand-open"></clr-icon> Atribuir-me
       </button>
     </div>

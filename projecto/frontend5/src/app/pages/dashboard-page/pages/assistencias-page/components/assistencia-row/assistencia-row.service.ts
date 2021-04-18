@@ -51,7 +51,7 @@ export class AssistenciaRowService {
     deps.expandedViewEl.nativeElement.style.maxHeight = '1000px';
     deps.expandedViewEl.nativeElement.style.opacity = '1';
     deps.expandedViewEl.nativeElement.style.transition =
-      'max-height 0.25s ease-in, opacity 0.25s ease';
+      'max-height 0.25s ease-in, opacity 0.25s ease-in';
     deps.collapsedViewEl.nativeElement.style.opacity = '0';
     deps.collapsedViewEl.nativeElement.style.transition = 'opacity 0.1s linear';
     setTimeout(() => {

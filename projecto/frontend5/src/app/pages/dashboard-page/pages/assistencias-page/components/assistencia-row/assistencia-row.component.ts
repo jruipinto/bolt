@@ -1,13 +1,11 @@
 import {
   Component,
-  OnInit,
   ChangeDetectionStrategy,
-  EventEmitter,
   Input,
-  Output,
   ViewChild,
   ElementRef,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { Assistencia } from 'src/app/shared';
 import { AssistenciaRowService } from './assistencia-row.service';
 
@@ -18,20 +16,26 @@ import { AssistenciaRowService } from './assistencia-row.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [AssistenciaRowService],
 })
-export class AssistenciaRowComponent implements OnInit {
+export class AssistenciaRowComponent {
   @Input() assistencia: Assistencia;
-  @Output() runAssistencia = new EventEmitter<number>();
-  @Output() openAssistencia = new EventEmitter<number>();
-  @Output() assignAssistencia = new EventEmitter<number>();
   @ViewChild('collapsedView') collapsedViewEl: ElementRef;
   @ViewChild('expandedView') expandedViewEl: ElementRef;
   @ViewChild('buttonsContainer') buttonsContainerEl: ElementRef;
 
   isExpanded = this.componentSVC.isComponentExpanded;
 
-  constructor(private componentSVC: AssistenciaRowService) {}
+  constructor(
+    private componentSVC: AssistenciaRowService,
+    private router: Router
+  ) {}
 
-  ngOnInit(): void {}
+  assignAssistencia(assistenciaID: number): void {}
+
+  openAssistencia(assistenciaID: number) {
+    return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
+  }
+
+  runAssistencia(assistenciaID: number): void {}
 
   toogleView(): void {
     this.componentSVC.toogleView({
