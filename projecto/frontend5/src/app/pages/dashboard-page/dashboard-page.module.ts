@@ -44,6 +44,7 @@ import { PainelRapidoPageModule } from './pages/painel-rapido-page/painel-rapido
 import { RLoadingModule } from 'src/app/shared/components/r-loading/r-loading.module';
 import { AssistenciaCardComponent } from './pages/assistencias-page/components/assistencia-card/assistencia-card.component';
 import { AssistenciaRowComponent } from './pages/assistencias-page/components/assistencia-row/assistencia-row.component';
+import { AssistenciaRowListComponent } from './pages/assistencias-page/components/assistencia-row-list/assistencia-row-list.component';
 
 @NgModule({
   imports: [
@@ -81,6 +82,7 @@ import { AssistenciaRowComponent } from './pages/assistencias-page/components/as
     ConfigsPageComponent,
     AssistenciaCardComponent,
     AssistenciaRowComponent,
+    AssistenciaRowListComponent,
   ],
 })
 export class DashboardPageModule {}
