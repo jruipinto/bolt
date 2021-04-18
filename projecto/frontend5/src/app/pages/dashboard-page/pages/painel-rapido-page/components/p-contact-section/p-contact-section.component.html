@@ -32,16 +32,19 @@
           pedidoContactoCliente.updatedAt | date: "mediumDate"
         }})
       </span>
-      <p>
-        <strong>Cliente: </strong>{{ pedidoContactoCliente.cliente_user_name }}
-      </p>
-      <p>
-        <strong>Contacto: </strong
-        >{{ pedidoContactoCliente.cliente_user_contacto }}
-      </p>
-      <p>
-        <strong>Info: </strong>{{ pedidoContactoCliente.relatorio_cliente }}
-      </p>
+      <ul class="list-unstyled">
+        <li>
+          <strong>Cliente: </strong
+          >{{ pedidoContactoCliente.cliente_user_name }}
+        </li>
+        <li>
+          <strong>Contacto: </strong
+          >{{ pedidoContactoCliente.cliente_user_contacto }}
+        </li>
+        <li>
+          <strong>Info: </strong>{{ pedidoContactoCliente.relatorio_cliente }}
+        </li>
+      </ul>
       <button
         class="btn btn-sm btn-link"
         (click)="openAssistencia(pedidoContactoCliente.id)"

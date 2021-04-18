@@ -23,10 +23,14 @@
           orcamento.updatedAt | date: "mediumDate"
         }})</span
       >
-      <p><strong>Cliente: </strong>{{ orcamento.cliente_user_name }}</p>
-      <p><strong>Contacto: </strong>{{ orcamento.cliente_user_contacto }}</p>
-      <p><strong>Preço: </strong>{{ orcamento.preco }}€</p>
-      <p><strong>Info: </strong>{{ orcamento.relatorio_cliente }}</p>
+      <ul class="list-unstyled">
+        <li><strong>Cliente: </strong>{{ orcamento.cliente_user_name }}</li>
+        <li>
+          <strong>Contacto: </strong>{{ orcamento.cliente_user_contacto }}
+        </li>
+        <li><strong>Preço: </strong>{{ orcamento.preco }}€</li>
+        <li><strong>Info: </strong>{{ orcamento.relatorio_cliente }}</li>
+      </ul>
       <button
         class="btn btn-sm btn-link"
         (click)="openAssistencia(orcamento.id)"

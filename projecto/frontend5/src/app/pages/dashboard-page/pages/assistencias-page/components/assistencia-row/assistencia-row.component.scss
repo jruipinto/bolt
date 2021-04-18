@@ -50,6 +50,10 @@
   white-space: normal;
 }
 
+li {
+  list-style: none;
+}
+
 @media screen and (max-width: 992px) {
   .collapsed-view {
     display: none;

@@ -64,6 +64,12 @@ r-data-row {
     margin: 0;
   }
 }
+app-painel-rapido-page {
+  ul > li {
+    margin-top: 0.7em;
+  }
+}
+
 @media screen and (max-width: 768px) {
   header .search-box label input,
   header .search label input,

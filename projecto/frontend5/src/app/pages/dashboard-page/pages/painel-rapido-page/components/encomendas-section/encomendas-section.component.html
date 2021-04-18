@@ -23,25 +23,27 @@
           encomenda.updatedAt | date: "mediumDate"
         }})</span
       >
-      <p>
-        <strong>Artigo: </strong>
-        {{ encomenda?.artigo_descricao }}
-        {{ encomenda?.artigo_marca }}
-        {{ encomenda?.artigo_modelo }}
-      </p>
-      <p><strong>QTY: </strong>{{ encomenda.qty }}</p>
-      <p>
-        <strong>Prazo: </strong
-        >{{ encomenda.previsao_entrega | date: "EEE, d MMM y" }}
-      </p>
-      <div *ngIf="encomenda.orcamento || encomenda.observacao">
-        <p *ngIf="encomenda.orcamento">
-          <strong>Orçamento: </strong>{{ encomenda.orcamento }}€
-        </p>
-        <p *ngIf="encomenda?.observacao">
-          <strong>OBS:</strong> {{ encomenda.observacao }}
-        </p>
-      </div>
+      <ul class="list-unstyled">
+        <li>
+          <strong>Artigo: </strong>
+          {{ encomenda?.artigo_descricao }}
+          {{ encomenda?.artigo_marca }}
+          {{ encomenda?.artigo_modelo }}
+        </li>
+        <li><strong>QTY: </strong>{{ encomenda.qty }}</li>
+        <li>
+          <strong>Prazo: </strong
+          >{{ encomenda.previsao_entrega | date: "EEE, d MMM y" }}
+        </li>
+        <div *ngIf="encomenda.orcamento || encomenda.observacao">
+          <li *ngIf="encomenda.orcamento">
+            <strong>Orçamento: </strong>{{ encomenda.orcamento }}€
+          </li>
+          <li *ngIf="encomenda?.observacao">
+            <strong>OBS:</strong> {{ encomenda.observacao }}
+          </li>
+        </div>
+      </ul>
       <button class="btn btn-sm btn-link" (click)="openEncomenda(encomenda.id)">
         Abrir (Enc. {{ encomenda.id }})
       </button>

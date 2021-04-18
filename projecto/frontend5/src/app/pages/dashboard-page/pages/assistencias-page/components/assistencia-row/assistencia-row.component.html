@@ -2,21 +2,31 @@
   <div #expandedView class="clr-row expanded-view">
     <div class="r-card-block clr-col-12">
       <h4 class="r-card-title">{{ assistencia.id }}</h4>
-      <div class="group">
-        <p class="r-card-text">
-          <strong>Estado: </strong> {{ assistencia.estado }}
-        </p>
-        <p class="r-card-text">
-          <strong>{{ assistencia.categoria }}</strong>
-          {{ assistencia.marca }} {{ assistencia.modelo }}
-          {{ assistencia.cor }}
-        </p>
-      </div>
-      <div class="group less-emphasis">
-        <p class="r-card-text">Problema: {{ assistencia.problema }}</p>
-        <p class="r-card-text">Cliente: {{ assistencia.cliente_user_name }}</p>
-        <p class="r-card-text">Técnico: {{ assistencia.tecnico }}</p>
-      </div>
+      <ul class="list-unstyled">
+        <div class="group">
+          <li class="r-card-text">
+            <p><strong>Estado: </strong> {{ assistencia.estado }}</p>
+          </li>
+          <li class="r-card-text">
+            <p>
+              <strong>{{ assistencia.categoria }}</strong>
+              {{ assistencia.marca }} {{ assistencia.modelo }}
+              {{ assistencia.cor }}
+            </p>
+          </li>
+        </div>
+        <div class="group less-emphasis">
+          <li class="r-card-text">
+            <p>Problema: {{ assistencia.problema }}</p>
+          </li>
+          <li class="r-card-text">
+            <p>Cliente: {{ assistencia.cliente_user_name }}</p>
+          </li>
+          <li class="r-card-text">
+            <p>Técnico: {{ assistencia.tecnico }}</p>
+          </li>
+        </div>
+      </ul>
     </div>
     <div #buttonsContainer class="r-card-footer">
       <button class="btn btn-success">
@@ -35,40 +45,42 @@
     </div>
   </div>
 
-  <div #collapsedView class="clr-row collapsed-view">
-    <div class="clr-col-lg-1">
-      <p>
-        <span class="p2">{{ assistencia.id }}</span>
-      </p>
-    </div>
-    <div class="clr-col-lg-2">
-      <p>
-        {{ assistencia.estado }}
-      </p>
-    </div>
-    <div class="clr-col-lg-3">
-      <p>
-        <span class="p2">{{ assistencia.categoria }}</span>
-        {{ assistencia.marca }}
-        {{ assistencia.modelo }}
-        {{ assistencia.cor }}
-      </p>
-    </div>
-    <div class="clr-col-lg-2">
-      <p>
-        {{ assistencia.problema }}
-      </p>
-    </div>
-    <div class="clr-col-lg-2">
-      <p>
-        <span class="p7">Cliente:</span> {{ assistencia.cliente_user_name }}
-      </p>
-    </div>
-    <div class="clr-col-lg-2">
-      <p>
-        <span class="p7">Técnico:</span> {{ assistencia.tecnico }}
-        <span *ngIf="!assistencia.tecnico">-</span>
-      </p>
-    </div>
+  <div #collapsedView class="collapsed-view">
+    <ul class="clr-row list-unstyled">
+      <li class="clr-col-lg-1">
+        <p>
+          <span class="p2">{{ assistencia.id }}</span>
+        </p>
+      </li>
+      <li class="clr-col-lg-2">
+        <p>
+          {{ assistencia.estado }}
+        </p>
+      </li>
+      <li class="clr-col-lg-3">
+        <p>
+          <span class="p2">{{ assistencia.categoria }}</span>
+          {{ assistencia.marca }}
+          {{ assistencia.modelo }}
+          {{ assistencia.cor }}
+        </p>
+      </li>
+      <li class="clr-col-lg-2">
+        <p>
+          {{ assistencia.problema }}
+        </p>
+      </li>
+      <li class="clr-col-lg-2">
+        <p>
+          <span class="p7">Cliente:</span> {{ assistencia.cliente_user_name }}
+        </p>
+      </li>
+      <li class="clr-col-lg-2">
+        <p>
+          <span class="p7">Técnico:</span> {{ assistencia.tecnico }}
+          <span *ngIf="!assistencia.tecnico">-</span>
+        </p>
+      </li>
+    </ul>
   </div>
 </r-data-row>
