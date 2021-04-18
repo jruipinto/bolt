@@ -60,16 +60,7 @@
   </clr-tabs>
 </div>
 
-<r-loading *ngIf="isLoading"></r-loading>
-
-<div *ngIf="assistencias$ | async as assistencias">
-  <ul *ngFor="let assistencia of assistencias; let listaIndex = index">
-    <li class="clr-row">
-      <app-assistencia-row
-        class="clr-col-12"
-        [assistencia]="assistencia"
-        (openAssistencia)="openAssistencia($event)"
-      ></app-assistencia-row>
-    </li>
-  </ul>
-</div>
+<app-assistencia-row-list
+  [assistencias$]="assistencias$"
+  [isLoading]="isLoading"
+></app-assistencia-row-list>

@@ -7,7 +7,6 @@ import {
 import { map, concatMap, tap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { AssistenciasService } from 'src/app/shared/state';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Assistencia, AuthService } from 'src/app/shared';
 
@@ -73,8 +72,7 @@ export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private assistencias: AssistenciasService,
-    private authService: AuthService,
-    private router: Router
+    private authService: AuthService
   ) {}
 
   ngAfterViewInit() {
@@ -109,17 +107,6 @@ export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {}
-
-  /*
-  openModal(id: number) {
-    return this.uiService.patchState({ assistenciaModalID: id, assistenciaModalVisible: true })
-      .subscribe();
-  }
-  */
-
-  openAssistencia(assistenciaID: number) {
-    return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
-  }
 
   filterAssistencias(arg: 'todas' | 'a fechar' | 'minhas') {
     if (arg === 'todas') {
