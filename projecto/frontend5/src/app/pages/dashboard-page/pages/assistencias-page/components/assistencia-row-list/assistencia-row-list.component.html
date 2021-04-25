@@ -2,9 +2,7 @@
   <r-loading *ngIf="!isLoading"></r-loading>
 </ng-template>
 
-<div *ngIf="isLoading">
-  <r-loading></r-loading>
-</div>
+<r-loading *ngIf="isLoading"></r-loading>
 
 <div *ngIf="assistencias$ | async as assistencias; else loading">
   <ul *ngIf="assistencias.length > 0; else noAssistencias">
@@ -15,7 +13,6 @@
       <app-assistencia-row
         class="clr-col-12"
         [assistencia]="assistencia"
-        (openAssistencia)="openAssistencia($event)"
       ></app-assistencia-row>
     </li>
   </ul>
