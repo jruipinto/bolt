@@ -18,7 +18,7 @@ import { Assistencia, AuthService } from 'src/app/shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
-  public isLoading = true;
+  public isLoading = false;
   public inOverflow = null;
   public loggedInUserName: string;
   public assistencias$: Observable<Assistencia[]>;
