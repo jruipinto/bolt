@@ -286,10 +286,6 @@ ${this.assistencia.relatorio_cliente}`
       );
   }
 
-  navigateBack() {
-    window.history.back();
-  }
-
   searchArtigo(input?: string) {
     if (!input) {
       return;

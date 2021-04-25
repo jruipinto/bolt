@@ -1,18 +1,8 @@
 <r-loading *ngIf="isLoading"></r-loading>
 
 <div *ngIf="assistencia && !isLoading">
-  <button
-    type="button"
-    class="btn btn-link btn-icon"
-    style="margin: 0; padding: 0"
-    (click)="navigateBack()"
-  >
-    <clr-icon
-      size="36"
-      shape="circle-arrow"
-      style="transform: rotate(270deg)"
-    ></clr-icon>
-  </button>
+  <app-back-button></app-back-button>
+
   <h1>Assistência {{ assistencia.id }}</h1>
 
   <div class="separate">

@@ -18,220 +18,257 @@
     qty: number;
 }
 -->
-<div *ngIf="!encomenda">
-    <span class="spinner spinner-inline">
-    </span>
-    <span>
-        A carregar dados...
-    </span>
-</div>
+<r-loading *ngIf="!encomenda"></r-loading>
 
 <div *ngIf="encomenda">
-    <button type="button" class="btn btn-link btn-icon" style="margin:0; padding:0" (click)="navigateBack()">
-        <clr-icon class="is-solid" size="36" shape="arrow" style="transform: rotate(270deg);"></clr-icon>
-    </button>
+  <app-back-button></app-back-button>
 
-    <h3>Encomenda {{encomenda.id}}</h3>
+  <h3>Encomenda {{ encomenda.id }}</h3>
 
-    <div class="separate">
-        <div class="clr-row">
-            <div class="clr-col-md-2 fontheavy">
-                Estado:
-            </div>
-            <div class="clr-col">
-                {{encomenda.estado}}
-            </div>
-        </div>
+  <div class="separate">
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">Estado:</div>
+      <div class="clr-col">
+        {{ encomenda.estado }}
+      </div>
     </div>
-    <div class="separate">
-        <div class="clr-row">
-            <div class="clr-col-md-2 fontheavy">
-                Artigo:
-            </div>
-            <div class="clr-col">
-                {{encomenda.qty}} x {{encomenda.artigo_descricao}} {{encomenda.artigo_marca}}
-                {{encomenda.artigo_modelo}}
-            </div>
-        </div>
-        <div class="clr-row">
-            <div class="clr-col-md-2 fontheavy">
-                Orçamento:
-            </div>
-            <div class="clr-col">
-                <span *ngIf="!encomenda.orcamento">-</span>
-                {{encomenda?.orcamento | currency: 'EUR'}}
-            </div>
-        </div>
-        <div class="clr-row">
-            <div class="clr-col-md-2 fontheavy">
-                Fornecedor:
-            </div>
-            <div class="clr-col">
-                {{encomenda?.fornecedor}} <span *ngIf="!encomenda.fornecedor">-</span>
-            </div>
-        </div>
-        <div class="clr-row">
-            <div class="clr-col-md-2 fontheavy">
-                Observação:
-            </div>
-            <div class="clr-col">
-                {{encomenda?.observacao}} <span *ngIf="!encomenda.observacao">-</span>
-            </div>
-        </div>
+  </div>
+  <div class="separate">
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">Artigo:</div>
+      <div class="clr-col">
+        {{ encomenda.qty }} x {{ encomenda.artigo_descricao }}
+        {{ encomenda.artigo_marca }}
+        {{ encomenda.artigo_modelo }}
+      </div>
     </div>
-    <div class="separate">
-        <div class="clr-row" *ngIf="encomenda.assistencia_id">
-            <div class="clr-col-md-2 fontheavy">
-                Assistencia:
-            </div>
-            <div class="clr-col">
-                <a (click)="openAssistencia(encomenda.assistencia_id)">{{encomenda.assistencia_id}}</a>
-            </div>
-        </div>
-        <div class="clr-row" *ngIf="encomenda.cliente_user_id">
-            <div class="clr-col-md-2 fontheavy">
-                Cliente:
-            </div>
-            <div class="clr-col">
-                {{encomenda.cliente_user_name}}
-            </div>
-        </div>
-        <div class="clr-row" *ngIf="encomenda.cliente_user_id">
-            <div class="clr-col-md-2 fontheavy">
-                Contacto:
-            </div>
-            <div class="clr-col">
-                {{encomenda.cliente_user_contacto}}
-            </div>
-        </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">Orçamento:</div>
+      <div class="clr-col">
+        <span *ngIf="!encomenda.orcamento">-</span>
+        {{ encomenda?.orcamento | currency: "EUR" }}
+      </div>
     </div>
-    <div class="separate">
-        <div class="clr-row">
-            <div class="clr-col-md-2 fontheavy">
-                Prazo de entrega:
-            </div>
-            <div class="clr-col">
-                {{encomenda.previsao_entrega | date: 'EEE, d MMM y'}}
-            </div>
-        </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">Fornecedor:</div>
+      <div class="clr-col">
+        {{ encomenda?.fornecedor }} <span *ngIf="!encomenda.fornecedor">-</span>
+      </div>
+    </div>
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">Observação:</div>
+      <div class="clr-col">
+        {{ encomenda?.observacao }} <span *ngIf="!encomenda.observacao">-</span>
+      </div>
+    </div>
+  </div>
+  <div class="separate">
+    <div class="clr-row" *ngIf="encomenda.assistencia_id">
+      <div class="clr-col-md-2 fontheavy">Assistencia:</div>
+      <div class="clr-col">
+        <a (click)="openAssistencia(encomenda.assistencia_id)">{{
+          encomenda.assistencia_id
+        }}</a>
+      </div>
+    </div>
+    <div class="clr-row" *ngIf="encomenda.cliente_user_id">
+      <div class="clr-col-md-2 fontheavy">Cliente:</div>
+      <div class="clr-col">
+        {{ encomenda.cliente_user_name }}
+      </div>
+    </div>
+    <div class="clr-row" *ngIf="encomenda.cliente_user_id">
+      <div class="clr-col-md-2 fontheavy">Contacto:</div>
+      <div class="clr-col">
+        {{ encomenda.cliente_user_contacto }}
+      </div>
+    </div>
+  </div>
+  <div class="separate">
+    <div class="clr-row">
+      <div class="clr-col-md-2 fontheavy">Prazo de entrega:</div>
+      <div class="clr-col">
+        {{ encomenda.previsao_entrega | date: "EEE, d MMM y" }}
+      </div>
+    </div>
+  </div>
+
+  <div class="separate">
+    <div class="clr-row">
+      <div class="clr-col">
+        <clr-accordion>
+          <clr-accordion-panel>
+            <clr-accordion-title
+              >Mensagens ({{
+                encomenda?.messages?.length
+              }})</clr-accordion-title
+            >
+            <clr-accordion-content *clrIfExpanded>
+              <div
+                class="clr-row"
+                *ngIf="encomenda.messages && encomenda.messages.length"
+              >
+                <div class="clr-col">
+                  <clr-datagrid>
+                    <clr-dg-column>Assunto</clr-dg-column>
+                    <clr-dg-column>Estado</clr-dg-column>
+                    <clr-dg-column>Enviada</clr-dg-column>
+                    <clr-dg-column>Entregue</clr-dg-column>
+                    <clr-dg-row *ngFor="let message of encomenda.messages">
+                      <clr-dg-cell>{{ message.subject }}</clr-dg-cell>
+                      <clr-dg-cell>{{ message.state }}</clr-dg-cell>
+                      <clr-dg-cell>{{
+                        message.createdAt | slice: 0:10
+                      }}</clr-dg-cell>
+                      <clr-dg-cell>{{
+                        message?.deliveredAt | slice: 0:10
+                      }}</clr-dg-cell>
+                    </clr-dg-row>
+                    <clr-dg-footer
+                      >{{ encomenda.messages.length }} mensagens</clr-dg-footer
+                    >
+                  </clr-datagrid>
+                </div>
+              </div>
+            </clr-accordion-content>
+          </clr-accordion-panel>
+
+          <clr-accordion-panel>
+            <clr-accordion-title>Registo Cronológico</clr-accordion-title>
+            <clr-accordion-content *clrIfExpanded>
+              <clr-datagrid>
+                <clr-dg-column>Evento</clr-dg-column>
+                <clr-dg-column>Editor</clr-dg-column>
+                <clr-dg-column>Técnico</clr-dg-column>
+                <clr-dg-column>Estado</clr-dg-column>
+                <clr-dg-column>Data</clr-dg-column>
+                <clr-dg-row
+                  *ngFor="let evento of encomenda.registo_cronologico"
+                >
+                  <clr-dg-cell>
+                    <span *ngIf="evento.editor_action">{{
+                      evento.editor_action
+                    }}</span>
+                    <span *ngIf="!evento.editor_action">novo estado</span>
+                  </clr-dg-cell>
+                  <clr-dg-cell>
+                    <span *ngIf="evento.editor_action">{{
+                      evento.editor
+                    }}</span>
+                    <span *ngIf="!evento.editor_action">{{
+                      evento.tecnico
+                    }}</span>
+                  </clr-dg-cell>
+                  <clr-dg-cell
+                    >{{ evento.tecnico_user_id }}
+                    {{ evento.tecnico }}</clr-dg-cell
+                  >
+                  <clr-dg-cell>{{ evento.estado }}</clr-dg-cell>
+                  <clr-dg-cell>{{
+                    evento.updatedAt | slice: 0:10
+                  }}</clr-dg-cell>
+                </clr-dg-row>
+                <clr-dg-footer
+                  >{{ encomenda.registo_cronologico.length }} eventos registados
+                </clr-dg-footer>
+              </clr-datagrid>
+            </clr-accordion-content>
+          </clr-accordion-panel>
+        </clr-accordion>
+      </div>
+    </div>
+  </div>
+
+  <div class="separate">
+    <div
+      *ngIf="
+        encomenda.estado === 'registada' ||
+        encomenda.estado === 'esgotada' ||
+        encomenda.estado === 'aguarda resposta de fornecedor' ||
+        encomenda.estado === 'detectado defeito'
+      "
+    >
+      <button
+        class="btn btn-success"
+        (click)="saveEncomenda('aguarda entrega', encomenda)"
+      >
+        <clr-icon shape="check"></clr-icon> Encomendado
+      </button>
+      <clr-dropdown>
+        <button clrDropdownTrigger class="btn btn-outline-primary">
+          <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
+          <clr-icon shape="caret down"> </clr-icon>
+        </button>
+        <clr-dropdown-menu clrPosition="top-left">
+          <button
+            clrDropdownItem
+            type="button"
+            (click)="saveEncomenda('aguarda resposta de fornecedor', encomenda)"
+          >
+            Aguarda resposta de fornecedor
+          </button>
+          <button
+            clrDropdownItem
+            type="button"
+            (click)="saveEncomenda('marcada para ir ao fornecedor', encomenda)"
+          >
+            Marcar para ir ao fornecedor
+          </button>
+          <button
+            clrDropdownItem
+            type="button"
+            (click)="saveEncomenda('esgotada', encomenda)"
+          >
+            Esgotado
+          </button>
+          <button
+            clrDropdownItem
+            type="button"
+            (click)="saveEncomenda('sem fornecedor', encomenda)"
+          >
+            Sem fornecedor
+          </button>
+        </clr-dropdown-menu>
+      </clr-dropdown>
     </div>
 
-    <div class="separate">
-        <div class="clr-row">
-            <div class="clr-col">
-                <clr-accordion>
-
-                    <clr-accordion-panel>
-                        <clr-accordion-title>Mensagens ({{encomenda?.messages?.length}})</clr-accordion-title>
-                        <clr-accordion-content *clrIfExpanded>
-                            <div class="clr-row" *ngIf="encomenda.messages && encomenda.messages.length">
-                                <div class="clr-col">
-                                    <clr-datagrid>
-                                        <clr-dg-column>Assunto</clr-dg-column>
-                                        <clr-dg-column>Estado</clr-dg-column>
-                                        <clr-dg-column>Enviada</clr-dg-column>
-                                        <clr-dg-column>Entregue</clr-dg-column>
-                                        <clr-dg-row *ngFor="let message of encomenda.messages">
-                                            <clr-dg-cell>{{message.subject}}</clr-dg-cell>
-                                            <clr-dg-cell>{{message.state}}</clr-dg-cell>
-                                            <clr-dg-cell>{{message.createdAt | slice:0:10}}</clr-dg-cell>
-                                            <clr-dg-cell>{{message?.deliveredAt | slice:0:10}}</clr-dg-cell>
-                                        </clr-dg-row>
-                                        <clr-dg-footer>{{encomenda.messages.length}} mensagens</clr-dg-footer>
-                                    </clr-datagrid>
-                                </div>
-                            </div>
-                        </clr-accordion-content>
-                    </clr-accordion-panel>
-
-                    <clr-accordion-panel>
-                        <clr-accordion-title>Registo Cronológico</clr-accordion-title>
-                        <clr-accordion-content *clrIfExpanded>
-                            <clr-datagrid>
-                                <clr-dg-column>Evento</clr-dg-column>
-                                <clr-dg-column>Editor</clr-dg-column>
-                                <clr-dg-column>Técnico</clr-dg-column>
-                                <clr-dg-column>Estado</clr-dg-column>
-                                <clr-dg-column>Data</clr-dg-column>
-                                <clr-dg-row *ngFor="let evento of encomenda.registo_cronologico">
-                                    <clr-dg-cell>
-                                        <span *ngIf="evento.editor_action">{{evento.editor_action}}</span>
-                                        <span *ngIf="!evento.editor_action">novo estado</span>
-                                    </clr-dg-cell>
-                                    <clr-dg-cell>
-                                        <span *ngIf="evento.editor_action">{{evento.editor}}</span>
-                                        <span *ngIf="!evento.editor_action">{{evento.tecnico}}</span>
-                                    </clr-dg-cell>
-                                    <clr-dg-cell>{{evento.tecnico_user_id}} {{evento.tecnico}}</clr-dg-cell>
-                                    <clr-dg-cell>{{evento.estado}}</clr-dg-cell>
-                                    <clr-dg-cell>{{evento.updatedAt | slice:0:10}}</clr-dg-cell>
-                                </clr-dg-row>
-                                <clr-dg-footer>{{encomenda.registo_cronologico.length}} eventos registados
-                                </clr-dg-footer>
-                            </clr-datagrid>
-                        </clr-accordion-content>
-                    </clr-accordion-panel>
-
-                </clr-accordion>
-            </div>
-        </div>
+    <div *ngIf="encomenda.estado === 'marcada para ir ao fornecedor'">
+      <button
+        class="btn btn-success"
+        (click)="saveEncomenda('adquirida', encomenda)"
+      >
+        <clr-icon shape="check"></clr-icon> Adquirido
+      </button>
+      <button
+        class="btn btn-danger"
+        (click)="saveEncomenda('esgotada', encomenda)"
+      >
+        <clr-icon shape="times"></clr-icon> Esgotado
+      </button>
     </div>
 
-    <div class="separate">
-
-        <div *ngIf="encomenda.estado === 'registada'
-        || encomenda.estado === 'esgotada'
-        || encomenda.estado === 'aguarda resposta de fornecedor'
-        || encomenda.estado === 'detectado defeito'">
-            <button class="btn btn-success" (click)="saveEncomenda('aguarda entrega', encomenda)">
-                <clr-icon shape="check"></clr-icon> Encomendado
-            </button>
-            <clr-dropdown>
-                <button clrDropdownTrigger class="btn btn-outline-primary">
-                    <clr-icon shape="ellipsis-horizontal"></clr-icon> Opções
-                    <clr-icon shape="caret down">
-                    </clr-icon>
-                </button>
-                <clr-dropdown-menu clrPosition="top-left">
-                    <button clrDropdownItem type="button"
-                        (click)="saveEncomenda('aguarda resposta de fornecedor', encomenda)">
-                        Aguarda
-                        resposta de fornecedor</button>
-                    <button clrDropdownItem type="button"
-                        (click)="saveEncomenda('marcada para ir ao fornecedor', encomenda)">
-                        Marcar
-                        para ir ao fornecedor</button>
-                    <button clrDropdownItem type="button"
-                        (click)="saveEncomenda('esgotada', encomenda)">Esgotado</button>
-                    <button clrDropdownItem type="button" (click)="saveEncomenda('sem fornecedor', encomenda)">Sem
-                        fornecedor
-                    </button>
-                </clr-dropdown-menu>
-            </clr-dropdown>
-        </div>
-
-
-
-        <div *ngIf="encomenda.estado === 'marcada para ir ao fornecedor'">
-            <button class="btn btn-success" (click)="saveEncomenda('adquirida', encomenda)">
-                <clr-icon shape="check"></clr-icon> Adquirido
-            </button>
-            <button class="btn btn-danger" (click)="saveEncomenda('esgotada', encomenda)">
-                <clr-icon shape="times"></clr-icon> Esgotado
-            </button>
-        </div>
-
-        <div *ngIf="encomenda.estado === 'aguarda entrega'">
-            <button class="btn btn-success" (click)="saveEncomenda('recebida', encomenda)">
-                <clr-icon shape="check"></clr-icon> Recebida
-            </button>
-        </div>
-
-        <div *ngIf="encomenda.estado === 'recebida'
-        || encomenda.estado === 'adquirida'
-        || encomenda.estado === 'sem fornecedor'">
-            <button class="btn btn-warning" (click)="saveEncomenda('entregue', encomenda)">Entregar</button>
-        </div>
-
+    <div *ngIf="encomenda.estado === 'aguarda entrega'">
+      <button
+        class="btn btn-success"
+        (click)="saveEncomenda('recebida', encomenda)"
+      >
+        <clr-icon shape="check"></clr-icon> Recebida
+      </button>
     </div>
+
+    <div
+      *ngIf="
+        encomenda.estado === 'recebida' ||
+        encomenda.estado === 'adquirida' ||
+        encomenda.estado === 'sem fornecedor'
+      "
+    >
+      <button
+        class="btn btn-warning"
+        (click)="saveEncomenda('entregue', encomenda)"
+      >
+        Entregar
+      </button>
+    </div>
+  </div>
 </div>
