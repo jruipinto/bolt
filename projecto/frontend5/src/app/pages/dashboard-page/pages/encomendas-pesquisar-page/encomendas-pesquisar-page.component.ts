@@ -1,13 +1,15 @@
 import {
-  Component, OnInit, OnDestroy,
-  AfterViewInit, ViewChild, ElementRef,
-  ChangeDetectionStrategy, ChangeDetectorRef
+  Component,
+  OnDestroy,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { concat, of } from 'rxjs';
-import { concatMap, reduce } from 'rxjs/operators';
+import { concat, Observable, of } from 'rxjs';
+import { concatMap, map, reduce, tap } from 'rxjs/operators';
 import { Encomenda, User, Artigo, dbQuery } from 'src/app/shared';
 import { EncomendasService, ArtigosService } from 'src/app/shared/state';
 import { clone, sort } from 'ramda';
@@ -18,18 +20,21 @@ import { ClientesPesquisarModalComponent } from 'src/app/pages/dashboard-page/mo
   selector: 'app-encomendas-pesquisar-page',
   templateUrl: './encomendas-pesquisar-page.component.html',
   styleUrls: ['./encomendas-pesquisar-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('userSearchModalInput') userSearchModalInputEl: ElementRef<HTMLElement>;
-  @ViewChild(ClientesPesquisarModalComponent) clientesSearchModal: ClientesPesquisarModalComponent;
+export class EncomendasPesquisarPageComponent
+  implements OnDestroy, AfterViewInit {
+  @ViewChild('userSearchModalInput')
+  userSearchModalInputEl: ElementRef<HTMLElement>;
+  @ViewChild(ClientesPesquisarModalComponent)
+  clientesSearchModal: ClientesPesquisarModalComponent;
 
-  public loading = false;
-  public results: Encomenda[];
+  public isLoading = false;
+  public results$: Observable<Encomenda[]>;
   public encomendasSearchForm = this.fb.group({
     input: [null],
     estado: ['qualquer'],
-    cliente_user_id: [null]
+    cliente_user_id: [null],
   });
 
   public estados = [
@@ -43,68 +48,72 @@ export class EncomendasPesquisarPageComponent implements OnInit, OnDestroy, Afte
     'aguarda entrega',
     'recebida',
     'detectado defeito',
-    'entregue'
+    'entregue',
   ];
 
   constructor(
     private encomendas: EncomendasService,
     private artigos: ArtigosService,
-    private router: Router,
-    private fb: FormBuilder,
-    private cdr: ChangeDetectorRef) { }
-
-  ngOnInit() {
-  }
+    private fb: FormBuilder
+  ) {}
 
   ngAfterViewInit() {
-    this.clientesSearchModal.selectedCliente.subscribe(
-      (user: User) => this.encomendasSearchForm.patchValue({ cliente_user_id: clone(user.id) })
+    this.clientesSearchModal.selectedCliente.subscribe((user: User) =>
+      this.encomendasSearchForm.patchValue({ cliente_user_id: clone(user.id) })
     );
     this.searchEncomenda(this.encomendasSearchForm.value);
   }
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 
-  openEncomenda(encomendaID: number) {
-    return this.router.navigate(['/dashboard/encomenda', encomendaID]);
-  }
-
-  searchEncomenda({ input, estado, cliente_user_id }) {
+  searchEncomenda({ input, estado, cliente_user_id }): void {
     if (!input && !cliente_user_id) {
+      this.results$ = of([]);
       return;
     }
-    this.loading = true;
+    this.isLoading = true;
 
-    const clienteStatement = cliente_user_id && typeof cliente_user_id === 'number' ? ',"cliente_user_id":' + cliente_user_id : '';
-    const estadoStatement = estado && estado !== 'qualquer' ? ',"estado": "' + estado + '"' : '';
+    const clienteStatement =
+      cliente_user_id && typeof cliente_user_id === 'number'
+        ? ',"cliente_user_id":' + cliente_user_id
+        : '';
+    const estadoStatement =
+      estado && estado !== 'qualquer' ? ',"estado": "' + estado + '"' : '';
 
-    return this.artigos.find(dbQuery(input || ' ', ['marca', 'modelo', 'descricao'])).pipe(
-      concatMap((artigosDB: Artigo[]) => {
-        if (!artigosDB || !artigosDB.length) {
-          return of(null);
-        }
-        return concat(...artigosDB.map(
-          ({ id }) => this.encomendas.find(
-            JSON.parse(
-              '{' +
-              '"query": {' +
-              '"$limit": "200",' +
-              '"artigo_id": ' + id +
-              clienteStatement +
-              estadoStatement +
-              '}' +
-              '}'
+    this.results$ = this.artigos
+      .find(dbQuery(input || ' ', ['marca', 'modelo', 'descricao']))
+      .pipe(
+        concatMap((artigosDB: Artigo[]) => {
+          if (!artigosDB || !artigosDB.length) {
+            return of(null);
+          }
+          return concat(
+            ...artigosDB.map(({ id }) =>
+              this.encomendas.find(
+                JSON.parse(
+                  '{' +
+                    '"query": {' +
+                    '"$limit": "200",' +
+                    '"artigo_id": ' +
+                    id +
+                    clienteStatement +
+                    estadoStatement +
+                    '}' +
+                    '}'
+                )
+              )
             )
-          )
-        )).pipe(reduce((acc, val) => ([...acc, ...val])));
-      })
-    ).subscribe(encomendas => {
-      const inverseDiff = (objA, objB) => objB.id - objA.id;
-      this.results = sort(inverseDiff, clone(encomendas));
-      this.loading = false;
-      this.cdr.detectChanges();
-    });
+          ).pipe(reduce((acc, val) => [...acc, ...val]));
+        })
+      )
+      .pipe(
+        map((encomendas) => {
+          const inverseDiff = (objA, objB) => objB.id - objA.id;
+          return sort(inverseDiff, clone(encomendas));
+        }),
+        tap(() => {
+          this.isLoading = false;
+        })
+      );
   }
-
 }

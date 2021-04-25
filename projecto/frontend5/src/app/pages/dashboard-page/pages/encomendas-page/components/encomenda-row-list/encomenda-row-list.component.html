@@ -1,0 +1,22 @@
+<ng-template #loading>
+  <r-loading *ngIf="!isLoading"></r-loading>
+</ng-template>
+
+<r-loading *ngIf="isLoading"></r-loading>
+
+<div *ngIf="encomendas$ | async as encomendas; else loading">
+  <ul *ngIf="encomendas.length > 0; else noArtigos">
+    <li
+      class="clr-row"
+      *ngFor="let encomenda of encomendas; let listaIndex = index"
+    >
+      <app-encomenda-row
+        class="clr-col-12"
+        [encomenda]="encomenda"
+      ></app-encomenda-row>
+    </li>
+  </ul>
+  <ng-template #noArtigos>
+    <p *ngIf="!isLoading">Nenhuma encomenda...</p>
+  </ng-template>
+</div>

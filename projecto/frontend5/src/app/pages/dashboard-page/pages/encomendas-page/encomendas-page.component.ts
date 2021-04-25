@@ -10,65 +10,55 @@ import { Encomenda } from 'src/app/shared';
 @Component({
   selector: 'app-encomendas-page',
   templateUrl: './encomendas-page.component.html',
-  styleUrls: ['./encomendas-page.component.scss']
+  styleUrls: ['./encomendas-page.component.scss'],
 })
 export class EncomendasPageComponent implements AfterContentInit, OnDestroy {
-  public loading = true;
+  public isLoading = true;
   public inOverflow = null;
   public encomendas$: Observable<Encomenda[]>;
-  public encomendasTodas$ = this.encomendas.state$
-    .pipe(
-      map(state => (
-        state
-          ? state.filter(encomenda => (
-            encomenda.estado === 'registada'
-            || encomenda.estado === 'marcada para ir ao fornecedor'
-            || encomenda.estado === 'adquirida'
-            || encomenda.estado === 'esgotada'
-            || encomenda.estado === 'sem fornecedor'
-            || encomenda.estado === 'aguarda resposta de fornecedor'
-            || encomenda.estado === 'aguarda entrega'
-            || encomenda.estado === 'recebida'
-            || encomenda.estado === 'detectado defeito'
-          ))
-          : null
-      ))
-    );
-  public encomendasMarcadas$ = this.encomendas.state$
-    .pipe(
-      map(state => (
-        state
-          ? state.filter(encomenda => (
-            encomenda.estado === 'marcada para ir ao fornecedor'
-          ))
-          : null
-      ))
-    );
-  public encomendasAguardaEntrega$ = this.encomendas.state$
-    .pipe(
-      map(state => (
-        state
-          ? state.filter(encomenda => (
-            encomenda.estado === 'aguarda entrega'
-          ))
-          : null
-      ))
-    );
-  public encomendasRecebidas$ = this.encomendas.state$
-    .pipe(
-      map(state => (
-        state
-          ? state.filter(encomenda => (
-            encomenda.estado === 'recebida'
-          ))
-          : null
-      ))
-    );
+  public encomendasTodas$ = this.encomendas.state$.pipe(
+    map((state) =>
+      state
+        ? state.filter(
+            (encomenda) =>
+              encomenda.estado === 'registada' ||
+              encomenda.estado === 'marcada para ir ao fornecedor' ||
+              encomenda.estado === 'adquirida' ||
+              encomenda.estado === 'esgotada' ||
+              encomenda.estado === 'sem fornecedor' ||
+              encomenda.estado === 'aguarda resposta de fornecedor' ||
+              encomenda.estado === 'aguarda entrega' ||
+              encomenda.estado === 'recebida' ||
+              encomenda.estado === 'detectado defeito'
+          )
+        : null
+    )
+  );
+  public encomendasMarcadas$ = this.encomendas.state$.pipe(
+    map((state) =>
+      state
+        ? state.filter(
+            (encomenda) => encomenda.estado === 'marcada para ir ao fornecedor'
+          )
+        : null
+    )
+  );
+  public encomendasAguardaEntrega$ = this.encomendas.state$.pipe(
+    map((state) =>
+      state
+        ? state.filter((encomenda) => encomenda.estado === 'aguarda entrega')
+        : null
+    )
+  );
+  public encomendasRecebidas$ = this.encomendas.state$.pipe(
+    map((state) =>
+      state
+        ? state.filter((encomenda) => encomenda.estado === 'recebida')
+        : null
+    )
+  );
 
-  constructor(
-    private encomendas: EncomendasService,
-    private router: Router) {
-  }
+  constructor(private encomendas: EncomendasService, private router: Router) {}
 
   /*
     estados possiveis:
@@ -85,38 +75,34 @@ export class EncomendasPageComponent implements AfterContentInit, OnDestroy {
   */
 
   ngAfterContentInit() {
-    window.innerWidth < 890 ? this.inOverflow = 'inOverflow' : this.inOverflow = null;
+    window.innerWidth < 890
+      ? (this.inOverflow = 'inOverflow')
+      : (this.inOverflow = null);
     this.encomendas
       .find({ query: { $limit: 200, estado: { $ne: 'entregue' } } })
-      .subscribe(() => this.loading = false);
+      .subscribe(() => (this.isLoading = false));
     this.filterEncomendas('aguarda entrega');
   }
 
-  ngOnDestroy() { }
-
-
-  openEncomenda(encomendaID: number) {
-    return this.router.navigate(['/dashboard/encomenda', encomendaID]);
-  }
+  ngOnDestroy() {}
 
   filterEncomendas(arg: 'todas' | 'marcadas' | 'aguarda entrega' | 'recebida') {
     if (arg === 'todas') {
-      return this.encomendas$ = this.encomendasTodas$;
+      return (this.encomendas$ = this.encomendasTodas$);
     }
     if (arg === 'marcadas') {
-      return this.encomendas$ = this.encomendasMarcadas$;
+      return (this.encomendas$ = this.encomendasMarcadas$);
     }
     if (arg === 'aguarda entrega') {
-      return this.encomendas$ = this.encomendasAguardaEntrega$;
+      return (this.encomendas$ = this.encomendasAguardaEntrega$);
     }
     if (arg === 'recebida') {
-      return this.encomendas$ = this.encomendasRecebidas$;
+      return (this.encomendas$ = this.encomendasRecebidas$);
     }
   }
 
   onResize(event) {
     const width = event.target.innerWidth;
-    width < 890 ? this.inOverflow = 'inOverflow' : this.inOverflow = null;
+    width < 890 ? (this.inOverflow = 'inOverflow') : (this.inOverflow = null);
   }
-
 }

@@ -1,62 +1,69 @@
-import { Component, OnDestroy, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Artigo, dbQuery } from 'src/app/shared';
-import { ArtigosService, UIService } from 'src/app/shared/state';
+import { ArtigosService } from 'src/app/shared/state';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @AutoUnsubscribe()
 @Component({
   selector: 'app-stock-page',
   templateUrl: './stock-page.component.html',
   styleUrls: ['./stock-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StockPageComponent implements AfterViewInit, OnDestroy {
-  public loading = false;
-  public results: Artigo[];
+  public isLoading = false;
+  public results$: Observable<Artigo[]>;
   public artigoSearchForm = this.fb.group({
-    input: [null]
+    input: [null],
   });
 
   constructor(
     private artigos: ArtigosService,
-    private uiService: UIService,
     private router: Router,
-    private fb: FormBuilder,
-    private cdr: ChangeDetectorRef) { }
+    private fb: FormBuilder
+  ) {}
 
   ngAfterViewInit() {
     this.searchArtigo(this.artigoSearchForm.value.input);
   }
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 
-  searchArtigo(input?: string) {
+  searchArtigo(input?: string): void {
     if (!input || !input.length) {
+      this.results$ = of([]);
       return;
     }
-    this.loading = true;
+    this.isLoading = true;
 
-    this.artigos.find(dbQuery(input, ['marca', 'modelo', 'descricao']))
-      .subscribe(results => {
-        this.results = results;
-        this.loading = false;
-        this.cdr.detectChanges();
-      });
+    this.results$ = this.artigos
+      .find(dbQuery(input, ['marca', 'modelo', 'descricao']))
+      .pipe(
+        tap(() => {
+          this.isLoading = false;
+        })
+      );
   }
 
-  searchArtigoByLocal(input?: string) {
+  searchArtigoByLocal(input?: string): void {
     if (!input || !input.length) {
+      this.results$ = of([]);
       return;
     }
-    this.loading = true;
+    this.isLoading = true;
     const inputSplited = input.split(' ');
-    const inputMapped = inputSplited.map(word =>
-      '{"$or": [' +
-      '{ "localizacao": { "$like": "%' + word + '%" }}' +
-      ' ]}'
+    const inputMapped = inputSplited.map(
+      (word) =>
+        '{"$or": [' + '{ "localizacao": { "$like": "%' + word + '%" }}' + ' ]}'
     );
     const query =
       '{' +
@@ -69,26 +76,14 @@ export class StockPageComponent implements AfterViewInit, OnDestroy {
       '}' +
       '}';
 
-    this.artigos.find(JSON.parse(query))
-      .subscribe(results => {
-        this.results = results;
-        this.loading = false;
-        this.cdr.detectChanges();
-      });
-  }
-
-  openArtigoModal(arg?: number) {
-    const artigoID = arg ? arg : null;
-    return this.uiService.patchState({ artigoModalID: artigoID, artigoModalVisible: true })
-      .subscribe();
-  }
-
-  openArtigo(artigoID: number) {
-    return this.router.navigate(['/dashboard/artigo', artigoID]);
+    this.results$ = this.artigos.find(JSON.parse(query)).pipe(
+      tap(() => {
+        this.isLoading = false;
+      })
+    );
   }
 
   newArtigo() {
     return this.router.navigate(['/dashboard/artigo']);
   }
-
 }

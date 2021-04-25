@@ -1,0 +1,41 @@
+<r-data-row (click)="openEncomenda(encomenda.id)">
+  <ul class="clr-row list-unstyled">
+    <li class="clr-col-lg-1">
+      <p>
+        <span class="p2">{{ encomenda.id }}</span>
+      </p>
+    </li>
+    <li class="clr-col-lg-3">
+      <p>
+        {{ encomenda.artigo_descricao }}
+      </p>
+    </li>
+    <li class="clr-col-lg-2">
+      <p>
+        <span class="p2">
+          {{ encomenda.artigo_marca }}
+          {{ encomenda.artigo_modelo }}
+        </span>
+      </p>
+    </li>
+    <li class="clr-col-lg-1">
+      <p><span class="p7">Qty: </span>{{ encomenda.qty }}</p>
+    </li>
+    <li class="clr-col-lg-3">
+      <p>
+        <span class="p7">destino:</span>
+        <span *ngIf="encomenda?.assistencia_id; else paraEncomenda">
+          Assistência {{ encomenda.assistencia_id }}
+        </span>
+        <ng-template #paraEncomenda>
+          {{ encomenda.cliente_user_name }}
+        </ng-template>
+      </p>
+    </li>
+    <li class="clr-col-lg-2">
+      <p>
+        {{ encomenda.estado }}
+      </p>
+    </li>
+  </ul>
+</r-data-row>
