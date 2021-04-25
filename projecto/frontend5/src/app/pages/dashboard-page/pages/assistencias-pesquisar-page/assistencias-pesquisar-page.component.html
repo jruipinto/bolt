@@ -1,55 +1,57 @@
-<h3>Pesquisar Assistências</h3>
-<div>
-  <form
-    clrForm
-    clrLayout="vertical"
-    class="clr-row"
-    [formGroup]="assistenciasSearchForm"
-    formState="assistenciasPesquisarPageAssistenciasSearchForm"
-  >
-    <div class="clr-col-lg-3">
-      <clr-input-container>
-        <label>Cliente</label>
-        <input
-          clrInput
-          placeholder="cliente..."
-          (click)="clientesSearchModal.open()"
-          formControlName="cliente"
-        />
-      </clr-input-container>
-    </div>
-    <div class="clr-col-lg-3">
-      <clr-select-container>
-        <label>Estado</label>
-        <select clrSelect name="estado" formControlName="estado">
-          <option *ngFor="let estado of estados" [value]="estado">
-            {{ estado }}
-          </option>
-        </select>
-      </clr-select-container>
-    </div>
-    <div class="clr-col-lg-3">
-      <clr-input-container>
-        <label>Pesquisar</label>
-        <input
-          clrInput
-          placeholder="digita algo..."
-          formControlName="input"
-          (keydown.enter)="searchAssistencia(assistenciasSearchForm.value)"
-          autofocus
-        />
-      </clr-input-container>
-    </div>
-    <div class="clr-col-lg-3">
-      <button
-        type="submit"
-        class="btn btn-primary"
-        (click)="searchAssistencia(assistenciasSearchForm.value)"
-      >
-        <clr-icon shape="search"></clr-icon> Pesquisar
-      </button>
-    </div>
-  </form>
+<div class="sticky-at-lg">
+  <h3>Pesquisar Assistências</h3>
+  <div>
+    <form
+      clrForm
+      clrLayout="vertical"
+      class="clr-row"
+      [formGroup]="assistenciasSearchForm"
+      formState="assistenciasPesquisarPageAssistenciasSearchForm"
+    >
+      <div class="clr-col-lg-3">
+        <clr-input-container>
+          <label>Cliente</label>
+          <input
+            clrInput
+            placeholder="cliente..."
+            (click)="clientesSearchModal.open()"
+            formControlName="cliente"
+          />
+        </clr-input-container>
+      </div>
+      <div class="clr-col-lg-3">
+        <clr-select-container>
+          <label>Estado</label>
+          <select clrSelect name="estado" formControlName="estado">
+            <option *ngFor="let estado of estados" [value]="estado">
+              {{ estado }}
+            </option>
+          </select>
+        </clr-select-container>
+      </div>
+      <div class="clr-col-lg-3">
+        <clr-input-container>
+          <label>Pesquisar</label>
+          <input
+            clrInput
+            placeholder="digita algo..."
+            formControlName="input"
+            (keydown.enter)="searchAssistencia(assistenciasSearchForm.value)"
+            autofocus
+          />
+        </clr-input-container>
+      </div>
+      <div class="clr-col-lg-3">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          (click)="searchAssistencia(assistenciasSearchForm.value)"
+        >
+          <clr-icon shape="search"></clr-icon> Pesquisar
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <h4>Resultados:</h4>
