@@ -1,13 +1,11 @@
 import {
   Component,
-  OnInit,
   OnDestroy,
   ViewChild,
   ElementRef,
   AfterViewInit,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { clone } from 'ramda';
@@ -25,7 +23,7 @@ import { tap } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssistenciasPesquisarPageComponent
-  implements OnInit, OnDestroy, AfterViewInit {
+  implements OnDestroy, AfterViewInit {
   @ViewChild('userSearchModalInput')
   userSearchModalInputEl: ElementRef<HTMLElement>;
   @ViewChild(ClientesPesquisarModalComponent)
@@ -64,11 +62,8 @@ export class AssistenciasPesquisarPageComponent
 
   constructor(
     private assistencias: AssistenciasService,
-    private router: Router,
     private fb: FormBuilder
   ) {}
-
-  ngOnInit() {}
 
   ngAfterViewInit() {
     this.clientesSearchModal.selectedCliente.subscribe((user: User) =>
@@ -78,10 +73,6 @@ export class AssistenciasPesquisarPageComponent
   }
 
   ngOnDestroy() {}
-
-  openAssistencia(assistenciaID: number) {
-    return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
-  }
 
   searchAssistencia({ input, estado, cliente }): void {
     if (!input && !cliente) {
