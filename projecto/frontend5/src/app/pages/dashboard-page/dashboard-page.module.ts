@@ -33,7 +33,6 @@ import {
   EncomendasCriarNovaPageComponent,
   EncomendasPageComponent,
   StockPageComponent,
-  AssistenciaPageComponent,
   ArtigoPageComponent,
 } from './pages';
 import { EncomendasPesquisarPageComponent } from './pages/encomendas-pesquisar-page/encomendas-pesquisar-page.component';
@@ -49,6 +48,7 @@ import { ArtigoRowComponent } from './pages/stock-page/components/artigo-row/art
 import { ArtigoRowListComponent } from './pages/stock-page/components/artigo-row-list/artigo-row-list.component';
 import { EncomendaRowComponent } from './pages/encomendas-page/components/encomenda-row/encomenda-row.component';
 import { EncomendaRowListComponent } from './pages/encomendas-page/components/encomenda-row-list/encomenda-row-list.component';
+import { AssistenciaPageModule } from './pages/assistencia-page/assistencia-page.module';
 
 @NgModule({
   imports: [
@@ -63,6 +63,7 @@ import { EncomendaRowListComponent } from './pages/encomendas-page/components/en
     ChatWidgetModule,
     PainelRapidoPageModule,
     RLoadingModule,
+    AssistenciaPageModule,
   ],
   declarations: [
     RCardComponent,
@@ -76,7 +77,6 @@ import { EncomendaRowListComponent } from './pages/encomendas-page/components/en
     AssistenciaEntradaPrintComponent,
     AssistenciaSaidaPrintComponent,
     AssistenciasPesquisarPageComponent,
-    AssistenciaPageComponent,
     ArtigoPageComponent,
     EncomendaPageComponent,
     EncomendasPesquisarPageComponent,
