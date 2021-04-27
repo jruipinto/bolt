@@ -1,1 +1,211 @@
-<p>accordion works!</p>
+<div class="separate">
+  <div class="clr-row">
+    <div class="clr-col">
+      <clr-accordion>
+        <clr-accordion-panel>
+          <clr-accordion-title
+            >Material ({{ assistencia?.material?.length }})</clr-accordion-title
+          >
+          <clr-accordion-content *clrIfExpanded>
+            <div class="clr-row">
+              <div class="clr-col">
+                <button class="btn btn-link" (click)="openArtigoSearchModal()">
+                  Adicionar material
+                </button>
+              </div>
+            </div>
+            <div
+              class="clr-row"
+              *ngIf="assistencia.material && assistencia.material.length"
+            >
+              <div class="clr-col">
+                <clr-datagrid>
+                  <clr-dg-column>Qty</clr-dg-column>
+                  <clr-dg-column>Descrição</clr-dg-column>
+                  <clr-dg-column>Local</clr-dg-column>
+                  <clr-dg-column>Custo p/ unidade</clr-dg-column>
+                  <clr-dg-column>PVP</clr-dg-column>
+                  <clr-dg-row *ngFor="let artigo of assistencia.material">
+                    <clr-dg-cell
+                      ><input
+                        class="clr-input small-input"
+                        type="number"
+                        name="newQty"
+                        id="newQty"
+                        [(ngModel)]="artigo.qty"
+                        (change)="materialChanged(artigo)"
+                      />
+                    </clr-dg-cell>
+                    <clr-dg-cell
+                      >{{ artigo.descricao }} {{ artigo.marca }}
+                      {{ artigo.modelo }}</clr-dg-cell
+                    >
+                    <clr-dg-cell>{{ artigo.localizacao }}</clr-dg-cell>
+                    <clr-dg-cell>{{
+                      artigo.preco | currency: "EUR"
+                    }}</clr-dg-cell>
+                    <clr-dg-cell>{{
+                      artigo.pvp | currency: "EUR"
+                    }}</clr-dg-cell>
+                  </clr-dg-row>
+                  <clr-dg-footer
+                    >{{ assistencia.material.length }} artigos
+                    adicionados</clr-dg-footer
+                  >
+                </clr-datagrid>
+              </div>
+            </div>
+          </clr-accordion-content>
+        </clr-accordion-panel>
+
+        <clr-accordion-panel>
+          <clr-accordion-title
+            >Encomendas ({{
+              assistencia?.encomendas?.length
+            }})</clr-accordion-title
+          >
+          <clr-accordion-content *clrIfExpanded>
+            <div class="clr-row">
+              <div class="clr-col">
+                <button
+                  class="btn btn-link"
+                  (click)="openEncomendaWizard()"
+                  [disabled]="
+                    assistencia.estado === 'orçamento pendente' ||
+                    assistencia.estado === 'não atendeu p/ orç.' ||
+                    assistencia.estado === 'cliente adiou orç.' ||
+                    assistencia.estado === 'contacto pendente' ||
+                    assistencia.estado === 'não atendeu p/ cont.' ||
+                    assistencia.estado === 'cliente adiou resp.'
+                  "
+                >
+                  Adicionar encomenda
+                </button>
+              </div>
+            </div>
+            <div
+              class="clr-row"
+              *ngIf="assistencia.encomendas && assistencia.encomendas.length"
+            >
+              <div class="clr-col">
+                <clr-datagrid>
+                  <clr-dg-column>Qty</clr-dg-column>
+                  <clr-dg-column>Descrição</clr-dg-column>
+                  <clr-dg-column>Prazo</clr-dg-column>
+                  <clr-dg-column>Estado</clr-dg-column>
+                  <clr-dg-row *ngFor="let encomenda of assistencia.encomendas">
+                    <clr-dg-cell
+                      ><input
+                        *ngIf="encomenda.estado === 'nova'"
+                        class="clr-input small-input"
+                        type="number"
+                        name="newQty"
+                        id="newQty"
+                        [(ngModel)]="encomenda.qty"
+                        (change)="encomendasChanged(encomenda)"
+                      /><span *ngIf="encomenda.estado !== 'nova'">{{
+                        encomenda.qty
+                      }}</span></clr-dg-cell
+                    >
+                    <clr-dg-cell
+                      >{{ encomenda.artigo_descricao }}
+                      {{ encomenda.artigo_marca }}
+                      {{ encomenda.artigo_modelo }}
+                    </clr-dg-cell>
+                    <clr-dg-cell>{{ encomenda.previsao_entrega }}</clr-dg-cell>
+                    <clr-dg-cell>{{ encomenda.estado }}</clr-dg-cell>
+                  </clr-dg-row>
+                  <clr-dg-footer
+                    >{{
+                      assistencia.encomendas.length
+                    }}
+                    encomendas</clr-dg-footer
+                  >
+                </clr-datagrid>
+              </div>
+            </div>
+          </clr-accordion-content>
+        </clr-accordion-panel>
+
+        <clr-accordion-panel>
+          <clr-accordion-title
+            >Mensagens ({{
+              assistencia?.messages?.length
+            }})</clr-accordion-title
+          >
+          <clr-accordion-content *clrIfExpanded>
+            <div
+              class="clr-row"
+              *ngIf="assistencia.messages && assistencia.messages.length"
+            >
+              <div class="clr-col">
+                <clr-datagrid>
+                  <clr-dg-column>Assunto</clr-dg-column>
+                  <clr-dg-column>Estado</clr-dg-column>
+                  <clr-dg-column>Enviada</clr-dg-column>
+                  <clr-dg-column>Entregue</clr-dg-column>
+                  <clr-dg-row *ngFor="let message of assistencia.messages">
+                    <clr-dg-cell>{{ message.subject }}</clr-dg-cell>
+                    <clr-dg-cell>{{ message.state }}</clr-dg-cell>
+                    <clr-dg-cell>{{
+                      message.createdAt | slice: 0:10
+                    }}</clr-dg-cell>
+                    <clr-dg-cell>{{
+                      message?.deliveredAt | slice: 0:10
+                    }}</clr-dg-cell>
+                  </clr-dg-row>
+                  <clr-dg-footer
+                    >{{ assistencia.messages.length }} mensagens</clr-dg-footer
+                  >
+                </clr-datagrid>
+              </div>
+            </div>
+          </clr-accordion-content>
+        </clr-accordion-panel>
+
+        <clr-accordion-panel>
+          <clr-accordion-title
+            >Registo Cronológico ({{
+              assistencia?.registo_cronologico?.length
+            }})
+          </clr-accordion-title>
+          <clr-accordion-content *clrIfExpanded>
+            <clr-datagrid>
+              <clr-dg-column>Evento</clr-dg-column>
+              <clr-dg-column>Editor</clr-dg-column>
+              <clr-dg-column>Técnico</clr-dg-column>
+              <clr-dg-column>Estado</clr-dg-column>
+              <clr-dg-column>Data</clr-dg-column>
+              <clr-dg-row
+                *ngFor="let evento of assistencia.registo_cronologico"
+              >
+                <clr-dg-cell>
+                  <span *ngIf="evento.editor_action">{{
+                    evento.editor_action
+                  }}</span>
+                  <span *ngIf="!evento.editor_action">novo estado</span>
+                </clr-dg-cell>
+                <clr-dg-cell>
+                  <span *ngIf="evento.editor_action">{{ evento.editor }}</span>
+                  <span *ngIf="!evento.editor_action">{{
+                    evento.tecnico
+                  }}</span>
+                </clr-dg-cell>
+                <clr-dg-cell
+                  >{{ evento.tecnico_user_id }}
+                  {{ evento.tecnico }}</clr-dg-cell
+                >
+                <clr-dg-cell>{{ evento.estado }}</clr-dg-cell>
+                <clr-dg-cell>{{ evento.updatedAt | slice: 0:10 }}</clr-dg-cell>
+              </clr-dg-row>
+              <clr-dg-footer
+                >{{ assistencia.registo_cronologico.length }} eventos
+                registados</clr-dg-footer
+              >
+            </clr-datagrid>
+          </clr-accordion-content>
+        </clr-accordion-panel>
+      </clr-accordion>
+    </div>
+  </div>
+</div>

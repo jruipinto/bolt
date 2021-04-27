@@ -13,6 +13,7 @@ import {
   FormStateModule,
 } from 'src/app/shared';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ArtigoSearchModalComponent } from './components/artigo-search-modal/artigo-search-modal.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     AssistenciaInfoComponent,
     ButtonsPanelComponent,
     TechnicalReportComponent,
+    ArtigoSearchModalComponent,
   ],
   imports: [
     CommonModule,

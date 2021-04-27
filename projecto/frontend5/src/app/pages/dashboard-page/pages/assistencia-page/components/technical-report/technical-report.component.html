@@ -1,1 +1,65 @@
-<p>technical-report works!</p>
+<div class="separate">
+  <div class="clr-row">
+    <div class="clr-col-md-6">
+      <div class="clr-row">
+        <div class="clr-col fontheavy">Informação técnica interna:</div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col">
+          <textarea
+            class="clr-textarea wd-100"
+            name="relatorio_interno"
+            id="relatorio_interno"
+            [(ngModel)]="assistencia.relatorio_interno"
+            autocaps
+          ></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="clr-col-md-6">
+      <div class="clr-row">
+        <div class="clr-col fontheavy">
+          Informação para o cliente:
+          <span
+            style="font-weight: lighter; cursor: pointer"
+            (click)="cloneRelatorioInterno()"
+          >
+            <clr-icon shape="clone"></clr-icon>Copiar
+          </span>
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col">
+          <textarea
+            class="clr-textarea wd-100"
+            name="relatorio_cliente"
+            id="relatorio_cliente"
+            [(ngModel)]="assistencia.relatorio_cliente"
+            autocaps
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="separate">
+  <div class="clr-row">
+    <div class="clr-col-4 clr-col-md-2 fontheavy">Orçamento:</div>
+    <div class="clr-col">
+      <span *ngIf="assistencia.orcamento">€ {{ assistencia.orcamento }}</span>
+      <span *ngIf="!assistencia.orcamento">não tem</span>
+    </div>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col-4 clr-col-md-2 fontheavy">Preço:</div>
+    <div class="clr-col-3">
+      €<input
+        class="clr-input wd-80"
+        type="number"
+        name="preco"
+        id="preco"
+        [(ngModel)]="assistencia.preco"
+      />
+    </div>
+  </div>
+</div>
