@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { clone } from 'ramda';
 import { Assistencia } from 'src/app/shared';
 
 @Component({
@@ -11,4 +12,10 @@ export class TechnicalReportComponent {
   @Input() assistencia: Assistencia;
 
   constructor() {}
+
+  cloneRelatorioInterno() {
+    this.assistencia.relatorio_cliente = clone(
+      this.assistencia.relatorio_interno
+    );
+  }
 }

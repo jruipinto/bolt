@@ -9,6 +9,7 @@ import { Assistencia } from 'src/app/shared';
 })
 export class AssistenciaInfoComponent {
   @Input() assistencia: Assistencia;
+  isTecnicoSelectionModalOpened = false;
 
   constructor() {}
 }

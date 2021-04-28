@@ -5,14 +5,13 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { map, concatMap, tap, toArray } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 import { Assistencia, Artigo, Encomenda, User } from 'src/app/shared/models';
 import { PrintService } from 'src/app/pages/dashboard-page/prints/print.service';
-import { UIService } from 'src/app/shared/state/ui.service';
 import {
   AssistenciasService,
   ArtigosService,
@@ -22,8 +21,7 @@ import {
 import { Observable, concat, of } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 import { clone, uniqBy } from 'ramda';
-import { dbQuery } from 'src/app/shared/utilities';
-import { AuthService, MessagesApiService } from 'src/app/shared';
+import { AuthService } from 'src/app/shared';
 
 @AutoUnsubscribe()
 @Component({
@@ -32,26 +30,22 @@ import { AuthService, MessagesApiService } from 'src/app/shared';
   styleUrls: ['./assistencia-page.component.scss'],
 })
 export class AssistenciaPageComponent implements AfterContentInit, OnDestroy {
-  public isLoading = true;
-  public tecnicos$ = this.users.find({ query: { tipo: 'tecnico' } });
-  public assistencia: Assistencia;
-  public tecnicoSelectModalOpened = false;
-  public artigoSearchModalOpened = false;
-  public artigoSearchForm = this.fb.group({
+  isLoading = true;
+  tecnicos$ = this.users.find({ query: { tipo: 'tecnico' } });
+  assistencia: Assistencia;
+
+  wizardArtigoSearchForm = this.fb.group({
     input: [null],
   });
-  public wizardArtigoSearchForm = this.fb.group({
-    input: [null],
-  });
-  public artigoSearchResults: Artigo[];
-  public encomendaWizardOpened = false;
+  artigoSearchResults: Artigo[];
+  encomendaWizardOpened = false;
   @ViewChild('artigoSearchModalInput')
   artigoSearchModalInputEl: ElementRef<HTMLElement>;
   @ViewChild('encomendaWizardInput')
   encomendaWizardInputEl: ElementRef<HTMLElement>;
   @ViewChild('wizard') wizard;
   @ViewChild('wizardPageTwo') wizardPageTwo;
-  public wizardEncomendaForm = this.fb.group({
+  wizardEncomendaForm = this.fb.group({
     artigo_id: [null, [Validators.required]],
     artigo_marca: [null],
     artigo_modelo: [null],
@@ -64,20 +58,18 @@ export class AssistenciaPageComponent implements AfterContentInit, OnDestroy {
     fornecedor: [null],
     qty: [null, [Validators.required]],
   });
-  public newEncomendasCounter = 0;
-  public material: Partial<Artigo>[];
-  public assistenciaOnInit: Assistencia;
+  newEncomendasCounter = 0;
+  material: Partial<Artigo>[];
+  assistenciaOnInit: Assistencia;
+  tecnicoSelectModalOpened = false;
 
   constructor(
     private printService: PrintService,
-    private uiService: UIService,
     private assistencias: AssistenciasService,
     private artigos: ArtigosService,
     private encomendas: EncomendasService,
-    private messages: MessagesApiService,
     private users: UsersService,
     private authService: AuthService,
-    private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private focusMonitor: FocusMonitor
@@ -92,30 +84,6 @@ export class AssistenciaPageComponent implements AfterContentInit, OnDestroy {
         tap((assistencia) => (this.assistenciaOnInit = clone(assistencia)))
       )
       .subscribe((assistencia) => {
-        /*
-        if (this.assistencia) {
-          const receivedAssistencia = clone(assistencia);
-          if (receivedAssistencia.relatorio_interno !== this.assistencia.relatorio_interno
-            || receivedAssistencia.relatorio_cliente !== this.assistencia.relatorio_cliente) {
-            this.assistencia = {
-              ...receivedAssistencia,
-              relatorio_interno: `alterado por outro utilizador ${receivedAssistencia.updatedAt}:
-${receivedAssistencia.relatorio_interno}
--------------------------------------
-tuas alterações:
-${this.assistencia.relatorio_interno}`,
-              relatorio_cliente: `alterado por outro utilizador ${receivedAssistencia.updatedAt}:
-${receivedAssistencia.relatorio_cliente}
--------------------------------------
-tuas alterações:
-${this.assistencia.relatorio_cliente}`
-            };
-          } else {
-            this.assistencia = clone(assistencia);
-          }
-        } else {
-          this.assistencia = clone(assistencia);
-        }*/
         if (!this.assistencia || this.isLoading) {
           this.assistencia = clone(assistencia);
           this.isLoading = false;
@@ -266,63 +234,6 @@ ${this.assistencia.relatorio_cliente}`
       .subscribe();
   }
 
-  createAssistenciaWithThisData(assistencia: Assistencia) {
-    this.uiService
-      .patchState({
-        // modals
-        // pages
-        assistenciasCriarNovaPageContactoClienteForm: {
-          contacto: assistencia.cliente_user_contacto,
-        },
-        assistenciasCriarNovaPageCriarNovaForm: {
-          ...assistencia,
-          problema: `(Ficha anterior: ${assistencia.id}) `,
-          orcamento: null,
-        },
-        // prints
-      })
-      .subscribe(() =>
-        this.router.navigate(['/dashboard/assistencias-criar-nova'])
-      );
-  }
-
-  searchArtigo(input?: string) {
-    if (!input) {
-      return;
-    }
-
-    this.artigos
-      .find(dbQuery(input, ['marca', 'modelo', 'descricao']))
-      .pipe(
-        map((artigos: Artigo[]) =>
-          artigos.map((artigoOnDB) => {
-            const currentArtigo = this.assistencia.material
-              ? this.assistencia.material.find((a) => a.id === artigoOnDB.id)
-              : null;
-            const artigoOnInit = this.assistenciaOnInit.material
-              ? this.assistenciaOnInit.material.find(
-                  (a) => a.id === artigoOnDB.id
-                )
-              : null;
-            if (!currentArtigo && !artigoOnInit) {
-              return artigoOnDB;
-            }
-            if (!currentArtigo && artigoOnInit) {
-              return { ...artigoOnDB, qty: artigoOnDB.qty + artigoOnInit.qty };
-            }
-            if (currentArtigo && !artigoOnInit) {
-              return { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty };
-            }
-            return {
-              ...artigoOnDB,
-              qty: artigoOnDB.qty - currentArtigo.qty + artigoOnInit.qty,
-            };
-          })
-        )
-      )
-      .subscribe((res: Artigo[]) => (this.artigoSearchResults = clone(res)));
-  }
-
   addArtigo(artigoInStock: Artigo) {
     if (artigoInStock.qty < 1) {
       return;
@@ -390,46 +301,6 @@ ${this.assistencia.relatorio_cliente}`
       ({ estado }) => estado === 'nova'
     ).length;
     this.artigoSearchResults = null; // reset this variable to enforce new search if needed
-  }
-
-  materialChanged(arg: Artigo) {
-    if (arg.qty < 1) {
-      this.assistencia.material = this.assistencia.material.filter(
-        ({ id }) => id !== arg.id
-      );
-    }
-    this.artigoSearchResults = null; // reset this variable to enforce new search if needed
-  }
-
-  print(arg: Assistencia) {
-    const assistencia = clone(arg);
-    if (assistencia.estado === 'entregue') {
-      return this.printService.printAssistenciaSaida(assistencia);
-    }
-    return this.printService.printAssistenciaEntrada(assistencia);
-  }
-
-  cloneRelatorioInterno() {
-    this.assistencia.relatorio_cliente = clone(
-      this.assistencia.relatorio_interno
-    );
-  }
-
-  openArtigoSearchModal() {
-    this.artigoSearchModalOpened = true;
-    setTimeout(
-      () =>
-        this.focusMonitor.focusVia(this.artigoSearchModalInputEl, 'program'),
-      0.1
-    );
-  }
-
-  openEncomendaWizard() {
-    this.encomendaWizardOpened = true;
-    setTimeout(
-      () => this.focusMonitor.focusVia(this.encomendaWizardInputEl, 'program'),
-      0.1
-    );
   }
 
   replaceTecnicoBy(tecnico: User) {
