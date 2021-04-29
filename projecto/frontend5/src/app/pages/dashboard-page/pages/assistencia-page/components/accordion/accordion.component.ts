@@ -6,7 +6,7 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Artigo, Assistencia, Encomenda } from 'src/app/shared';
 
 @Component({
@@ -16,28 +16,23 @@ import { Artigo, Assistencia, Encomenda } from 'src/app/shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionComponent {
-  @Input() assistencia: Assistencia;
-
   @ViewChild('artigoSearchModalInput')
   artigoSearchModalInputEl: ElementRef<HTMLElement>;
-
-  isArtigoSearchModalOpened = false;
-
-  isEncomendaWizardOpened = false;
-
-  artigoSearchResults: Artigo[];
-
   encomendaWizardInputEl: ElementRef<HTMLElement>;
 
+  @Input() assistencia: Assistencia = null;
+  isArtigoSearchModalOpened = false;
+  isEncomendaWizardOpened = false;
+  artigoSearchResults: Artigo[] = [];
   newEncomendasCounter = 0;
 
   constructor(private focusMonitor: FocusMonitor, private fb: FormBuilder) {}
 
-  encomendasChanged(arg: Encomenda) {
-    if (arg.qty < 1) {
+  updateEncomendas(encomenda: Encomenda) {
+    if (encomenda.qty < 1) {
       this.assistencia.encomendas = this.assistencia.encomendas
         .filter(({ estado }) => estado === 'nova') // only let to clean 'nova' encomendas
-        .filter(({ id }) => id !== arg.id);
+        .filter(({ id }) => id !== encomenda.id);
     }
     this.newEncomendasCounter = this.assistencia.encomendas.filter(
       ({ estado }) => estado === 'nova'
@@ -45,10 +40,10 @@ export class AccordionComponent {
     this.artigoSearchResults = null; // reset this variable to enforce new search if needed
   }
 
-  materialChanged(arg: Artigo) {
-    if (arg.qty < 1) {
+  updateMaterial(artigo: Artigo) {
+    if (artigo.qty < 1) {
       this.assistencia.material = this.assistencia.material.filter(
-        ({ id }) => id !== arg.id
+        ({ id }) => id !== artigo.id
       );
     }
     this.artigoSearchResults = null; // reset this variable to enforce new search if needed

@@ -19,9 +19,9 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonsPanelComponent {
-  @Input() assistencia: Assistencia;
+  @Input() assistencia: Assistencia = null;
   newEncomendasCounter = 0;
-  assistenciaOnInit: Assistencia;
+  assistenciaOnInit: Assistencia = null;
 
   constructor(
     private assistencias: AssistenciasService,

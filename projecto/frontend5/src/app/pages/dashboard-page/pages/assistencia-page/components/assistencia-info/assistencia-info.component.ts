@@ -8,7 +8,7 @@ import { Assistencia } from 'src/app/shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssistenciaInfoComponent {
-  @Input() assistencia: Assistencia;
+  @Input() assistencia: Assistencia = null;
 
   constructor() {}
 

@@ -35,7 +35,7 @@
                       name="newQty"
                       id="newQty"
                       [(ngModel)]="artigo.qty"
-                      (change)="materialChanged(artigo)"
+                      (change)="updateMaterial(artigo)"
                     />
                   </clr-dg-cell>
                   <clr-dg-cell
@@ -103,7 +103,7 @@
                       name="newQty"
                       id="newQty"
                       [(ngModel)]="encomenda.qty"
-                      (change)="encomendasChanged(encomenda)"
+                      (change)="updateEncomendas(encomenda)"
                     /><span *ngIf="encomenda.estado !== 'nova'">{{
                       encomenda.qty
                     }}</span></clr-dg-cell

@@ -14,16 +14,13 @@ import { Artigo, Assistencia, Encomenda } from 'src/app/shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EncomendaWizardComponent {
-  @Input() assistencia: Assistencia;
-
-  isEncomendaWizardOpened = false;
-
-  newEncomendasCounter = 0;
-
   @ViewChild('wizard') wizard;
   @ViewChild('wizardPageTwo') wizardPageTwo;
 
-  artigoSearchResults: Artigo[];
+  @Input() assistencia: Assistencia = null;
+  isEncomendaWizardOpened = false;
+  newEncomendasCounter = 0;
+  artigoSearchResults: Artigo[] = [];
 
   wizardEncomendaForm = this.fb.group({
     artigo_id: [null, [Validators.required]],
@@ -61,7 +58,7 @@ export class EncomendaWizardComponent {
     ++this.newEncomendasCounter;
   }
 
-  pushToWizardEncomendaForm(arg: Artigo) {
+  patchWizardEncomendaForm(arg: Artigo) {
     const artigo = { ...arg };
     this.wizardEncomendaForm.patchValue({
       artigo_id: artigo.id,

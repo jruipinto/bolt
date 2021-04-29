@@ -21,14 +21,7 @@ import { clone } from 'ramda';
 })
 export class AssistenciaPageComponent implements AfterContentInit, OnDestroy {
   isLoading = true;
-  assistencia: Assistencia;
-
-  encomendaWizardOpened = false;
-  @ViewChild('artigoSearchModalInput')
-  artigoSearchModalInputEl: ElementRef<HTMLElement>;
-  @ViewChild('encomendaWizardInput')
-  encomendaWizardInputEl: ElementRef<HTMLElement>;
-  material: Partial<Artigo>[];
+  assistencia: Assistencia = null;
   assistenciaOnInit: Assistencia;
 
   constructor(
@@ -39,16 +32,17 @@ export class AssistenciaPageComponent implements AfterContentInit, OnDestroy {
   ngAfterContentInit() {
     this.route.paramMap
       .pipe(
-        tap(() => (this.isLoading = true)),
-        concatMap((params) => this.assistencias.get(+params.get('id'))),
-        map((res) => res[0]),
-        tap((assistencia) => (this.assistenciaOnInit = clone(assistencia)))
+        concatMap((routeParams) =>
+          this.assistencias.get(+routeParams.get('id'))
+        ),
+        map((res) => res[0])
       )
       .subscribe((assistencia) => {
-        if (!this.assistencia || this.isLoading) {
+        if (!this.assistencia) {
           this.assistencia = clone(assistencia);
-          this.isLoading = false;
         }
+        this.assistenciaOnInit = clone(assistencia);
+        this.isLoading = false;
       });
   }
 

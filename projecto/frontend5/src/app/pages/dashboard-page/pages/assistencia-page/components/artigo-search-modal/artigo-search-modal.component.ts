@@ -12,13 +12,10 @@ import { ArtigosService } from 'src/app/shared/state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArtigoSearchModalComponent {
-  @Input() assistencia: Assistencia;
-
+  @Input() assistencia: Assistencia = null;
+  assistenciaOnInit: Assistencia = null;
   isArtigoSearchModalOpened = false;
-
-  artigoSearchResults: Artigo[];
-
-  assistenciaOnInit: Assistencia;
+  artigoSearchResults: Artigo[] = [];
 
   artigoSearchForm = this.fb.group({
     input: [null],
@@ -30,7 +27,6 @@ export class ArtigoSearchModalComponent {
     if (!input) {
       return;
     }
-
     this.artigos
       .find(dbQuery(input, ['marca', 'modelo', 'descricao']))
       .pipe(

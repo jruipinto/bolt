@@ -39,7 +39,7 @@
         <r-data-row
           class="clr-row"
           *ngFor="let artigo of artigos; let listaIndex = index"
-          (click)="pushToWizardEncomendaForm(artigo)"
+          (click)="patchWizardEncomendaForm(artigo)"
         >
           <div class="clr-col-lg-3">
             <span class="fontheavy">{{ artigo.marca }}</span>
