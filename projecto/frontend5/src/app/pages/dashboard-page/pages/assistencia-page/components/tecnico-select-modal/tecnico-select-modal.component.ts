@@ -16,8 +16,11 @@ export class TecnicoSelectModalComponent {
   constructor(private users: UsersService) {}
 
   replaceTecnicoBy(tecnico: User) {
-    this.assistencia.tecnico_user_id = tecnico.id;
-    this.assistencia.tecnico = tecnico.nome;
+    this.assistencia = {
+      ...this.assistencia,
+      tecnico_user_id: tecnico.id,
+      tecnico: tecnico.nome,
+    };
     this.isTecnicoSelectModalOpened = false;
   }
 }

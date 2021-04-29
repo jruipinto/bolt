@@ -197,8 +197,9 @@ export class ButtonsPanelComponent {
   print(arg: Assistencia) {
     const assistencia = clone(arg);
     if (assistencia.estado === 'entregue') {
-      return this.printService.printAssistenciaSaida(assistencia);
+      this.printService.printAssistenciaSaida(assistencia);
+      return;
     }
-    return this.printService.printAssistenciaEntrada(assistencia);
+    this.printService.printAssistenciaEntrada(assistencia);
   }
 }

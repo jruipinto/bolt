@@ -1,15 +1,9 @@
-import {
-  Component,
-  AfterContentInit,
-  OnDestroy,
-  ViewChild,
-  ElementRef,
-} from '@angular/core';
+import { Component, AfterContentInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, concatMap, tap } from 'rxjs/operators';
+import { map, concatMap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
-import { Assistencia, Artigo } from 'src/app/shared/models';
+import { Assistencia } from 'src/app/shared/models';
 import { AssistenciasService } from 'src/app/shared/state';
 import { clone } from 'ramda';
 

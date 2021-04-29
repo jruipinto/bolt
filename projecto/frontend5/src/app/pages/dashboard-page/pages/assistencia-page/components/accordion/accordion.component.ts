@@ -6,7 +6,6 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Artigo, Assistencia, Encomenda } from 'src/app/shared';
 
 @Component({
@@ -26,7 +25,7 @@ export class AccordionComponent {
   artigoSearchResults: Artigo[] = [];
   newEncomendasCounter = 0;
 
-  constructor(private focusMonitor: FocusMonitor, private fb: FormBuilder) {}
+  constructor(private focusMonitor: FocusMonitor) {}
 
   updateEncomendas(encomenda: Encomenda) {
     if (encomenda.qty < 1) {
