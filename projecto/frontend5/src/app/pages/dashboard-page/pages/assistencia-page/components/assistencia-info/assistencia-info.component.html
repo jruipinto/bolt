@@ -1,56 +1,58 @@
-<div class="separate">
-  <div class="clr-row">
-    <div class="clr-col-4 clr-col-md-2 fontheavy">Estado:</div>
-    <div class="clr-col">
-      {{ assistencia.estado }}
-    </div>
+<ul>
+  <div class="separate">
+    <li class="clr-row">
+      <span class="clr-col-4 clr-col-md-2 p4">Estado:</span>
+      <span class="clr-col">
+        {{ assistencia.estado }}
+      </span>
+    </li>
   </div>
-</div>
-<div class="separate">
-  <div class="clr-row">
-    <div class="clr-col-4 clr-col-md-2 fontheavy">Cliente:</div>
-    <div class="clr-col">
-      {{ assistencia.cliente_user_name }}
-    </div>
+  <div class="separate">
+    <li class="clr-row">
+      <span class="clr-col-4 clr-col-md-2 p4">Cliente:</span>
+      <span class="clr-col">
+        {{ assistencia.cliente_user_name }}
+      </span>
+    </li>
+    <li class="clr-row">
+      <span class="clr-col-4 clr-col-md-2 p4">Contacto:</span>
+      <span class="clr-col">
+        {{ assistencia.cliente_user_contacto }}
+      </span>
+    </li>
+    <li class="clr-row">
+      <span class="clr-col-4 clr-col-md-2 p4">Técnico:</span>
+      <span class="clr-col">
+        {{ assistencia.tecnico }}
+        <span *ngIf="!assistencia.tecnico">(aguarda técnico)</span>
+        <clr-icon
+          shape="pencil"
+          style="cursor: pointer; margin-left: 1em"
+          (click)="openTecnicoSelectionModal()"
+        >
+        </clr-icon>
+      </span>
+    </li>
+    <li class="clr-row">
+      <span class="clr-col-4 clr-col-md-2 p4">Equipamento:</span>
+      <span class="clr-col">
+        {{ assistencia.categoria }}
+        {{ assistencia.marca }}
+        {{ assistencia.modelo }}
+        {{ assistencia.cor }}
+      </span>
+    </li>
+    <li class="clr-row">
+      <span class="clr-col-4 clr-col-md-2 p4">Serial:</span>
+      <span class="clr-col">
+        {{ assistencia.serial }}
+      </span>
+    </li>
+    <li class="clr-row">
+      <span class="clr-col-4 clr-col-md-2 p4">Problema:</span>
+      <span class="clr-col">
+        {{ assistencia.problema }}
+      </span>
+    </li>
   </div>
-  <div class="clr-row">
-    <div class="clr-col-4 clr-col-md-2 fontheavy">Contacto:</div>
-    <div class="clr-col">
-      {{ assistencia.cliente_user_contacto }}
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-4 clr-col-md-2 fontheavy">Técnico:</div>
-    <div class="clr-col">
-      {{ assistencia.tecnico }}
-      <span *ngIf="!assistencia.tecnico">(aguarda técnico)</span>
-      <clr-icon
-        shape="pencil"
-        style="cursor: pointer; margin-left: 1em"
-        (click)="isTecnicoSelectionModalOpened = true"
-      >
-      </clr-icon>
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-4 clr-col-md-2 fontheavy">Equipamento:</div>
-    <div class="clr-col">
-      {{ assistencia.categoria }}
-      {{ assistencia.marca }}
-      {{ assistencia.modelo }}
-      {{ assistencia.cor }}
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-4 clr-col-md-2 fontheavy">Serial:</div>
-    <div class="clr-col">
-      {{ assistencia.serial }}
-    </div>
-  </div>
-  <div class="clr-row">
-    <div class="clr-col-4 clr-col-md-2 fontheavy">Problema:</div>
-    <div class="clr-col">
-      {{ assistencia.problema }}
-    </div>
-  </div>
-</div>
+</ul>

@@ -64,4 +64,34 @@ export class ArtigoSearchModalComponent {
         this.artigoSearchResults = clone(res);
       });
   }
+
+  addArtigo(artigoInStock: Artigo) {
+    if (artigoInStock.qty < 1) {
+      return;
+    }
+    const artigo = { ...artigoInStock, qty: 1 };
+    let material = clone(this.assistencia.material);
+    if (material) {
+      if (material.findIndex((item) => item.id === artigo.id) < 0) {
+        material = [...material, artigo];
+      } else {
+        material = material.map((item) => {
+          if (item.id === artigo.id) {
+            return { ...item, qty: item.qty + 1 };
+          } else {
+            return item;
+          }
+        });
+      }
+    } else {
+      material = clone([artigo]);
+    }
+    const resultIndex = this.artigoSearchResults.findIndex(
+      (result) => result.id === artigo.id
+    );
+    this.artigoSearchResults[resultIndex].qty =
+      this.artigoSearchResults[resultIndex].qty - artigo.qty;
+    this.assistencia.material = clone(material);
+    this.isArtigoSearchModalOpened = false;
+  }
 }

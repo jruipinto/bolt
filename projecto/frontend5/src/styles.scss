@@ -59,6 +59,11 @@ main.content-area {
 .clr-form-control {
   margin-top: 0.3rem !important;
 }
+
+span.p4:not([cds-text]),
+label.p4:not([cds-text]) {
+  margin-top: 0;
+}
 /*
 // this fix breaks the screen below 380px which is actually iphone 6 and 5 resolutions
 @media screen and (max-width: 576px) {

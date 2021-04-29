@@ -10,10 +10,13 @@ import { TechnicalReportComponent } from './components/technical-report/technica
 import {
   AutocapsModule,
   AutofocusModule,
+  BackButtonModule,
   FormStateModule,
 } from 'src/app/shared';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ArtigoSearchModalComponent } from './components/artigo-search-modal/artigo-search-modal.component';
+import { EncomendaWizardComponent } from './components/encomenda-wizard/encomenda-wizard.component';
+import { TecnicoSelectModalComponent } from './components/tecnico-select-modal/tecnico-select-modal.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,8 @@ import { ArtigoSearchModalComponent } from './components/artigo-search-modal/art
     ButtonsPanelComponent,
     TechnicalReportComponent,
     ArtigoSearchModalComponent,
+    EncomendaWizardComponent,
+    TecnicoSelectModalComponent,
   ],
   imports: [
     CommonModule,
@@ -33,6 +38,7 @@ import { ArtigoSearchModalComponent } from './components/artigo-search-modal/art
     FormStateModule,
     AutocapsModule,
     AutofocusModule,
+    BackButtonModule,
   ],
   exports: [AssistenciaPageComponent],
 })

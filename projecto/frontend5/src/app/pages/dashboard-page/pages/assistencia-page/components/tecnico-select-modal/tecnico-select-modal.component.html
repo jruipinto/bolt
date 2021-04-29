@@ -1,0 +1,12 @@
+<clr-modal [(clrModalOpen)]="isTecnicoSelectModalOpened" [clrModalSize]="'sm'">
+  <h3 class="modal-title">Atribuir Técnico</h3>
+  <div class="modal-body">
+    <r-data-row
+      class="clr-row"
+      *ngFor="let tecnico of tecnicos$ | async"
+      (click)="replaceTecnicoBy(tecnico)"
+    >
+      {{ tecnico.nome }}</r-data-row
+    >
+  </div>
+</clr-modal>

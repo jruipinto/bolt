@@ -17,7 +17,7 @@ import {
   RCardComponent,
   RDataRowComponent,
   ChatWidgetModule,
-  BackButtonComponent,
+  BackButtonModule,
 } from 'src/app/shared/components';
 /* components */
 import { DashboardPageComponent } from './dashboard-page.component';
@@ -64,6 +64,7 @@ import { AssistenciaPageModule } from './pages/assistencia-page/assistencia-page
     PainelRapidoPageModule,
     RLoadingModule,
     AssistenciaPageModule,
+    BackButtonModule,
   ],
   declarations: [
     RCardComponent,
@@ -90,7 +91,6 @@ import { AssistenciaPageModule } from './pages/assistencia-page/assistencia-page
     ArtigoRowListComponent,
     EncomendaRowComponent,
     EncomendaRowListComponent,
-    BackButtonComponent,
   ],
 })
 export class DashboardPageModule {}

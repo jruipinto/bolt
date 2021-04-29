@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Artigo, Assistencia } from 'src/app/shared';
+import { Artigo, Assistencia, Encomenda } from 'src/app/shared';
 
 @Component({
   selector: 'app-accordion',
@@ -29,7 +29,21 @@ export class AccordionComponent {
 
   encomendaWizardInputEl: ElementRef<HTMLElement>;
 
+  newEncomendasCounter = 0;
+
   constructor(private focusMonitor: FocusMonitor, private fb: FormBuilder) {}
+
+  encomendasChanged(arg: Encomenda) {
+    if (arg.qty < 1) {
+      this.assistencia.encomendas = this.assistencia.encomendas
+        .filter(({ estado }) => estado === 'nova') // only let to clean 'nova' encomendas
+        .filter(({ id }) => id !== arg.id);
+    }
+    this.newEncomendasCounter = this.assistencia.encomendas.filter(
+      ({ estado }) => estado === 'nova'
+    ).length;
+    this.artigoSearchResults = null; // reset this variable to enforce new search if needed
+  }
 
   materialChanged(arg: Artigo) {
     if (arg.qty < 1) {
