@@ -17,8 +17,11 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ArtigoSearchModalComponent } from './components/artigo-search-modal/artigo-search-modal.component';
 import { EncomendaWizardComponent } from './components/encomenda-wizard/encomenda-wizard.component';
 import { TecnicoSelectModalComponent } from './components/tecnico-select-modal/tecnico-select-modal.component';
+import { PageUiService } from './services/page-ui.service';
+import { PageDataService } from './services/page-data.service';
 
 @NgModule({
+  providers: [PageUiService, PageDataService],
   declarations: [
     AssistenciaPageComponent,
     AccordionComponent,
