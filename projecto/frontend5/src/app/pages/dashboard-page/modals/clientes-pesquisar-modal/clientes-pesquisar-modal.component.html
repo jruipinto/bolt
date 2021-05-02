@@ -1,25 +1,41 @@
-<clr-modal [(clrModalOpen)]="modalOpen" [clrModalSize]="'lg'">
+<clr-modal [(clrModalOpen)]="isModalOpen" [clrModalSize]="'lg'">
   <h3 class="modal-title">Pesquisar Cliente</h3>
   <div class="modal-body">
-    <form [formGroup]="userSearchForm" (ngSubmit)="searchUser(userSearchForm.value.input)">
+    <form
+      [formGroup]="userSearchForm"
+      (ngSubmit)="searchUser(userSearchForm.value.input)"
+    >
       <div class="clr-row">
         <div class="clr-col-12 padding-bottom-05">
-          <input #userSearchModalInput type="text" class="clr-input wd-100" placeholder="Digita nome..." name="input"
-            formControlName="input" />
+          <input
+            *ngIf="isModalOpen"
+            autofocus
+            type="text"
+            class="clr-input wd-100"
+            placeholder="Digita nome..."
+            name="input"
+            formControlName="input"
+          />
         </div>
       </div>
     </form>
     <h4>Resultados:</h4>
     <div *ngIf="userSearchResults$ | async as users">
-      <p *ngIf="users.length===0">Nenhum resultado encontrado para esses parametros...</p>
-      <div *ngIf="users.length>0">
-        <r-data-row class="clr-row" style="margin-bottom: 0" *ngFor="let user of users; let listaIndex=index"
-          (click)="selectUser(user)">
+      <p *ngIf="users.length === 0">
+        Nenhum resultado encontrado para esses parametros...
+      </p>
+      <div *ngIf="users.length > 0">
+        <r-data-row
+          class="clr-row"
+          style="margin-bottom: 0"
+          *ngFor="let user of users; let listaIndex = index"
+          (click)="selectUser(user)"
+        >
           <div class="clr-col-lg-9">
-            {{user.nome}}
+            {{ user.nome }}
           </div>
           <div class="clr-col-lg-3 lessimportant">
-            {{user.contacto}}
+            {{ user.contacto }}
           </div>
         </r-data-row>
       </div>
