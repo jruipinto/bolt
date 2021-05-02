@@ -38,6 +38,10 @@ export class StockPageComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {}
 
+  openArtigo({ id }: Artigo) {
+    return this.router.navigate(['/dashboard/artigo', id]);
+  }
+
   searchArtigo(input?: string): void {
     if (!input || !input.length) {
       this.results$ = of([]);

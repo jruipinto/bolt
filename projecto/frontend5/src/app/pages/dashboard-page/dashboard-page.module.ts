@@ -15,7 +15,7 @@ import {
 /* shared components */
 import {
   RCardComponent,
-  RDataRowComponent,
+  RDataRowModule,
   ChatWidgetModule,
   BackButtonModule,
 } from 'src/app/shared/components';
@@ -44,11 +44,10 @@ import { PainelRapidoPageModule } from './pages/painel-rapido-page/painel-rapido
 import { RLoadingModule } from 'src/app/shared/components/r-loading/r-loading.module';
 import { AssistenciaRowComponent } from './pages/assistencias-page/components/assistencia-row/assistencia-row.component';
 import { AssistenciaRowListComponent } from './pages/assistencias-page/components/assistencia-row-list/assistencia-row-list.component';
-import { ArtigoRowComponent } from './pages/stock-page/components/artigo-row/artigo-row.component';
-import { ArtigoRowListComponent } from './pages/stock-page/components/artigo-row-list/artigo-row-list.component';
 import { EncomendaRowComponent } from './pages/encomendas-page/components/encomenda-row/encomenda-row.component';
 import { EncomendaRowListComponent } from './pages/encomendas-page/components/encomenda-row-list/encomenda-row-list.component';
 import { AssistenciaPageModule } from './pages/assistencia-page/assistencia-page.module';
+import { ArtigoRowListModule } from './components/artigo-row-list/artigo-row-list.module';
 
 @NgModule({
   imports: [
@@ -65,10 +64,11 @@ import { AssistenciaPageModule } from './pages/assistencia-page/assistencia-page
     RLoadingModule,
     AssistenciaPageModule,
     BackButtonModule,
+    RDataRowModule,
+    ArtigoRowListModule,
   ],
   declarations: [
     RCardComponent,
-    RDataRowComponent,
     DashboardPageComponent,
     AssistenciasPageComponent,
     AssistenciasCriarNovaPageComponent,
@@ -87,8 +87,6 @@ import { AssistenciaPageModule } from './pages/assistencia-page/assistencia-page
     ConfigsPageComponent,
     AssistenciaRowComponent,
     AssistenciaRowListComponent,
-    ArtigoRowComponent,
-    ArtigoRowListComponent,
     EncomendaRowComponent,
     EncomendaRowListComponent,
   ],

@@ -1,4 +1,10 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { Artigo } from 'src/app/shared';
 
@@ -11,6 +17,7 @@ import { Artigo } from 'src/app/shared';
 export class ArtigoRowListComponent {
   @Input() artigos$: Observable<Artigo[]>;
   @Input() isLoading = false;
+  @Output('rowClick') rowClick = new EventEmitter<Artigo>();
 
   constructor() {}
 }

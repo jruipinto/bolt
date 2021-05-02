@@ -1,5 +1,10 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { Artigo } from 'src/app/shared';
 
 @Component({
@@ -10,10 +15,7 @@ import { Artigo } from 'src/app/shared';
 })
 export class ArtigoRowComponent {
   @Input() artigo: Artigo;
+  @Output('rowClick') rowClick = new EventEmitter<Artigo>();
 
-  constructor(private router: Router) {}
-
-  openArtigo(artigoID: number) {
-    return this.router.navigate(['/dashboard/artigo', artigoID]);
-  }
+  constructor() {}
 }
