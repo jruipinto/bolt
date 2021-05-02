@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Input,
   ViewChild,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Artigo, Assistencia, Encomenda } from 'src/app/shared';
@@ -18,7 +19,7 @@ export class EncomendaWizardComponent {
   @ViewChild('wizardPageTwo') wizardPageTwo;
 
   @Input() assistencia: Assistencia = null;
-  isEncomendaWizardOpened = false;
+  isModalOpen = false;
   newEncomendasCounter = 0;
   artigoSearchResults: Artigo[] = [];
 
@@ -40,7 +41,12 @@ export class EncomendaWizardComponent {
     input: [null],
   });
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {}
+
+  open(): void {
+    this.isModalOpen = true;
+    this.cdr.detectChanges();
+  }
 
   addEncomenda(arg: Encomenda) {
     const encomenda = {

@@ -1,7 +1,13 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { clone } from 'ramda';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { Artigo, Assistencia, dbQuery } from 'src/app/shared';
 import { ArtigosService } from 'src/app/shared/state';
 
@@ -14,32 +20,43 @@ import { ArtigosService } from 'src/app/shared/state';
 export class ArtigoSearchModalComponent {
   @Input() assistencia: Assistencia = null;
   assistenciaOnInit: Assistencia = null;
-  isArtigoSearchModalOpened = false;
-  artigoSearchResults: Artigo[] = [];
+  isLoading = false;
+  isModalOpen = false;
+  results$: Observable<Artigo[]> = of([]);
 
   artigoSearchForm = this.fb.group({
     input: [null],
   });
 
-  constructor(private artigos: ArtigosService, private fb: FormBuilder) {}
+  constructor(
+    private artigos: ArtigosService,
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  open(): void {
+    this.isModalOpen = true;
+    this.cdr.detectChanges();
+  }
 
   searchArtigo(input?: string) {
-    if (!input) {
+    if (!input || !input.length) {
+      this.results$ = of([]);
       return;
     }
-    this.artigos
+    this.isLoading = true;
+
+    this.results$ = this.artigos
       .find(dbQuery(input, ['marca', 'modelo', 'descricao']))
       .pipe(
         map((artigos: Artigo[]) =>
           artigos.map((artigoOnDB) => {
-            const currentArtigo = this.assistencia.material
-              ? this.assistencia.material.find((a) => a.id === artigoOnDB.id)
-              : null;
-            const artigoOnInit = this.assistenciaOnInit.material
-              ? this.assistenciaOnInit.material.find(
-                  (a) => a.id === artigoOnDB.id
-                )
-              : null;
+            const currentArtigo = this.assistencia?.material.find(
+              ({ id }) => id === artigoOnDB.id
+            );
+            const artigoOnInit = this.assistenciaOnInit?.material.find(
+              ({ id }) => id === artigoOnDB.id
+            );
             if (!currentArtigo && !artigoOnInit) {
               return artigoOnDB;
             }
@@ -54,11 +71,11 @@ export class ArtigoSearchModalComponent {
               qty: artigoOnDB.qty - currentArtigo.qty + artigoOnInit.qty,
             };
           })
-        )
-      )
-      .subscribe((res: Artigo[]) => {
-        this.artigoSearchResults = clone(res);
-      });
+        ),
+        tap(() => {
+          this.isLoading = false;
+        })
+      );
   }
 
   addArtigo(artigoInStock: Artigo) {
@@ -82,12 +99,13 @@ export class ArtigoSearchModalComponent {
     } else {
       material = clone([artigo]);
     }
-    const resultIndex = this.artigoSearchResults.findIndex(
-      (result) => result.id === artigo.id
-    );
-    this.artigoSearchResults[resultIndex].qty =
-      this.artigoSearchResults[resultIndex].qty - artigo.qty;
-    this.assistencia.material = clone(material);
-    this.isArtigoSearchModalOpened = false;
+    this.results$.subscribe((results) => {
+      const resultIndex = results.findIndex(
+        (result) => result.id === artigo.id
+      );
+      results[resultIndex].qty = results[resultIndex].qty - artigo.qty;
+      this.assistencia.material = clone(material);
+      this.isModalOpen = false;
+    });
   }
 }

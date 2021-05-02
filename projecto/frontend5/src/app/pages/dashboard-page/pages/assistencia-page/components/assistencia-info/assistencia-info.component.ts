@@ -1,5 +1,11 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  ViewChild,
+} from '@angular/core';
 import { Assistencia } from 'src/app/shared';
+import { TecnicoSelectModalComponent } from '../tecnico-select-modal/tecnico-select-modal.component';
 
 @Component({
   selector: 'app-assistencia-info',
@@ -8,9 +14,9 @@ import { Assistencia } from 'src/app/shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssistenciaInfoComponent {
+  @ViewChild(TecnicoSelectModalComponent)
+  tecnicoSelectModal: TecnicoSelectModalComponent;
   @Input() assistencia: Assistencia = null;
 
   constructor() {}
-
-  openTecnicoSelectionModal(): void {}
 }

@@ -28,7 +28,7 @@
         <clr-icon
           shape="pencil"
           style="cursor: pointer; margin-left: 1em"
-          (click)="openTecnicoSelectionModal()"
+          (click)="tecnicoSelectModal.open()"
         >
         </clr-icon>
       </span>
@@ -56,3 +56,7 @@
     </li>
   </div>
 </ul>
+
+<app-tecnico-select-modal
+  [assistencia]="assistencia"
+></app-tecnico-select-modal>

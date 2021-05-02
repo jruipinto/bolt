@@ -1,0 +1,58 @@
+<div class="clr-row">
+  <div class="clr-col">
+    <button
+      class="btn btn-link"
+      (click)="encomendaWizard.open()"
+      [disabled]="
+        assistencia.estado === 'orçamento pendente' ||
+        assistencia.estado === 'não atendeu p/ orç.' ||
+        assistencia.estado === 'cliente adiou orç.' ||
+        assistencia.estado === 'contacto pendente' ||
+        assistencia.estado === 'não atendeu p/ cont.' ||
+        assistencia.estado === 'cliente adiou resp.'
+      "
+    >
+      Adicionar encomenda
+    </button>
+  </div>
+</div>
+<div
+  class="clr-row"
+  *ngIf="assistencia.encomendas && assistencia.encomendas.length"
+>
+  <div class="clr-col">
+    <clr-datagrid>
+      <clr-dg-column>Qty</clr-dg-column>
+      <clr-dg-column>Descrição</clr-dg-column>
+      <clr-dg-column>Prazo</clr-dg-column>
+      <clr-dg-column>Estado</clr-dg-column>
+      <clr-dg-row *ngFor="let encomenda of assistencia.encomendas">
+        <clr-dg-cell
+          ><input
+            *ngIf="encomenda.estado === 'nova'"
+            class="clr-input small-input"
+            type="number"
+            name="newQty"
+            id="newQty"
+            [(ngModel)]="encomenda.qty"
+            (change)="updateEncomendas(encomenda)"
+          /><span *ngIf="encomenda.estado !== 'nova'">{{
+            encomenda.qty
+          }}</span></clr-dg-cell
+        >
+        <clr-dg-cell
+          >{{ encomenda.artigo_descricao }}
+          {{ encomenda.artigo_marca }}
+          {{ encomenda.artigo_modelo }}
+        </clr-dg-cell>
+        <clr-dg-cell>{{ encomenda.previsao_entrega }}</clr-dg-cell>
+        <clr-dg-cell>{{ encomenda.estado }}</clr-dg-cell>
+      </clr-dg-row>
+      <clr-dg-footer
+        >{{ assistencia.encomendas.length }} encomendas</clr-dg-footer
+      >
+    </clr-datagrid>
+  </div>
+</div>
+
+<app-encomenda-wizard [assistencia]="assistencia"></app-encomenda-wizard>

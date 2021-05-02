@@ -1,6 +1,6 @@
 <clr-wizard
   #wizard
-  [(clrWizardOpen)]="isEncomendaWizardOpened"
+  [(clrWizardOpen)]="isModalOpen"
   clrWizardSize="lg"
   (clrWizardOnFinish)="addEncomenda(wizardEncomendaForm.value)"
 >
@@ -20,7 +20,8 @@
       <div class="clr-row">
         <div class="clr-col-12 padding-bottom-05">
           <input
-            #encomendaWizardInput
+            *ngIf="isModalOpen"
+            autofocus
             type="text"
             class="clr-input wd-100"
             placeholder="Digita algo..."
