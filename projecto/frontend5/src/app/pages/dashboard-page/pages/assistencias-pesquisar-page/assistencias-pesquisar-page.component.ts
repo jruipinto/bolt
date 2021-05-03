@@ -29,7 +29,7 @@ export class AssistenciasPesquisarPageComponent
   @ViewChild(ClientesPesquisarModalComponent)
   clientesSearchModal: ClientesPesquisarModalComponent;
   public results$: Observable<Assistencia[]>;
-  public isLoading = false;
+  public isLoading = true;
 
   public assistenciasSearchForm = this.fb.group({
     input: [null],
@@ -77,55 +77,31 @@ export class AssistenciasPesquisarPageComponent
   searchAssistencia({ input, estado, cliente }): void {
     if (!input && !cliente) {
       this.results$ = of([]);
+      this.isLoading = false;
       return;
     }
     this.isLoading = true;
-    const inputMapped = (input || ' ')
-      .split(' ')
-      .map(
-        (word) =>
-          '{"$or": [' +
-          '{ "categoria": { "$like": "%' +
-          word +
-          '%" }},' +
-          '{ "marca": { "$like": "%' +
-          word +
-          '%" }},' +
-          '{ "modelo": { "$like": "%' +
-          word +
-          '%" }},' +
-          '{ "cor": { "$like": "%' +
-          word +
-          '%" }},' +
-          '{ "serial": { "$like": "%' +
-          word +
-          '%" }},' +
-          '{ "problema": { "$like": "%' +
-          word +
-          '%" }}' +
-          ' ]}'
-      );
 
-    const clienteStatement =
-      cliente && typeof cliente === 'number'
-        ? ',"cliente_user_id":' + cliente
-        : '';
-    const estadoStatement =
-      estado && estado !== 'qualquer' ? ',"estado": "' + estado + '"' : '';
-    const dbQuery =
-      '{' +
-      '"query": {' +
-      '"$sort": { "id": "-1"},' +
-      '"$limit": "200",' +
-      '"$and": [' +
-      inputMapped +
-      ']' +
-      estadoStatement +
-      clienteStatement +
-      '}' +
-      '}';
+    const dbQuery = {
+      query: {
+        $sort: { id: '-1' },
+        $limit: '200',
+        $and: (input || ' ').split(' ').map((word) => ({
+          $or: [
+            { categoria: { $like: `%${word}%` } },
+            { marca: { $like: `%${word}%` } },
+            { modelo: { $like: `%${word}%` } },
+            { cor: { $like: `%${word}%` } },
+            { serial: { $like: `%${word}%` } },
+            { problema: { $like: `%${word}%` } },
+          ],
+        })),
+        ...(estado !== 'qualquer' ? { estado: estado } : null),
+        ...(+cliente ? { cliente_user_id: +cliente } : null),
+      },
+    };
 
-    this.results$ = this.assistencias.find(JSON.parse(dbQuery)).pipe(
+    this.results$ = this.assistencias.find(dbQuery).pipe(
       tap(() => {
         this.isLoading = false;
       })

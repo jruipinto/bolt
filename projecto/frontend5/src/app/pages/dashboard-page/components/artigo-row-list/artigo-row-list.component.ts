@@ -59,23 +59,17 @@ export class ArtigoRowListComponent implements OnDestroy {
     this.isLoading = true;
     this.cdr.detectChanges();
 
-    const inputSplited = input.split(' ');
-    const inputMapped = inputSplited.map(
-      (word) =>
-        '{"$or": [' + '{ "localizacao": { "$like": "%' + word + '%" }}' + ' ]}'
-    );
-    const query =
-      '{' +
-      '"query": {' +
-      '"$sort": { "localizacao": "1", "marca": "1", "modelo": "1",  "descricao": "1"},' +
-      '"$limit": "200",' +
-      '"$and": [' +
-      inputMapped +
-      ']' +
-      '}' +
-      '}';
+    const query = {
+      query: {
+        $sort: { localizacao: '1', marca: '1', modelo: '1', descricao: '1' },
+        $limit: '200',
+        $and: input
+          .split(' ')
+          .map((word) => ({ $or: [{ localizacao: { $like: `%${word}%` } }] })),
+      },
+    };
 
-    return this.artigos.find(JSON.parse(query)).pipe(
+    return this.artigos.find(query).pipe(
       tap(() => {
         this.isLoading = false;
       })

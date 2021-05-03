@@ -29,7 +29,7 @@ export class EncomendasPesquisarPageComponent
   @ViewChild(ClientesPesquisarModalComponent)
   clientesSearchModal: ClientesPesquisarModalComponent;
 
-  public isLoading = false;
+  public isLoading = true;
   public results$: Observable<Encomenda[]>;
   public encomendasSearchForm = this.fb.group({
     input: [null],
@@ -69,16 +69,10 @@ export class EncomendasPesquisarPageComponent
   searchEncomenda({ input, estado, cliente_user_id }): void {
     if (!input && !cliente_user_id) {
       this.results$ = of([]);
+      this.isLoading = false;
       return;
     }
     this.isLoading = true;
-
-    const clienteStatement =
-      cliente_user_id && typeof cliente_user_id === 'number'
-        ? ',"cliente_user_id":' + cliente_user_id
-        : '';
-    const estadoStatement =
-      estado && estado !== 'qualquer' ? ',"estado": "' + estado + '"' : '';
 
     this.results$ = this.artigos
       .find(dbQuery(input || ' ', ['marca', 'modelo', 'descricao']))
@@ -89,19 +83,16 @@ export class EncomendasPesquisarPageComponent
           }
           return concat(
             ...artigosDB.map(({ id }) =>
-              this.encomendas.find(
-                JSON.parse(
-                  '{' +
-                    '"query": {' +
-                    '"$limit": "200",' +
-                    '"artigo_id": ' +
-                    id +
-                    clienteStatement +
-                    estadoStatement +
-                    '}' +
-                    '}'
-                )
-              )
+              this.encomendas.find({
+                query: {
+                  $limit: '200',
+                  artigo_id: id,
+                  ...(estado !== 'qualquer' ? { estado: estado } : null),
+                  ...(+cliente_user_id
+                    ? { cliente_user_id: +cliente_user_id }
+                    : null),
+                },
+              })
             )
           ).pipe(reduce((acc, val) => [...acc, ...val]));
         })
