@@ -4,10 +4,10 @@ import {
   ChangeDetectionStrategy,
   OnDestroy,
 } from '@angular/core';
-import { map, concatMap, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { AssistenciasService } from 'src/app/shared/state';
-import { Observable } from 'rxjs';
+import { concat, Observable, of } from 'rxjs';
 import { Assistencia, AuthService } from 'src/app/shared';
 
 @AutoUnsubscribe()
@@ -18,11 +18,17 @@ import { Assistencia, AuthService } from 'src/app/shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
-  public isLoading = false;
-  public inOverflow = null;
-  public loggedInUserName: string;
-  public assistencias$: Observable<Assistencia[]>;
-  public assistenciasTodas$ = this.assistencias.state$.pipe(
+  LARGE_SCREEN_WIDTH = 992;
+  screenWidth =
+    window.innerWidth ||
+    document.documentElement.clientWidth ||
+    document.body.clientWidth;
+
+  isLoading = true;
+  isSmallScreen = this.screenWidth < this.LARGE_SCREEN_WIDTH;
+  loggedInUserName: string;
+  assistencias$: Observable<Assistencia[]> = of([]);
+  assistenciasTodas$ = this.assistencias.state$.pipe(
     map((state) =>
       state
         ? state.filter(
@@ -38,7 +44,7 @@ export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
         : null
     )
   );
-  public assistenciasAFechar$ = this.assistencias.state$.pipe(
+  assistenciasAFechar$ = this.assistencias.state$.pipe(
     map((state) =>
       state
         ? state.filter(
@@ -52,7 +58,7 @@ export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
         : null
     )
   );
-  public assistenciasMinhas$ = this.assistencias.state$.pipe(
+  assistenciasMinhas$ = this.assistencias.state$.pipe(
     map((state) =>
       state
         ? state.filter(
@@ -76,33 +82,30 @@ export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
   ) {}
 
   ngAfterViewInit() {
-    window.innerWidth < 890
-      ? (this.inOverflow = 'inOverflow')
-      : (this.inOverflow = null);
-    this.authService
-      .getUserName$()
-      .pipe(
-        tap((res) => (this.loggedInUserName = res[0].nome)),
-        concatMap(() =>
-          this.assistencias.find({
-            query: {
-              $limit: 200,
-              estado: {
-                $in: [
-                  'recebido',
-                  'em análise',
-                  'contactado',
-                  'incontactável',
-                  'orçamento aprovado',
-                  'orçamento recusado',
-                  'material recebido',
-                ],
-              },
-            },
-          })
-        )
-      )
-      .subscribe(() => (this.isLoading = false));
+    this.isSmallScreen = this.screenWidth < this.LARGE_SCREEN_WIDTH;
+
+    concat(
+      this.authService
+        .getUserName$()
+        .pipe(tap(([user]) => (this.loggedInUserName = user.nome))),
+      this.assistencias.find({
+        query: {
+          $limit: 200,
+          estado: {
+            $in: [
+              'recebido',
+              'em análise',
+              'contactado',
+              'incontactável',
+              'orçamento aprovado',
+              'orçamento recusado',
+              'material recebido',
+            ],
+          },
+        },
+      })
+    ).subscribe(() => (this.isLoading = false));
+
     this.filterAssistencias('minhas');
   }
 
@@ -110,18 +113,20 @@ export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
 
   filterAssistencias(arg: 'todas' | 'a fechar' | 'minhas') {
     if (arg === 'todas') {
-      return (this.assistencias$ = this.assistenciasTodas$);
+      this.assistencias$ = this.assistenciasTodas$;
+      return;
     }
     if (arg === 'a fechar') {
-      return (this.assistencias$ = this.assistenciasAFechar$);
+      this.assistencias$ = this.assistenciasAFechar$;
+      return;
     }
     if (arg === 'minhas') {
-      return (this.assistencias$ = this.assistenciasMinhas$);
+      this.assistencias$ = this.assistenciasMinhas$;
+      return;
     }
   }
 
   onResize(event) {
-    const width = event.target.innerWidth;
-    width < 890 ? (this.inOverflow = 'inOverflow') : (this.inOverflow = null);
+    this.isSmallScreen = event.target.innerWidth < this.LARGE_SCREEN_WIDTH;
   }
 }

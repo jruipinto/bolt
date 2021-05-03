@@ -28,7 +28,7 @@
       <button
         clrTabLink
         (click)="filterAssistencias('a fechar')"
-        [clrTabLinkInOverflow]="inOverflow"
+        [clrTabLinkInOverflow]="isSmallScreen"
       >
         A fechar
         <span
@@ -46,7 +46,7 @@
       <button
         clrTabLink
         (click)="filterAssistencias('todas')"
-        [clrTabLinkInOverflow]="inOverflow"
+        [clrTabLinkInOverflow]="isSmallScreen"
       >
         Todas
         <span class="badge" *ngIf="assistenciasTodas$ | async as assistencias">
