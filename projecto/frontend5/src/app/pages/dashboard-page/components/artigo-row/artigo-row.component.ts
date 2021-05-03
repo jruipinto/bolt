@@ -15,7 +15,7 @@ import { Artigo } from 'src/app/shared';
 })
 export class ArtigoRowComponent {
   @Input() artigo: Artigo;
-  @Output('rowClick') rowClick = new EventEmitter<Artigo>();
+  @Output() rowClick = new EventEmitter<Artigo>();
 
   constructor() {}
 }

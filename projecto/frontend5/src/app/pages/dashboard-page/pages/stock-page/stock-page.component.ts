@@ -3,14 +3,14 @@ import {
   OnDestroy,
   AfterViewInit,
   ChangeDetectionStrategy,
+  ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Artigo, dbQuery } from 'src/app/shared';
-import { ArtigosService } from 'src/app/shared/state';
-import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Artigo } from 'src/app/shared';
+import { Observable } from 'rxjs';
+import { ArtigoRowListComponent } from '../../components/artigo-row-list/artigo-row-list.component';
 
 @AutoUnsubscribe()
 @Component({
@@ -20,17 +20,13 @@ import { tap } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StockPageComponent implements AfterViewInit, OnDestroy {
-  public isLoading = false;
+  @ViewChild(ArtigoRowListComponent) artigoRowList: ArtigoRowListComponent;
   public results$: Observable<Artigo[]>;
   public artigoSearchForm = this.fb.group({
     input: [null],
   });
 
-  constructor(
-    private artigos: ArtigosService,
-    private router: Router,
-    private fb: FormBuilder
-  ) {}
+  constructor(private router: Router, private fb: FormBuilder) {}
 
   ngAfterViewInit() {
     this.searchArtigo(this.artigoSearchForm.value.input);
@@ -43,48 +39,11 @@ export class StockPageComponent implements AfterViewInit, OnDestroy {
   }
 
   searchArtigo(input?: string): void {
-    if (!input || !input.length) {
-      this.results$ = of([]);
-      return;
-    }
-    this.isLoading = true;
-
-    this.results$ = this.artigos
-      .find(dbQuery(input, ['marca', 'modelo', 'descricao']))
-      .pipe(
-        tap(() => {
-          this.isLoading = false;
-        })
-      );
+    this.results$ = this.artigoRowList.searchArtigo(input);
   }
 
   searchArtigoByLocal(input?: string): void {
-    if (!input || !input.length) {
-      this.results$ = of([]);
-      return;
-    }
-    this.isLoading = true;
-    const inputSplited = input.split(' ');
-    const inputMapped = inputSplited.map(
-      (word) =>
-        '{"$or": [' + '{ "localizacao": { "$like": "%' + word + '%" }}' + ' ]}'
-    );
-    const query =
-      '{' +
-      '"query": {' +
-      '"$sort": { "localizacao": "1", "marca": "1", "modelo": "1",  "descricao": "1"},' +
-      '"$limit": "200",' +
-      '"$and": [' +
-      inputMapped +
-      ']' +
-      '}' +
-      '}';
-
-    this.results$ = this.artigos.find(JSON.parse(query)).pipe(
-      tap(() => {
-        this.isLoading = false;
-      })
-    );
+    this.results$ = this.artigoRowList.searchArtigoByLocal(input);
   }
 
   newArtigo() {
