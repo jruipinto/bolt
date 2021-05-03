@@ -1,10 +1,6 @@
-<ng-template #loading>
-  <r-loading *ngIf="!isLoading"></r-loading>
-</ng-template>
-
 <r-loading *ngIf="isLoading"></r-loading>
 
-<div *ngIf="artigos$ | async as artigos; else loading">
+<div *ngIf="artigos$ | async as artigos">
   <ul *ngIf="artigos.length > 0; else noArtigos">
     <li class="clr-row" *ngFor="let artigo of artigos; let listaIndex = index">
       <app-artigo-row

@@ -1,10 +1,6 @@
-<ng-template #loading>
-  <r-loading *ngIf="!isLoading"></r-loading>
-</ng-template>
-
 <r-loading *ngIf="isLoading"></r-loading>
 
-<div *ngIf="encomendas$ | async as encomendas; else loading">
+<div *ngIf="encomendas$ | async as encomendas">
   <ul *ngIf="encomendas.length > 0; else noArtigos">
     <li
       class="clr-row"

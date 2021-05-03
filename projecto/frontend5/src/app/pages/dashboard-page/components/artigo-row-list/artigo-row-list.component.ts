@@ -4,24 +4,33 @@ import {
   Input,
   EventEmitter,
   Output,
+  ChangeDetectorRef,
+  OnDestroy,
 } from '@angular/core';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Artigo, dbQuery } from 'src/app/shared';
 import { ArtigosService } from 'src/app/shared/state';
 
+@AutoUnsubscribe()
 @Component({
   selector: 'app-artigo-row-list',
   templateUrl: './artigo-row-list.component.html',
   styleUrls: ['./artigo-row-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArtigoRowListComponent {
+export class ArtigoRowListComponent implements OnDestroy {
   @Input() artigos$: Observable<Artigo[]> = of([]);
   @Input() isLoading = false;
   @Output() rowClick = new EventEmitter<Artigo>();
 
-  constructor(private artigos: ArtigosService) {}
+  constructor(
+    private artigos: ArtigosService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnDestroy(): void {}
 
   searchArtigo(input?: string): Observable<Artigo[]> {
     if (!input || !input.length) {
@@ -30,6 +39,7 @@ export class ArtigoRowListComponent {
       return;
     }
     this.isLoading = true;
+    this.cdr.detectChanges();
 
     return this.artigos
       .find(dbQuery(input, ['marca', 'modelo', 'descricao']))
@@ -47,6 +57,8 @@ export class ArtigoRowListComponent {
       return;
     }
     this.isLoading = true;
+    this.cdr.detectChanges();
+
     const inputSplited = input.split(' ');
     const inputMapped = inputSplited.map(
       (word) =>

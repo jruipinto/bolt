@@ -1,10 +1,6 @@
-<ng-template #loading>
-  <r-loading *ngIf="!isLoading"></r-loading>
-</ng-template>
-
 <r-loading *ngIf="isLoading"></r-loading>
 
-<div *ngIf="assistencias$ | async as assistencias; else loading">
+<div *ngIf="assistencias$ | async as assistencias">
   <ul *ngIf="assistencias.length > 0; else noAssistencias">
     <li
       class="clr-row"
