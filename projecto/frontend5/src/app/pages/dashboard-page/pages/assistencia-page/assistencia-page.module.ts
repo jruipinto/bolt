@@ -23,7 +23,7 @@ import { AccordionContentMaterialComponent } from './components/accordion-conten
 import { AccordionContentEncomendasComponent } from './components/accordion-content-encomendas/accordion-content-encomendas.component';
 import { AccordionContentMessagesComponent } from './components/accordion-content-messages/accordion-content-messages.component';
 import { AccordionContentRegistoComponent } from './components/accordion-content-registo/accordion-content-registo.component';
-import { ArtigoRowListModule } from '../../components/artigo-row-list/artigo-row-list.module';
+import { ArtigoModule } from '../../components/artigo/artigo.module';
 
 @NgModule({
   providers: [PageDataService],
@@ -52,7 +52,7 @@ import { ArtigoRowListModule } from '../../components/artigo-row-list/artigo-row
     AutofocusModule,
     BackButtonModule,
     RDataRowModule,
-    ArtigoRowListModule,
+    ArtigoModule,
   ],
   exports: [AssistenciaPageComponent],
 })

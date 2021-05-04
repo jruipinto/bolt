@@ -42,12 +42,10 @@ import { ClientesPesquisarModalComponent } from './modals/clientes-pesquisar-mod
 import { ConfigsPageComponent } from './pages/configs-page/configs-page.component';
 import { PainelRapidoPageModule } from './pages/painel-rapido-page/painel-rapido-page.module';
 import { RLoadingModule } from 'src/app/shared/components/r-loading/r-loading.module';
-import { AssistenciaRowComponent } from './pages/assistencias-page/components/assistencia-row/assistencia-row.component';
-import { AssistenciaRowListComponent } from './pages/assistencias-page/components/assistencia-row-list/assistencia-row-list.component';
-import { EncomendaRowComponent } from './pages/encomendas-page/components/encomenda-row/encomenda-row.component';
-import { EncomendaRowListComponent } from './pages/encomendas-page/components/encomenda-row-list/encomenda-row-list.component';
 import { AssistenciaPageModule } from './pages/assistencia-page/assistencia-page.module';
-import { ArtigoRowListModule } from './components/artigo-row-list/artigo-row-list.module';
+import { ArtigoModule } from './components/artigo/artigo.module';
+import { AssistenciaModule } from './components/assistencia/assistencia.module';
+import { EncomendaModule } from './components/encomenda/encomenda.module';
 
 @NgModule({
   imports: [
@@ -65,7 +63,9 @@ import { ArtigoRowListModule } from './components/artigo-row-list/artigo-row-lis
     AssistenciaPageModule,
     BackButtonModule,
     RDataRowModule,
-    ArtigoRowListModule,
+    ArtigoModule,
+    AssistenciaModule,
+    EncomendaModule,
   ],
   declarations: [
     RCardComponent,
@@ -85,10 +85,6 @@ import { ArtigoRowListModule } from './components/artigo-row-list/artigo-row-lis
     EncomendaPromptModalComponent,
     ClientesPesquisarModalComponent,
     ConfigsPageComponent,
-    AssistenciaRowComponent,
-    AssistenciaRowListComponent,
-    EncomendaRowComponent,
-    EncomendaRowListComponent,
   ],
 })
 export class DashboardPageModule {}

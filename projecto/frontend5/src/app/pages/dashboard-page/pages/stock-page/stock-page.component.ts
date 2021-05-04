@@ -10,7 +10,7 @@ import { FormBuilder } from '@angular/forms';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Artigo } from 'src/app/shared';
 import { Observable } from 'rxjs';
-import { ArtigoRowListComponent } from '../../components/artigo-row-list/artigo-row-list.component';
+import { ArtigoRowListComponent } from '../../components/artigo/artigo-row-list/artigo-row-list.component';
 
 @AutoUnsubscribe()
 @Component({
