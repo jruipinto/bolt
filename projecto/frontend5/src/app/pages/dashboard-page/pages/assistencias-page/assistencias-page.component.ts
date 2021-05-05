@@ -7,7 +7,7 @@ import {
 import { map, tap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { AssistenciasService } from 'src/app/shared/state';
-import { concat, Observable, of } from 'rxjs';
+import { concat, Observable } from 'rxjs';
 import { Assistencia, AuthService } from 'src/app/shared';
 
 @AutoUnsubscribe()
@@ -27,7 +27,6 @@ export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
   isLoading = true;
   isSmallScreen = this.screenWidth < this.LARGE_SCREEN_WIDTH;
   loggedInUserName: string;
-  assistencias$: Observable<Assistencia[]> = of([]);
   assistenciasTodas$ = this.assistencias.state$.pipe(
     map((state) =>
       state
@@ -75,13 +74,14 @@ export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
         : null
     )
   );
+  assistencias$: Observable<Assistencia[]> = this.assistenciasMinhas$;
 
   constructor(
     private assistencias: AssistenciasService,
     private authService: AuthService
   ) {}
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.isSmallScreen = this.screenWidth < this.LARGE_SCREEN_WIDTH;
 
     concat(
@@ -105,13 +105,11 @@ export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
         },
       })
     ).subscribe(() => (this.isLoading = false));
-
-    this.filterAssistencias('minhas');
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy(): void {}
 
-  filterAssistencias(arg: 'todas' | 'a fechar' | 'minhas') {
+  filterAssistencias(arg: 'todas' | 'a fechar' | 'minhas'): void {
     if (arg === 'todas') {
       this.assistencias$ = this.assistenciasTodas$;
       return;
@@ -126,7 +124,7 @@ export class AssistenciasPageComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  onResize(event) {
+  onResize(event): void {
     this.isSmallScreen = event.target.innerWidth < this.LARGE_SCREEN_WIDTH;
   }
 }

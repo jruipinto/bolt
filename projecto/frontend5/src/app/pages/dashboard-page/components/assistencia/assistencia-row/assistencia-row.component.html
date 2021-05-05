@@ -29,17 +29,34 @@
       </ul>
     </div>
     <div #buttonsContainer class="r-card-footer">
-      <button class="btn btn-success">
-        <clr-icon
-          shape="play"
-          (click)="runAssistencia(assistencia.id)"
-        ></clr-icon>
+      <button
+        *ngIf="
+          assistencia.estado === 'recebido' ||
+          assistencia.estado === 'contactado' ||
+          assistencia.estado === 'incontactável' ||
+          assistencia.estado === 'orçamento aprovado' ||
+          assistencia.estado === 'orçamento recusado' ||
+          assistencia.estado === 'material recebido'
+        "
+        class="btn btn-success"
+        (click)="runAssistencia(assistencia)"
+      >
+        <clr-icon shape="play"></clr-icon>
         Iniciar
       </button>
-      <button class="btn btn-link" (click)="openAssistencia(assistencia.id)">
+      <button class="btn btn-link" (click)="openAssistencia(assistencia)">
         <clr-icon shape="pop-out"></clr-icon> Abrir
       </button>
-      <button class="btn btn-link" (click)="assignAssistencia(assistencia.id)">
+      <button
+        *ngIf="
+          assistencia?.tecnico_user_id !== loggedInUserID &&
+          assistencia?.estado !== 'concluído s/ rep.' &&
+          assistencia?.estado !== 'concluído' &&
+          assistencia?.estado !== 'entregue'
+        "
+        class="btn btn-link"
+        (click)="assignAssistencia(assistencia)"
+      >
         <clr-icon shape="cursor-hand-open"></clr-icon> Atribuir-me
       </button>
     </div>

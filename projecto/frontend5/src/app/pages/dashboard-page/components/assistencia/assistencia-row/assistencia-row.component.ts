@@ -6,7 +6,8 @@ import {
   ElementRef,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Assistencia } from 'src/app/shared';
+import { Assistencia, AuthService } from 'src/app/shared';
+import { AssistenciasService } from 'src/app/shared/state';
 import { AssistenciaRowService } from './assistencia-row.service';
 
 @Component({
@@ -23,19 +24,44 @@ export class AssistenciaRowComponent {
   @ViewChild('buttonsContainer') buttonsContainerEl: ElementRef;
 
   isExpanded = this.componentSVC.isComponentExpanded;
+  loggedInUserID = this.authService.getUserId();
 
   constructor(
     private componentSVC: AssistenciaRowService,
-    private router: Router
+    private router: Router,
+    private assistencias: AssistenciasService,
+    private authService: AuthService
   ) {}
 
-  assignAssistencia(assistenciaID: number): void {}
-
-  openAssistencia(assistenciaID: number) {
-    return this.router.navigate(['/dashboard/assistencia', assistenciaID]);
+  assignAssistencia(assistencia: Assistencia): void {
+    this.assistencias
+      .patch(
+        assistencia.id,
+        {
+          ...assistencia,
+          tecnico_user_id: this.loggedInUserID,
+        },
+        'edição'
+      )
+      .subscribe();
   }
 
-  runAssistencia(assistenciaID: number): void {}
+  openAssistencia({ id }: Assistencia): Promise<boolean> {
+    return this.router.navigate(['/dashboard/assistencia', id]);
+  }
+
+  runAssistencia(assistencia: Assistencia): void {
+    this.assistencias
+      .patch(
+        assistencia.id,
+        {
+          ...assistencia,
+          estado: 'em análise',
+        },
+        'novo estado'
+      )
+      .subscribe();
+  }
 
   toogleView(): void {
     this.componentSVC.toogleView({
