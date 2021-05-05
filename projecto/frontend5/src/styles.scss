@@ -73,6 +73,23 @@ span.p4:not([cds-text]),
 label.p4:not([cds-text]) {
   margin-top: 0;
 }
+
+@media screen and (max-width: 768px) {
+  .clr-wizard {
+    .modal-dialog {
+      height: 100% !important;
+      width: 100% !important;
+    }
+
+    .modal-content {
+      min-width: 100%;
+    }
+
+    .modal-nav.clr-wizard-stepnav-wrapper {
+      display: none;
+    }
+  }
+}
 /*
 // this fix breaks the screen below 380px which is actually iphone 6 and 5 resolutions
 @media screen and (max-width: 576px) {
