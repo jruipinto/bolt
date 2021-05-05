@@ -1,7 +1,7 @@
 <clr-wizard
   #wizard
   [(clrWizardOpen)]="isModalOpen"
-  clrWizardSize="lg"
+  clrWizardSize="xl"
   (clrWizardOnFinish)="addEncomenda(wizardEncomendaForm.value)"
 >
   <clr-wizard-title>Encomendar Artigo</clr-wizard-title>
@@ -14,6 +14,7 @@
   <clr-wizard-page>
     <ng-template clrPageTitle>Escolher Artigo</ng-template>
     <form
+      class="sticky"
       [formGroup]="wizardArtigoSearchForm"
       (ngSubmit)="searchArtigo(wizardArtigoSearchForm.value.input)"
     >
@@ -31,31 +32,13 @@
         </div>
       </div>
     </form>
+
     <h4>Resultados:</h4>
-    <div *ngIf="artigoSearchResults as artigos">
-      <p *ngIf="artigos.length === 0">
-        Nenhum resultado encontrado para esses parametros...
-      </p>
-      <div *ngIf="artigos.length > 0">
-        <r-data-row
-          class="clr-row"
-          *ngFor="let artigo of artigos; let listaIndex = index"
-          (click)="patchWizardEncomendaForm(artigo)"
-        >
-          <div class="clr-col-lg-3">
-            <span class="fontheavy">{{ artigo.marca }}</span>
-            {{ artigo.modelo }}
-          </div>
-          <div class="clr-col-lg-6 lessimportant">
-            {{ artigo.descricao }}
-          </div>
-          <div class="clr-col-lg-1 lessimportant">Qty: {{ artigo.qty }}</div>
-          <div class="clr-col-lg-2 lessimportant">
-            Local: {{ artigo.localizacao }}
-          </div>
-        </r-data-row>
-      </div>
-    </div>
+
+    <app-artigo-row-list
+      [artigos$]="results$"
+      (rowClick)="selectArtigo($event)"
+    ></app-artigo-row-list>
   </clr-wizard-page>
 
   <clr-wizard-page

@@ -6,6 +6,8 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { ArtigoRowListComponent } from 'src/app/pages/dashboard-page/components/artigo/artigo-row-list/artigo-row-list.component';
 import { Artigo, Assistencia, Encomenda } from 'src/app/shared';
 
 @Component({
@@ -17,11 +19,12 @@ import { Artigo, Assistencia, Encomenda } from 'src/app/shared';
 export class EncomendaWizardComponent {
   @ViewChild('wizard') wizard;
   @ViewChild('wizardPageTwo') wizardPageTwo;
+  @ViewChild(ArtigoRowListComponent) artigoRowList: ArtigoRowListComponent;
 
   @Input() assistencia: Assistencia = null;
   isModalOpen = false;
   newEncomendasCounter = 0;
-  artigoSearchResults: Artigo[] = [];
+  results$: Observable<Artigo[]> = of([]);
 
   wizardEncomendaForm = this.fb.group({
     artigo_id: [null, [Validators.required]],
@@ -64,7 +67,7 @@ export class EncomendaWizardComponent {
     ++this.newEncomendasCounter;
   }
 
-  patchWizardEncomendaForm(arg: Artigo) {
+  selectArtigo(arg: Artigo) {
     const artigo = { ...arg };
     this.wizardEncomendaForm.patchValue({
       artigo_id: artigo.id,
@@ -72,8 +75,10 @@ export class EncomendaWizardComponent {
       artigo_modelo: artigo.modelo,
       artigo_descricao: artigo.descricao,
     });
-    this.wizard.navService.currentPage = this.wizardPageTwo;
+    this.wizard.next();
   }
 
-  searchArtigo(arg: string): void {}
+  searchArtigo(input: string): void {
+    this.results$ = this.artigoRowList.searchArtigo(input);
+  }
 }
