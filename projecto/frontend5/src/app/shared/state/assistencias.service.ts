@@ -2,21 +2,30 @@ import { Injectable } from '@angular/core';
 import { concat, of } from 'rxjs';
 import { map, concatMap, toArray } from 'rxjs/operators';
 import { EntityStateAbstraction } from 'src/app/shared/abstraction-classes';
-import { AssistenciasApiService, AuthService, MessagesApiService } from 'src/app/shared/services';
+import {
+  AssistenciasApiService,
+  AuthService,
+  MessagesApiService,
+} from 'src/app/shared/services';
 import { ArtigosService } from './artigos.service';
 import { EncomendasService } from './encomendas.service';
-import { Assistencia, EventoCronologico, Artigo, Encomenda } from 'src/app/shared/models';
+import {
+  Assistencia,
+  EventoCronologico,
+  Artigo,
+  Encomenda,
+} from 'src/app/shared/models';
 import { Message } from '../components/chat-widget/models/message.model';
 
 @Injectable({ providedIn: 'root' })
 export class AssistenciasService extends EntityStateAbstraction {
-
   constructor(
     protected assistenciasAPI: AssistenciasApiService,
     private authService: AuthService,
     private artigosService: ArtigosService,
     private encomendasService: EncomendasService,
-    private messagesService: MessagesApiService) {
+    private messagesService: MessagesApiService
+  ) {
     super(assistenciasAPI);
   }
 
@@ -25,56 +34,68 @@ export class AssistenciasService extends EntityStateAbstraction {
       map((res: Assistencia[]) => res[0]),
 
       // retrieve assistencia.material data
-      concatMap(assistencia => {
+      concatMap((assistencia) => {
         if (assistencia && assistencia.material) {
-          return concat(...assistencia.material.map(
-            (artigo: Partial<Artigo>) => this.artigosService.get(artigo.id).pipe(
-              map((dbArtigo: Artigo[]) => dbArtigo[0]),
-              map(dbArtigo => ({ ...dbArtigo, qty: artigo.qty }))
+          return concat(
+            ...assistencia.material.map((artigo: Partial<Artigo>) =>
+              this.artigosService.get(artigo.id).pipe(
+                map((dbArtigo: Artigo[]) => dbArtigo[0]),
+                map((dbArtigo) => ({ ...dbArtigo, qty: artigo.qty }))
+              )
             )
-          )).pipe(
+          ).pipe(
             toArray(),
-            map((material: Artigo[]) => ({ ...assistencia, material }) as Assistencia)
+            map(
+              (material: Artigo[]) =>
+                ({ ...assistencia, material } as Assistencia)
+            )
           );
         }
         return of(assistencia);
-
       }),
 
       // retrieve assistencia.encomendas data
-      concatMap(assistencia => {
+      concatMap((assistencia) => {
         if (assistencia && assistencia.encomendas) {
-          return concat(...assistencia.encomendas.map(
-            (encomenda: Partial<Encomenda>) => this.encomendasService.get(encomenda.id).pipe(
-              map((dbEncomenda: Encomenda[]) => dbEncomenda[0]),
-              map(dbEncomenda => ({ ...dbEncomenda, qty: encomenda.qty }))
+          return concat(
+            ...assistencia.encomendas.map((encomenda: Partial<Encomenda>) =>
+              this.encomendasService.get(encomenda.id).pipe(
+                map((dbEncomenda: Encomenda[]) => dbEncomenda[0]),
+                map((dbEncomenda) => ({ ...dbEncomenda, qty: encomenda.qty }))
+              )
             )
-          )).pipe(
+          ).pipe(
             toArray(),
-            map((encomendas: Encomenda[]) => ({ ...assistencia, encomendas }) as Assistencia)
+            map(
+              (encomendas: Encomenda[]) =>
+                ({ ...assistencia, encomendas } as Assistencia)
+            )
           );
         }
         return of(assistencia);
-
       }),
 
       // retrieve assistencia.messages data
-      concatMap(assistencia => {
+      concatMap((assistencia) => {
         if (assistencia && assistencia.messages) {
-          return concat(...assistencia.messages.map(
-            (message: Partial<Message>) => this.messagesService.get(message.id).pipe(
-              map((dbMessage: Message[]) => dbMessage[0])
+          return concat(
+            ...assistencia.messages.map((message: Partial<Message>) =>
+              this.messagesService
+                .get(message.id)
+                .pipe(map((dbMessage: Message[]) => dbMessage[0]))
             )
-          )).pipe(
+          ).pipe(
             toArray(),
-            map((messages: Message[]) => ({ ...assistencia, messages }) as Assistencia)
+            map(
+              (messages: Message[]) =>
+                ({ ...assistencia, messages } as Assistencia)
+            )
           );
         }
         return of(assistencia);
-
       }),
 
-      map(res => [res])
+      map((res) => [res])
     );
   }
 
@@ -87,59 +108,89 @@ export class AssistenciasService extends EntityStateAbstraction {
       encomendas,
       messages,
       preco,
-      estado
-    } = assistencia;
-    const registo_cronologico: EventoCronologico[] = [{
-      editor_user_id: this.authService.getUserId(),
-      editor_action: 'novo estado',
-      tecnico_user_id,
-      relatorio_interno,
-      relatorio_cliente,
-      material,
-      encomendas,
-      messages,
-      preco,
       estado,
-      updatedAt: new Date().toLocaleString() // dia/mes/ano, hora:minuto:segundo naquele momento
-    }];
+    } = assistencia;
+    const registo_cronologico: EventoCronologico[] = [
+      {
+        editor_user_id: this.authService.getUserId(),
+        editor_action: 'novo estado',
+        tecnico_user_id,
+        relatorio_interno,
+        relatorio_cliente,
+        material,
+        encomendas,
+        messages,
+        preco,
+        estado,
+        updatedAt: new Date().toLocaleString(), // dia/mes/ano, hora:minuto:segundo naquele momento
+      },
+    ];
     return super.create({ ...assistencia, registo_cronologico } as Assistencia);
   }
 
-  public patch(id: number, assistencia: Partial<Assistencia>, editor_action?: 'novo estado' | 'edição') {
-    return of(assistencia as Assistencia).pipe(
+  public patch(
+    id: number,
+    assistencia: Partial<Assistencia>,
+    editor_action?: 'novo estado' | 'edição'
+  ) {
+    return this.get(assistencia.id).pipe(
+      // this step is for avoid uncorrect patches after
+      // using .find() method (which was made for improved speed)
+      map(([result]) => {
+        return {
+          ...result,
+          ...assistencia,
+          registo_cronologico:
+            assistencia?.registo_cronologico ?? result.registo_cronologico,
+          material: assistencia?.material ?? result.material,
+          encomendas: assistencia?.encomendas ?? result.encomendas,
+          messages: assistencia?.messages ?? result.messages,
+        };
+      }),
 
       // send SMS about the assistencia to the client
-      concatMap(patchedAssistencia => {
+      concatMap((patchedAssistencia) => {
         if (
-          (patchedAssistencia.estado !== 'concluído'
-            && patchedAssistencia.estado !== 'concluído s/ rep.'
-            && patchedAssistencia.estado !== 'orçamento pendente')
-          || editor_action === 'edição'
+          (patchedAssistencia.estado !== 'concluído' &&
+            patchedAssistencia.estado !== 'concluído s/ rep.' &&
+            patchedAssistencia.estado !== 'orçamento pendente') ||
+          editor_action === 'edição'
         ) {
           return of({ ...patchedAssistencia, messages: assistencia.messages });
         }
-        if (patchedAssistencia.estado === 'concluído' || patchedAssistencia.estado === 'concluído s/ rep.') {
-          return this.messagesService.notificarConclusaoDe(patchedAssistencia).pipe(
-            map(e => e[0]),
-            map((msg: Message) => ({
-              ...patchedAssistencia,
-              messages: assistencia.messages ? [...assistencia.messages, { id: msg.id }] : [{ id: msg.id }]
-            }))
-          );
+        if (
+          patchedAssistencia.estado === 'concluído' ||
+          patchedAssistencia.estado === 'concluído s/ rep.'
+        ) {
+          return this.messagesService
+            .notificarConclusaoDe(patchedAssistencia)
+            .pipe(
+              map((e) => e[0]),
+              map((msg: Message) => ({
+                ...patchedAssistencia,
+                messages: assistencia.messages
+                  ? [...assistencia.messages, { id: msg.id }]
+                  : [{ id: msg.id }],
+              }))
+            );
         }
         if (patchedAssistencia.estado === 'orçamento pendente') {
-          return this.messagesService.notificarOrcamentoDe(patchedAssistencia).pipe(
-            map(e => e[0]),
-            map((msg: Message) => ({
-              ...patchedAssistencia,
-              messages: assistencia.messages ? [...assistencia.messages, { id: msg.id }] : [{ id: msg.id }]
-            }))
-          );
+          return this.messagesService
+            .notificarOrcamentoDe(patchedAssistencia)
+            .pipe(
+              map((e) => e[0]),
+              map((msg: Message) => ({
+                ...patchedAssistencia,
+                messages: assistencia.messages
+                  ? [...assistencia.messages, { id: msg.id }]
+                  : [{ id: msg.id }],
+              }))
+            );
         }
       }),
 
       // patch the assistencia
-      map(patchedAssistencia => {
+      map((patchedAssistencia) => {
         const {
           tecnico_user_id,
           relatorio_interno,
@@ -147,9 +198,10 @@ export class AssistenciasService extends EntityStateAbstraction {
           material,
           encomendas,
           messages,
-          preco
+          preco,
+          registo_cronologico,
         } = patchedAssistencia;
-        const novoRegisto: EventoCronologico = {
+        const novoEvento: EventoCronologico = {
           editor_user_id: this.authService.getUserId(),
           editor_action,
           tecnico_user_id,
@@ -160,18 +212,18 @@ export class AssistenciasService extends EntityStateAbstraction {
           messages,
           preco,
           estado: assistencia.estado,
-          updatedAt: new Date().toLocaleString()
+          updatedAt: new Date().toLocaleString(),
         };
         const updatedRegistoCronologico: EventoCronologico[] = [
-          ...assistencia.registo_cronologico,
-          novoRegisto
+          ...registo_cronologico,
+          novoEvento,
         ];
-        return ({ ...patchedAssistencia, registo_cronologico: updatedRegistoCronologico } as Assistencia);
+        return {
+          ...patchedAssistencia,
+          registo_cronologico: updatedRegistoCronologico,
+        } as Assistencia;
       }),
-      concatMap(patchedAssistencia => super.patch(id, patchedAssistencia))
-
+      concatMap((patchedAssistencia) => super.patch(id, patchedAssistencia))
     );
   }
-
-
 }

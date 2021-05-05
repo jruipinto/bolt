@@ -315,20 +315,12 @@ export class AssistenciasApiService extends EntityApiAbstration {
   }
 
   patch(id: number, data: Assistencia, actionType?: string) {
-    // backwards compatibility with id's < 3300
-    return this.get(data.id).pipe(
-      concatMap(([result]) => {
-        return this.fullyDetailedAssistencias$(
-          super.patch(id, {
-            ...result,
-            ...data,
-            registo_cronologico:
-              data.registo_cronologico ?? result.registo_cronologico,
-            material: this.simplify(data.material ?? result.material),
-            encomendas: this.simplify(data.encomendas ?? result.encomendas),
-            messages: this.simplify(data.messages ?? result.messages),
-          })
-        );
+    return this.fullyDetailedAssistencias$(
+      super.patch(id, {
+        ...data,
+        material: this.simplify(data.material),
+        encomendas: this.simplify(data.encomendas),
+        messages: this.simplify(data.messages),
       })
     );
   }
