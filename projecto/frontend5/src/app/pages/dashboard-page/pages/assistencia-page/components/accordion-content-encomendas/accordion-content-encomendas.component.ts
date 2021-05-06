@@ -5,6 +5,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Assistencia, Artigo, Encomenda } from 'src/app/shared';
+import { AssistenciaPageService } from '../../assistencia-page.service';
 import { EncomendaWizardComponent } from '../encomenda-wizard/encomenda-wizard.component';
 
 @Component({
@@ -18,20 +19,10 @@ export class AccordionContentEncomendasComponent {
   encomendaWizard: EncomendaWizardComponent;
 
   @Input() assistencia: Assistencia = null;
-  newEncomendasCounter = 0;
-  artigoSearchResults: Artigo[] = [];
 
-  constructor() {}
+  constructor(private pageSvc: AssistenciaPageService) {}
 
-  updateEncomendas(encomenda: Encomenda) {
-    if (encomenda.qty < 1) {
-      this.assistencia.encomendas = this.assistencia.encomendas
-        .filter(({ estado }) => estado === 'nova') // only let to clean 'nova' encomendas
-        .filter(({ id }) => id !== encomenda.id);
-    }
-    this.newEncomendasCounter = this.assistencia.encomendas.filter(
-      ({ estado }) => estado === 'nova'
-    ).length;
-    this.artigoSearchResults = null; // reset this variable to enforce new search if needed
+  updateEncomendas(encomenda: Encomenda): void {
+    this.pageSvc.updateEncomendas(encomenda);
   }
 }

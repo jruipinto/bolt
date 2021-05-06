@@ -18,15 +18,15 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ArtigoSearchModalComponent } from './components/artigo-search-modal/artigo-search-modal.component';
 import { EncomendaWizardComponent } from './components/encomenda-wizard/encomenda-wizard.component';
 import { TecnicoSelectModalComponent } from './components/tecnico-select-modal/tecnico-select-modal.component';
-import { PageDataService } from './services/page-data.service';
 import { AccordionContentMaterialComponent } from './components/accordion-content-material/accordion-content-material.component';
 import { AccordionContentEncomendasComponent } from './components/accordion-content-encomendas/accordion-content-encomendas.component';
 import { AccordionContentMessagesComponent } from './components/accordion-content-messages/accordion-content-messages.component';
 import { AccordionContentRegistoComponent } from './components/accordion-content-registo/accordion-content-registo.component';
 import { ArtigoModule } from '../../components/artigo/artigo.module';
+import { AssistenciaPageService } from './assistencia-page.service';
 
 @NgModule({
-  providers: [PageDataService],
+  providers: [AssistenciaPageService],
   declarations: [
     AssistenciaPageComponent,
     AccordionComponent,

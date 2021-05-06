@@ -5,6 +5,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Assistencia, Artigo } from 'src/app/shared';
+import { AssistenciaPageService } from '../../assistencia-page.service';
 import { ArtigoSearchModalComponent } from '../artigo-search-modal/artigo-search-modal.component';
 
 @Component({
@@ -18,16 +19,10 @@ export class AccordionContentMaterialComponent {
   artigoSearchModal: ArtigoSearchModalComponent;
 
   @Input() assistencia: Assistencia = null;
-  artigoSearchResults: Artigo[] = [];
 
-  constructor() {}
+  constructor(private pageSvc: AssistenciaPageService) {}
 
   updateMaterial(artigo: Artigo) {
-    if (artigo.qty < 1) {
-      this.assistencia.material = this.assistencia.material.filter(
-        ({ id }) => id !== artigo.id
-      );
-    }
-    this.artigoSearchResults = null; // reset this variable to enforce new search if needed
+    this.pageSvc.updateMaterial(artigo);
   }
 }

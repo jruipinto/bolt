@@ -3,13 +3,15 @@ import {
   ChangeDetectionStrategy,
   Input,
   ChangeDetectorRef,
+  ViewChild,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { clone } from 'ramda';
 import { Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { Artigo, Assistencia, dbQuery } from 'src/app/shared';
-import { ArtigosService } from 'src/app/shared/state';
+import { map } from 'rxjs/operators';
+import { ArtigoRowListComponent } from 'src/app/pages/dashboard-page/components/artigo/artigo-row-list/artigo-row-list.component';
+import { Artigo, Assistencia } from 'src/app/shared';
+import { AssistenciaPageService } from '../../assistencia-page.service';
 
 @Component({
   selector: 'app-artigo-search-modal',
@@ -18,9 +20,9 @@ import { ArtigosService } from 'src/app/shared/state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArtigoSearchModalComponent {
+  @ViewChild(ArtigoRowListComponent) artigoRowList: ArtigoRowListComponent;
+
   @Input() assistencia: Assistencia = null;
-  assistenciaOnInit: Assistencia = null;
-  isLoading = false;
   isModalOpen = false;
   results$: Observable<Artigo[]> = of([]);
 
@@ -29,9 +31,9 @@ export class ArtigoSearchModalComponent {
   });
 
   constructor(
-    private artigos: ArtigosService,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private pageSvc: AssistenciaPageService
   ) {}
 
   open(): void {
@@ -40,42 +42,31 @@ export class ArtigoSearchModalComponent {
   }
 
   searchArtigo(input?: string) {
-    if (!input || !input.length) {
-      this.results$ = of([]);
-      return;
-    }
-    this.isLoading = true;
-
-    this.results$ = this.artigos
-      .find(dbQuery(input, ['marca', 'modelo', 'descricao']))
-      .pipe(
-        map((artigos: Artigo[]) =>
-          artigos.map((artigoOnDB) => {
-            const currentArtigo = this.assistencia?.material.find(
-              ({ id }) => id === artigoOnDB.id
-            );
-            const artigoOnInit = this.assistenciaOnInit?.material.find(
-              ({ id }) => id === artigoOnDB.id
-            );
-            if (!currentArtigo && !artigoOnInit) {
-              return artigoOnDB;
-            }
-            if (!currentArtigo && artigoOnInit) {
-              return { ...artigoOnDB, qty: artigoOnDB.qty + artigoOnInit.qty };
-            }
-            if (currentArtigo && !artigoOnInit) {
-              return { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty };
-            }
-            return {
-              ...artigoOnDB,
-              qty: artigoOnDB.qty - currentArtigo.qty + artigoOnInit.qty,
-            };
-          })
-        ),
-        tap(() => {
-          this.isLoading = false;
+    this.results$ = this.artigoRowList.searchArtigo(input).pipe(
+      map((artigos: Artigo[]) =>
+        artigos.map((artigoOnDB) => {
+          const currentArtigo = this.pageSvc.assistenciaDraft?.material.find(
+            ({ id }) => id === artigoOnDB.id
+          );
+          const artigoOnInit = this.pageSvc.assistenciaOriginal?.material.find(
+            ({ id }) => id === artigoOnDB.id
+          );
+          if (!currentArtigo && !artigoOnInit) {
+            return artigoOnDB;
+          }
+          if (!currentArtigo && artigoOnInit) {
+            return { ...artigoOnDB, qty: artigoOnDB.qty + artigoOnInit.qty };
+          }
+          if (currentArtigo && !artigoOnInit) {
+            return { ...artigoOnDB, qty: artigoOnDB.qty - currentArtigo.qty };
+          }
+          return {
+            ...artigoOnDB,
+            qty: artigoOnDB.qty - currentArtigo.qty + artigoOnInit.qty,
+          };
         })
-      );
+      )
+    );
   }
 
   addArtigo(artigoInStock: Artigo) {
@@ -83,7 +74,7 @@ export class ArtigoSearchModalComponent {
       return;
     }
     const artigo = { ...artigoInStock, qty: 1 };
-    let material = clone(this.assistencia.material);
+    let material = clone(this.pageSvc.assistenciaDraft?.material);
     if (material) {
       if (material.findIndex((item) => item.id === artigo.id) < 0) {
         material = [...material, artigo];
@@ -104,7 +95,7 @@ export class ArtigoSearchModalComponent {
         (result) => result.id === artigo.id
       );
       results[resultIndex].qty = results[resultIndex].qty - artigo.qty;
-      this.assistencia.material = clone(material);
+      this.pageSvc.assistenciaDraft.material = clone(material);
       this.isModalOpen = false;
     });
   }
