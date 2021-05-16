@@ -1,11 +1,10 @@
-import { AfterViewInit, Injectable, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Injectable } from '@angular/core';
 import { clone } from 'ramda';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { concatMap, map, take } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { Artigo, Assistencia, Encomenda } from 'src/app/shared';
-import { AssistenciasService } from 'src/app/shared/state';
+import produce from 'immer';
+import { WritableDraft } from 'immer/dist/internal';
 
 interface AssistenciaPageState {
   assistenciaDraft: Assistencia;
@@ -14,99 +13,78 @@ interface AssistenciaPageState {
   isLoading: boolean;
 }
 
-@AutoUnsubscribe()
 @Injectable({
   providedIn: 'root',
 })
-export class AssistenciaPageService implements AfterViewInit, OnDestroy {
-  stateSource = new BehaviorSubject<AssistenciaPageState>({
+export class AssistenciaPageService {
+  private stateSource = new BehaviorSubject<AssistenciaPageState>({
     assistenciaDraft: null,
     assistenciaOriginal: null,
     newEncomendasCounter: 0,
     isLoading: true,
   });
 
-  constructor(
-    private assistencias: AssistenciasService,
-    private route: ActivatedRoute
-  ) {}
+  state = {
+    /**
+     * Observes state (first emission only)
+     */
+    observeOne: () => {
+      return this.stateSource.asObservable().pipe(
+        take(1),
+        map((state) => clone(state))
+      );
+    },
+    /**
+     * Observes state
+     */
+    observe: () => {
+      return this.stateSource.asObservable().pipe(map((state) => clone(state)));
+    },
 
-  ngAfterViewInit(): void {
-    this.route.paramMap
-      .pipe(
-        concatMap((routeParams) => {
-          return this.assistencias
-            .get(+routeParams.get('id'))
-            .pipe(map(([assistencia]) => assistencia));
-        }),
-        concatMap((assistencia) => {
-          return this.getState().pipe(
-            map((state) => {
-              let newState: AssistenciaPageState;
-              if (!state.assistenciaDraft) {
-                newState.assistenciaDraft = clone(assistencia);
-              }
-              newState.assistenciaOriginal = clone(assistencia);
-              newState.isLoading = false;
-              return newState;
-            })
-          );
-        })
-      )
-      .subscribe(this.patchState);
-  }
+    /**
+     * Patchs state by executing patchCallback on state
+     * (the old state isn't changed. Immutability is assured by immerjs)
+     */
+    patch: (
+      patchCallback: (draftState: WritableDraft<AssistenciaPageState>) => void
+    ) => {
+      this.state.observeOne().subscribe((state) => {
+        const nextState = produce(state, patchCallback);
+        this.stateSource.next(nextState);
+      });
+    },
+  };
 
-  ngOnDestroy(): void {}
+  constructor() {}
 
-  getState(): Observable<AssistenciaPageState> {
-    return this.stateSource.asObservable().pipe(
-      take(1),
-      map((state) => clone(state))
-    );
-  }
-  observeState(): Observable<AssistenciaPageState> {
-    return this.stateSource.asObservable().pipe(map((state) => clone(state)));
-  }
-  patchState(patch: Partial<AssistenciaPageState>): void {
-    this.getState().subscribe((state) => {
-      this.stateSource.next({ ...clone(state), ...patch });
+  updateEncomendas(encomenda: Encomenda) {
+    this.state.patch((draftState) => {
+      if (encomenda.qty < 1) {
+        draftState.assistenciaDraft.encomendas =
+          draftState.assistenciaDraft.encomendas
+            .filter(({ estado }) => estado === 'nova') // only let to clean 'nova' encomendas
+            .filter(({ id }) => id !== encomenda.id);
+      }
+      draftState.newEncomendasCounter =
+        draftState.assistenciaDraft.encomendas.filter(
+          ({ estado }) => estado === 'nova'
+        ).length;
     });
   }
 
-  updateEncomendas(encomenda: Encomenda) {
-    this.getState()
-      .pipe(
-        map((state) => {
-          let newState: AssistenciaPageState;
-          if (encomenda.qty < 1) {
-            newState.assistenciaDraft.encomendas = state.assistenciaDraft.encomendas
-              .filter(({ estado }) => estado === 'nova') // only let to clean 'nova' encomendas
-              .filter(({ id }) => id !== encomenda.id);
-          }
-          newState.newEncomendasCounter = state.assistenciaDraft.encomendas.filter(
-            ({ estado }) => estado === 'nova'
-          ).length;
-
-          return newState;
-        })
-      )
-      .subscribe(this.patchState);
-  }
-
   updateMaterial(artigo: Artigo): void {
-    this.getState()
-      .pipe(
-        map((state) => {
-          let newState: AssistenciaPageState;
-          if (artigo.qty < 1) {
-            newState.assistenciaDraft.material = state.assistenciaDraft.material.filter(
-              ({ id }) => id !== artigo.id
-            );
-          }
-
-          return newState;
-        })
-      )
-      .subscribe(this.patchState);
+    this.state.patch((draftState) => {
+      if (artigo.qty < 1) {
+        draftState.assistenciaDraft.material =
+          draftState.assistenciaDraft.material.filter(
+            ({ id }) => id !== artigo.id
+          );
+        return;
+      }
+      const { material } = draftState.assistenciaDraft;
+      draftState.assistenciaDraft.material = material.map((i) => {
+        return i.id === artigo.id ? artigo : i;
+      });
+    });
   }
 }

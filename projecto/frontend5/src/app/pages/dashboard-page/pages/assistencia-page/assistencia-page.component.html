@@ -1,6 +1,6 @@
 <r-loading *ngIf="isLoading$ | async"></r-loading>
 
-<div *ngIf="assistencia$ | async">
+<div *ngIf="assistencia$ | async as assistencia">
   <app-back-button></app-back-button>
 
   <h3>Assistência {{ assistencia.id }}</h3>
