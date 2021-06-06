@@ -65,10 +65,13 @@ export class AssistenciaPageService {
             .filter(({ estado }) => estado === 'nova') // only let to clean 'nova' encomendas
             .filter(({ id }) => id !== encomenda.id);
       }
-      draftState.newEncomendasCounter =
-        draftState.assistenciaDraft.encomendas.filter(
-          ({ estado }) => estado === 'nova'
-        ).length;
+      const { encomendas } = draftState.assistenciaDraft;
+      draftState.newEncomendasCounter = encomendas.filter(
+        ({ estado }) => estado === 'nova'
+      ).length;
+      draftState.assistenciaDraft.encomendas = encomendas.map((i) => {
+        return i.artigo_id === encomenda.artigo_id ? encomenda : i;
+      });
     });
   }
 

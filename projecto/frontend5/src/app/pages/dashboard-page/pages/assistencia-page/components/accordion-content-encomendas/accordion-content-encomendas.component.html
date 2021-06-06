@@ -27,8 +27,8 @@
       <clr-dg-column>Prazo</clr-dg-column>
       <clr-dg-column>Estado</clr-dg-column>
       <clr-dg-row *ngFor="let encomenda of assistencia.encomendas">
-        <clr-dg-cell
-          ><input
+        <clr-dg-cell>
+          <input
             *ngIf="encomenda.estado === 'nova'"
             class="clr-input small-input"
             type="number"
@@ -36,10 +36,9 @@
             id="newQty"
             [(ngModel)]="encomenda.qty"
             (change)="updateEncomendas(encomenda)"
-          /><span *ngIf="encomenda.estado !== 'nova'">{{
-            encomenda.qty
-          }}</span></clr-dg-cell
-        >
+          />
+          <span *ngIf="encomenda.estado !== 'nova'">{{ encomenda.qty }}</span>
+        </clr-dg-cell>
         <clr-dg-cell
           >{{ encomenda.artigo_descricao }}
           {{ encomenda.artigo_marca }}

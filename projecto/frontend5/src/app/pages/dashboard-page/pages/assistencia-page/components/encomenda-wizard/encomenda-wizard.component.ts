@@ -9,6 +9,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { ArtigoRowListComponent } from 'src/app/pages/dashboard-page/components/artigo/artigo-row-list/artigo-row-list.component';
 import { Artigo, Assistencia, Encomenda } from 'src/app/shared';
+import { AssistenciaPageService } from '../../assistencia-page.service';
 
 @Component({
   selector: 'app-encomenda-wizard',
@@ -23,7 +24,6 @@ export class EncomendaWizardComponent {
 
   @Input() assistencia: Assistencia = null;
   isModalOpen = false;
-  newEncomendasCounter = 0;
   results$: Observable<Artigo[]> = of([]);
 
   wizardEncomendaForm = this.fb.group({
@@ -44,27 +44,27 @@ export class EncomendaWizardComponent {
     input: [null],
   });
 
-  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef,
+    private pageSvc: AssistenciaPageService
+  ) {}
 
   open(): void {
     this.isModalOpen = true;
     this.cdr.detectChanges();
   }
 
-  addEncomenda(arg: Encomenda) {
-    const encomenda = {
-      ...arg,
+  addEncomenda(encomenda: Encomenda) {
+    Object.assign(encomenda, {
       assistencia_id: this.assistencia.id,
       cliente_user_id: this.assistencia.cliente_user_id,
-    };
-    this.assistencia.encomendas
-      ? (this.assistencia.encomendas = [
-          ...this.assistencia.encomendas,
-          encomenda,
-        ])
-      : (this.assistencia.encomendas = [encomenda]);
+    });
+    this.pageSvc.state.patch((draftState) => {
+      draftState.assistenciaDraft.encomendas.push(encomenda);
+      ++draftState.newEncomendasCounter;
+    });
     this.wizard.reset();
-    ++this.newEncomendasCounter;
   }
 
   selectArtigo(arg: Artigo) {
