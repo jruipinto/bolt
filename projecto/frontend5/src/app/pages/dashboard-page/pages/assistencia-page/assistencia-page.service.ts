@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { clone } from 'ramda';
-import { BehaviorSubject } from 'rxjs';
-import { map, take } from 'rxjs/operators';
-import { Artigo, Assistencia, Encomenda } from 'src/app/shared';
-import produce from 'immer';
-import { WritableDraft } from 'immer/dist/internal';
+import {
+  Artigo,
+  Assistencia,
+  createComponentState,
+  Encomenda,
+} from 'src/app/shared';
 
 interface AssistenciaPageState {
   assistenciaDraft: Assistencia;
@@ -17,46 +17,23 @@ interface AssistenciaPageState {
   providedIn: 'root',
 })
 export class AssistenciaPageService {
-  private stateSource = new BehaviorSubject<AssistenciaPageState>({
+  /**
+   * Object with methods to get and modify the page's state
+   */
+  state = createComponentState({
     assistenciaDraft: null,
     assistenciaOriginal: null,
     newEncomendasCounter: 0,
     isLoading: true,
-  });
-
-  state = {
-    /**
-     * Observes state (first emission only)
-     */
-    observeOne: () => {
-      return this.stateSource.asObservable().pipe(
-        take(1),
-        map((state) => clone(state))
-      );
-    },
-    /**
-     * Observes state
-     */
-    observe: () => {
-      return this.stateSource.asObservable().pipe(map((state) => clone(state)));
-    },
-
-    /**
-     * Patchs state by executing patchCallback on state
-     * (the old state isn't changed. Immutability is assured by immerjs)
-     */
-    patch: (
-      patchCallback: (draftState: WritableDraft<AssistenciaPageState>) => void
-    ) => {
-      this.state.observeOne().subscribe((state) => {
-        const nextState = produce(state, patchCallback);
-        this.stateSource.next(nextState);
-      });
-    },
-  };
+  } as AssistenciaPageState);
 
   constructor() {}
 
+  /**
+   * Update `assistenciaDraft.encomendas` and `newEncomendasCounter` accordingly.
+   * ___
+   * (see AssistenciaPageState model for any doubts)
+   */
   updateEncomendas(encomenda: Encomenda) {
     this.state.patch((draftState) => {
       if (encomenda.qty < 1) {
@@ -75,6 +52,11 @@ export class AssistenciaPageService {
     });
   }
 
+  /**
+   * Update `assistenciaDraft.material`
+   * ___
+   * (see AssistenciaPageState model for any doubts)
+   */
   updateMaterial(artigo: Artigo): void {
     this.state.patch((draftState) => {
       if (artigo.qty < 1) {
